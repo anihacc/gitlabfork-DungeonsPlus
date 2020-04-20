@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://gitlab.com/groups/modding-legacy/-/issues"
+[[mods]]
+modId="structure_gel"
+version="${file.jarVersion}"
+displayName="Structure Gel Demo"
+displayURL="https://moddinglegacy.com/"
+logoFile="banner.png"
+credits=""
+authors="Silver_David"
+description='''An open source mod to give working examples on how to use Structure Gel API'''
+[[dependencies.structure_gel_demo]]
+    modId="forge"
+    mandatory=true
+    versionRange="[28.2.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.structure_gel_demo]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.14.4]"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.structure_gel_demo]]
+    modId="structure_gel"
+    mandatory=true
+    versionRange="[1.0.0]"
+    ordering="NONE"
+    side="BOTH"
