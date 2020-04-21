@@ -1,0 +1,89 @@
+package com.legacy.structure_gel_demo;
+
+import com.legacy.structure_gel_demo.features.tower.TowerPieces;
+import com.legacy.structure_gel_demo.features.tower.TowerStructure;
+import com.mojang.datafixers.util.Pair;
+
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.GenerationStage.Decoration;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+
+@Mod(SGDemoMod.MODID)
+public class SGDemoMod
+{
+	public static final String NAME = "Structure Gel Demo";
+	public static final String MODID = "structure_gel_demo";
+	public static final String VERSION = "1.0.0";
+
+	public SGDemoMod()
+	{
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientInit);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonInit);
+	}
+
+	private void commonInit(final FMLCommonSetupEvent event)
+	{
+		ForgeRegistries.BIOMES.getValues().forEach(biome -> {
+			biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature( Features.TOWER.getFirst(), new NoFeatureConfig(), Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+			biome.addStructure(Features.TOWER.getFirst(), new NoFeatureConfig());
+		});
+		
+	}
+
+	private void clientInit(final FMLClientSetupEvent event)
+	{
+
+	}
+
+	public static ResourceLocation locate(String key)
+	{
+		return new ResourceLocation(MODID, key);
+	}
+
+	public static <T extends IForgeRegistryEntry<T>> T register(IForgeRegistry<T> registry, String name, T object)
+	{
+		object.setRegistryName(SGDemoMod.locate(name));
+		registry.register(object);
+		return object;
+	}
+
+	@Mod.EventBusSubscriber(modid = SGDemoMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+	public static class Features
+	{
+		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> TOWER;
+		
+		@SubscribeEvent
+		public static void onRegistry(final RegistryEvent.Register<Feature<?>> event)
+		{
+			TOWER = structure(event, "tower", new TowerStructure(NoFeatureConfig::deserialize), TowerPieces.Piece::new);
+			
+		}
+
+		@SuppressWarnings("deprecation")
+		private static <C extends IFeatureConfig> Pair<Structure<C>, IStructurePieceType> structure(RegistryEvent.Register<Feature<?>> event, String key, Structure<C> structure, IStructurePieceType pieceType)
+		{
+			register(event.getRegistry(), key, structure);
+			Registry.register(Registry.STRUCTURE_FEATURE, locate(key.toLowerCase()), structure);
+			Feature.STRUCTURES.put(locate(key.toLowerCase()).toString(), structure);
+			Registry.register(Registry.STRUCTURE_PIECE, locate(key.toLowerCase()).toString(), pieceType);
+			return Pair.of(structure, pieceType);
+		}
+	}
+}

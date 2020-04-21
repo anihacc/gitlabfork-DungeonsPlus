@@ -2,7 +2,7 @@ modLoader="javafml"
 loaderVersion="[28,)"
 issueTrackerURL="https://gitlab.com/groups/modding-legacy/-/issues"
 [[mods]]
-modId="structure_gel"
+modId="structure_gel_demo"
 version="${file.jarVersion}"
 displayName="Structure Gel Demo"
 displayURL="https://moddinglegacy.com/"
