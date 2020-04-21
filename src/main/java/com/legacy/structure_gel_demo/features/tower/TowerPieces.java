@@ -1,30 +1,46 @@
 package com.legacy.structure_gel_demo.features.tower;
 
 import java.util.List;
+import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.legacy.structure_gel.structures.GelStructurePiece;
 import com.legacy.structure_gel.structures.jigsaw.JigsawPoolBuilder;
 import com.legacy.structure_gel.structures.jigsaw.JigsawRegistryHelper;
 import com.legacy.structure_gel.structures.processors.RandomBlockSwapProcessor;
 import com.legacy.structure_gel_demo.SGDemoMod;
 
 import net.minecraft.block.Blocks;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.item.ArmorStandEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.properties.ChestType;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.jigsaw.JigsawManager;
 import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
-import net.minecraft.world.gen.feature.structure.AbstractVillagePiece;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.AlwaysTrueRuleTest;
 import net.minecraft.world.gen.feature.template.RandomBlockMatchRuleTest;
 import net.minecraft.world.gen.feature.template.RuleEntry;
 import net.minecraft.world.gen.feature.template.RuleStructureProcessor;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.storage.loot.LootTables;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class TowerPieces
 {
@@ -87,7 +103,7 @@ public class TowerPieces
 		 * Just another way to get the JigsawPoolBuilder if you like doing things like
 		 * this.
 		 */
-		registry.register("gate", new JigsawPoolBuilder(registry).names("gate").maintainWater(false).build());
+		registry.register("base", new JigsawPoolBuilder(registry).names("base").maintainWater(false).processors(cobbleToMossy, brickDecay).build());
 
 		/**
 		 * Creating a JigsawPoolBuilder instance beforehand with shared settings that'll
@@ -97,22 +113,23 @@ public class TowerPieces
 
 		/**
 		 * In this case, I'm using the JigsawPoolBuilder.collect to merge two different
-		 * pool builders into one. Since both "top" and "top_2" will use the same basic
-		 * settings, but with "top_2" having a gold decay processor, I use a copy of the
-		 * JigsawPoolBuilder instance created beforehand. With these copies, I can
-		 * adjust the settings for each builder while keeping commmon settings the same.
+		 * pool builders into one. Since both "top_full" and "top_decay" will use the
+		 * same basic settings, but with "top_decay" having a gold decay processor, I
+		 * use a copy of the JigsawPoolBuilder instance created beforehand. With these
+		 * copies, I can adjust the settings for each builder while keeping commmon
+		 * settings the same.
 		 * 
 		 * It's worth noting that processors() functions as an append, meaning that the
-		 * "top_2" structure will have both cobbleToMossy and goldDecay.
+		 * "top_decay" structure will have both cobbleToMossy and goldDecay.
 		 * 
 		 * The weights of each structure set in names() are preserved, so set them as
 		 * you normally would.
 		 */
-		registry.register("top", JigsawPoolBuilder.collect(topBuilder.clone().names(ImmutableMap.of("top", 1)), topBuilder.clone().names(ImmutableMap.of("top_2", 4)).processors(goldDecay)));
+		registry.register("top", JigsawPoolBuilder.collect(topBuilder.clone().names(ImmutableMap.of("top_full", 1)), topBuilder.clone().names(ImmutableMap.of("top_decay", 4)).processors(goldDecay)));
 
 	}
 
-	public static class Piece extends AbstractVillagePiece
+	public static class Piece extends GelStructurePiece
 	{
 		public Piece(TemplateManager template, JigsawPiece jigsawPiece, BlockPos pos, int groundLevelDelta, Rotation rotation, MutableBoundingBox boundingBox)
 		{
@@ -122,6 +139,80 @@ public class TowerPieces
 		public Piece(TemplateManager template, CompoundNBT nbt)
 		{
 			super(template, nbt, SGDemoMod.Features.TOWER.getSecond());
+		}
+
+		/**
+		 * In this, I add a base of cobblestone below the structure in case it generates
+		 * above nothing.
+		 */
+		@Override
+		public boolean addComponentParts(IWorld world, Random rand, MutableBoundingBox bounds, ChunkPos chunkPos)
+		{
+			boolean flag = super.addComponentParts(world, rand, bounds, chunkPos);
+
+			if (this.getGroundLevelDelta() == 1 && this.getLocation() == SGDemoMod.locate("tower/base"))
+			{
+				for (int x = 0; x < 10; x++)
+					for (int y = 0; y < 10; y++)
+						world.setBlockState(pos.add(x, 0, y), Blocks.GLASS.getDefaultState(), 3);
+			}
+			System.out.println(this.getGroundLevelDelta());
+
+			return flag;
+		}
+
+		@Override
+		public void handleDataMarker(String key, IWorld worldIn, BlockPos pos, Random rand, MutableBoundingBox bounds)
+		{
+			/**
+			 * When placing a tile entity in place of the structure block, you first need to
+			 * set the space to air. If you don't, the chest you place won't be a chest tile
+			 * entity. setAir is a simple shortcut to do this.
+			 * 
+			 * The value I enter into the structure block is formatted with arguments
+			 * separated by "-". So in these cases, I use formats like "chest-west-left" and
+			 * "spawner-minecraft:vex".
+			 */
+			if (key.contains("chest"))
+			{
+				this.setAir(worldIn, pos);
+				String[] data = key.split("-");
+
+				Direction facing = Direction.byName(data[1]);
+				ChestType chestType = data[2].equals(ChestType.LEFT.name()) ? ChestType.LEFT : (data[2].equals(ChestType.RIGHT.name()) ? ChestType.RIGHT : ChestType.SINGLE);
+
+				worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).rotate(this.rotation), 3);
+				if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)
+					((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
+			}
+			if (key.contains("spawner"))
+			{
+				this.setAir(worldIn, pos);
+				String[] data = key.split("-");
+
+				worldIn.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
+				if (worldIn.getTileEntity(pos) instanceof MobSpawnerTileEntity)
+					((MobSpawnerTileEntity) worldIn.getTileEntity(pos)).getSpawnerBaseLogic().setEntityType(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(data[1])));
+
+			}
+			/**
+			 * Creating entities is a little simpler with the createEntity method. Doing
+			 * this will automatically create the entity and set it's position and rotation
+			 * based on the structure.
+			 * 
+			 * Entities are spawned facing south by default with the rotation argument being
+			 * the rotation of the structure to offset them. Do Rotation.add to the rotation
+			 * value passed in to rotate it according to how yours needs to be facing.
+			 */
+			if (key.equals("armor_stand"))
+			{
+				setAir(worldIn, pos);
+
+				ArmorStandEntity entity = createEntity(EntityType.ARMOR_STAND, worldIn, pos, this.rotation);
+				entity.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+
+				worldIn.addEntity(entity);
+			}
 		}
 	}
 }

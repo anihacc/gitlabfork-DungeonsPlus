@@ -60,7 +60,7 @@ minecraft {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.14.4-28.2.0'
-	compile files('libraries/structure_gel-dev.jar')
+	compile files('run/mods/structure_gel-dev.jar')
 }
 
 jar {

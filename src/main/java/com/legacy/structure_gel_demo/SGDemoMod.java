@@ -18,7 +18,6 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -34,7 +33,6 @@ public class SGDemoMod
 
 	public SGDemoMod()
 	{
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientInit);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonInit);
 	}
 
@@ -45,11 +43,6 @@ public class SGDemoMod
 			biome.addStructure(Features.TOWER.getFirst(), new NoFeatureConfig());
 		});
 		
-	}
-
-	private void clientInit(final FMLClientSetupEvent event)
-	{
-
 	}
 
 	public static ResourceLocation locate(String key)
