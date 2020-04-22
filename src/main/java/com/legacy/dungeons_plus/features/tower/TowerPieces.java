@@ -150,7 +150,7 @@ public class TowerPieces
 		{
 			boolean flag = super.addComponentParts(world, rand, bounds, chunkPos);
 
-			if (this.getGroundLevelDelta() == 1 && this.getLocation() == DungeonsPlus.locate("tower/base"))
+			if (this.getGroundLevelDelta() == 1 && this.getLocation().equals(DungeonsPlus.locate("tower/base")))
 			{
 				for (int x = 0; x < 10; x++)
 					for (int y = 0; y < 10; y++)
