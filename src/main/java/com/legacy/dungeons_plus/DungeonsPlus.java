@@ -1,7 +1,7 @@
-package com.legacy.structure_gel_demo;
+package com.legacy.dungeons_plus;
 
-import com.legacy.structure_gel_demo.features.tower.TowerPieces;
-import com.legacy.structure_gel_demo.features.tower.TowerStructure;
+import com.legacy.dungeons_plus.features.tower.TowerPieces;
+import com.legacy.dungeons_plus.features.tower.TowerStructure;
 import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.util.ResourceLocation;
@@ -24,14 +24,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
-@Mod(SGDemoMod.MODID)
-public class SGDemoMod
+@Mod(DungeonsPlus.MODID)
+public class DungeonsPlus
 {
-	public static final String NAME = "Structure Gel Demo";
-	public static final String MODID = "structure_gel_demo";
+	public static final String NAME = "Dungeons Plus";
+	public static final String MODID = "dungeons_plus";
 	public static final String VERSION = "1.0.0";
 
-	public SGDemoMod()
+	public DungeonsPlus()
 	{
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonInit);
 	}
@@ -39,7 +39,7 @@ public class SGDemoMod
 	private void commonInit(final FMLCommonSetupEvent event)
 	{
 		ForgeRegistries.BIOMES.getValues().forEach(biome -> {
-			biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature( Features.TOWER.getFirst(), new NoFeatureConfig(), Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+			biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.TOWER.getFirst(), new NoFeatureConfig(), Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
 			biome.addStructure(Features.TOWER.getFirst(), new NoFeatureConfig());
 		});
 		
@@ -52,12 +52,12 @@ public class SGDemoMod
 
 	public static <T extends IForgeRegistryEntry<T>> T register(IForgeRegistry<T> registry, String name, T object)
 	{
-		object.setRegistryName(SGDemoMod.locate(name));
+		object.setRegistryName(DungeonsPlus.locate(name));
 		registry.register(object);
 		return object;
 	}
 
-	@Mod.EventBusSubscriber(modid = SGDemoMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class Features
 	{
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> TOWER;

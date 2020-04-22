@@ -13,8 +13,8 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = '1.0.0'
-group = 'com.legacy.structure_gel_demo'
-archivesBaseName = 'structure-gel-demo-1.14.4'
+group = 'com.legacy.dungeons_plus'
+archivesBaseName = 'dungeons-plus-1.14.4'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
@@ -48,7 +48,7 @@ minecraft {
 			workingDirectory project.file('run')
 			property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 			property 'forge.logging.console.level', 'debug'
-			args '--mod', 'structure_gel_demo', '--all', '--output', file('run/generated/resources')
+			args '--mod', 'dungeons_plus', '--all', '--output', file('run/generated/resources')
 			mods {
 				examplemod {
 					source sourceSets.main
@@ -60,13 +60,13 @@ minecraft {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.14.4-28.2.0'
-	compile files('run/mods/structure_gel-dev.jar')
+	compile files('run/mods/structure-gel-dev.jar')
 }
 
 jar {
     manifest {
         attributes([
-            "Specification-Title": "structure_gel_demo",
+            "Specification-Title": "dungeons_plus",
             "Specification-Vendor": "moddinglegacy",
             "Specification-Version": "1",
             "Implementation-Title": project.name,

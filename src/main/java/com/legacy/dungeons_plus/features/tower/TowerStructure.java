@@ -1,8 +1,8 @@
-package com.legacy.structure_gel_demo.features.tower;
+package com.legacy.dungeons_plus.features.tower;
 
 import java.util.function.Function;
 
-import com.legacy.structure_gel_demo.SGDemoMod;
+import com.legacy.dungeons_plus.DungeonsPlus;
 import com.mojang.datafixers.Dynamic;
 
 import net.minecraft.util.math.BlockPos;
@@ -48,7 +48,7 @@ public class TowerStructure extends ScatteredStructure<NoFeatureConfig>
 	@Override
 	public String getStructureName()
 	{
-		return SGDemoMod.locate("tower").toString();
+		return DungeonsPlus.locate("tower").toString();
 	}
 
 	@Override

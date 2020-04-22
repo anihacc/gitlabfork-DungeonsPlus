@@ -1,15 +1,15 @@
-package com.legacy.structure_gel_demo.features.tower;
+package com.legacy.dungeons_plus.features.tower;
 
 import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.structure_gel.structures.GelStructurePiece;
 import com.legacy.structure_gel.structures.jigsaw.JigsawPoolBuilder;
 import com.legacy.structure_gel.structures.jigsaw.JigsawRegistryHelper;
 import com.legacy.structure_gel.structures.processors.RandomBlockSwapProcessor;
-import com.legacy.structure_gel_demo.SGDemoMod;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -46,7 +46,7 @@ public class TowerPieces
 {
 	public static void init(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
-		JigsawManager.func_214889_a(SGDemoMod.locate("tower/root"), 7, TowerPieces.Piece::new, chunkGen, template, pos, pieces, seed);
+		JigsawManager.func_214889_a(DungeonsPlus.locate("tower/root"), 7, TowerPieces.Piece::new, chunkGen, template, pos, pieces, seed);
 	}
 
 	static
@@ -65,7 +65,7 @@ public class TowerPieces
 				new RuleEntry(new RandomBlockMatchRuleTest(Blocks.STONE_BRICKS, 0.3F), AlwaysTrueRuleTest.INSTANCE, Blocks.CRACKED_STONE_BRICKS.getDefaultState())));
 		//@formatter:on
 
-		JigsawRegistryHelper registry = new JigsawRegistryHelper(SGDemoMod.MODID, "tower/");
+		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "tower/");
 
 		/**
 		 * The JigsawRegistryHelper.register method takes a string for the name of the
@@ -133,12 +133,12 @@ public class TowerPieces
 	{
 		public Piece(TemplateManager template, JigsawPiece jigsawPiece, BlockPos pos, int groundLevelDelta, Rotation rotation, MutableBoundingBox boundingBox)
 		{
-			super(SGDemoMod.Features.TOWER.getSecond(), template, jigsawPiece, pos, groundLevelDelta, rotation, boundingBox);
+			super(DungeonsPlus.Features.TOWER.getSecond(), template, jigsawPiece, pos, groundLevelDelta, rotation, boundingBox);
 		}
 
 		public Piece(TemplateManager template, CompoundNBT nbt)
 		{
-			super(template, nbt, SGDemoMod.Features.TOWER.getSecond());
+			super(template, nbt, DungeonsPlus.Features.TOWER.getSecond());
 		}
 
 		/**
@@ -150,7 +150,7 @@ public class TowerPieces
 		{
 			boolean flag = super.addComponentParts(world, rand, bounds, chunkPos);
 
-			if (this.getGroundLevelDelta() == 1 && this.getLocation() == SGDemoMod.locate("tower/base"))
+			if (this.getGroundLevelDelta() == 1 && this.getLocation() == DungeonsPlus.locate("tower/base"))
 			{
 				for (int x = 0; x < 10; x++)
 					for (int y = 0; y < 10; y++)
