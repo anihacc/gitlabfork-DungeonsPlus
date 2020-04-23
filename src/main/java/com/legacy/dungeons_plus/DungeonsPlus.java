@@ -2,6 +2,7 @@ package com.legacy.dungeons_plus;
 
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.features.BiggerDungeonPieces;
 import com.legacy.dungeons_plus.features.BiggerDungeonStructure;
 import com.legacy.dungeons_plus.features.TowerPieces;
@@ -12,6 +13,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
@@ -51,9 +53,13 @@ public class DungeonsPlus
 			if (types.contains(BiomeDictionary.Type.OVERWORLD))
 			{
 				biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.TOWER.getFirst(), new NoFeatureConfig(), Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
-				biome.addStructure(Features.TOWER.getFirst(), new NoFeatureConfig());
-				
 				biome.addFeature(Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature(Features.BIGGER_DUNGEON.getFirst(), new NoFeatureConfig(), Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+
+				if (ImmutableList.of(Biomes.PLAINS, Biomes.DARK_FOREST, Biomes.FOREST, Biomes.BIRCH_FOREST, Biomes.MOUNTAINS).contains(biome))
+				{
+					biome.addStructure(Features.TOWER.getFirst(), new NoFeatureConfig());
+				}
+								
 				biome.addStructure(Features.BIGGER_DUNGEON.getFirst(), new NoFeatureConfig());
 			}
 		}
@@ -70,7 +76,7 @@ public class DungeonsPlus
 		registry.register(object);
 		return object;
 	}
-
+	
 	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class Features
 	{

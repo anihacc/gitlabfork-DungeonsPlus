@@ -14,8 +14,10 @@ import com.legacy.structure_gel.structures.processors.RandomBlockSwapProcessor;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -152,27 +154,31 @@ public class TowerPieces
 			super(template, nbt, DungeonsPlus.Features.TOWER.getSecond());
 		}
 
+		/**
+		 * When placing a tile entity in place of the structure block, you first need to
+		 * set the space to air. If you don't, the chest you place won't be a chest tile
+		 * entity. setAir is a simple shortcut to do this.
+		 * 
+		 * The value I enter into the structure block is formatted with arguments
+		 * separated by "-". So in these cases, I use formats like "chest-west-left" and
+		 * "spawner-minecraft:vex". Using String.split, I can issolate these values.
+		 */
 		@Override
 		public void handleDataMarker(String key, IWorld worldIn, BlockPos pos, Random rand, MutableBoundingBox bounds)
 		{
-			/**
-			 * When placing a tile entity in place of the structure block, you first need to
-			 * set the space to air. If you don't, the chest you place won't be a chest tile
-			 * entity. setAir is a simple shortcut to do this.
-			 * 
-			 * The value I enter into the structure block is formatted with arguments
-			 * separated by "-". So in these cases, I use formats like "chest-west-left" and
-			 * "spawner-minecraft:vex".
-			 */
 			if (key.contains("chest"))
 			{
-				this.setAir(worldIn, pos);
+				/**
+				 * Using flag 2 because I don't want block updates for this. If the chest
+				 * updates, double chests might not connect.
+				 */
+				worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 				String[] data = key.split("-");
 
 				Direction facing = Direction.byName(data[1]);
 				ChestType chestType = data[2].equals(ChestType.LEFT.name()) ? ChestType.LEFT : (data[2].equals(ChestType.RIGHT.name()) ? ChestType.RIGHT : ChestType.SINGLE);
 
-				worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).rotate(this.rotation), 3);
+				worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).rotate(this.rotation), 2);
 				if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)
 					((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
 			}
@@ -201,6 +207,10 @@ public class TowerPieces
 
 				ArmorStandEntity entity = createEntity(EntityType.ARMOR_STAND, worldIn, pos, this.rotation);
 				entity.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+
+				for (Item item : ImmutableList.of(Items.GOLDEN_HELMET, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS))
+					if (rand.nextFloat() < 0.25)
+						entity.setItemStackToSlot(MobEntity.getSlotForItemStack(new ItemStack(item)), new ItemStack(item));
 
 				worldIn.addEntity(entity);
 			}

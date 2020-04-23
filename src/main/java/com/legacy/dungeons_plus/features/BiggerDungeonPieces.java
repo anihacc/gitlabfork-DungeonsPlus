@@ -41,18 +41,20 @@ public class BiggerDungeonPieces
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "bigger_dungeon/");
 
-		/**Check TowerPieces for information on the JigsawRegistryHelper and JigsawPoolBuilder.
+		/**
+		 * Check TowerPieces for information on the JigsawRegistryHelper and
+		 * JigsawPoolBuilder.
 		 * 
 		 * Jigsaw structures generate at surface level by default. To prevent this, have
 		 * whatever structure starts the generation have generateAtSurface set to false.
 		 * You'll set the y level in the structure start like normal. In this case, it's
 		 * in BiggerDungeonStructure.Start.init
 		 */
-		registry.register("root", registry.builder().names("root").maintainWater(false).generateAtSurface(false).build());
+		registry.register("root", registry.builder().names("root").maintainWater(false).build());
 
 		JigsawPoolBuilder basicPoolBuilder = registry.builder().maintainWater(false).processors(new RandomBlockSwapProcessor(Blocks.COBBLESTONE, 0.2F, Blocks.MOSSY_COBBLESTONE.getDefaultState()));
 		registry.register("main_room", basicPoolBuilder.clone().names("main_room").build());
-		
+
 		/**
 		 * Using multiple JigsawPoolBuilders, I can collect them into one pool and build
 		 * that, while keeping the settings of each pool builder in their own
@@ -82,7 +84,7 @@ public class BiggerDungeonPieces
 		{
 			super(template, nbt, DungeonsPlus.Features.BIGGER_DUNGEON.getSecond());
 		}
-		
+
 		@Override
 		public void handleDataMarker(String key, IWorld worldIn, BlockPos pos, Random rand, MutableBoundingBox bounds)
 		{
@@ -93,9 +95,7 @@ public class BiggerDungeonPieces
 				{
 					String[] data = key.split("-");
 
-					Direction facing = Direction.byName(data[1]);
-
-					worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).rotate(this.rotation), 3);
+					worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.byName(data[1])).rotate(this.rotation), 3);
 					if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)
 						((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
 				}
