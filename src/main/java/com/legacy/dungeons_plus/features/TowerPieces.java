@@ -110,7 +110,9 @@ public class TowerPieces
 		 * This registry is told to not maintain water and to use the structure
 		 * processors (cobbleToMossy and brickDecay) defined above.
 		 */
-		registry.register("floor", registry.builder().names("floor_spider", "floor_zombie", "floor_skeleton", "floor_vex").maintainWater(false).processors(cobbleToMossy, brickDecay).build());
+		registry.register("floor", registry.builder().names("floor_spider", "floor_zombie", "floor_skeleton").maintainWater(false).processors(cobbleToMossy, brickDecay).build());
+
+		registry.register("vex_floor", registry.builder().names("floor_vex").maintainWater(false).processors(cobbleToMossy, brickDecay).build());
 
 		/**
 		 * Just another way to get the JigsawPoolBuilder if you like doing things like
