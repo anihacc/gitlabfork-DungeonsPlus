@@ -1,42 +1,40 @@
 package com.legacy.dungeons_plus.features;
 
+import java.util.Random;
 import java.util.function.Function;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.DungeonsPlusConfig;
 import com.mojang.datafixers.Dynamic;
 
+import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.ScatteredStructure;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-public class TowerStructure extends ScatteredStructure<NoFeatureConfig>
+public class TowerStructure extends Structure<NoFeatureConfig>
 {
-
 	public TowerStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
 	{
 		super(configFactoryIn);
 	}
 
-	protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator)
-	{
-		return 38;
-	}
-
-	protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator)
-	{
-		return 8;
-	}
-
 	@Override
-	protected int getSeedModifier()
+	public boolean hasStartAt(ChunkGenerator<?> chunkGen, Random rand, int chunkPosX, int chunkPosZ)
 	{
-		return 143112;
+		Biome biome = chunkGen.getBiomeProvider().getBiome(new BlockPos((chunkPosX << 4) + 9, 0, (chunkPosZ << 4) + 9));
+		if (chunkGen.hasStructure(biome, this))
+		{
+			((SharedSeedRandom) rand).setLargeFeatureSeedWithSalt(chunkGen.getSeed(), chunkPosX, chunkPosZ, 10387320);
+			return rand.nextDouble() < DungeonsPlusConfig.COMMON.towerProbability.get();
+		}
+		else
+			return false;
 	}
 
 	@Override

@@ -25,7 +25,9 @@ import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -42,6 +44,7 @@ public class DungeonsPlus
 	public DungeonsPlus()
 	{
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonInit);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsPlusConfig.COMMON_SPEC);
 	}
 
 	private void commonInit(final FMLCommonSetupEvent event)
@@ -52,15 +55,15 @@ public class DungeonsPlus
 			
 			if (types.contains(BiomeDictionary.Type.OVERWORLD))
 			{
-				biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.TOWER.getFirst(), new NoFeatureConfig(), Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
-				biome.addFeature(Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature(Features.BIGGER_DUNGEON.getFirst(), new NoFeatureConfig(), Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+				biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.TOWER.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+				biome.addFeature(Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature(Features.BIGGER_DUNGEON.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
 
 				if (ImmutableList.of(Biomes.PLAINS, Biomes.DARK_FOREST, Biomes.FOREST, Biomes.BIRCH_FOREST, Biomes.MOUNTAINS).contains(biome))
 				{
-					biome.addStructure(Features.TOWER.getFirst(), new NoFeatureConfig());
+					biome.addStructure(Features.TOWER.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
 				}
 								
-				biome.addStructure(Features.BIGGER_DUNGEON.getFirst(), new NoFeatureConfig());
+				biome.addStructure(Features.BIGGER_DUNGEON.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
 			}
 		}
 	}

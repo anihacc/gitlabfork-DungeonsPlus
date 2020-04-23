@@ -112,7 +112,7 @@ public class TowerPieces
 		 */
 		registry.register("floor", registry.builder().names("floor_spider", "floor_zombie", "floor_skeleton").maintainWater(false).processors(cobbleToMossy, brickDecay).build());
 
-		registry.register("vex_floor", registry.builder().names("floor_vex").maintainWater(false).processors(cobbleToMossy, brickDecay).build());
+		registry.register("floor_vex", registry.builder().names("floor_vex").maintainWater(false).processors(cobbleToMossy, brickDecay).build());
 
 		/**
 		 * Just another way to get the JigsawPoolBuilder if you like doing things like
