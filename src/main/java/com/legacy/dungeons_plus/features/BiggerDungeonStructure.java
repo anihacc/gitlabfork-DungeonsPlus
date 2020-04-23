@@ -25,12 +25,12 @@ public class BiggerDungeonStructure extends ScatteredStructure<NoFeatureConfig>
 
 	protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator)
 	{
-		return 20;
+		return 30;
 	}
 
 	protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator)
 	{
-		return 4;
+		return 15;
 	}
 
 	@Override

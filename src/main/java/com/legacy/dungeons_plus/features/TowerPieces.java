@@ -172,13 +172,13 @@ public class TowerPieces
 				 * Using flag 2 because I don't want block updates for this. If the chest
 				 * updates, double chests might not connect.
 				 */
-				worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+				worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 				String[] data = key.split("-");
 
 				Direction facing = Direction.byName(data[1]);
-				ChestType chestType = data[2].equals(ChestType.LEFT.name()) ? ChestType.LEFT : (data[2].equals(ChestType.RIGHT.name()) ? ChestType.RIGHT : ChestType.SINGLE);
+				ChestType chestType = data[2].equals(ChestType.LEFT.getName()) ? ChestType.LEFT : (data[2].equals(ChestType.RIGHT.getName()) ? ChestType.RIGHT : ChestType.SINGLE);
 
-				worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).rotate(this.rotation), 2);
+				worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).rotate(this.rotation), 3);
 				if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)
 					((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
 			}
