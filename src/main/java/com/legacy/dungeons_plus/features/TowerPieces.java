@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.features.tower;
+package com.legacy.dungeons_plus.features;
 
 import java.util.List;
 import java.util.Random;
@@ -27,7 +27,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -65,6 +64,18 @@ public class TowerPieces
 				new RuleEntry(new RandomBlockMatchRuleTest(Blocks.STONE_BRICKS, 0.3F), AlwaysTrueRuleTest.INSTANCE, Blocks.CRACKED_STONE_BRICKS.getDefaultState())));
 		//@formatter:on
 
+		/**
+		 * This registry is used in combination with JigsawPoolBuilders. The prefix
+		 * ("tower/") is optional, but allows you to cut down some typing since your
+		 * resource locations may need to start with it.
+		 * 
+		 * If you need to change the prefix, you can use .setPrefix on the registry to
+		 * create a clone of it.
+		 * 
+		 * In the future, any string input using this registry will become a
+		 * ResourceLocation with this format. modid:prefixtext ->
+		 * dungeons_plus:tower/text
+		 */
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "tower/");
 
 		/**
@@ -139,26 +150,6 @@ public class TowerPieces
 		public Piece(TemplateManager template, CompoundNBT nbt)
 		{
 			super(template, nbt, DungeonsPlus.Features.TOWER.getSecond());
-		}
-
-		/**
-		 * In this, I add a base of cobblestone below the structure in case it generates
-		 * above nothing.
-		 */
-		@Override
-		public boolean addComponentParts(IWorld world, Random rand, MutableBoundingBox bounds, ChunkPos chunkPos)
-		{
-			boolean flag = super.addComponentParts(world, rand, bounds, chunkPos);
-
-			if (this.getGroundLevelDelta() == 1 && this.getLocation().equals(DungeonsPlus.locate("tower/base")))
-			{
-				for (int x = 0; x < 10; x++)
-					for (int y = 0; y < 10; y++)
-						world.setBlockState(pos.add(x, 0, y), Blocks.GLASS.getDefaultState(), 3);
-			}
-			System.out.println(this.getGroundLevelDelta());
-
-			return flag;
 		}
 
 		@Override

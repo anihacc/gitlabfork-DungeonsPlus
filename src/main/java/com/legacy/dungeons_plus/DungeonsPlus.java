@@ -1,7 +1,12 @@
 package com.legacy.dungeons_plus;
 
-import com.legacy.dungeons_plus.features.tower.TowerPieces;
-import com.legacy.dungeons_plus.features.tower.TowerStructure;
+import java.util.Set;
+
+import com.legacy.dungeons_plus.features.BiggerDungeonPieces;
+import com.legacy.dungeons_plus.features.BiggerDungeonStructure;
+import com.legacy.dungeons_plus.features.TowerPieces;
+import com.legacy.dungeons_plus.features.TowerStructure;
+import com.legacy.structure_gel.StructureGelMod;
 import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +20,7 @@ import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -38,11 +44,19 @@ public class DungeonsPlus
 
 	private void commonInit(final FMLCommonSetupEvent event)
 	{
-		ForgeRegistries.BIOMES.getValues().forEach(biome -> {
-			biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.TOWER.getFirst(), new NoFeatureConfig(), Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
-			biome.addStructure(Features.TOWER.getFirst(), new NoFeatureConfig());
-		});
-		
+		for (Biome biome : ForgeRegistries.BIOMES.getValues())
+		{
+			Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(biome);
+			
+			if (types.contains(BiomeDictionary.Type.OVERWORLD))
+			{
+				biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.TOWER.getFirst(), new NoFeatureConfig(), Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+				biome.addStructure(Features.TOWER.getFirst(), new NoFeatureConfig());
+				
+				biome.addFeature(Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature(Features.BIGGER_DUNGEON.getFirst(), new NoFeatureConfig(), Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+				biome.addStructure(Features.BIGGER_DUNGEON.getFirst(), new NoFeatureConfig());
+			}
+		}
 	}
 
 	public static ResourceLocation locate(String key)
@@ -61,12 +75,15 @@ public class DungeonsPlus
 	public static class Features
 	{
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> TOWER;
+		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> BIGGER_DUNGEON;
 		
 		@SubscribeEvent
 		public static void onRegistry(final RegistryEvent.Register<Feature<?>> event)
 		{
 			TOWER = structure(event, "tower", new TowerStructure(NoFeatureConfig::deserialize), TowerPieces.Piece::new);
+			BIGGER_DUNGEON = structure(event, "bigger_dungeon", new BiggerDungeonStructure(NoFeatureConfig::deserialize), BiggerDungeonPieces.Piece::new);
 			
+			StructureGelMod.addIllagerStructures(TOWER.getFirst());
 		}
 
 		@SuppressWarnings("deprecation")

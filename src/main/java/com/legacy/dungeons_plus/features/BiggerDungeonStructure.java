@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.features.tower;
+package com.legacy.dungeons_plus.features;
 
 import java.util.function.Function;
 
@@ -15,40 +15,40 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-public class TowerStructure extends ScatteredStructure<NoFeatureConfig>
+public class BiggerDungeonStructure extends ScatteredStructure<NoFeatureConfig>
 {
 
-	public TowerStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
+	public BiggerDungeonStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
 	{
 		super(configFactoryIn);
 	}
 
 	protected int getBiomeFeatureDistance(ChunkGenerator<?> chunkGenerator)
 	{
-		return 16;
+		return 15;
 	}
 
 	protected int getBiomeFeatureSeparation(ChunkGenerator<?> chunkGenerator)
 	{
-		return 8;
+		return 4;
 	}
 
 	@Override
 	protected int getSeedModifier()
 	{
-		return 143112;
+		return 420691337;
 	}
 
 	@Override
 	public IStartFactory getStartFactory()
 	{
-		return TowerStructure.Start::new;
+		return BiggerDungeonStructure.Start::new;
 	}
 
 	@Override
 	public String getStructureName()
 	{
-		return DungeonsPlus.locate("tower").toString();
+		return DungeonsPlus.locate("bigger_dungeon").toString();
 	}
 
 	@Override
@@ -68,9 +68,10 @@ public class TowerStructure extends ScatteredStructure<NoFeatureConfig>
 		@Override
 		public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
 		{
-			TowerPieces.init(generator, templateManagerIn, new BlockPos(chunkX * 16, 90, chunkZ * 16), this.components, this.rand);
+			BlockPos pos = new BlockPos(chunkX * 16, 5 + rand.nextInt(30), chunkZ * 16);
+
+			BiggerDungeonPieces.init(generator, templateManagerIn, pos, this.components, this.rand);
 			this.recalculateStructureSize();
 		}
-
 	}
 }
