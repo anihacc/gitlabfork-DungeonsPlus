@@ -2,8 +2,8 @@ package com.legacy.dungeons_plus.features;
 
 import java.util.function.Function;
 
-import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.DungeonsConfig;
+import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.structure_gel.structures.ProbabilityStructure;
 import com.mojang.datafixers.Dynamic;
 
@@ -32,19 +32,19 @@ public class TowerStructure extends ProbabilityStructure<NoFeatureConfig>
 	@Override
 	public double getChance()
 	{
-		return DungeonsConfig.COMMON.towerProbability.get();
+		return DungeonsConfig.COMMON.tower.getProbability();
 	}
 
 	@Override
 	public int getSpacing()
 	{
-		return DungeonsConfig.COMMON.towerSpacing.get();
+		return DungeonsConfig.COMMON.tower.getSpacing();
 	}
 
 	@Override
 	public int getSpacingOffset()
 	{
-		return DungeonsConfig.COMMON.towerOffset.get();
+		return DungeonsConfig.COMMON.tower.getOffset();
 	}
 
 	@Override

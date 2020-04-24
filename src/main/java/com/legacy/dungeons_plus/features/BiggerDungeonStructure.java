@@ -32,19 +32,19 @@ public class BiggerDungeonStructure extends ProbabilityStructure<NoFeatureConfig
 	@Override
 	public double getChance()
 	{
-		return DungeonsConfig.COMMON.biggerDungeonProbability.get();
+		return DungeonsConfig.COMMON.biggerDungeon.getProbability();
 	}
 
 	@Override
 	public int getSpacing()
 	{
-		return DungeonsConfig.COMMON.biggerDungeonSpacing.get();
+		return DungeonsConfig.COMMON.biggerDungeon.getSpacing();
 	}
 
 	@Override
 	public int getSpacingOffset()
 	{
-		return DungeonsConfig.COMMON.biggerDungeonOffset.get();
+		return DungeonsConfig.COMMON.biggerDungeon.getOffset();
 	}
 	
 	@Override
