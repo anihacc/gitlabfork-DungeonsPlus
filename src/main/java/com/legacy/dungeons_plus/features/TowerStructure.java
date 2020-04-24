@@ -1,13 +1,12 @@
 package com.legacy.dungeons_plus.features;
 
-import java.util.Random;
 import java.util.function.Function;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.DungeonsPlusConfig;
+import com.legacy.dungeons_plus.DungeonsConfig;
+import com.legacy.structure_gel.structures.ProbabilityStructure;
 import com.mojang.datafixers.Dynamic;
 
-import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.biome.Biome;
@@ -17,7 +16,7 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-public class TowerStructure extends Structure<NoFeatureConfig>
+public class TowerStructure extends ProbabilityStructure<NoFeatureConfig>
 {
 	public TowerStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
 	{
@@ -25,16 +24,27 @@ public class TowerStructure extends Structure<NoFeatureConfig>
 	}
 
 	@Override
-	public boolean hasStartAt(ChunkGenerator<?> chunkGen, Random rand, int chunkPosX, int chunkPosZ)
+	public int getSeed()
 	{
-		Biome biome = chunkGen.getBiomeProvider().getBiome(new BlockPos((chunkPosX << 4) + 9, 0, (chunkPosZ << 4) + 9));
-		if (chunkGen.hasStructure(biome, this))
-		{
-			((SharedSeedRandom) rand).setLargeFeatureSeedWithSalt(chunkGen.getSeed(), chunkPosX, chunkPosZ, 10387320);
-			return rand.nextDouble() < DungeonsPlusConfig.COMMON.towerProbability.get();
-		}
-		else
-			return false;
+		return 155166;
+	}
+
+	@Override
+	public double getChance()
+	{
+		return DungeonsConfig.COMMON.towerProbability.get();
+	}
+
+	@Override
+	public int getSpacing()
+	{
+		return DungeonsConfig.COMMON.towerSpacing.get();
+	}
+
+	@Override
+	public int getSpacingOffset()
+	{
+		return DungeonsConfig.COMMON.towerOffset.get();
 	}
 
 	@Override

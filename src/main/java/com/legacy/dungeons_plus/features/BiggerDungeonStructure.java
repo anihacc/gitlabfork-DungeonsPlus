@@ -1,14 +1,13 @@
 package com.legacy.dungeons_plus.features;
 
-import java.util.Random;
 import java.util.function.Function;
 
+import com.legacy.dungeons_plus.DungeonsConfig;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.DungeonsPlusConfig;
 import com.legacy.structure_gel.structures.GelStructureStart;
+import com.legacy.structure_gel.structures.ProbabilityStructure;
 import com.mojang.datafixers.Dynamic;
 
-import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.biome.Biome;
@@ -17,26 +16,37 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-public class BiggerDungeonStructure extends Structure<NoFeatureConfig>
+public class BiggerDungeonStructure extends ProbabilityStructure<NoFeatureConfig>
 {
 	public BiggerDungeonStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
 	{
 		super(configFactoryIn);
 	}
-
+	
 	@Override
-	public boolean hasStartAt(ChunkGenerator<?> chunkGen, Random rand, int chunkPosX, int chunkPosZ)
+	public int getSeed()
 	{
-		Biome biome = chunkGen.getBiomeProvider().getBiome(new BlockPos((chunkPosX << 4) + 9, 0, (chunkPosZ << 4) + 9));
-		if (chunkGen.hasStructure(biome, this))
-		{
-			((SharedSeedRandom) rand).setLargeFeatureSeedWithSalt(chunkGen.getSeed(), chunkPosX, chunkPosZ, 10387320);
-			return rand.nextDouble() < DungeonsPlusConfig.COMMON.biggerDungeonProbability.get();
-		}
-		else
-			return false;
+		return 973181;
+	}
+	
+	@Override
+	public double getChance()
+	{
+		return DungeonsConfig.COMMON.biggerDungeonProbability.get();
 	}
 
+	@Override
+	public int getSpacing()
+	{
+		return DungeonsConfig.COMMON.biggerDungeonSpacing.get();
+	}
+
+	@Override
+	public int getSpacingOffset()
+	{
+		return DungeonsConfig.COMMON.biggerDungeonOffset.get();
+	}
+	
 	@Override
 	public IStartFactory getStartFactory()
 	{
