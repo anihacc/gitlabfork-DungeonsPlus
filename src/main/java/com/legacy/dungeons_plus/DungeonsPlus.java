@@ -44,7 +44,7 @@ public class DungeonsPlus
 	public DungeonsPlus()
 	{
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonInit);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsPlusConfig.COMMON_SPEC);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsConfig.COMMON_SPEC);
 	}
 
 	private void commonInit(final FMLCommonSetupEvent event)
