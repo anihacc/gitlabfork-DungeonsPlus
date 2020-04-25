@@ -26,7 +26,7 @@ public class DungeonsConfig
 		public Common(ForgeConfigSpec.Builder builder)
 		{
 			this.tower = new ConfigTemplates.BiomeStructureConfig(builder, "tower", 0.75D, 25, 6, "plains, forest, dark_forest, birch_forest, mountains");
-			this.leviathan = new ConfigTemplates.BiomeStructureConfig(builder, "leviathan", 1, 5, 0, "desert");
+			this.leviathan = new ConfigTemplates.BiomeStructureConfig(builder, "leviathan", 1.0D, 36, 8, "desert");
 			this.biggerDungeon = new ConfigTemplates.StructureConfig(builder, "bigger_dungeon", 0.1D, 5, 2);
 
 		}
