@@ -3,8 +3,7 @@ package com.legacy.dungeons_plus.features;
 import java.util.function.Function;
 
 import com.legacy.dungeons_plus.DungeonsConfig;
-import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.structure_gel.structures.ProbabilityStructure;
+import com.legacy.structure_gel.structures.GelStructure;
 import com.mojang.datafixers.Dynamic;
 
 import net.minecraft.util.math.BlockPos;
@@ -16,7 +15,7 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-public class TowerStructure extends ProbabilityStructure<NoFeatureConfig>
+public class TowerStructure extends GelStructure<NoFeatureConfig>
 {
 	public TowerStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
 	{
@@ -30,7 +29,7 @@ public class TowerStructure extends ProbabilityStructure<NoFeatureConfig>
 	}
 
 	@Override
-	public double getChance()
+	public double getProbability()
 	{
 		return DungeonsConfig.COMMON.tower.getProbability();
 	}
@@ -42,7 +41,7 @@ public class TowerStructure extends ProbabilityStructure<NoFeatureConfig>
 	}
 
 	@Override
-	public int getSpacingOffset()
+	public int getOffset()
 	{
 		return DungeonsConfig.COMMON.tower.getOffset();
 	}
@@ -51,12 +50,6 @@ public class TowerStructure extends ProbabilityStructure<NoFeatureConfig>
 	public IStartFactory getStartFactory()
 	{
 		return TowerStructure.Start::new;
-	}
-
-	@Override
-	public String getStructureName()
-	{
-		return DungeonsPlus.locate("tower").toString();
 	}
 
 	@Override

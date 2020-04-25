@@ -20,12 +20,14 @@ public class DungeonsConfig
 	public static class Common
 	{
 		public final ConfigTemplates.BiomeStructureConfig tower;
+		public final ConfigTemplates.BiomeStructureConfig leviathan;
 		public final ConfigTemplates.StructureConfig biggerDungeon;
 
 		public Common(ForgeConfigSpec.Builder builder)
 		{
 			this.tower = new ConfigTemplates.BiomeStructureConfig(builder, "tower", 0.75D, 25, 6, "plains, forest, dark_forest, birch_forest, mountains");
-			this.biggerDungeon = new ConfigTemplates.StructureConfig(builder, "bigger_dungeon", 0.1D, 4, 1);
+			this.leviathan = new ConfigTemplates.BiomeStructureConfig(builder, "leviathan", 1, 5, 0, "desert");
+			this.biggerDungeon = new ConfigTemplates.StructureConfig(builder, "bigger_dungeon", 0.1D, 5, 2);
 
 		}
 	}

@@ -7,9 +7,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.legacy.dungeons_plus.features.BiggerDungeonPieces;
 import com.legacy.dungeons_plus.features.BiggerDungeonStructure;
+import com.legacy.dungeons_plus.features.LeviathanPieces;
+import com.legacy.dungeons_plus.features.LeviathanStructure;
 import com.legacy.dungeons_plus.features.TowerPieces;
 import com.legacy.dungeons_plus.features.TowerStructure;
-import com.legacy.structure_gel.StructureGelMod;
+import com.legacy.structure_gel.structures.JigsawAccessHelper;
 import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.util.ResourceLocation;
@@ -49,7 +51,7 @@ public class DungeonsPlus
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonInit);
 	}
 
-	private void commonInit(final FMLCommonSetupEvent event)
+	public void commonInit(final FMLCommonSetupEvent event)
 	{
 		for (Biome biome : ForgeRegistries.BIOMES.getValues())
 		{
@@ -58,10 +60,14 @@ public class DungeonsPlus
 			if (types.contains(BiomeDictionary.Type.OVERWORLD))
 			{
 				biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.TOWER.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+				biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.LEVIATHAN.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
 				biome.addFeature(Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature(Features.BIGGER_DUNGEON.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
 
 				if (DungeonsConfig.COMMON.tower.getBiomes().contains(biome))
 					biome.addStructure(Features.TOWER.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
+
+				if (DungeonsConfig.COMMON.leviathan.getBiomes().contains(biome))
+					biome.addStructure(Features.LEVIATHAN.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
 
 				biome.addStructure(Features.BIGGER_DUNGEON.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
 			}
@@ -84,15 +90,17 @@ public class DungeonsPlus
 	public static class Features
 	{
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> TOWER;
+		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> LEVIATHAN;
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> BIGGER_DUNGEON;
 
 		@SubscribeEvent
 		public static void onRegistry(final RegistryEvent.Register<Feature<?>> event)
 		{
 			TOWER = structure(event, "tower", new TowerStructure(NoFeatureConfig::deserialize), TowerPieces.Piece::new);
+			LEVIATHAN = structure(event, "leviathan", new LeviathanStructure(NoFeatureConfig::deserialize), LeviathanPieces.Piece::new);
 			BIGGER_DUNGEON = structure(event, "bigger_dungeon", new BiggerDungeonStructure(NoFeatureConfig::deserialize), BiggerDungeonPieces.Piece::new);
 
-			StructureGelMod.addIllagerStructures(TOWER.getFirst());
+			JigsawAccessHelper.addIllagerStructures(TOWER.getFirst());
 		}
 
 		@SuppressWarnings("deprecation")
