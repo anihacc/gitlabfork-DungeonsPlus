@@ -73,9 +73,9 @@ public class LeviathanStructure extends GelStructure<NoFeatureConfig>
 	public static class Start extends GelStructureStart
 	{
 
-		public Start(Structure<?> structureIn, int chunkX, int chunkZ, Biome biomeIn, MutableBoundingBox boundsIn, int referenceIn, long seed)
+		public Start(Structure<?> structureIn, int chunkX, int chunkZ, MutableBoundingBox boundsIn, int referenceIn, long seed)
 		{
-			super(structureIn, chunkX, chunkZ, biomeIn, boundsIn, referenceIn, seed);
+			super(structureIn, chunkX, chunkZ, boundsIn, referenceIn, seed);
 		}
 
 		@Override

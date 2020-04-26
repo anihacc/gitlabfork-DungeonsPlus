@@ -59,17 +59,17 @@ public class DungeonsPlus
 
 			if (types.contains(BiomeDictionary.Type.OVERWORLD))
 			{
-				biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.TOWER.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
-				biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.LEVIATHAN.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
-				biome.addFeature(Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature(Features.BIGGER_DUNGEON.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+				biome.addFeature(Decoration.SURFACE_STRUCTURES, Features.TOWER.getFirst().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+				biome.addFeature(Decoration.SURFACE_STRUCTURES, Features.LEVIATHAN.getFirst().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+				biome.addFeature(Decoration.UNDERGROUND_STRUCTURES, Features.BIGGER_DUNGEON.getFirst().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 
 				if (DungeonsConfig.COMMON.tower.getBiomes().contains(biome))
-					biome.addStructure(Features.TOWER.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
+					biome.addStructure(Features.TOWER.getFirst().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
 
 				if (DungeonsConfig.COMMON.leviathan.getBiomes().contains(biome))
-					biome.addStructure(Features.LEVIATHAN.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
+					biome.addStructure(Features.LEVIATHAN.getFirst().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
 
-				biome.addStructure(Features.BIGGER_DUNGEON.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
+				biome.addStructure(Features.BIGGER_DUNGEON.getFirst().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
 			}
 		}
 	}

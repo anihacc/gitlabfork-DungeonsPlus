@@ -14,13 +14,12 @@ apply plugin: 'maven-publish'
 
 version = '1.0.0'
 group = 'com.legacy.dungeons_plus'
-archivesBaseName = 'dungeons-plus-1.14.4'
+archivesBaseName = 'dungeons-plus-1.15.2'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', 
-	version: '20200119-1.14.3'
+    mappings channel: 'snapshot', version: '20200425-1.15.1'
     runs {
         client {
             workingDirectory project.file('run')
@@ -59,7 +58,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.4-28.2.0'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.1.50'
 	compile files('run/mods/structure-gel-dev.jar')
 }
 
