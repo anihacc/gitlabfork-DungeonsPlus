@@ -97,7 +97,7 @@ public class EndRuinsPieces
 		}
 
 		/**
-		 * Places end stone underneath the structure in case it generates with overhang
+		 * Places end stone underneath the structure in case it generates with overhang, and obsidian under the pylons just in case.
 		 */
 		@Override
 		public boolean func_225577_a_(IWorld world, ChunkGenerator<?> chunkGen, Random rand, MutableBoundingBox bounds, ChunkPos chunkPos)
@@ -106,7 +106,8 @@ public class EndRuinsPieces
 			{
 				if (this.getLocation().toString().contains("end_ruins/tower/base_"))
 					this.extendDown(world, Blocks.END_STONE.getDefaultState(), bounds, this.rotation, rand);
-				System.out.println(this.getLocation());
+				if (this.getLocation().toString().contains("end_ruins/pylon/"))
+					this.extendDown(world, Blocks.OBSIDIAN.getDefaultState(), bounds, this.rotation, rand);
 			}
 			return false;
 		}
