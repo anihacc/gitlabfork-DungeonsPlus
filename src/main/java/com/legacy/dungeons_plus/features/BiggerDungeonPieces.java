@@ -34,11 +34,14 @@ public class BiggerDungeonPieces
 {
 	public static void assemble(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
-		init();
 		JigsawManager.func_214889_a(DungeonsPlus.locate("bigger_dungeon/root"), 7, BiggerDungeonPieces.Piece::new, chunkGen, template, pos, pieces, seed);
 	}
 
 	public static void init()
+	{
+	}
+
+	static
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "bigger_dungeon/");
 

@@ -47,11 +47,14 @@ public class TowerPieces
 {
 	public static void assemble(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
-		init();
 		JigsawManager.func_214889_a(DungeonsPlus.locate("tower/root"), 7, TowerPieces.Piece::new, chunkGen, template, pos, pieces, seed);
 	}
-	
+
 	public static void init()
+	{
+	}
+
+	static
 	{
 		/**
 		 * This is a processor from Structure Gel API for making a single block swap. It

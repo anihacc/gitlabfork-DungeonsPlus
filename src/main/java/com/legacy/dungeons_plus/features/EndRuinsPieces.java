@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.ChunkGenerator;
@@ -32,11 +33,14 @@ public class EndRuinsPieces
 {
 	public static void assemble(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
-		init();
 		JigsawManager.func_214889_a(DungeonsPlus.locate("end_ruins/base_plate"), 7, EndRuinsPieces.Piece::new, chunkGen, template, pos, pieces, seed);
 	}
 
 	public static void init()
+	{
+	}
+
+	static
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "end_ruins/");
 
@@ -54,7 +58,7 @@ public class EndRuinsPieces
 		 * method, I can set the weights of all normal towers to 2 and all broken towers
 		 * to 1 (default).
 		 */
-		registry.register("pylon", JigsawPoolBuilder.collect(registry.builder().weight(2).names("pylon/tall", "pylon/medium", "pylon/small"), registry.builder().names("pylon/tall_broken", "pylon/medium_broken", "pylon/small_broken")));
+		registry.register("pylon", JigsawPoolBuilder.collect(registry.builder().names("pylon/tall", "pylon/medium", "pylon/small"), registry.builder().weight(2).names("pylon/tall_broken", "pylon/medium_broken", "pylon/small_broken")));
 
 		registry.register("pylon/debris", registry.builder().names("pylon/debris_1", "pylon/debris_2", "pylon/debris_3", "pylon/debris_4").build());
 
@@ -92,6 +96,21 @@ public class EndRuinsPieces
 			super(template, nbt, DungeonsPlus.Features.END_RUINS.getSecond());
 		}
 
+		/**
+		 * Places end stone underneath the structure in case it generates with overhang
+		 */
+		@Override
+		public boolean func_225577_a_(IWorld world, ChunkGenerator<?> chunkGen, Random rand, MutableBoundingBox bounds, ChunkPos chunkPos)
+		{
+			if (super.func_225577_a_(world, chunkGen, rand, bounds, chunkPos))
+			{
+				if (this.getLocation().toString().contains("end_ruins/tower/base_"))
+					this.extendDown(world, Blocks.END_STONE.getDefaultState(), bounds, this.rotation, rand);
+				System.out.println(this.getLocation());
+			}
+			return false;
+		}
+
 		@Override
 		public void handleDataMarker(String key, IWorld worldIn, BlockPos pos, Random rand, MutableBoundingBox bounds)
 		{
@@ -113,6 +132,10 @@ public class EndRuinsPieces
 						MobSpawnerTileEntity tile = (MobSpawnerTileEntity) worldIn.getTileEntity(pos);
 						tile.getSpawnerBaseLogic().setEntityType(entityType);
 					}
+				}
+				else
+				{
+					worldIn.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState(), 3);
 				}
 			}
 		}

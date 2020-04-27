@@ -30,11 +30,14 @@ public class LeviathanPieces
 {
 	public static void assemble(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
-		init();
 		JigsawManager.func_214889_a(DungeonsPlus.locate("leviathan/spine"), 7, LeviathanPieces.Piece::new, chunkGen, template, pos, pieces, seed);
 	}
 
 	public static void init()
+	{
+	}
+
+	static
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "leviathan/");
 		registry.register("spine", registry.builder().names("spine_front_1", "spine_front_2").build());
