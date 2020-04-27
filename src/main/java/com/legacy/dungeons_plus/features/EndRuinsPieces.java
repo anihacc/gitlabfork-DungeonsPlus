@@ -3,6 +3,7 @@ package com.legacy.dungeons_plus.features;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.collect.ImmutableMap;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.structure_gel.structures.GelStructurePiece;
 import com.legacy.structure_gel.structures.jigsaw.JigsawPoolBuilder;
@@ -58,17 +59,24 @@ public class EndRuinsPieces
 		registry.register("pylon/debris", registry.builder().names("pylon/debris_1", "pylon/debris_2", "pylon/debris_3", "pylon/debris_4").build());
 
 		/**
+		 * Since all of the next registry entries will start with "end_ruins/tower/" I'm
+		 * changing the prefix. Using setPrefix creates a clone of the registry, so I'm
+		 * creating a new registry for this prefix. In practice, this allows me to use
+		 * the old registry and it's prefix along with this one.
+		 */
+		JigsawRegistryHelper towerRegistry = registry.setPrefix("end_ruins/tower/");
+		/**
 		 * By using the .clone() method, I can use the same settings for each pool
 		 * builder. All tower pools will use the RandomBlockSwapProcessor to replace end
 		 * stone bricks with end stone.
 		 */
-		JigsawPoolBuilder towerPieces = registry.builder().processors(new RandomBlockSwapProcessor(Blocks.END_STONE_BRICKS, 0.1F, Blocks.END_STONE.getDefaultState()));
-		registry.register("tower/base", towerPieces.clone().names("tower/base_1").build());
-		registry.register("tower/mid", towerPieces.clone().names("tower/mid_1").build());
-		registry.register("tower/top", towerPieces.clone().names("tower/top_1").build());
+		JigsawPoolBuilder towerPieces = towerRegistry.builder().processors(new RandomBlockSwapProcessor(Blocks.END_STONE_BRICKS, 0.1F, Blocks.END_STONE.getDefaultState()));
+		towerRegistry.register("base", towerPieces.clone().names("base_1", "base_2").build());
+		towerRegistry.register("mid", towerPieces.clone().names("mid_1", "mid_2").build());
+		towerRegistry.register("top", towerPieces.clone().names("top_1", "top_2").build());
 
-		registry.register("tower/spine", registry.builder().names("tower/spine").build());
-		registry.register("tower/block_pile", registry.builder().names("tower/block_pile_1").build());
+		towerRegistry.register("spine", towerRegistry.builder().names("spine").build());
+		towerRegistry.register("block_pile", towerRegistry.builder().names(ImmutableMap.of("block_pile_1", 2, "block_pile_2", 2, "block_pile_3", 2, "block_pile_4", 1)).build());
 
 	}
 
@@ -93,7 +101,11 @@ public class EndRuinsPieces
 				String[] data = key.split("-");
 				EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(data[1]));
 
-				if (entityType == EntityType.PHANTOM && rand.nextBoolean())
+				/**
+				 * Placing a phantom spawner 50% of the time, and an enderman spawner 100% of
+				 * the time.
+				 */
+				if ((entityType == EntityType.PHANTOM && rand.nextBoolean()) || entityType == EntityType.ENDERMAN)
 				{
 					worldIn.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
 					if (worldIn.getTileEntity(pos) instanceof MobSpawnerTileEntity)
