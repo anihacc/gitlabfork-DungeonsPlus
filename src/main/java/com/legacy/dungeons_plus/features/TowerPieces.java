@@ -45,12 +45,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class TowerPieces
 {
-	public static void init(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
+	public static void assemble(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
+		init();
 		JigsawManager.func_214889_a(DungeonsPlus.locate("tower/root"), 7, TowerPieces.Piece::new, chunkGen, template, pos, pieces, seed);
 	}
-
-	static
+	
+	public static void init()
 	{
 		/**
 		 * This is a processor from Structure Gel API for making a single block swap. It
