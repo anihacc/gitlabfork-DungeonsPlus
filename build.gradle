@@ -59,7 +59,7 @@ minecraft {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.15.2-31.1.50'
-	compile files('run/mods/structure-gel-dev.jar')
+	compile files('libs/structure-gel-api-deobf.jar')
 }
 
 jar {
