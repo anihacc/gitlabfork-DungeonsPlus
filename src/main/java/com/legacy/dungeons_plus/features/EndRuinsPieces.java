@@ -121,16 +121,12 @@ public class EndRuinsPieces
 				String[] data = key.split("-");
 				EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(data[1]));
 
-				/**
-				 * Placing a phantom spawner 50% of the time, and an enderman spawner 100% of
-				 * the time.
-				 */
-				if ((entityType == EntityType.PHANTOM && rand.nextBoolean()) || entityType == EntityType.ENDERMAN)
+				if (entityType == EntityType.PHANTOM || entityType == EntityType.ENDERMAN)
 				{
 					worldIn.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
 					if (worldIn.getTileEntity(pos) instanceof MobSpawnerTileEntity)
 					{
-						MobSpawnerTileEntity tile = (MobSpawnerTileEntity) worldIn.getTileEntity(pos);
+						MobSpawnerTileEntity tile = (MobSpawnerTileEntity) worldIn.getTileEntity(pos);					
 						tile.getSpawnerBaseLogic().setEntityType(entityType);
 					}
 				}
