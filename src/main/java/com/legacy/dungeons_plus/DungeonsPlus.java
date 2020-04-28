@@ -66,13 +66,17 @@ public class DungeonsPlus
 
 			if (DungeonsConfig.COMMON.tower.getBiomes().contains(biome))
 				biome.addStructure(Features.TOWER.getFirst().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-			
+
+			/**
+			 * Should only add to the overworld biomes. If you get it in your dimension, I'm
+			 * sorry. - Silver_David
+			 */
 			if (types.contains(BiomeDictionary.Type.OVERWORLD))
 				biome.addStructure(Features.BIGGER_DUNGEON.getFirst().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-			
+
 			if (DungeonsConfig.COMMON.leviathan.getBiomes().contains(biome))
 				biome.addStructure(Features.LEVIATHAN.getFirst().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
-			
+
 			if (DungeonsConfig.COMMON.endRuins.getBiomes().contains(biome))
 				biome.addStructure(Features.END_RUINS.getFirst().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
 		}

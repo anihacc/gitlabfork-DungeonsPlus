@@ -31,7 +31,6 @@ public class DungeonsConfig
 			this.biggerDungeon = new ConfigTemplates.StructureConfig(builder, "bigger_dungeon", 0.1D, 5, 2);
 			this.endRuins = new ConfigTemplates.BiomeStructureConfig(builder, "end_ruins", 1.0D, 35, 8, "end_highlands, end_midlands");
 			
-
 		}
 	}
 }
