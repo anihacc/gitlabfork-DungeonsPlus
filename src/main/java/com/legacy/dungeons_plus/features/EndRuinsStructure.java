@@ -23,11 +23,10 @@ public class EndRuinsStructure extends GelStructure<NoFeatureConfig>
 		super(configFactoryIn);
 	}
 
-	//TODO change seed
 	@Override
 	public int getSeed()
 	{
-		return 973181;
+		return 843152;
 	}
 
 	@Override
@@ -39,13 +38,13 @@ public class EndRuinsStructure extends GelStructure<NoFeatureConfig>
 	@Override
 	public int getSpacing()
 	{
-		return DungeonsConfig.COMMON.endRuins.getSpacing();
+		return 10;//DungeonsConfig.COMMON.endRuins.getSpacing();
 	}
 
 	@Override
 	public int getOffset()
 	{
-		return DungeonsConfig.COMMON.endRuins.getOffset();
+		return 0;//DungeonsConfig.COMMON.endRuins.getOffset();
 	}
 
 	@Override

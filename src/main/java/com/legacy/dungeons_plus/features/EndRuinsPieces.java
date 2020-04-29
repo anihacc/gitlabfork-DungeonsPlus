@@ -49,7 +49,7 @@ public class EndRuinsPieces
 		 * other structures on the ground off of it, similar to how the pillager outpost
 		 * works.
 		 */
-		registry.register("base_plate", registry.builder().names("base_plate").build(), PlacementBehaviour.TERRAIN_MATCHING);
+		registry.register("base_plate", registry.builder().names("base_plate").build(), PlacementBehaviour.RIGID);
 		registry.register("pylon_plate", registry.builder().names("pylon_plate").build(), PlacementBehaviour.TERRAIN_MATCHING);
 
 		/**
@@ -108,6 +108,7 @@ public class EndRuinsPieces
 					this.extendDown(world, Blocks.END_STONE.getDefaultState(), bounds, this.rotation, rand);
 				if (this.getLocation().toString().contains("end_ruins/pylon/"))
 					this.extendDown(world, Blocks.OBSIDIAN.getDefaultState(), bounds, this.rotation, rand);
+				return true;
 			}
 			return false;
 		}

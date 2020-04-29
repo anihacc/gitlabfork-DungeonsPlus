@@ -25,8 +25,8 @@ public class DungeonsEvents
 		{
 			EntityAccessHelper.setDeathLootTable((MobEntity) event.getEntity(), LEVIATHAN_HUSK);
 		}
-
-		if (event.getEntity() instanceof EndermanEntity && Features.END_RUINS.getFirst().isPositionInStructure(event.getWorld(), event.getEntity().getPosition()))
+		
+		if (event.getEntity().getType().equals(EntityType.ENDERMAN) && Features.END_RUINS.getFirst().isPositionInsideStructure(event.getWorld(), event.getEntity().getPosition()))
 		{
 			((EndermanEntity) event.getEntity()).targetSelector.addGoal(1, new NearestAttackableTargetGoal<>((EndermanEntity) event.getEntity(), PlayerEntity.class, true, false));
 		}
