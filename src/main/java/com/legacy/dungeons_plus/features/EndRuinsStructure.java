@@ -38,13 +38,13 @@ public class EndRuinsStructure extends GelStructure<NoFeatureConfig>
 	@Override
 	public int getSpacing()
 	{
-		return 10;//DungeonsConfig.COMMON.endRuins.getSpacing();
+		return DungeonsConfig.COMMON.endRuins.getSpacing();
 	}
 
 	@Override
 	public int getOffset()
 	{
-		return 0;//DungeonsConfig.COMMON.endRuins.getOffset();
+		return DungeonsConfig.COMMON.endRuins.getOffset();
 	}
 
 	@Override

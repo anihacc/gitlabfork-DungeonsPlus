@@ -29,7 +29,7 @@ public class DungeonsConfig
 			this.tower = new ConfigTemplates.BiomeStructureConfig(builder, "tower", 0.75D, 25, 6, "plains, forest, dark_forest, birch_forest, mountains");
 			this.leviathan = new ConfigTemplates.BiomeStructureConfig(builder, "leviathan", 1.0D, 36, 8, "desert");
 			this.biggerDungeon = new ConfigTemplates.StructureConfig(builder, "bigger_dungeon", 0.1D, 5, 2);
-			this.endRuins = new ConfigTemplates.BiomeStructureConfig(builder, "end_ruins", 1.0D, 35, 8, "end_highlands, end_midlands");
+			this.endRuins = new ConfigTemplates.BiomeStructureConfig(builder, "end_ruins", 1.0D, 24, 8, "end_highlands, end_midlands");
 			
 		}
 	}
