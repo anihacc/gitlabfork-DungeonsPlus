@@ -117,10 +117,9 @@ public class DungeonsPlus
 		private static <C extends IFeatureConfig> Pair<Structure<C>, IStructurePieceType> structure(RegistryEvent.Register<Feature<?>> event, String key, Structure<C> structure, IStructurePieceType pieceType)
 		{
 			register(event.getRegistry(), key, structure);
-			Registry.register(Registry.STRUCTURE_FEATURE, locate(key.toLowerCase()), structure);
-			Feature.STRUCTURES.put(locate(key.toLowerCase()).toString(), structure);
-			Registry.register(Registry.STRUCTURE_PIECE, locate(key.toLowerCase()).toString(), pieceType);
-			return Pair.of(structure, pieceType);
+			Structure<C> struc = Registry.register(Registry.STRUCTURE_FEATURE, locate(key.toLowerCase()), structure);
+			Feature.STRUCTURES.put(locate(key.toLowerCase()).toString(), struc);
+			return Pair.of(struc, Registry.register(Registry.STRUCTURE_PIECE, locate(key.toLowerCase()), pieceType));
 		}
 	}
 }

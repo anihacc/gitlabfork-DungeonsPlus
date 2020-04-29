@@ -22,7 +22,7 @@ public class EndRuinsStructure extends GelStructure<NoFeatureConfig>
 	{
 		super(configFactoryIn);
 	}
-
+	
 	@Override
 	public int getSeed()
 	{
@@ -58,7 +58,7 @@ public class EndRuinsStructure extends GelStructure<NoFeatureConfig>
 	{
 		return 5;
 	}
-	
+
 	public static class Start extends GelStructureStart
 	{
 
@@ -77,6 +77,12 @@ public class EndRuinsStructure extends GelStructure<NoFeatureConfig>
 			{
 				EndRuinsPieces.assemble(generator, templateManagerIn, new BlockPos(x, 0, z), this.components, this.rand);
 				this.recalculateStructureSize();
+
+				/**
+				 * Removes components if they generate below y level 5. In this case, basically
+				 * the parts that generate over the void.
+				 */
+				this.components.removeIf(c -> c.getBoundingBox().minY < 5);
 			}
 		}
 	}
