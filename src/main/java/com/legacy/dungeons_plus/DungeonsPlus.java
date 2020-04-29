@@ -118,7 +118,6 @@ public class DungeonsPlus
 		{
 			Structure<C> struc = Registry.register(Registry.STRUCTURE_FEATURE, locate(key.toLowerCase()), structure);
 			register(event.getRegistry(), key, struc);
-			//Feature.STRUCTURES.put(locate(key.toLowerCase()).toString(), struc);
 			return Pair.of(struc, Registry.register(Registry.STRUCTURE_PIECE, locate(key.toLowerCase()), pieceType));
 		}
 	}
