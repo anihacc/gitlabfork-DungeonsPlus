@@ -33,7 +33,7 @@ public class EndRuinsPieces
 {
 	public static void assemble(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
-		JigsawManager.func_214889_a(DungeonsPlus.locate("end_ruins/base_plate"), 7, EndRuinsPieces.Piece::new, chunkGen, template, pos, pieces, seed);
+		JigsawManager.func_214889_a(DungeonsPlus.locate("end_ruins/tower/base"), 7, EndRuinsPieces.Piece::new, chunkGen, template, pos, pieces, seed);
 	}
 
 	public static void init()
@@ -44,12 +44,11 @@ public class EndRuinsPieces
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "end_ruins/");
 
+		registry.register("pylon_plate_spacer", registry.builder().names("pylon_plate_spacer").build());
 		/**
-		 * In this case, root is a simple flat structure with jigsaws in it to generate
-		 * other structures on the ground off of it, similar to how the pillager outpost
-		 * works.
+		 * I'm using the terrain matching placement behavior to ensure the structures
+		 * that generate off of this plate are at ground level.
 		 */
-		registry.register("base_plate", registry.builder().names("base_plate").build(), PlacementBehaviour.RIGID);
 		registry.register("pylon_plate", registry.builder().names("pylon_plate").build(), PlacementBehaviour.TERRAIN_MATCHING);
 
 		/**
@@ -69,11 +68,12 @@ public class EndRuinsPieces
 		 * the old registry and it's prefix along with this one.
 		 */
 		JigsawRegistryHelper towerRegistry = registry.setPrefix("end_ruins/tower/");
+		
 		/**
 		 * By using the .clone() method, I can use the same settings for each pool
 		 * builder. All tower pools will use the RandomBlockSwapProcessor to replace end
 		 * stone bricks with end stone.
-		 */
+		 */		
 		JigsawPoolBuilder towerPieces = towerRegistry.builder().processors(new RandomBlockSwapProcessor(Blocks.END_STONE_BRICKS, 0.1F, Blocks.END_STONE.getDefaultState()));
 		towerRegistry.register("base", towerPieces.clone().names("base_1", "base_2").build());
 		towerRegistry.register("mid", towerPieces.clone().names("mid_1", "mid_2").build());
@@ -97,7 +97,8 @@ public class EndRuinsPieces
 		}
 
 		/**
-		 * Places end stone underneath the structure in case it generates with overhang, and obsidian under the pylons just in case.
+		 * Places end stone underneath the structure in case it generates with overhang,
+		 * and obsidian under the pylons just in case.
 		 */
 		@Override
 		public boolean func_225577_a_(IWorld world, ChunkGenerator<?> chunkGen, Random rand, MutableBoundingBox bounds, ChunkPos chunkPos)
@@ -127,7 +128,7 @@ public class EndRuinsPieces
 					worldIn.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
 					if (worldIn.getTileEntity(pos) instanceof MobSpawnerTileEntity)
 					{
-						MobSpawnerTileEntity tile = (MobSpawnerTileEntity) worldIn.getTileEntity(pos);					
+						MobSpawnerTileEntity tile = (MobSpawnerTileEntity) worldIn.getTileEntity(pos);
 						tile.getSpawnerBaseLogic().setEntityType(entityType);
 					}
 				}

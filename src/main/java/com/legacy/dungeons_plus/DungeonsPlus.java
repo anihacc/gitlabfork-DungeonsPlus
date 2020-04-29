@@ -116,9 +116,9 @@ public class DungeonsPlus
 		@SuppressWarnings("deprecation")
 		private static <C extends IFeatureConfig> Pair<Structure<C>, IStructurePieceType> structure(RegistryEvent.Register<Feature<?>> event, String key, Structure<C> structure, IStructurePieceType pieceType)
 		{
-			register(event.getRegistry(), key, structure);
 			Structure<C> struc = Registry.register(Registry.STRUCTURE_FEATURE, locate(key.toLowerCase()), structure);
-			Feature.STRUCTURES.put(locate(key.toLowerCase()).toString(), struc);
+			register(event.getRegistry(), key, struc);
+			//Feature.STRUCTURES.put(locate(key.toLowerCase()).toString(), struc);
 			return Pair.of(struc, Registry.register(Registry.STRUCTURE_PIECE, locate(key.toLowerCase()), pieceType));
 		}
 	}
