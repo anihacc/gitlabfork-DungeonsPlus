@@ -7,11 +7,13 @@ import org.apache.logging.log4j.Logger;
 
 import com.legacy.dungeons_plus.features.BiggerDungeonPieces;
 import com.legacy.dungeons_plus.features.BiggerDungeonStructure;
+import com.legacy.dungeons_plus.features.EndRuinsPieces;
+import com.legacy.dungeons_plus.features.EndRuinsStructure;
 import com.legacy.dungeons_plus.features.LeviathanPieces;
 import com.legacy.dungeons_plus.features.LeviathanStructure;
 import com.legacy.dungeons_plus.features.TowerPieces;
 import com.legacy.dungeons_plus.features.TowerStructure;
-import com.legacy.structure_gel.structures.JigsawAccessHelper;
+import com.legacy.structure_gel.structures.jigsaw.JigsawAccessHelper;
 import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.util.ResourceLocation;
@@ -57,20 +59,26 @@ public class DungeonsPlus
 		{
 			Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(biome);
 
+			biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.TOWER.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+			biome.addFeature(Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature(Features.BIGGER_DUNGEON.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+			biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.LEVIATHAN.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+			biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.END_RUINS.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
+
+			if (DungeonsConfig.COMMON.tower.getBiomes().contains(biome))
+				biome.addStructure(Features.TOWER.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
+
+			/**
+			 * Should only add to the overworld biomes. If you get it in your dimension, I'm
+			 * sorry. - Silver_David
+			 */
 			if (types.contains(BiomeDictionary.Type.OVERWORLD))
-			{
-				biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.TOWER.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
-				biome.addFeature(Decoration.SURFACE_STRUCTURES, Biome.createDecoratedFeature(Features.LEVIATHAN.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
-				biome.addFeature(Decoration.UNDERGROUND_STRUCTURES, Biome.createDecoratedFeature(Features.BIGGER_DUNGEON.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG, Placement.NOPE, IPlacementConfig.NO_PLACEMENT_CONFIG));
-
-				if (DungeonsConfig.COMMON.tower.getBiomes().contains(biome))
-					biome.addStructure(Features.TOWER.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
-
-				if (DungeonsConfig.COMMON.leviathan.getBiomes().contains(biome))
-					biome.addStructure(Features.LEVIATHAN.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
-
 				biome.addStructure(Features.BIGGER_DUNGEON.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
-			}
+
+			if (DungeonsConfig.COMMON.leviathan.getBiomes().contains(biome))
+				biome.addStructure(Features.LEVIATHAN.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
+
+			if (DungeonsConfig.COMMON.endRuins.getBiomes().contains(biome))
+				biome.addStructure(Features.END_RUINS.getFirst(), IFeatureConfig.NO_FEATURE_CONFIG);
 		}
 	}
 
@@ -92,6 +100,7 @@ public class DungeonsPlus
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> TOWER;
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> LEVIATHAN;
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> BIGGER_DUNGEON;
+		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> END_RUINS;
 
 		@SubscribeEvent
 		public static void onRegistry(final RegistryEvent.Register<Feature<?>> event)
@@ -99,6 +108,7 @@ public class DungeonsPlus
 			TOWER = structure(event, "tower", new TowerStructure(NoFeatureConfig::deserialize), TowerPieces.Piece::new);
 			LEVIATHAN = structure(event, "leviathan", new LeviathanStructure(NoFeatureConfig::deserialize), LeviathanPieces.Piece::new);
 			BIGGER_DUNGEON = structure(event, "bigger_dungeon", new BiggerDungeonStructure(NoFeatureConfig::deserialize), BiggerDungeonPieces.Piece::new);
+			END_RUINS = structure(event, "end_ruins", new EndRuinsStructure(NoFeatureConfig::deserialize), EndRuinsPieces.Piece::new);
 
 			JigsawAccessHelper.addIllagerStructures(TOWER.getFirst());
 		}
@@ -106,11 +116,9 @@ public class DungeonsPlus
 		@SuppressWarnings("deprecation")
 		private static <C extends IFeatureConfig> Pair<Structure<C>, IStructurePieceType> structure(RegistryEvent.Register<Feature<?>> event, String key, Structure<C> structure, IStructurePieceType pieceType)
 		{
-			register(event.getRegistry(), key, structure);
-			Registry.register(Registry.STRUCTURE_FEATURE, locate(key.toLowerCase()), structure);
-			Feature.STRUCTURES.put(locate(key.toLowerCase()).toString(), structure);
-			Registry.register(Registry.STRUCTURE_PIECE, locate(key.toLowerCase()).toString(), pieceType);
-			return Pair.of(structure, pieceType);
+			Structure<C> struc = Registry.register(Registry.STRUCTURE_FEATURE, locate(key.toLowerCase()), structure);
+			register(event.getRegistry(), key, struc);
+			return Pair.of(struc, Registry.register(Registry.STRUCTURE_PIECE, locate(key.toLowerCase()), pieceType));
 		}
 	}
 }
