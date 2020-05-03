@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.google.common.collect.ImmutableMap;
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.DungeonsPlusLoot;
 import com.legacy.structure_gel.structures.GelStructurePiece;
 import com.legacy.structure_gel.structures.jigsaw.JigsawPoolBuilder;
 import com.legacy.structure_gel.structures.jigsaw.JigsawRegistryHelper;
@@ -70,10 +71,12 @@ public class BiggerDungeonPieces
 		 * clone it otherwise we end up changing the instance, which affects all
 		 * builders associated with it.
 		 */
-		JigsawPoolBuilder basicRooms = basicPoolBuilder.clone().names(ImmutableMap.of("side_room/skeleton", 4, "side_room/zombie", 4));
+		JigsawPoolBuilder basicRooms = basicPoolBuilder.clone().names(ImmutableMap.of("side_room/skeleton", 8, "side_room/zombie", 8));
 		JigsawPoolBuilder strayRoom = registry.builder().names("side_room/stray").maintainWater(false).processors(new RandomBlockSwapProcessor(Blocks.COBBLESTONE, 0.2F, Blocks.PACKED_ICE.getDefaultState()));
 		JigsawPoolBuilder huskRoom = registry.builder().names("side_room/husk").maintainWater(false).processors(new RandomBlockSwapProcessor(Blocks.COBBLESTONE, 0.2F, Blocks.TERRACOTTA.getDefaultState()));
-		registry.register("side_room", JigsawPoolBuilder.collect(basicRooms, strayRoom, huskRoom));
+		registry.register("normal_room", JigsawPoolBuilder.collect(basicRooms, strayRoom, huskRoom));
+		
+		registry.register("special_room", JigsawPoolBuilder.collect(strayRoom, huskRoom));
 
 	}
 
@@ -101,7 +104,12 @@ public class BiggerDungeonPieces
 
 					worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.byName(data[1])).rotate(this.rotation), 3);
 					if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)
-						((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
+						if (data[1].contains("huskmap"))
+							((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(DungeonsPlusLoot.DUNGEON_LOOT_HUSK, rand.nextLong());
+						else if (data[1].contains("straymap"))
+							((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(DungeonsPlusLoot.DUNGEON_LOOT_STRAY, rand.nextLong());
+						else
+							((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
 				}
 			}
 			if (key.contains("spawner"))
