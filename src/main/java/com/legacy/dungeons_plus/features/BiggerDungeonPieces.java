@@ -75,7 +75,7 @@ public class BiggerDungeonPieces
 		JigsawPoolBuilder strayRoom = registry.builder().names("side_room/stray").maintainWater(false).processors(new RandomBlockSwapProcessor(Blocks.COBBLESTONE, 0.2F, Blocks.PACKED_ICE.getDefaultState()));
 		JigsawPoolBuilder huskRoom = registry.builder().names("side_room/husk").maintainWater(false).processors(new RandomBlockSwapProcessor(Blocks.COBBLESTONE, 0.2F, Blocks.TERRACOTTA.getDefaultState()));
 		registry.register("normal_room", JigsawPoolBuilder.collect(basicRooms, strayRoom, huskRoom));
-		
+
 		registry.register("special_room", JigsawPoolBuilder.collect(strayRoom, huskRoom));
 
 	}
@@ -98,10 +98,13 @@ public class BiggerDungeonPieces
 			if (key.contains("chest"))
 			{
 				this.setAir(worldIn, pos);
-				if (rand.nextBoolean())
-				{
-					String[] data = key.split("-");
+				String[] data = key.split("-");
 
+				/**
+				 * Generates the chests with a 50% chance, or if they are a map chest.
+				 */
+				if (rand.nextBoolean() || data[0].contains("map"))
+				{
 					worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.byName(data[1])).rotate(this.rotation), 3);
 					if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)
 						if (data[1].contains("huskmap"))

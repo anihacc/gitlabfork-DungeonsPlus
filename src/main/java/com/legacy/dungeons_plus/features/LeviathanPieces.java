@@ -65,14 +65,11 @@ public class LeviathanPieces
 			if (key.contains("chest"))
 			{
 				this.setAir(world, pos);
-				if (rand.nextBoolean())
-				{
-					String[] data = key.split("-");
+				String[] data = key.split("-");
 
-					world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.byName(data[1])).rotate(this.rotation), 3);
-					if (world.getTileEntity(pos) instanceof ChestTileEntity)
-						((ChestTileEntity) world.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
-				}
+				world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.byName(data[1])).rotate(this.rotation), 3);
+				if (world.getTileEntity(pos) instanceof ChestTileEntity)
+					((ChestTileEntity) world.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
 			}
 			if (key.equals("spawner"))
 			{
