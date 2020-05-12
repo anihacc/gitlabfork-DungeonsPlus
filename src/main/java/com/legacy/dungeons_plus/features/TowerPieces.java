@@ -188,7 +188,7 @@ public class TowerPieces
 				worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).rotate(this.rotation), 3);
 				if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)
 				{
-					if (data[1].contains("map"))
+					if (data[0].contains("map"))
 						((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(DungeonsPlusLoot.TOWER_LOOT_MAP, rand.nextLong());
 					else
 						((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());

@@ -3,7 +3,6 @@ package com.legacy.dungeons_plus.features;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.collect.ImmutableMap;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.DungeonsPlusLoot;
 import com.legacy.structure_gel.structures.GelStructurePiece;
@@ -61,19 +60,21 @@ public class BiggerDungeonPieces
 		registry.register("main_room", basicPoolBuilder.clone().names("main_room").build());
 
 		/**
-		 * Using multiple JigsawPoolBuilders, I can collect them into one pool and build
-		 * that, while keeping the settings of each pool builder in their own
-		 * structures. In this, I'll have a zombie, skeleton, husk, and stray room with
-		 * the zombie and skeleton having a weight of 4.
-		 * 
 		 * Since basicRooms is cloning from basicPoolBuilder, they will have the
 		 * processor that converts some cobblestone to mossy cobble. Note: We have to
 		 * clone it otherwise we end up changing the instance, which affects all
 		 * builders associated with it.
 		 */
-		JigsawPoolBuilder basicRooms = basicPoolBuilder.clone().names(ImmutableMap.of("side_room/skeleton", 8, "side_room/zombie", 8));
+		JigsawPoolBuilder basicRooms = basicPoolBuilder.clone().weight(8).names("side_room/skeleton", "side_room/zombie");
 		JigsawPoolBuilder strayRoom = registry.builder().names("side_room/stray").maintainWater(false).processors(new RandomBlockSwapProcessor(Blocks.COBBLESTONE, 0.2F, Blocks.PACKED_ICE.getDefaultState()));
 		JigsawPoolBuilder huskRoom = registry.builder().names("side_room/husk").maintainWater(false).processors(new RandomBlockSwapProcessor(Blocks.COBBLESTONE, 0.2F, Blocks.TERRACOTTA.getDefaultState()));
+
+		/**
+		 * Using the JigsawPoolBuilder's collect method, I can merge as many pools as I
+		 * want together. Doing this will maintain the input weights of each pool. In
+		 * this instance, a normal room has skeleton and zombies with a weight of 8 and
+		 * husks and strays with a weight of 1 each.
+		 */
 		registry.register("normal_room", JigsawPoolBuilder.collect(basicRooms, strayRoom, huskRoom));
 
 		registry.register("special_room", JigsawPoolBuilder.collect(strayRoom, huskRoom));
@@ -107,9 +108,9 @@ public class BiggerDungeonPieces
 				{
 					worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.byName(data[1])).rotate(this.rotation), 3);
 					if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)
-						if (data[1].contains("huskmap"))
+						if (data[0].contains("huskmap"))
 							((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(DungeonsPlusLoot.DUNGEON_LOOT_HUSK, rand.nextLong());
-						else if (data[1].contains("straymap"))
+						else if (data[0].contains("straymap"))
 							((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(DungeonsPlusLoot.DUNGEON_LOOT_STRAY, rand.nextLong());
 						else
 							((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());

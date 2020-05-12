@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.google.common.collect.Lists;
-import com.legacy.dungeons_plus.DungeonsConfig;
-import com.legacy.structure_gel.structures.GelStructure;
+import com.legacy.structure_gel.ConfigTemplates.StructureConfig;
+import com.legacy.structure_gel.structures.GelConfigStructure;
 import com.legacy.structure_gel.structures.GelStructureStart;
 import com.mojang.datafixers.Dynamic;
 
@@ -19,13 +19,13 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-public class LeviathanStructure extends GelStructure<NoFeatureConfig>
+public class LeviathanStructure extends GelConfigStructure<NoFeatureConfig>
 {
 	public static final List<SpawnListEntry> SPAWNS = Lists.newArrayList(new SpawnListEntry(EntityType.HUSK, 1, 4, 4));
-	
-	public LeviathanStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
+
+	public LeviathanStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn, StructureConfig config)
 	{
-		super(configFactoryIn);
+		super(configFactoryIn, config);
 	}
 
 	@Override
@@ -38,24 +38,6 @@ public class LeviathanStructure extends GelStructure<NoFeatureConfig>
 	public int getSeed()
 	{
 		return 719643;
-	}
-
-	@Override
-	public double getProbability()
-	{
-		return DungeonsConfig.COMMON.leviathan.getProbability();
-	}
-
-	@Override
-	public int getSpacing()
-	{
-		return DungeonsConfig.COMMON.leviathan.getSpacing();
-	}
-
-	@Override
-	public int getOffset()
-	{
-		return DungeonsConfig.COMMON.leviathan.getOffset();
 	}
 
 	@Override
