@@ -21,16 +21,18 @@ public class DungeonsConfig
 	{
 		public final ConfigTemplates.BiomeStructureConfig tower;
 		public final ConfigTemplates.BiomeStructureConfig leviathan;
-		public final ConfigTemplates.StructureConfig biggerDungeon;
+		public final ConfigTemplates.BiomeStructureConfig snowyTemple;
+		public final ConfigTemplates.BiomeStructureConfig biggerDungeon;
 		public final ConfigTemplates.BiomeStructureConfig endRuins;
 
 		public Common(ForgeConfigSpec.Builder builder)
 		{
 			this.tower = new ConfigTemplates.BiomeStructureConfig(builder, "tower", 0.75D, 25, 6, "plains, forest, dark_forest, birch_forest, mountains");
 			this.leviathan = new ConfigTemplates.BiomeStructureConfig(builder, "leviathan", 1.0D, 36, 8, "desert");
-			this.biggerDungeon = new ConfigTemplates.StructureConfig(builder, "bigger_dungeon", 0.1D, 5, 2);
-			this.endRuins = new ConfigTemplates.BiomeStructureConfig(builder, "end_ruins", 1.0D, 24, 8, "end_highlands, end_midlands");
-			
+			this.snowyTemple = new ConfigTemplates.BiomeStructureConfig(builder, "snowy_temple", 1.0D, 36, 8, "snowy_tundra");
+			this.biggerDungeon = new ConfigTemplates.BiomeStructureConfig(builder, "bigger_dungeon", 0.4D, 12, 5, "mushroom_fields, mushroom_field_shore", false);
+			this.endRuins = new ConfigTemplates.BiomeStructureConfig(builder, "end_ruins", 0.8D, 24, 8, "end_highlands, end_midlands");
+
 		}
 	}
 }

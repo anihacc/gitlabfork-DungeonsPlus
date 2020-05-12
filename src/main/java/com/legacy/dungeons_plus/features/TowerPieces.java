@@ -6,6 +6,7 @@ import java.util.Random;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.DungeonsPlusLoot;
 import com.legacy.structure_gel.structures.GelStructurePiece;
 import com.legacy.structure_gel.structures.jigsaw.JigsawPoolBuilder;
 import com.legacy.structure_gel.structures.jigsaw.JigsawRegistryHelper;
@@ -182,7 +183,12 @@ public class TowerPieces
 
 				worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).rotate(this.rotation), 3);
 				if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)
-					((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
+				{
+					if (data[0].contains("map"))
+						((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(DungeonsPlusLoot.TOWER_LOOT_MAP, rand.nextLong());
+					else
+						((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
+				}
 			}
 			if (key.contains("spawner"))
 			{

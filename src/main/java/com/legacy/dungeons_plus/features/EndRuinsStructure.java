@@ -2,8 +2,8 @@ package com.legacy.dungeons_plus.features;
 
 import java.util.function.Function;
 
-import com.legacy.dungeons_plus.DungeonsConfig;
-import com.legacy.structure_gel.structures.GelStructure;
+import com.legacy.structure_gel.ConfigTemplates.StructureConfig;
+import com.legacy.structure_gel.structures.GelConfigStructure;
 import com.legacy.structure_gel.structures.GelStructureStart;
 import com.mojang.datafixers.Dynamic;
 
@@ -16,35 +16,17 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-public class EndRuinsStructure extends GelStructure<NoFeatureConfig>
+public class EndRuinsStructure extends GelConfigStructure<NoFeatureConfig>
 {
-	public EndRuinsStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn)
+	public EndRuinsStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn, StructureConfig config)
 	{
-		super(configFactoryIn);
+		super(configFactoryIn, config);
 	}
-	
+
 	@Override
 	public int getSeed()
 	{
 		return 843152;
-	}
-
-	@Override
-	public double getProbability()
-	{
-		return DungeonsConfig.COMMON.endRuins.getProbability();
-	}
-
-	@Override
-	public int getSpacing()
-	{
-		return DungeonsConfig.COMMON.endRuins.getSpacing();
-	}
-
-	@Override
-	public int getOffset()
-	{
-		return DungeonsConfig.COMMON.endRuins.getOffset();
 	}
 
 	@Override
