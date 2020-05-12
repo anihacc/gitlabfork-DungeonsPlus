@@ -56,34 +56,34 @@ public class DungeonsPlus
 		for (Biome biome : ForgeRegistries.BIOMES.getValues())
 		{
 			Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(biome);
-			
+
 			RegistryHelper.addFeature(biome, Decoration.SURFACE_STRUCTURES, Features.TOWER.getFirst());
 			RegistryHelper.addFeature(biome, Decoration.UNDERGROUND_STRUCTURES, Features.BIGGER_DUNGEON.getFirst());
 			RegistryHelper.addFeature(biome, Decoration.SURFACE_STRUCTURES, Features.LEVIATHAN.getFirst());
 			RegistryHelper.addFeature(biome, Decoration.SURFACE_STRUCTURES, Features.SNOWY_TEMPLE.getFirst());
 			RegistryHelper.addFeature(biome, Decoration.SURFACE_STRUCTURES, Features.END_RUINS.getFirst());
 
-			if (DungeonsConfig.COMMON.tower.getBiomes().contains(biome))
+			if (DungeonsConfig.COMMON.tower.isBiomeAllowed(biome))
 				RegistryHelper.addStructure(biome, Features.TOWER.getFirst());
 
 			/**
 			 * Should only add to the overworld biomes. If you get it in your dimension, I'm
-			 * sorry. - Silver_David
+			 * sorry, but there is a blacklist in the config. - Silver_David
 			 */
-			if (types.contains(BiomeDictionary.Type.OVERWORLD))
+			if (types.contains(BiomeDictionary.Type.OVERWORLD) && DungeonsConfig.COMMON.biggerDungeon.isBiomeAllowed(biome))
 				RegistryHelper.addStructure(biome, Features.BIGGER_DUNGEON.getFirst());
 
-			if (DungeonsConfig.COMMON.leviathan.getBiomes().contains(biome))
+			if (DungeonsConfig.COMMON.leviathan.isBiomeAllowed(biome))
 				RegistryHelper.addStructure(biome, Features.LEVIATHAN.getFirst());
-			
-			if (DungeonsConfig.COMMON.snowyTemple.getBiomes().contains(biome))
+
+			if (DungeonsConfig.COMMON.snowyTemple.isBiomeAllowed(biome))
 				RegistryHelper.addStructure(biome, Features.SNOWY_TEMPLE.getFirst());
-			
-			if (DungeonsConfig.COMMON.endRuins.getBiomes().contains(biome))
+
+			if (DungeonsConfig.COMMON.endRuins.isBiomeAllowed(biome))
 				RegistryHelper.addStructure(biome, Features.END_RUINS.getFirst());
 		}
 	}
-	
+
 	public static ResourceLocation locate(String key)
 	{
 		return new ResourceLocation(MODID, key);
@@ -97,7 +97,7 @@ public class DungeonsPlus
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> SNOWY_TEMPLE;
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> BIGGER_DUNGEON;
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> END_RUINS;
-		
+
 		@SubscribeEvent
 		public static void onRegistry(final RegistryEvent.Register<Feature<?>> event)
 		{
