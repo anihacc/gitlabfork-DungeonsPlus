@@ -24,6 +24,6 @@ issueTrackerURL="https://gitlab.com/groups/modding-legacy/-/issues"
 [[dependencies.dungeons_plus]]
     modId="structure_gel"
     mandatory=true
-    versionRange="[1.0.0]"
+    versionRange="[1.0.0,]"
     ordering="NONE"
     side="BOTH"
