@@ -6,7 +6,7 @@ issueTrackerURL="https://gitlab.com/groups/modding-legacy/-/issues"
 	version="${file.jarVersion}"
 	displayName="Dungeons Plus"
 	displayURL="https://moddinglegacy.com/"
-	logoFile="banner.png"
+	logoFile="logo.png"
 	authors="Silver_David"
 	description='''Adds a few new dungeons to the world using Structure Gel API'''
 [[dependencies.dungeons_plus]]
