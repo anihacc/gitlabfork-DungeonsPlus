@@ -24,6 +24,6 @@ description='''Adds a few new dungeons to the world using Structure Gel API'''
 [[dependencies.dungeons_plus]]
     modId="structure_gel"
     mandatory=true
-    versionRange="[1.0.0]"
+    versionRange="[1.0.0,]"
     ordering="NONE"
     side="BOTH"
