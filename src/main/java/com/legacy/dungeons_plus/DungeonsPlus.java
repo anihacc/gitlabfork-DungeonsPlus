@@ -108,7 +108,7 @@ public class DungeonsPlus
 			BIGGER_DUNGEON = RegistryHelper.registerStructureAndPiece(registry, locate("bigger_dungeon"), new BiggerDungeonStructure(NoFeatureConfig::deserialize, DungeonsConfig.COMMON.biggerDungeon), BiggerDungeonPieces.Piece::new);
 			END_RUINS = RegistryHelper.registerStructureAndPiece(registry, locate("end_ruins"), new EndRuinsStructure(NoFeatureConfig::deserialize, DungeonsConfig.COMMON.endRuins), EndRuinsPieces.Piece::new);
 
-			JigsawAccessHelper.addIllagerStructures(TOWER.getFirst());
+			JigsawAccessHelper.addIllagerStructures(TOWER.getFirst(), SNOWY_TEMPLE.getFirst());
 		}
 	}
 }

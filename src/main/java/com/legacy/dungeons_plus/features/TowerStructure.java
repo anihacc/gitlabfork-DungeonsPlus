@@ -52,7 +52,7 @@ public class TowerStructure extends GelConfigStructure<NoFeatureConfig>
 		public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
 		{
 			BlockPos pos = new BlockPos(chunkX * 16 + this.rand.nextInt(5), 90, chunkZ * 16 + this.rand.nextInt(5));
-			TowerPieces.init(generator, templateManagerIn, pos, this.components, this.rand);
+			TowerPieces.assemble(generator, templateManagerIn, pos, this.components, this.rand);
 			this.recalculateStructureSize();
 		}
 

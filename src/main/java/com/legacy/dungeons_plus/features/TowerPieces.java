@@ -46,9 +46,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class TowerPieces
 {
-	public static void init(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
+	public static void assemble(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
 		JigsawManager.func_214889_a(DungeonsPlus.locate("tower/root"), 7, TowerPieces.Piece::new, chunkGen, template, pos, pieces, seed);
+	}
+
+	public static void init()
+	{
 	}
 
 	static

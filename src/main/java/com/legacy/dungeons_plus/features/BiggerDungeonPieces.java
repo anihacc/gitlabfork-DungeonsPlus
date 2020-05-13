@@ -32,9 +32,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class BiggerDungeonPieces
 {
-	public static void init(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
+	public static void assemble(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
 		JigsawManager.func_214889_a(DungeonsPlus.locate("bigger_dungeon/root"), 7, BiggerDungeonPieces.Piece::new, chunkGen, template, pos, pieces, seed);
+	}
+
+	public static void init()
+	{
 	}
 
 	static
