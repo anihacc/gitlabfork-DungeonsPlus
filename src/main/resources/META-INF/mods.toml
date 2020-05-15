@@ -2,13 +2,13 @@ modLoader="javafml"
 loaderVersion="[31,)"
 issueTrackerURL="https://gitlab.com/groups/modding-legacy/-/issues"
 [[mods]]
-modId="dungeons_plus"
-version="${file.jarVersion}"
-displayName="Dungeons Plus"
-displayURL="https://moddinglegacy.com/"
-logoFile="logo.png"
-authors="Silver_David"
-description='''Adds a few new dungeons to the world using Structure Gel API'''
+	modId="dungeons_plus"
+	version="${file.jarVersion}"
+	displayName="Dungeons Plus"
+	displayURL="https://moddinglegacy.com/"
+	logoFile="logo.png"
+	authors="Silver_David"
+	description='''Adds a few new dungeons to the world using Structure Gel API'''
 [[dependencies.dungeons_plus]]
     modId="forge"
     mandatory=true
