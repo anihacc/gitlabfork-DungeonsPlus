@@ -33,7 +33,7 @@ public class EndRuinsPieces
 {
 	public static void assemble(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
-		JigsawManager.func_214889_a(DungeonsPlus.locate("end_ruins/tower/base"), 7, EndRuinsPieces.Piece::new, chunkGen, template, pos, pieces, seed);
+		JigsawManager.addPieces(DungeonsPlus.locate("end_ruins/tower/base"), 7, EndRuinsPieces.Piece::new, chunkGen, template, pos, pieces, seed);
 	}
 
 	public static void init()
@@ -101,9 +101,9 @@ public class EndRuinsPieces
 		 * and obsidian under the pylons just in case.
 		 */
 		@Override
-		public boolean func_225577_a_(IWorld world, ChunkGenerator<?> chunkGen, Random rand, MutableBoundingBox bounds, ChunkPos chunkPos)
+		public boolean create(IWorld world, ChunkGenerator<?> chunkGen, Random rand, MutableBoundingBox bounds, ChunkPos chunkPos)
 		{
-			if (super.func_225577_a_(world, chunkGen, rand, bounds, chunkPos))
+			if (super.create(world, chunkGen, rand, bounds, chunkPos))
 			{
 				if (this.getLocation().toString().contains("end_ruins/tower/base_"))
 					this.extendDown(world, Blocks.END_STONE.getDefaultState(), bounds, this.rotation, rand);

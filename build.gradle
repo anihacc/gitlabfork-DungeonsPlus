@@ -19,7 +19,7 @@ archivesBaseName = 'dungeons-plus-1.15.2'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200425-1.15.1'
+    mappings channel: 'snapshot', version: '20200529-1.15.1'
     runs {
         client {
             workingDirectory project.file('run')
