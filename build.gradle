@@ -60,7 +60,7 @@ minecraft {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.14.4-28.2.0'
-	compile files('libs/structure-gel-api-deobf.jar')
+	compile files('libs/structure-gel-api-1.14.4-1.0.0-deobf.jar')
 }
 
 jar {
