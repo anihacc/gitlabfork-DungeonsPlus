@@ -2,7 +2,7 @@ package com.legacy.dungeons_plus;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.legacy.structure_gel.ConfigTemplates;
+import com.legacy.structure_gel.util.ConfigTemplates;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

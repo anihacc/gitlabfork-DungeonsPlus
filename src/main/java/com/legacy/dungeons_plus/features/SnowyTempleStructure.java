@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
-import com.legacy.structure_gel.ConfigTemplates.StructureConfig;
 import com.legacy.structure_gel.structures.GelConfigStructure;
 import com.legacy.structure_gel.structures.GelStructureStart;
+import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
 import com.mojang.datafixers.Dynamic;
 
 import net.minecraft.entity.EntityType;
