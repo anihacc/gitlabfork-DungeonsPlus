@@ -1,7 +1,7 @@
 package com.legacy.dungeons_plus;
 
 import com.legacy.dungeons_plus.DungeonsPlus.Features;
-import com.legacy.structure_gel.entities.EntityAccessHelper;
+import com.legacy.structure_gel.access_helpers.EntityAccessHelper;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;

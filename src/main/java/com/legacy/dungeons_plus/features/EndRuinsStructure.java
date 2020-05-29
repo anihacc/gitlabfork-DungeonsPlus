@@ -2,9 +2,9 @@ package com.legacy.dungeons_plus.features;
 
 import java.util.function.Function;
 
-import com.legacy.structure_gel.ConfigTemplates.StructureConfig;
 import com.legacy.structure_gel.structures.GelConfigStructure;
 import com.legacy.structure_gel.structures.GelStructureStart;
+import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
 import com.mojang.datafixers.Dynamic;
 
 import net.minecraft.util.math.BlockPos;

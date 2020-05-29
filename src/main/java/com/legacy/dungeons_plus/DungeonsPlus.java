@@ -15,7 +15,7 @@ import com.legacy.dungeons_plus.features.SnowyTemplePieces;
 import com.legacy.dungeons_plus.features.SnowyTempleStructure;
 import com.legacy.dungeons_plus.features.TowerPieces;
 import com.legacy.dungeons_plus.features.TowerStructure;
-import com.legacy.structure_gel.structures.jigsaw.JigsawAccessHelper;
+import com.legacy.structure_gel.access_helpers.JigsawAccessHelper;
 import com.legacy.structure_gel.util.RegistryHelper;
 import com.mojang.datafixers.util.Pair;
 
