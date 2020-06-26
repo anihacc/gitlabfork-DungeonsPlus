@@ -32,7 +32,6 @@ public class DungeonsConfig
 			this.snowyTemple = new ConfigTemplates.BiomeStructureConfig(builder, "snowy_temple", 1.0D, 36, 8, "snowy_tundra");
 			this.biggerDungeon = new ConfigTemplates.BiomeStructureConfig(builder, "bigger_dungeon", 0.4D, 12, 5, "mushroom_fields, mushroom_field_shore", false);
 			this.endRuins = new ConfigTemplates.BiomeStructureConfig(builder, "end_ruins", 0.8D, 24, 8, "end_highlands, end_midlands");
-
 		}
 	}
 }
