@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.0.0'
+version = '1.0.1'
 group = 'com.legacy.dungeons_plus'
 archivesBaseName = 'dungeons-plus-1.14.4'
 
@@ -60,7 +60,7 @@ minecraft {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.14.4-28.2.0'
-	compile files('libs/structure-gel-api-1.14.4-1.0.0-deobf.jar')
+	compile files('libs/structure-gel-api-1.14.4-1.1.0-deobf.jar')
 }
 
 jar {
