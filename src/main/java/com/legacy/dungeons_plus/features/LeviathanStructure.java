@@ -56,7 +56,7 @@ public class LeviathanStructure extends GelConfigStructure<NoFeatureConfig>
 		@Override
 		public void func_230364_a_(ChunkGenerator generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config)
 		{
-			LeviathanPieces.assemble(generator, templateManagerIn, new BlockPos(chunkX * 16 + rand.nextInt(15), 90, chunkZ * 16 + rand.nextInt(15)), this.components, this.rand);
+			LeviathanPieces.assemble(generator, templateManagerIn, new BlockPos(chunkX * 16 + rand.nextInt(15), 0, chunkZ * 16 + rand.nextInt(15)), this.components, this.rand);
 			this.recalculateStructureSize();
 
 			this.components.forEach(c -> c.offset(0, -1, 0));

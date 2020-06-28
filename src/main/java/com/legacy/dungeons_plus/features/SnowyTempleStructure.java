@@ -56,7 +56,7 @@ public class SnowyTempleStructure extends GelConfigStructure<NoFeatureConfig>
 		@Override
 		public void func_230364_a_(ChunkGenerator generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config)
 		{
-			SnowyTemplePieces.assemble(generator, templateManagerIn, new BlockPos(chunkX * 16 + rand.nextInt(15), 90, chunkZ * 16 + rand.nextInt(15)), this.components, this.rand);
+			SnowyTemplePieces.assemble(generator, templateManagerIn, new BlockPos(chunkX * 16 + rand.nextInt(15), 0, chunkZ * 16 + rand.nextInt(15)), this.components, this.rand);
 			this.recalculateStructureSize();
 		}
 	}
