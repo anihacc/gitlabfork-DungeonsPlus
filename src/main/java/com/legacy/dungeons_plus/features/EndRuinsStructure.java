@@ -1,11 +1,9 @@
 package com.legacy.dungeons_plus.features;
 
-import java.util.function.Function;
-
 import com.legacy.structure_gel.structures.GelConfigStructure;
 import com.legacy.structure_gel.structures.GelStructureStart;
 import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
@@ -18,9 +16,9 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 
 public class EndRuinsStructure extends GelConfigStructure<NoFeatureConfig>
 {
-	public EndRuinsStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn, StructureConfig config)
+	public EndRuinsStructure(Codec<NoFeatureConfig> codec, StructureConfig config)
 	{
-		super(configFactoryIn, config);
+		super(codec, config);
 	}
 
 	@Override
@@ -30,27 +28,21 @@ public class EndRuinsStructure extends GelConfigStructure<NoFeatureConfig>
 	}
 
 	@Override
-	public IStartFactory getStartFactory()
+	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return EndRuinsStructure.Start::new;
 	}
 
-	@Override
-	public int getSize()
-	{
-		return 5;
-	}
-
-	public static class Start extends GelStructureStart
+	public static class Start extends GelStructureStart<NoFeatureConfig>
 	{
 
-		public Start(Structure<?> structureIn, int chunkX, int chunkZ, MutableBoundingBox boundsIn, int referenceIn, long seed)
+		public Start(Structure<NoFeatureConfig> structureIn, int chunkX, int chunkZ, MutableBoundingBox boundsIn, int referenceIn, long seed)
 		{
 			super(structureIn, chunkX, chunkZ, boundsIn, referenceIn, seed);
 		}
 
 		@Override
-		public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
+		public void func_230364_a_(ChunkGenerator generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config)
 		{
 			int x = (chunkX * 16) + 7;
 			int z = (chunkZ * 16) + 7;

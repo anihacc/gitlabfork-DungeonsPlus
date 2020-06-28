@@ -12,6 +12,7 @@ import com.legacy.structure_gel.structures.processors.RandomBlockSwapProcessor;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
+import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
@@ -27,14 +28,13 @@ import net.minecraft.world.gen.feature.jigsaw.JigsawManager;
 import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
 import net.minecraft.world.gen.feature.structure.StructurePiece;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.storage.loot.LootTables;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class BiggerDungeonPieces
 {
-	public static void assemble(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
+	public static void assemble(ChunkGenerator chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
-		JigsawManager.addPieces(DungeonsPlus.locate("bigger_dungeon/root"), 7, BiggerDungeonPieces.Piece::new, chunkGen, template, pos, pieces, seed);
+		JigsawManager.func_236823_a_(DungeonsPlus.locate("bigger_dungeon/root"), 7, BiggerDungeonPieces.Piece::new, chunkGen, template, pos, pieces, seed, true, true);
 	}
 
 	public static void init()
@@ -85,12 +85,12 @@ public class BiggerDungeonPieces
 	{
 		public Piece(TemplateManager template, JigsawPiece jigsawPiece, BlockPos pos, int groundLevelDelta, Rotation rotation, MutableBoundingBox boundingBox)
 		{
-			super(DungeonsPlus.Features.BIGGER_DUNGEON.getSecond(), template, jigsawPiece, pos, groundLevelDelta, rotation, boundingBox);
+			super(DungeonsPlus.Structures.BIGGER_DUNGEON.getSecond(), template, jigsawPiece, pos, groundLevelDelta, rotation, boundingBox);
 		}
 
 		public Piece(TemplateManager template, CompoundNBT nbt)
 		{
-			super(template, nbt, DungeonsPlus.Features.BIGGER_DUNGEON.getSecond());
+			super(template, nbt, DungeonsPlus.Structures.BIGGER_DUNGEON.getSecond());
 		}
 
 		@Override
@@ -106,7 +106,7 @@ public class BiggerDungeonPieces
 				 */
 				if (rand.nextBoolean() || data[0].contains("map"))
 				{
-					worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.byName(data[1])).rotate(this.rotation), 3);
+					worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.byName(data[1])).rotate(worldIn, pos, this.rotation), 3);
 					if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)
 						if (data[0].contains("huskmap"))
 							((ChestTileEntity) worldIn.getTileEntity(pos)).setLootTable(DungeonsPlusLoot.DUNGEON_LOOT_HUSK, rand.nextLong());

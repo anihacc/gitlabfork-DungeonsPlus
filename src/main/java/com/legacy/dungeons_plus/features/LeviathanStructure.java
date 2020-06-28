@@ -1,13 +1,12 @@
 package com.legacy.dungeons_plus.features;
 
 import java.util.List;
-import java.util.function.Function;
 
 import com.google.common.collect.Lists;
 import com.legacy.structure_gel.structures.GelConfigStructure;
 import com.legacy.structure_gel.structures.GelStructureStart;
 import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.BlockPos;
@@ -23,9 +22,9 @@ public class LeviathanStructure extends GelConfigStructure<NoFeatureConfig>
 {
 	public static final List<SpawnListEntry> SPAWNS = Lists.newArrayList(new SpawnListEntry(EntityType.HUSK, 1, 4, 4));
 
-	public LeviathanStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn, StructureConfig config)
+	public LeviathanStructure(Codec<NoFeatureConfig> codec, StructureConfig config)
 	{
-		super(configFactoryIn, config);
+		super(codec, config);
 	}
 
 	@Override
@@ -41,27 +40,21 @@ public class LeviathanStructure extends GelConfigStructure<NoFeatureConfig>
 	}
 
 	@Override
-	public IStartFactory getStartFactory()
+	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return LeviathanStructure.Start::new;
 	}
 
-	@Override
-	public int getSize()
-	{
-		return 4;
-	}
-
-	public static class Start extends GelStructureStart
+	public static class Start extends GelStructureStart<NoFeatureConfig>
 	{
 
-		public Start(Structure<?> structureIn, int chunkX, int chunkZ, MutableBoundingBox boundsIn, int referenceIn, long seed)
+		public Start(Structure<NoFeatureConfig> structureIn, int chunkX, int chunkZ, MutableBoundingBox boundsIn, int referenceIn, long seed)
 		{
 			super(structureIn, chunkX, chunkZ, boundsIn, referenceIn, seed);
 		}
 
 		@Override
-		public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
+		public void func_230364_a_(ChunkGenerator generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config)
 		{
 			LeviathanPieces.assemble(generator, templateManagerIn, new BlockPos(chunkX * 16 + rand.nextInt(15), 90, chunkZ * 16 + rand.nextInt(15)), this.components, this.rand);
 			this.recalculateStructureSize();
