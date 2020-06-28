@@ -24,16 +24,18 @@ public class DungeonsEvents
 		Entity entity = event.getEntity();
 		EntityType<?> entityType = entity.getType();
 		BlockPos pos = entity.func_233580_cy_();
-		StructureManager strucManager = ((ServerWorld) event.getWorld()).func_241112_a_();
+		if (!event.getWorld().isRemote)
+		{
+			StructureManager strucManager = ((ServerWorld) event.getWorld()).func_241112_a_();
 
-		if (entityType.equals(EntityType.HUSK) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.LEVIATHAN.getFirst()).isValid())
-			EntityAccessHelper.setDeathLootTable((MobEntity) event.getEntity(), DungeonsPlusLoot.LEVIATHAN_HUSK);
+			if (entityType.equals(EntityType.HUSK) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.LEVIATHAN.getFirst()).isValid())
+				EntityAccessHelper.setDeathLootTable((MobEntity) event.getEntity(), DungeonsPlusLoot.LEVIATHAN_HUSK);
 
-		if (entityType.equals(EntityType.STRAY) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.SNOWY_TEMPLE.getFirst()).isValid())
-			EntityAccessHelper.setDeathLootTable((MobEntity) event.getEntity(), DungeonsPlusLoot.SNOWY_TEMPLE_STRAY);
+			if (entityType.equals(EntityType.STRAY) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.SNOWY_TEMPLE.getFirst()).isValid())
+				EntityAccessHelper.setDeathLootTable((MobEntity) event.getEntity(), DungeonsPlusLoot.SNOWY_TEMPLE_STRAY);
 
-		if (entityType.equals(EntityType.ENDERMAN) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.END_RUINS.getFirst()).isValid())
-			((EndermanEntity) entity).targetSelector.addGoal(1, new NearestAttackableTargetGoal<>((EndermanEntity) entity, PlayerEntity.class, true, false));
-
+			if (entityType.equals(EntityType.ENDERMAN) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.END_RUINS.getFirst()).isValid())
+				((EndermanEntity) entity).targetSelector.addGoal(1, new NearestAttackableTargetGoal<>((EndermanEntity) entity, PlayerEntity.class, true, false));
+		}
 	}
 }
