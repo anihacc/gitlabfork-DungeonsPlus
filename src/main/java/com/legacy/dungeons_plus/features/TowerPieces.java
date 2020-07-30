@@ -183,7 +183,7 @@ public class TowerPieces
 				String[] data = key.split("-");
 
 				Direction facing = Direction.byName(data[1]);
-				ChestType chestType = data[2].equals(ChestType.LEFT.func_176610_l()) ? ChestType.LEFT : (data[2].equals(ChestType.RIGHT.func_176610_l()) ? ChestType.RIGHT : ChestType.SINGLE);
+				ChestType chestType = data[2].equals(ChestType.LEFT.getString()) ? ChestType.LEFT : (data[2].equals(ChestType.RIGHT.getString()) ? ChestType.RIGHT : ChestType.SINGLE);
 
 				worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).rotate(worldIn, pos, this.rotation), 3);
 				if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)

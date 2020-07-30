@@ -46,7 +46,7 @@ public class EndRuinsStructure extends GelConfigStructure<NoFeatureConfig>
 		{
 			int x = (chunkX * 16) + 7;
 			int z = (chunkZ * 16) + 7;
-			int y = generator.func_222529_a(x, z, Heightmap.Type.WORLD_SURFACE_WG);
+			int y = generator.getHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG);
 			if (y >= 60)
 			{
 				EndRuinsPieces.assemble(generator, templateManagerIn, new BlockPos(x, 0, z), this.components, this.rand);

@@ -23,7 +23,7 @@ public class DungeonsEvents
 	{
 		Entity entity = event.getEntity();
 		EntityType<?> entityType = entity.getType();
-		BlockPos pos = entity.func_233580_cy_();
+		BlockPos pos = entity.getPosition();
 		if (!event.getWorld().isRemote)
 		{
 			StructureManager strucManager = ((ServerWorld) event.getWorld()).func_241112_a_();
