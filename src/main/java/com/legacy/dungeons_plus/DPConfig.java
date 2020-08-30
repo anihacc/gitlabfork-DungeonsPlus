@@ -6,7 +6,7 @@ import com.legacy.structure_gel.util.ConfigTemplates;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class DungeonsConfig
+public class DPConfig
 {
 	public static final Common COMMON;
 	public static final ForgeConfigSpec COMMON_SPEC;

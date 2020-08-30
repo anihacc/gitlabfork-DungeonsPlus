@@ -1,30 +1,30 @@
 package com.legacy.dungeons_plus;
 
-import java.util.Set;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.legacy.dungeons_plus.features.BiggerDungeonPieces;
+import com.legacy.dungeons_plus.features.BiggerDungeonPools;
 import com.legacy.dungeons_plus.features.BiggerDungeonStructure;
-import com.legacy.dungeons_plus.features.EndRuinsPieces;
+import com.legacy.dungeons_plus.features.EndRuinsPools;
 import com.legacy.dungeons_plus.features.EndRuinsStructure;
-import com.legacy.dungeons_plus.features.LeviathanPieces;
+import com.legacy.dungeons_plus.features.LeviathanPools;
 import com.legacy.dungeons_plus.features.LeviathanStructure;
-import com.legacy.dungeons_plus.features.SnowyTemplePieces;
+import com.legacy.dungeons_plus.features.SnowyTemplePools;
 import com.legacy.dungeons_plus.features.SnowyTempleStructure;
-import com.legacy.dungeons_plus.features.TowerPieces;
+import com.legacy.dungeons_plus.features.TowerPools;
 import com.legacy.dungeons_plus.features.TowerStructure;
+import com.legacy.structure_gel.access_helpers.BiomeAccessHelper;
 import com.legacy.structure_gel.access_helpers.JigsawAccessHelper;
 import com.legacy.structure_gel.util.RegistryHelper;
-import com.mojang.datafixers.util.Pair;
+import com.legacy.structure_gel.util.StructureRegistrar;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.GenerationStage.Decoration;
+import net.minecraft.world.gen.feature.StructureFeature;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraftforge.common.BiomeDictionary;
+import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -38,14 +38,12 @@ import net.minecraftforge.registries.IForgeRegistry;
 @Mod(DungeonsPlus.MODID)
 public class DungeonsPlus
 {
-	public static final String NAME = "Dungeons Plus";
 	public static final String MODID = "dungeons_plus";
-	public static final String VERSION = "1.0.1";
 	public static final Logger LOGGER = LogManager.getLogger();
 
 	public DungeonsPlus()
 	{
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DungeonsConfig.COMMON_SPEC);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DPConfig.COMMON_SPEC);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonInit);
 	}
 
@@ -53,26 +51,20 @@ public class DungeonsPlus
 	{
 		for (Biome biome : ForgeRegistries.BIOMES.getValues())
 		{
-			Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(biome);
+			if (DPConfig.COMMON.tower.isBiomeAllowed(biome))
+				BiomeAccessHelper.addStructure(biome, Structures.TOWER.getStructureFeature());
 
-			if (DungeonsConfig.COMMON.tower.isBiomeAllowed(biome))
-				RegistryHelper.addStructure(biome, Structures.TOWER.getFirst());
+			if (/*types.contains(BiomeDictionary.Type.OVERWORLD) && */DPConfig.COMMON.biggerDungeon.isBiomeAllowed(biome))
+				BiomeAccessHelper.addStructure(biome, Structures.BIGGER_DUNGEON.getStructureFeature());
+			
+			if (DPConfig.COMMON.leviathan.isBiomeAllowed(biome))
+				BiomeAccessHelper.addStructure(biome, Structures.LEVIATHAN.getStructureFeature());
 
-			/**
-			 * Should only add to the overworld biomes. If you get it in your dimension, I'm
-			 * sorry, but there is a blacklist in the config. - Silver_David
-			 */
-			if (types.contains(BiomeDictionary.Type.OVERWORLD) && DungeonsConfig.COMMON.biggerDungeon.isBiomeAllowed(biome))
-				RegistryHelper.addStructure(biome, Structures.BIGGER_DUNGEON.getFirst());
+			if (DPConfig.COMMON.snowyTemple.isBiomeAllowed(biome))
+				BiomeAccessHelper.addStructure(biome, Structures.SNOWY_TEMPLE.getStructureFeature());
 
-			if (DungeonsConfig.COMMON.leviathan.isBiomeAllowed(biome))
-				RegistryHelper.addStructure(biome, Structures.LEVIATHAN.getFirst());
-
-			if (DungeonsConfig.COMMON.snowyTemple.isBiomeAllowed(biome))
-				RegistryHelper.addStructure(biome, Structures.SNOWY_TEMPLE.getFirst());
-
-			if (DungeonsConfig.COMMON.endRuins.isBiomeAllowed(biome))
-				RegistryHelper.addStructure(biome, Structures.END_RUINS.getFirst());
+			if (DPConfig.COMMON.endRuins.isBiomeAllowed(biome))
+				BiomeAccessHelper.addStructure(biome, Structures.END_RUINS.getStructureFeature());
 		}
 	}
 
@@ -84,23 +76,24 @@ public class DungeonsPlus
 	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class Structures
 	{
-		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> TOWER;
-		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> LEVIATHAN;
-		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> SNOWY_TEMPLE;
-		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> BIGGER_DUNGEON;
-		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> END_RUINS;
+		public static StructureRegistrar<TowerStructure, IStructurePieceType, StructureFeature<VillageConfig, TowerStructure>> TOWER;
+		public static StructureRegistrar<BiggerDungeonStructure, IStructurePieceType, StructureFeature<VillageConfig, BiggerDungeonStructure>> BIGGER_DUNGEON;
+		
+		public static StructureRegistrar<LeviathanStructure, IStructurePieceType, StructureFeature<VillageConfig, LeviathanStructure>> LEVIATHAN;
+		public static StructureRegistrar<SnowyTempleStructure, IStructurePieceType, StructureFeature<VillageConfig, SnowyTempleStructure>> SNOWY_TEMPLE;
+		public static StructureRegistrar<EndRuinsStructure, IStructurePieceType, StructureFeature<VillageConfig, EndRuinsStructure>> END_RUINS;
 
 		@SubscribeEvent
 		public static void onRegistry(final RegistryEvent.Register<Structure<?>> event)
 		{
 			IForgeRegistry<Structure<?>> registry = event.getRegistry();
-			TOWER = RegistryHelper.registerStructureAndPiece(registry, locate("tower"), new TowerStructure(NoFeatureConfig.field_236558_a_, DungeonsConfig.COMMON.tower), TowerPieces.Piece::new);
-			LEVIATHAN = RegistryHelper.registerStructureAndPiece(registry, locate("leviathan"), new LeviathanStructure(NoFeatureConfig.field_236558_a_, DungeonsConfig.COMMON.leviathan), LeviathanPieces.Piece::new);
-			SNOWY_TEMPLE = RegistryHelper.registerStructureAndPiece(registry, locate("snowy_temple"), new SnowyTempleStructure(NoFeatureConfig.field_236558_a_, DungeonsConfig.COMMON.snowyTemple), SnowyTemplePieces.Piece::new);
-			BIGGER_DUNGEON = RegistryHelper.registerStructureAndPiece(registry, locate("bigger_dungeon"), new BiggerDungeonStructure(NoFeatureConfig.field_236558_a_, DungeonsConfig.COMMON.biggerDungeon), BiggerDungeonPieces.Piece::new);
-			END_RUINS = RegistryHelper.registerStructureAndPiece(registry, locate("end_ruins"), new EndRuinsStructure(NoFeatureConfig.field_236558_a_, DungeonsConfig.COMMON.endRuins), EndRuinsPieces.Piece::new);
+			TOWER = RegistryHelper.handleRegistrar(registry, locate("tower"), new TowerStructure(VillageConfig.field_236533_a_, DPConfig.COMMON.tower), Decoration.SURFACE_STRUCTURES, TowerStructure.Piece::new, new VillageConfig(() -> TowerPools.ROOT, 7));
+			BIGGER_DUNGEON = RegistryHelper.handleRegistrar(registry, locate("bigger_dungeon"), new BiggerDungeonStructure(VillageConfig.field_236533_a_, DPConfig.COMMON.biggerDungeon), Decoration.UNDERGROUND_STRUCTURES, BiggerDungeonStructure.Piece::new, new VillageConfig(() -> BiggerDungeonPools.ROOT, 7));
+			LEVIATHAN = RegistryHelper.handleRegistrar(registry, locate("leviathan"), new LeviathanStructure(VillageConfig.field_236533_a_, DPConfig.COMMON.tower), Decoration.SURFACE_STRUCTURES, LeviathanStructure.Piece::new, new VillageConfig(() -> LeviathanPools.ROOT, 7));
+			SNOWY_TEMPLE = RegistryHelper.handleRegistrar(registry, locate("snowy_temple"), new SnowyTempleStructure(VillageConfig.field_236533_a_, DPConfig.COMMON.tower), Decoration.SURFACE_STRUCTURES, SnowyTempleStructure.Piece::new, new VillageConfig(() -> SnowyTemplePools.ROOT, 7));
+			END_RUINS = RegistryHelper.handleRegistrar(registry, locate("end_ruins"), new EndRuinsStructure(VillageConfig.field_236533_a_, DPConfig.COMMON.tower), Decoration.SURFACE_STRUCTURES, EndRuinsStructure.Piece::new, new VillageConfig(() -> EndRuinsPools.ROOT, 7));
 
-			JigsawAccessHelper.addIllagerStructures(TOWER.getFirst(), SNOWY_TEMPLE.getFirst());
+			JigsawAccessHelper.addIllagerStructures(TOWER.getStructure(), SNOWY_TEMPLE.getStructure());
 		}
 	}
 }

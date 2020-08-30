@@ -16,7 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class DungeonsEvents
+public class DPEvents
 {
 	@SubscribeEvent
 	public static void onEntitySpawn(EntityJoinWorldEvent event)
@@ -27,15 +27,16 @@ public class DungeonsEvents
 		if (!event.getWorld().isRemote)
 		{
 			StructureManager strucManager = ((ServerWorld) event.getWorld()).func_241112_a_();
+			
+			if (entityType.equals(EntityType.HUSK) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.LEVIATHAN.getStructure()).isValid())
+				EntityAccessHelper.setDeathLootTable((MobEntity) event.getEntity(), DPLoot.LEVIATHAN_HUSK);
 
-			if (entityType.equals(EntityType.HUSK) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.LEVIATHAN.getFirst()).isValid())
-				EntityAccessHelper.setDeathLootTable((MobEntity) event.getEntity(), DungeonsPlusLoot.LEVIATHAN_HUSK);
+			if (entityType.equals(EntityType.STRAY) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.SNOWY_TEMPLE.getStructure()).isValid())
+				EntityAccessHelper.setDeathLootTable((MobEntity) event.getEntity(), DPLoot.SNOWY_TEMPLE_STRAY);
 
-			if (entityType.equals(EntityType.STRAY) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.SNOWY_TEMPLE.getFirst()).isValid())
-				EntityAccessHelper.setDeathLootTable((MobEntity) event.getEntity(), DungeonsPlusLoot.SNOWY_TEMPLE_STRAY);
-
-			if (entityType.equals(EntityType.ENDERMAN) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.END_RUINS.getFirst()).isValid())
+			if (entityType.equals(EntityType.ENDERMAN) && strucManager.func_235010_a_(pos, false, DungeonsPlus.Structures.END_RUINS.getStructure()).isValid())
 				((EndermanEntity) entity).targetSelector.addGoal(1, new NearestAttackableTargetGoal<>((EndermanEntity) entity, PlayerEntity.class, true, false));
+				
 		}
 	}
 }

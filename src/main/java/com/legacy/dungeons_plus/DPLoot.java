@@ -2,7 +2,7 @@ package com.legacy.dungeons_plus;
 
 import net.minecraft.util.ResourceLocation;
 
-public class DungeonsPlusLoot
+public class DPLoot
 {
 	// Chests
 	public static final ResourceLocation TOWER_LOOT_MAP = DungeonsPlus.locate("chests/tower_loot_map");
