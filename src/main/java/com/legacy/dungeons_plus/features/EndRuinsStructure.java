@@ -51,31 +51,16 @@ public class EndRuinsStructure extends GelConfigJigsawStructure
 	}
 
 	@Override
-	public IStartFactory<VillageConfig> getStartFactory()
+	public void handleStartFactory(GelJigsawStructure.Start start, DynamicRegistries dynamicRegistries, ChunkGenerator chunkGen, TemplateManager templateManager, int chunkX, int chunkZ, Biome biome, VillageConfig config)
 	{
-		return (structure, chunkX, chunkZ, bounds, references, seed) -> new EndRuinsStructure.Start(this, chunkX, chunkZ, bounds, references, seed);
-	}
-
-	public static class Start extends GelJigsawStructure.Start
-	{
-
-		public Start(GelJigsawStructure jigsawStructure, int chunkX, int chunkZ, MutableBoundingBox bounds, int references, long seed)
+		int x = (chunkX * 16) + 7;
+		int z = (chunkZ * 16) + 7;
+		int y = chunkGen.getHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG);
+		if (y >= 60)
 		{
-			super(jigsawStructure, chunkX, chunkZ, bounds, references, seed);
-		}
-
-		@Override
-		public void func_230364_a_(DynamicRegistries dynamicRegistries, ChunkGenerator generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biome, VillageConfig config)
-		{
-			int x = (chunkX * 16) + 7;
-			int z = (chunkZ * 16) + 7;
-			int y = generator.getHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG);
-			if (y >= 60)
-			{
-				super.func_230364_a_(dynamicRegistries, generator, templateManagerIn, chunkX, chunkZ, biome, config);
-				this.components.removeIf(c -> c.getBoundingBox().minY < 5);
-				this.recalculateStructureSize();
-			}
+			super.handleStartFactory(start, dynamicRegistries, chunkGen, templateManager, chunkX, chunkZ, biome, config);
+			start.getComponents().removeIf(c -> c.getBoundingBox().minY < 5);
+			start.recalculateStructureSize();
 		}
 	}
 

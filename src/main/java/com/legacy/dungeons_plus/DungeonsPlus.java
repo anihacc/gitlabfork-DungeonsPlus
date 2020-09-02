@@ -15,14 +15,16 @@ import com.legacy.dungeons_plus.features.TowerPools;
 import com.legacy.dungeons_plus.features.TowerStructure;
 import com.legacy.structure_gel.access_helpers.BiomeAccessHelper;
 import com.legacy.structure_gel.access_helpers.JigsawAccessHelper;
+import com.legacy.structure_gel.data.BiomeDictionary;
+import com.legacy.structure_gel.data.BiomeDictionary.BiomeType;
+import com.legacy.structure_gel.data.BiomeDictionaryEvent;
 import com.legacy.structure_gel.util.RegistryHelper;
 import com.legacy.structure_gel.util.StructureRegistrar;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage.Decoration;
-import net.minecraft.world.gen.feature.StructureFeature;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraftforge.event.RegistryEvent;
@@ -44,7 +46,18 @@ public class DungeonsPlus
 	public DungeonsPlus()
 	{
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DPConfig.COMMON_SPEC);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerBiomeDict);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonInit);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void registerBiomeDict(final BiomeDictionaryEvent event)
+	{
+		event.register(BiomeType.create(locate("tower_biomes")).biomes(Biomes.PLAINS, Biomes.FOREST, Biomes.DARK_FOREST, Biomes.BIRCH_FOREST, Biomes.MOUNTAINS));
+		event.register(BiomeType.create(locate("leviathan_biomes")).biomes(Biomes.DESERT));
+		event.register(BiomeType.create(locate("snowy_temple_biomes")).biomes(Biomes.SNOWY_TUNDRA, Biomes.SNOWY_TAIGA));
+		event.register(BiomeType.create(locate("bigger_dungeon_biomes")).parents(BiomeDictionary.OVERWORLD));
+		event.register(BiomeType.create(locate("end_ruins_biomes")).parents(BiomeDictionary.OUTER_END_ISLAND));
 	}
 
 	public void commonInit(final FMLCommonSetupEvent event)
@@ -54,9 +67,9 @@ public class DungeonsPlus
 			if (DPConfig.COMMON.tower.isBiomeAllowed(biome))
 				BiomeAccessHelper.addStructure(biome, Structures.TOWER.getStructureFeature());
 
-			if (/*types.contains(BiomeDictionary.Type.OVERWORLD) && */DPConfig.COMMON.biggerDungeon.isBiomeAllowed(biome))
+			if (DPConfig.COMMON.biggerDungeon.isBiomeAllowed(biome))
 				BiomeAccessHelper.addStructure(biome, Structures.BIGGER_DUNGEON.getStructureFeature());
-			
+
 			if (DPConfig.COMMON.leviathan.isBiomeAllowed(biome))
 				BiomeAccessHelper.addStructure(biome, Structures.LEVIATHAN.getStructureFeature());
 
@@ -76,12 +89,11 @@ public class DungeonsPlus
 	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class Structures
 	{
-		public static StructureRegistrar<TowerStructure, IStructurePieceType, StructureFeature<VillageConfig, TowerStructure>> TOWER;
-		public static StructureRegistrar<BiggerDungeonStructure, IStructurePieceType, StructureFeature<VillageConfig, BiggerDungeonStructure>> BIGGER_DUNGEON;
-		
-		public static StructureRegistrar<LeviathanStructure, IStructurePieceType, StructureFeature<VillageConfig, LeviathanStructure>> LEVIATHAN;
-		public static StructureRegistrar<SnowyTempleStructure, IStructurePieceType, StructureFeature<VillageConfig, SnowyTempleStructure>> SNOWY_TEMPLE;
-		public static StructureRegistrar<EndRuinsStructure, IStructurePieceType, StructureFeature<VillageConfig, EndRuinsStructure>> END_RUINS;
+		public static StructureRegistrar<VillageConfig, TowerStructure> TOWER;
+		public static StructureRegistrar<VillageConfig, BiggerDungeonStructure> BIGGER_DUNGEON;
+		public static StructureRegistrar<VillageConfig, LeviathanStructure> LEVIATHAN;
+		public static StructureRegistrar<VillageConfig, SnowyTempleStructure> SNOWY_TEMPLE;
+		public static StructureRegistrar<VillageConfig, EndRuinsStructure> END_RUINS;
 
 		@SubscribeEvent
 		public static void onRegistry(final RegistryEvent.Register<Structure<?>> event)
@@ -94,6 +106,12 @@ public class DungeonsPlus
 			END_RUINS = RegistryHelper.handleRegistrar(registry, locate("end_ruins"), new EndRuinsStructure(VillageConfig.field_236533_a_, DPConfig.COMMON.tower), Decoration.SURFACE_STRUCTURES, EndRuinsStructure.Piece::new, new VillageConfig(() -> EndRuinsPools.ROOT, 7));
 
 			JigsawAccessHelper.addIllagerStructures(TOWER.getStructure(), SNOWY_TEMPLE.getStructure());
+
+			TowerPools.init();
+			BiggerDungeonPools.init();
+			LeviathanPools.init();
+			SnowyTemplePools.init();
+			EndRuinsPools.init();
 		}
 	}
 }

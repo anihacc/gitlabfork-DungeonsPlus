@@ -32,7 +32,7 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 {
 	public BiggerDungeonStructure(Codec<VillageConfig> codec, StructureConfig config)
 	{
-		super(codec, config, 0, true, true);
+		super(codec, config, 20, true, false);
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 		{
 			return DungeonsPlus.Structures.BIGGER_DUNGEON.getPieceType();
 		}
-		
+
 		@Override
 		public void handleDataMarker(String key, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox bounds)
 		{
