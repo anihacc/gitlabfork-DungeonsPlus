@@ -15,9 +15,8 @@ import com.legacy.dungeons_plus.features.TowerPools;
 import com.legacy.dungeons_plus.features.TowerStructure;
 import com.legacy.structure_gel.access_helpers.BiomeAccessHelper;
 import com.legacy.structure_gel.access_helpers.JigsawAccessHelper;
-import com.legacy.structure_gel.data.BiomeDictionary;
-import com.legacy.structure_gel.data.BiomeDictionary.BiomeType;
-import com.legacy.structure_gel.data.BiomeDictionaryEvent;
+import com.legacy.structure_gel.biome_dictionary.BiomeDictionary;
+import com.legacy.structure_gel.biome_dictionary.BiomeType;
 import com.legacy.structure_gel.util.RegistryHelper;
 import com.legacy.structure_gel.util.StructureRegistrar;
 
@@ -28,6 +27,7 @@ import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -46,18 +46,19 @@ public class DungeonsPlus
 	public DungeonsPlus()
 	{
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DPConfig.COMMON_SPEC);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerBiomeDict);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonInit);
+		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modBus.addGenericListener(BiomeType.class, this::registerBiomeDictionary);
+		modBus.addListener(this::commonInit);
 	}
 
 	@SuppressWarnings("unchecked")
-	public void registerBiomeDict(final BiomeDictionaryEvent event)
+	public void registerBiomeDictionary(final RegistryEvent.Register<BiomeType> event)
 	{
-		event.register(BiomeType.create(locate("tower_biomes")).biomes(Biomes.PLAINS, Biomes.FOREST, Biomes.DARK_FOREST, Biomes.BIRCH_FOREST, Biomes.MOUNTAINS));
-		event.register(BiomeType.create(locate("leviathan_biomes")).biomes(Biomes.DESERT));
-		event.register(BiomeType.create(locate("snowy_temple_biomes")).biomes(Biomes.SNOWY_TUNDRA, Biomes.SNOWY_TAIGA));
-		event.register(BiomeType.create(locate("bigger_dungeon_biomes")).parents(BiomeDictionary.OVERWORLD));
-		event.register(BiomeType.create(locate("end_ruins_biomes")).parents(BiomeDictionary.OUTER_END_ISLAND));
+		BiomeDictionary.register(BiomeType.create(locate("tower_biomes")).biomes(Biomes.PLAINS, Biomes.FOREST, Biomes.DARK_FOREST, Biomes.BIRCH_FOREST, Biomes.MOUNTAINS));
+		BiomeDictionary.register(BiomeType.create(locate("leviathan_biomes")).biomes(Biomes.DESERT));
+		BiomeDictionary.register(BiomeType.create(locate("snowy_temple_biomes")).biomes(Biomes.SNOWY_TUNDRA, Biomes.SNOWY_TAIGA));
+		BiomeDictionary.register(BiomeType.create(locate("bigger_dungeon_biomes")).parents(BiomeDictionary.OVERWORLD));
+		BiomeDictionary.register(BiomeType.create(locate("end_ruins_biomes")).parents(BiomeDictionary.OUTER_END_ISLAND));
 	}
 
 	public void commonInit(final FMLCommonSetupEvent event)
