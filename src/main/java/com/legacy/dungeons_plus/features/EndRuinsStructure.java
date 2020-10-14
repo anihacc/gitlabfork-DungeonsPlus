@@ -10,7 +10,6 @@ import com.legacy.structure_gel.worldgen.jigsaw.GelJigsawStructure;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -107,21 +106,10 @@ public class EndRuinsStructure extends GelConfigJigsawStructure
 			{
 				this.setAir(worldIn, pos);
 				String[] data = key.split("-");
-				EntityType<?> entityType = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(data[1]));
 
-				if (entityType == EntityType.PHANTOM || entityType == EntityType.ENDERMAN)
-				{
-					worldIn.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
-					if (worldIn.getTileEntity(pos) instanceof MobSpawnerTileEntity)
-					{
-						MobSpawnerTileEntity tile = (MobSpawnerTileEntity) worldIn.getTileEntity(pos);
-						tile.getSpawnerBaseLogic().setEntityType(entityType);
-					}
-				}
-				else
-				{
-					worldIn.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState(), 3);
-				}
+				worldIn.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
+				if (worldIn.getTileEntity(pos) instanceof MobSpawnerTileEntity)
+					((MobSpawnerTileEntity) worldIn.getTileEntity(pos)).getSpawnerBaseLogic().setEntityType(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(data[1])));
 			}
 		}
 	}

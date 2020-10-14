@@ -88,9 +88,7 @@ public class SnowyTempleStructure extends GelConfigJigsawStructure
 
 				world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
 				if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
-				{
 					((MobSpawnerTileEntity) world.getTileEntity(pos)).getSpawnerBaseLogic().setEntityType(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(data[1])));
-				}
 			}
 		}
 	}

@@ -21,14 +21,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 
 @Mod(DungeonsPlus.MODID)
@@ -40,17 +40,17 @@ public class DungeonsPlus
 	public DungeonsPlus()
 	{
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DPConfig.COMMON_SPEC);
-		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-		modBus.addListener(this::commonInit);
+		IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+		forgeBus.addListener(this::biomeLoad);
 	}
 
-	public void commonInit(final FMLCommonSetupEvent event)
+	public void biomeLoad(final BiomeLoadingEvent event)
 	{
-		BiomeAccessHelper.addStructureToBiomes(Structures.TOWER.getStructureFeature());
-		BiomeAccessHelper.addStructureToBiomes(Structures.BIGGER_DUNGEON.getStructureFeature());
-		BiomeAccessHelper.addStructureToBiomes(Structures.LEVIATHAN.getStructureFeature());
-		BiomeAccessHelper.addStructureToBiomes(Structures.SNOWY_TEMPLE.getStructureFeature());
-		BiomeAccessHelper.addStructureToBiomes(Structures.END_RUINS.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.TOWER.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.BIGGER_DUNGEON.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.LEVIATHAN.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.SNOWY_TEMPLE.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.END_RUINS.getStructureFeature());
 	}
 
 	public static ResourceLocation locate(String key)

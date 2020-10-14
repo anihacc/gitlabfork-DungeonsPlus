@@ -85,9 +85,7 @@ public class LeviathanStructure extends GelConfigJigsawStructure
 
 				world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
 				if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
-				{
 					((MobSpawnerTileEntity) world.getTileEntity(pos)).getSpawnerBaseLogic().setEntityType(EntityType.HUSK);
-				}
 			}
 		}
 	}

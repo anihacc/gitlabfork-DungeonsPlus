@@ -31,7 +31,7 @@ public class DPConfig
 			this.leviathan = new StructureConfig(builder, "leviathan").probability(1.0D).spacing(36).offset(8).biomes(true, "#structure_gel:desert");
 			this.snowyTemple = new StructureConfig(builder, "snowy_temple").probability(1.0D).spacing(36).offset(8).biomes(true, "#structure_gel:snowy_plains, #structure_gel:snowy_spruce_forest");
 			this.biggerDungeon = new StructureConfig(builder, "bigger_dungeon").probability(0.4D).spacing(12).offset(5).biomes(true, "#structure_gel:overworld, !mushroom_fields, !mushroom_field_shore");
-			this.endRuins = new StructureConfig(builder, "end_ruins").probability(0.8D).spacing(24).offset(8).biomes(true, "#structure_gel:outer_end_islands");
+			this.endRuins = new StructureConfig(builder, "end_ruins").probability(0.8D).spacing(24).offset(8).biomes(true, "#structure_gel:outer_end_island");
 		}
 	}
 }
