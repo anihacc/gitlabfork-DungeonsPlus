@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.features;
+package com.legacy.dungeons_plus.pools;
 
 import com.legacy.dungeons_plus.DPProcessors;
 import com.legacy.dungeons_plus.DungeonsPlus;

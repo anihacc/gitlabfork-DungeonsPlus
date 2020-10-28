@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.features;
+package com.legacy.dungeons_plus.structures;
 
 import java.util.Random;
 

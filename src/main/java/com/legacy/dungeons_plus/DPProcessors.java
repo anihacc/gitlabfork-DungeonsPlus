@@ -17,7 +17,7 @@ public class DPProcessors
 	public static final StructureProcessorList TOWER_GOLD_DECAY = register("tower_gold_decay", new RandomBlockSwapProcessor(Blocks.GOLD_BLOCK, 0.3F, Blocks.AIR));
 	public static final StructureProcessorList ICE_TO_BLUE = register("ice_to_blue", new RandomBlockSwapProcessor(Blocks.PACKED_ICE, 0.07F, Blocks.BLUE_ICE));
 	public static final StructureProcessorList END_RUINS_TOWER = register("end_ruins_tower", new RandomBlockSwapProcessor(Blocks.END_STONE_BRICKS, 0.1F, Blocks.END_STONE));
-
+	
 	private static StructureProcessorList register(String key, StructureProcessor processor)
 	{
 		return RegistryHelper.registerProcessor(DungeonsPlus.locate(key), processor);

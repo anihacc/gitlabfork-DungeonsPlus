@@ -1,8 +1,8 @@
-package com.legacy.dungeons_plus.features;
+package com.legacy.dungeons_plus.structures;
 
 import java.util.Random;
 
-import com.legacy.dungeons_plus.DPLoot;
+import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
 import com.legacy.structure_gel.worldgen.jigsaw.AbstractGelStructurePiece;
@@ -11,6 +11,8 @@ import com.mojang.serialization.Codec;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ChestTileEntity;
@@ -21,6 +23,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IServerWorld;
+import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.feature.jigsaw.JigsawManager.IPieceFactory;
 import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
@@ -28,41 +31,42 @@ import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class BiggerDungeonStructure extends GelConfigJigsawStructure
+public class SnowyTempleStructure extends GelConfigJigsawStructure
 {
-	public BiggerDungeonStructure(Codec<VillageConfig> codec, StructureConfig config)
+	public SnowyTempleStructure(Codec<VillageConfig> codec, StructureConfig config)
 	{
-		super(codec, config, 20, true, false);
+		super(codec, config, 0, true, true);
+		this.setSpawnList(EntityClassification.MONSTER, ImmutableList.of(new MobSpawnInfo.Spawners(EntityType.STRAY, 1, 2, 4)));
 	}
 
 	@Override
 	public int getSeed()
 	{
-		return 973181;
+		return 943137831;
 	}
-
+	
 	@Override
 	public IPieceFactory getPieceType()
 	{
 		return Piece::new;
 	}
 
-	public static final class Piece extends AbstractGelStructurePiece
+	public static class Piece extends AbstractGelStructurePiece
 	{
-		public Piece(TemplateManager templateManager, JigsawPiece jigsawPiece, BlockPos pos, int groundLevelDelta, Rotation rotation, MutableBoundingBox bounds)
+		public Piece(TemplateManager template, JigsawPiece jigsawPiece, BlockPos pos, int groundLevelDelta, Rotation rotation, MutableBoundingBox boundingBox)
 		{
-			super(templateManager, jigsawPiece, pos, groundLevelDelta, rotation, bounds);
+			super(template, jigsawPiece, pos, groundLevelDelta, rotation, boundingBox);
 		}
 
-		public Piece(TemplateManager templateManager, CompoundNBT nbt)
+		public Piece(TemplateManager template, CompoundNBT nbt)
 		{
-			super(templateManager, nbt);
+			super(template, nbt);
 		}
 
 		@Override
 		public IStructurePieceType getStructurePieceType()
 		{
-			return DungeonsPlus.Structures.BIGGER_DUNGEON.getPieceType();
+			return DungeonsPlus.Structures.SNOWY_TEMPLE.getPieceType();
 		}
 
 		@Override
@@ -73,20 +77,9 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 				this.setAir(world, pos);
 				String[] data = key.split("-");
 
-				/**
-				 * Generates the chests with a 50% chance, or if they are a map chest.
-				 */
-				if (rand.nextBoolean() || data[0].contains("map"))
-				{
-					world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.byName(data[1])).rotate(world, pos, this.rotation), 3);
-					if (world.getTileEntity(pos) instanceof ChestTileEntity)
-						if (data[0].contains("huskmap"))
-							((ChestTileEntity) world.getTileEntity(pos)).setLootTable(DPLoot.DUNGEON_LOOT_HUSK, rand.nextLong());
-						else if (data[0].contains("straymap"))
-							((ChestTileEntity) world.getTileEntity(pos)).setLootTable(DPLoot.DUNGEON_LOOT_STRAY, rand.nextLong());
-						else
-							((ChestTileEntity) world.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
-				}
+				world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.byName(data[1])).rotate(world, pos, this.rotation), 3);
+				if (world.getTileEntity(pos) instanceof ChestTileEntity)
+					((ChestTileEntity) world.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
 			}
 			if (key.contains("spawner"))
 			{
@@ -96,7 +89,6 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 				world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
 				if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
 					((MobSpawnerTileEntity) world.getTileEntity(pos)).getSpawnerBaseLogic().setEntityType(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(data[1])));
-
 			}
 		}
 	}

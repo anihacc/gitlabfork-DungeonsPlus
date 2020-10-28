@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.features;
+package com.legacy.dungeons_plus.pools;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.structure_gel.worldgen.jigsaw.JigsawRegistryHelper;
