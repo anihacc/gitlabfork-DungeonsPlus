@@ -1,7 +1,8 @@
 package com.legacy.dungeons_plus.structures;
 
 import com.legacy.dungeons_plus.pieces.WarpedGardenPieces;
-import com.legacy.structure_gel.worldgen.structure.GelStructure;
+import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
+import com.legacy.structure_gel.worldgen.structure.GelConfigStructure;
 import com.legacy.structure_gel.worldgen.structure.GelStructureStart;
 import com.mojang.serialization.Codec;
 
@@ -15,35 +16,11 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-public class WarpedGardenStructure extends GelStructure<NoFeatureConfig>
+public class WarpedGardenStructure extends GelConfigStructure<NoFeatureConfig>
 {
-	public WarpedGardenStructure(Codec<NoFeatureConfig> codec)
+	public WarpedGardenStructure(Codec<NoFeatureConfig> codec, StructureConfig config)
 	{
-		super(codec);
-	}
-
-	@Override
-	protected boolean func_230365_b_()
-	{
-		return false;
-	}
-
-	@Override
-	public double getProbability()
-	{
-		return 1.0;
-	}
-
-	@Override
-	public int getSpacing()
-	{
-		return 10;
-	}
-
-	@Override
-	public int getOffset()
-	{
-		return 0;
+		super(codec, config);
 	}
 
 	@Override
