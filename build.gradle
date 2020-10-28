@@ -61,8 +61,8 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.3-34.1.19'
-	compile files('libs/structure-gel-api-1.16.3-1.4.1-deobf.jar')
+    minecraft 'net.minecraftforge:forge:1.16.3-34.1.23'
+	compile files('libs/structure-gel-api-1.16.3-1.5.1-deobf.jar')
 }
 
 repositories {
