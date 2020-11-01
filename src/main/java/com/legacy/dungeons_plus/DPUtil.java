@@ -1,6 +1,9 @@
 package com.legacy.dungeons_plus;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.legacy.structure_gel.access_helpers.TileEntityAccessHelper;
 
@@ -30,7 +33,7 @@ public class DPUtil
 	{
 		placeLootChest(lootTable, world, rand, pos, rotation, Direction.byName(facing), chestType.equals(ChestType.LEFT.getString()) ? ChestType.LEFT : (chestType.equals(ChestType.RIGHT.getString()) ? ChestType.RIGHT : ChestType.SINGLE));
 	}
-	
+
 	public static void placeLootChest(ResourceLocation lootTable, IWorld world, Random rand, BlockPos pos, Rotation rotation, Direction facing)
 	{
 		placeLootChest(lootTable, world, rand, pos, rotation, facing, ChestType.SINGLE);
@@ -43,12 +46,12 @@ public class DPUtil
 		if (world.getTileEntity(pos) instanceof ChestTileEntity)
 			((ChestTileEntity) world.getTileEntity(pos)).setLootTable(lootTable, rand.nextLong());
 	}
-	
+
 	public static void placeSpawner(String entity, IWorld world, Random rand, BlockPos pos)
 	{
 		placeSpawner(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(entity)), world, rand, pos);
 	}
-	
+
 	public static void placeSpawner(EntityType<?> entity, IWorld world, Random rand, BlockPos pos)
 	{
 		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
@@ -56,15 +59,20 @@ public class DPUtil
 		if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
 			((MobSpawnerTileEntity) world.getTileEntity(pos)).getSpawnerBaseLogic().setEntityType(entity);
 	}
-	
+
 	public static void placeSpawner(EntityType<?> entity, IWorld world, Random rand, BlockPos pos, CompoundNBT nbt)
+	{
+		placeSpawner(entity, world, rand, pos, Arrays.asList(nbt));
+	}
+
+	public static void placeSpawner(EntityType<?> entity, IWorld world, Random rand, BlockPos pos, List<CompoundNBT> nbt)
 	{
 		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
 		if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
 		{
 			MobSpawnerTileEntity tile = (MobSpawnerTileEntity) world.getTileEntity(pos);
-			TileEntityAccessHelper.setSpawnerSpawns(tile, new WeightedSpawnerEntity(nbt));
+			TileEntityAccessHelper.setSpawnerSpawns(tile, nbt.stream().map(WeightedSpawnerEntity::new).collect(Collectors.toList()));
 			tile.getSpawnerBaseLogic().setEntityType(entity);
 		}
 	}

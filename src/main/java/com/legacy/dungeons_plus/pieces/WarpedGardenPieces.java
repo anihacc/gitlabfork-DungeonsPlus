@@ -1,6 +1,8 @@
 package com.legacy.dungeons_plus.pieces;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -12,9 +14,15 @@ import com.legacy.structure_gel.worldgen.GelPlacementSettings;
 import com.legacy.structure_gel.worldgen.processors.RandomBlockSwapProcessor;
 import com.legacy.structure_gel.worldgen.processors.RemoveGelStructureProcessor;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.FloatNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -40,6 +48,7 @@ public class WarpedGardenPieces
 {
 	private static final ResourceLocation[] FLOWERY = new ResourceLocation[] { locate("flower_0"), locate("flower_1"), locate("flower_2"), locate("flower_3") };
 	private static final ResourceLocation[] LOOT = new ResourceLocation[] { locate("portal"), locate("ship"), locate("nylium"), locate("volcano") };
+	private static final List<CompoundNBT> SPAWNS = new ArrayList<>();
 
 	public static void assemble(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<StructurePiece> structurePieces, Random rand)
 	{
@@ -128,12 +137,40 @@ public class WarpedGardenPieces
 			}
 			if (key.equals("spawner"))
 			{
-				CompoundNBT nbt = new CompoundNBT();
-				CompoundNBT entityNbt = new CompoundNBT();
-				entityNbt.putString("id", EntityType.DROWNED.getRegistryName().toString());
-				entityNbt.putBoolean("Glowing", true);
-				nbt.put("Entity", nbt);
-				DPUtil.placeSpawner(EntityType.DROWNED, world, rand, pos, nbt);
+				if (SPAWNS.isEmpty())
+				{
+					for (Block coral : BlockTags.CORAL_BLOCKS.getAllElements())
+					{
+						CompoundNBT entityNbt = new CompoundNBT();
+						CompoundNBT tag = new CompoundNBT();
+						tag.putString("id", EntityType.DROWNED.getRegistryName().toString());
+						ListNBT handItems = new ListNBT();
+						handItems.add(new ItemStack(Items.GOLDEN_SWORD).write(new CompoundNBT()));
+						handItems.add(new ItemStack(coral).write(new CompoundNBT()));
+						tag.put("HandItems", handItems);
+						ListNBT handDropChances = new ListNBT();
+						handDropChances.add(FloatNBT.valueOf(0.085F));
+						handDropChances.add(FloatNBT.valueOf(1.0F));
+						tag.put("HandDropChances", handDropChances);
+						entityNbt.put("Entity", tag);
+						SPAWNS.add(entityNbt);
+					}
+
+					CompoundNBT entityNbt = new CompoundNBT();
+					CompoundNBT tag = new CompoundNBT();
+					tag.putString("id", EntityType.DROWNED.getRegistryName().toString());
+					ListNBT handItems = new ListNBT();
+					handItems.add(new ItemStack(Items.GOLDEN_SWORD).write(new CompoundNBT()));
+					tag.put("HandItems", handItems);
+					entityNbt.put("Entity", tag);
+					SPAWNS.add(entityNbt);
+					int coralCount = BlockTags.CORAL_BLOCKS.getAllElements().size();
+					entityNbt.putInt("Weight", coralCount == 0 ? 1 : coralCount * 5);
+				}
+				
+				Collections.shuffle(SPAWNS, rand);
+
+				DPUtil.placeSpawner(EntityType.DROWNED, world, rand, pos, SPAWNS);
 			}
 		}
 	}
