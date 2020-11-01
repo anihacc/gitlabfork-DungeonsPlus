@@ -2,6 +2,7 @@ package com.legacy.dungeons_plus.structures;
 
 import java.util.Random;
 
+import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
 import com.legacy.structure_gel.worldgen.jigsaw.AbstractGelStructurePiece;
@@ -11,8 +12,6 @@ import com.mojang.serialization.Codec;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.MobSpawnerTileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
@@ -28,7 +27,6 @@ import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class EndRuinsStructure extends GelConfigJigsawStructure
 {
@@ -100,16 +98,12 @@ public class EndRuinsStructure extends GelConfigJigsawStructure
 		}
 
 		@Override
-		public void handleDataMarker(String key, BlockPos pos, IServerWorld worldIn, Random rand, MutableBoundingBox bounds)
+		public void handleDataMarker(String key, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox bounds)
 		{
 			if (key.contains("spawner"))
 			{
-				this.setAir(worldIn, pos);
 				String[] data = key.split("-");
-
-				worldIn.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
-				if (worldIn.getTileEntity(pos) instanceof MobSpawnerTileEntity)
-					((MobSpawnerTileEntity) worldIn.getTileEntity(pos)).getSpawnerBaseLogic().setEntityType(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(data[1])));
+				DPUtil.placeSpawner(data[1], world, rand, pos);
 			}
 		}
 	}

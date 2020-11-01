@@ -4,14 +4,13 @@ import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPLoot;
+import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
 import com.legacy.structure_gel.worldgen.jigsaw.AbstractGelStructurePiece;
 import com.legacy.structure_gel.worldgen.jigsaw.GelConfigJigsawStructure;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
@@ -21,10 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.ChestType;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.MobSpawnerTileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -35,7 +30,6 @@ import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class TowerStructure extends GelConfigJigsawStructure
 {
@@ -67,46 +61,38 @@ public class TowerStructure extends GelConfigJigsawStructure
 		{
 			super(templateManager, nbt);
 		}
-		
+
 		@Override
 		public IStructurePieceType getStructurePieceType()
 		{
 			return DungeonsPlus.Structures.TOWER.getPieceType();
 		}
-		
+
 		@Override
 		public void handleDataMarker(String key, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox bounds)
 		{
-			/**
-			 * Using flag 2 because I don't want block updates for this. If the chest
-			 * updates, double chests might not connect.
-			 */
 			if (key.contains("chest"))
 			{
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 				String[] data = key.split("-");
-
-				Direction facing = Direction.byName(data[1]);
-				ChestType chestType = data[2].equals(ChestType.LEFT.getString()) ? ChestType.LEFT : (data[2].equals(ChestType.RIGHT.getString()) ? ChestType.RIGHT : ChestType.SINGLE);
-
-				world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).rotate(world, pos, this.rotation), 3);
-				if (world.getTileEntity(pos) instanceof ChestTileEntity)
+				ResourceLocation lootTable = LootTables.CHESTS_SIMPLE_DUNGEON;
+				if (data[0].contains(":"))
 				{
-					if (data[0].contains("map"))
-						((ChestTileEntity) world.getTileEntity(pos)).setLootTable(DPLoot.TOWER_LOOT_MAP, rand.nextLong());
-					else
-						((ChestTileEntity) world.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
+					switch (data[0].split(":")[1])
+					{
+					case "vex":
+						lootTable = DPLoot.VEX_MAP;
+						break;
+					case "map":
+						lootTable = DPLoot.VEX;
+						break;
+					}
 				}
+				DPUtil.placeLootChest(lootTable, world, rand, pos, this.rotation, data[1], data[2]);
 			}
 			if (key.contains("spawner"))
 			{
-				this.setAir(world, pos);
 				String[] data = key.split("-");
-
-				world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
-				if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
-					((MobSpawnerTileEntity) world.getTileEntity(pos)).getSpawnerBaseLogic().setEntityType(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(data[1])));
-
+				DPUtil.placeSpawner(data[1], world, rand, pos);
 			}
 			/**
 			 * Creating entities is a little simpler with the createEntity method. Doing

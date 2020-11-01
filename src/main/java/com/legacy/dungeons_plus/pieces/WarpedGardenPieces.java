@@ -5,20 +5,16 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
+import com.legacy.dungeons_plus.DPLoot;
+import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.structure_gel.worldgen.GelPlacementSettings;
 import com.legacy.structure_gel.worldgen.processors.RandomBlockSwapProcessor;
 import com.legacy.structure_gel.worldgen.processors.RemoveGelStructureProcessor;
 
 import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.EntityType;
-import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.ChestType;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.MobSpawnerTileEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -43,8 +39,8 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 public class WarpedGardenPieces
 {
 	private static final ResourceLocation[] FLOWERY = new ResourceLocation[] { locate("flower_0"), locate("flower_1"), locate("flower_2"), locate("flower_3") };
-	private static final ResourceLocation[] LOOT = new ResourceLocation[] { locate("portal"), locate("ship"), locate("nylium"), locate("volcano")};
-	
+	private static final ResourceLocation[] LOOT = new ResourceLocation[] { locate("portal"), locate("ship"), locate("nylium"), locate("volcano") };
+
 	public static void assemble(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<StructurePiece> structurePieces, Random rand)
 	{
 		structurePieces.add(new Piece(templateManager, LOOT[rand.nextInt(LOOT.length)], pos.add(rand.nextInt(3) - 1, 0, rand.nextInt(3) - 1), rotation));
@@ -52,7 +48,7 @@ public class WarpedGardenPieces
 		List<BlockPos> positions = Arrays.asList(pos.add(-offset, 0, rand.nextInt(7) - 3), pos.add(offset, 0, rand.nextInt(7) - 3), pos.add(rand.nextInt(7) - 3, 0, offset), pos.add(rand.nextInt(7) - 3, 0, -offset));
 		positions.forEach(p -> structurePieces.add(new Piece(templateManager, getRandomPiece(rand), p, rotation)));
 	}
-	
+
 	public static ResourceLocation locate(String name)
 	{
 		return DungeonsPlus.locate("warped_garden/" + name);
@@ -65,7 +61,7 @@ public class WarpedGardenPieces
 			return FLOWERY[i];
 		return LOOT[i - FLOWERY.length];
 	}
-	
+
 	public static class Piece extends TemplateStructurePiece
 	{
 		private final ResourceLocation location;
@@ -127,23 +123,17 @@ public class WarpedGardenPieces
 		{
 			if (key.contains("chest"))
 			{
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 				String[] data = key.split("-");
-
-				Direction facing = Direction.byName(data[1]);
-				ChestType chestType = data[2].equals(ChestType.LEFT.getString()) ? ChestType.LEFT : (data[2].equals(ChestType.RIGHT.getString()) ? ChestType.RIGHT : ChestType.SINGLE);
-
-				world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).with(ChestBlock.WATERLOGGED, true).rotate(world, pos, this.rotation), 3);
-				if (world.getTileEntity(pos) instanceof ChestTileEntity)
-					((ChestTileEntity) world.getTileEntity(pos)).setLootTable(LootTables.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
+				DPUtil.placeLootChest(DPLoot.WARPED_GARDEN, world, rand, pos, this.rotation, data[1]);
 			}
 			if (key.equals("spawner"))
 			{
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-				world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
-				if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
-					((MobSpawnerTileEntity) world.getTileEntity(pos)).getSpawnerBaseLogic().setEntityType(EntityType.DROWNED);
-
+				CompoundNBT nbt = new CompoundNBT();
+				CompoundNBT entityNbt = new CompoundNBT();
+				entityNbt.putString("id", EntityType.DROWNED.getRegistryName().toString());
+				entityNbt.putBoolean("Glowing", true);
+				nbt.put("Entity", nbt);
+				DPUtil.placeSpawner(EntityType.DROWNED, world, rand, pos, nbt);
 			}
 		}
 	}

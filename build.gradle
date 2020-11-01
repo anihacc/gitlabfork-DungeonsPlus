@@ -14,7 +14,7 @@ apply plugin: 'maven-publish'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
-version = '1.0.3'
+version = '1.1.0'
 group = 'com.legacy.dungeons_plus'
 archivesBaseName = 'dungeons-plus-1.16.3'
 
