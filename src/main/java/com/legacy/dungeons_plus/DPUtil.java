@@ -3,14 +3,12 @@ package com.legacy.dungeons_plus;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
-import com.legacy.structure_gel.access_helpers.TileEntityAccessHelper;
+import com.legacy.structure_gel.access_helpers.SpawnerAccessHelper;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
@@ -54,26 +52,19 @@ public class DPUtil
 
 	public static void placeSpawner(EntityType<?> entity, IWorld world, Random rand, BlockPos pos)
 	{
-		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
-		if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
-			((MobSpawnerTileEntity) world.getTileEntity(pos)).getSpawnerBaseLogic().setEntityType(entity);
+		placeSpawner(SpawnerAccessHelper.createSpawnerEntity(entity), world, rand, pos);
 	}
 
-	public static void placeSpawner(EntityType<?> entity, IWorld world, Random rand, BlockPos pos, CompoundNBT nbt)
+	public static void placeSpawner(WeightedSpawnerEntity spawnerEntity, IWorld world, Random rand, BlockPos pos)
 	{
-		placeSpawner(entity, world, rand, pos, Arrays.asList(nbt));
+		placeSpawner(Arrays.asList(spawnerEntity), world, rand, pos);
 	}
 
-	public static void placeSpawner(EntityType<?> entity, IWorld world, Random rand, BlockPos pos, List<CompoundNBT> nbt)
+	public static void placeSpawner(List<WeightedSpawnerEntity> spawnerEntities, IWorld world, Random rand, BlockPos pos)
 	{
 		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
 		if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
-		{
-			MobSpawnerTileEntity tile = (MobSpawnerTileEntity) world.getTileEntity(pos);
-			TileEntityAccessHelper.setSpawnerSpawns(tile, nbt.stream().map(WeightedSpawnerEntity::new).collect(Collectors.toList()));
-			tile.getSpawnerBaseLogic().setEntityType(entity);
-		}
+			SpawnerAccessHelper.setSpawnPotentials((MobSpawnerTileEntity) world.getTileEntity(pos), spawnerEntities);
 	}
 }
