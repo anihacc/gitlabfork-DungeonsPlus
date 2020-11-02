@@ -16,7 +16,7 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 version = '1.1.0'
 group = 'com.legacy.dungeons_plus'
-archivesBaseName = 'dungeons-plus-1.16.3'
+archivesBaseName = 'dungeons-plus-1.16.4'
 
 minecraft {
     mappings channel: 'snapshot', version: '20201028-1.16.3'
@@ -61,8 +61,8 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.3-34.1.23'
-	compile files('libs/structure-gel-api-1.16.3-1.5.1a-deobf.jar')
+    minecraft 'net.minecraftforge:forge:1.16.4-35.0.1'
+	compile files('libs/structure-gel-api-1.16.4-1.7.0-deobf.jar')
 }
 
 jar {
