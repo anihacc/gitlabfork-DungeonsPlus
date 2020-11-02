@@ -40,8 +40,9 @@ public class DPUtil
 
 	public static void placeLootChest(ResourceLocation lootTable, IWorld world, Random rand, BlockPos pos, Rotation rotation, Direction facing, ChestType chestType)
 	{
+		boolean waterlog = world.getFluidState(pos).getFluid() == Fluids.WATER;
 		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).with(ChestBlock.WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER).rotate(world, pos, rotation), 3);
+		world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).with(ChestBlock.WATERLOGGED, waterlog).rotate(world, pos, rotation), 3);
 		if (world.getTileEntity(pos) instanceof ChestTileEntity)
 			((ChestTileEntity) world.getTileEntity(pos)).setLootTable(lootTable, rand.nextLong());
 	}

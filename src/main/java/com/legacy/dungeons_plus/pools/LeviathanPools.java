@@ -20,6 +20,6 @@ public class LeviathanPools
 		registry.register("spine_back", registry.builder().names("spine_back_1", "spine_back_2").build());
 		registry.register("skull", registry.builder().names("skull_1", "skull_2").build());
 		registry.register("tail", registry.builder().names("tail_1", "tail_2").build());
-		registry.register("room", registry.builder().names("room").build());
+		registry.register("room", registry.builder().names("room").maintainWater(false).build());
 	}
 }
