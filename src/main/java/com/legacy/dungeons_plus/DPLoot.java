@@ -4,34 +4,52 @@ import net.minecraft.util.ResourceLocation;
 
 public class DPLoot
 {
-	// Tower
-	public static final ResourceLocation VEX = locate("tower/vex");
-	public static final ResourceLocation VEX_MAP = locate("tower/vex_map");
+	public static final class Tower
+	{
+		public static final ResourceLocation CHEST_VEX = chest("tower/vex");
+		public static final ResourceLocation CHEST_VEX_MAP = chest("tower/vex_map");
+		public static final ResourceLocation SKELETON = entity("tower/skeleton");
+		public static final ResourceLocation SPIDER = entity("tower/spider");
+		public static final ResourceLocation ZOMBIE = entity("tower/zombie");
+	}
 
-	// Bigger/Buried Dungeon
-	public static final ResourceLocation HUSK = locate("bigger_dungeon/husk");
-	public static final ResourceLocation HUSK_MAP = locate("bigger_dungeon/husk_map");
-	public static final ResourceLocation STRAY = locate("bigger_dungeon/stray");
-	public static final ResourceLocation STRAY_MAP = locate("bigger_dungeon/stray_map");
+	public static final class BuriedDungeon
+	{
+		public static final ResourceLocation CHEST_HUSK = chest("bigger_dungeon/husk");
+		public static final ResourceLocation CHEST_HUSK_MAP = chest("bigger_dungeon/husk_map");
+		public static final ResourceLocation CHEST_STRAY = chest("bigger_dungeon/stray");
+		public static final ResourceLocation CHEST_STRAY_MAP = chest("bigger_dungeon/stray_map");
+	}
 
-	// Leviathan
-	public static final ResourceLocation LEVIATHAN = locate("leviathan/common");
+	public static final class Leviathan
+	{
+		public static final ResourceLocation CHEST_COMMON = chest("leviathan/common");
+		public static final ResourceLocation HUSK = entity("leviathan/husk");
+	}
 
-	// Snowy Temple
-	public static final ResourceLocation SNOWY_TEMPLE = locate("snowy_temple/common");
+	public static final class SnowyTemple
+	{
+		public static final ResourceLocation CHEST_COMMON = chest("snowy_temple/common");
+		public static final ResourceLocation STRAY = entity("snowy_temple/stray");
+	}
 
-	// Warped Garden
-	public static final ResourceLocation WARPED_GARDEN = locate("warped_garden/common");
+	public static final class WarpedGarden
+	{
+		public static final ResourceLocation CHEST_COMMON = chest("warped_garden/common");
+	}
 
-	// Soul Prison
-	public static final ResourceLocation SOUL_PRISON = locate("soul_prison/common");
+	public static final class SoulPrison
+	{
+		public static final ResourceLocation CHEST_COMMON = chest("soul_prison/common");
+	}
 
-	// Entities
-	public static ResourceLocation LEVIATHAN_HUSK = DungeonsPlus.locate("entities/leviathan_husk");
-	public static ResourceLocation SNOWY_TEMPLE_STRAY = DungeonsPlus.locate("entities/snowy_temple_stray");
-
-	private static ResourceLocation locate(String key)
+	private static ResourceLocation chest(String key)
 	{
 		return DungeonsPlus.locate("chests/" + key);
+	}
+
+	private static ResourceLocation entity(String key)
+	{
+		return DungeonsPlus.locate("entities/" + key);
 	}
 }

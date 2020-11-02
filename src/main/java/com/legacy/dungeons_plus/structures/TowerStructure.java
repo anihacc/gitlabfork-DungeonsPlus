@@ -80,10 +80,10 @@ public class TowerStructure extends GelConfigJigsawStructure
 					switch (data[0].split(":")[1])
 					{
 					case "vex":
-						lootTable = DPLoot.VEX_MAP;
+						lootTable = DPLoot.Tower.CHEST_VEX_MAP;
 						break;
 					case "map":
-						lootTable = DPLoot.VEX;
+						lootTable = DPLoot.Tower.CHEST_VEX;
 						break;
 					}
 				}

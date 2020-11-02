@@ -133,7 +133,7 @@ public class WarpedGardenPieces
 			if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				DPUtil.placeLootChest(DPLoot.WARPED_GARDEN, world, rand, pos, this.rotation, data[1]);
+				DPUtil.placeLootChest(DPLoot.WarpedGarden.CHEST_COMMON, world, rand, pos, this.rotation, data[1]);
 			}
 			if (key.equals("spawner"))
 			{
@@ -141,31 +141,31 @@ public class WarpedGardenPieces
 				{
 					for (Block coral : BlockTags.CORAL_BLOCKS.getAllElements())
 					{
-						CompoundNBT entityNbt = new CompoundNBT();
-						CompoundNBT tag = new CompoundNBT();
-						tag.putString("id", EntityType.DROWNED.getRegistryName().toString());
+						CompoundNBT spawnEntryNBT = new CompoundNBT();
+						CompoundNBT entityNBT = new CompoundNBT();
+						entityNBT.putString("id", EntityType.DROWNED.getRegistryName().toString());
 						ListNBT handItems = new ListNBT();
 						handItems.add(new ItemStack(Items.GOLDEN_SWORD).write(new CompoundNBT()));
 						handItems.add(new ItemStack(coral).write(new CompoundNBT()));
-						tag.put("HandItems", handItems);
+						entityNBT.put("HandItems", handItems);
 						ListNBT handDropChances = new ListNBT();
 						handDropChances.add(FloatNBT.valueOf(0.085F));
 						handDropChances.add(FloatNBT.valueOf(1.0F));
-						tag.put("HandDropChances", handDropChances);
-						entityNbt.put("Entity", tag);
-						SPAWNS.add(entityNbt);
+						entityNBT.put("HandDropChances", handDropChances);
+						spawnEntryNBT.put("Entity", entityNBT);
+						SPAWNS.add(spawnEntryNBT);
 					}
 
-					CompoundNBT entityNbt = new CompoundNBT();
-					CompoundNBT tag = new CompoundNBT();
-					tag.putString("id", EntityType.DROWNED.getRegistryName().toString());
+					CompoundNBT spawnEntryNBT = new CompoundNBT();
+					CompoundNBT entityNBT = new CompoundNBT();
+					entityNBT.putString("id", EntityType.DROWNED.getRegistryName().toString());
 					ListNBT handItems = new ListNBT();
 					handItems.add(new ItemStack(Items.GOLDEN_SWORD).write(new CompoundNBT()));
-					tag.put("HandItems", handItems);
-					entityNbt.put("Entity", tag);
-					SPAWNS.add(entityNbt);
+					entityNBT.put("HandItems", handItems);
+					spawnEntryNBT.put("Entity", entityNBT);
+					SPAWNS.add(spawnEntryNBT);
 					int coralCount = BlockTags.CORAL_BLOCKS.getAllElements().size();
-					entityNbt.putInt("Weight", coralCount == 0 ? 1 : coralCount * 5);
+					spawnEntryNBT.putInt("Weight", coralCount == 0 ? 1 : coralCount * 5);
 				}
 				
 				Collections.shuffle(SPAWNS, rand);

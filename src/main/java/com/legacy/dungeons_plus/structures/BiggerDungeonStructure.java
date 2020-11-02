@@ -79,16 +79,16 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 						switch (data[0].split(":")[1])
 						{
 						case "huskmap":
-							lootTable = DPLoot.HUSK_MAP;
+							lootTable = DPLoot.BuriedDungeon.CHEST_HUSK_MAP;
 							break;
 						case "husk":
-							lootTable = DPLoot.HUSK;
+							lootTable = DPLoot.BuriedDungeon.CHEST_HUSK;
 							break;
 						case "straymap":
-							lootTable = DPLoot.STRAY_MAP;
+							lootTable = DPLoot.BuriedDungeon.CHEST_STRAY_MAP;
 							break;
 						case "stray":
-							lootTable = DPLoot.STRAY;
+							lootTable = DPLoot.BuriedDungeon.CHEST_STRAY;
 							break;
 						}
 					}
