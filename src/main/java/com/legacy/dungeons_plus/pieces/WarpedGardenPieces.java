@@ -18,6 +18,8 @@ import com.legacy.structure_gel.worldgen.structure.GelTemplateStructurePiece;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.monster.DrownedEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -159,6 +161,16 @@ public class WarpedGardenPieces
 				Collections.shuffle(SPAWNS, rand);
 
 				DPUtil.placeSpawner(SPAWNS, world, rand, pos);
+			}
+			if (key.equals("drowned"))
+			{
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+				DrownedEntity drowned = EntityType.DROWNED.create(world.getWorld());
+				ItemStack goldSword = new ItemStack(Items.GOLDEN_SWORD);
+				goldSword.setDamage(10);
+				drowned.setItemStackToSlot(EquipmentSlotType.MAINHAND, goldSword);
+				drowned.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.AIR));
+				drowned.enablePersistence();
 			}
 		}
 	}
