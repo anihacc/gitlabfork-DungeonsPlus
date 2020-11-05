@@ -67,9 +67,7 @@ public class WarpedGardenPieces
 	public static ResourceLocation getRandomPiece(Random rand)
 	{
 		int i = rand.nextInt(FLOWERY.length + LOOT.length);
-		if (i < FLOWERY.length)
-			return FLOWERY[i];
-		return LOOT[i - FLOWERY.length];
+		return i < FLOWERY.length ? FLOWERY[i] : LOOT[i - FLOWERY.length];
 	}
 
 	public static class Piece extends GelTemplateStructurePiece
@@ -95,7 +93,7 @@ public class WarpedGardenPieces
 			BlockPos centerPos = new BlockPos(sizePos.getX() / 2, 0, sizePos.getZ() / 2);
 			return new GelPlacementSettings().setMaintainWater(false).setRotation(this.rotation).setMirror(Mirror.NONE).setCenterOffset(centerPos);
 		}
-		
+
 		@Override
 		public void addProcessors(TemplateManager templateManager, PlacementSettings placementSettings)
 		{
@@ -128,36 +126,36 @@ public class WarpedGardenPieces
 			{
 				if (SPAWNS.isEmpty())
 				{
-					CompoundNBT goldSwordNBT = new ItemStack(Items.GOLDEN_SWORD).write(new CompoundNBT());
-					goldSwordNBT.putInt("Damage", 10);
-					
+					CompoundNBT goldAxeNBT = new ItemStack(Items.GOLDEN_AXE).write(new CompoundNBT());
+					goldAxeNBT.putInt("Damage", 10);
+
 					for (Block coral : BlockTags.CORAL_BLOCKS.getAllElements())
 					{
 						CompoundNBT entityNBT = new CompoundNBT();
-						
+
 						ListNBT handItems = new ListNBT();
-						handItems.add(goldSwordNBT);
+						handItems.add(goldAxeNBT);
 						handItems.add(new ItemStack(coral).write(new CompoundNBT()));
 						entityNBT.put("HandItems", handItems);
-						
+
 						ListNBT handDropChances = new ListNBT();
 						handDropChances.add(FloatNBT.valueOf(0.085F)); // Main hand
 						handDropChances.add(FloatNBT.valueOf(1.0F)); // Off hand
 						entityNBT.put("HandDropChances", handDropChances);
-						
+
 						SPAWNS.add(SpawnerAccessHelper.createSpawnerEntity(1, EntityType.DROWNED, entityNBT));
 					}
 
 					CompoundNBT entityNBT = new CompoundNBT();
-					
+
 					ListNBT handItems = new ListNBT();
-					handItems.add(goldSwordNBT);
+					handItems.add(goldAxeNBT);
 					entityNBT.put("HandItems", handItems);
-					
+
 					int coralCount = BlockTags.CORAL_BLOCKS.getAllElements().size();
 					SPAWNS.add(SpawnerAccessHelper.createSpawnerEntity(coralCount == 0 ? 1 : coralCount * 5, EntityType.DROWNED, entityNBT));
 				}
-				
+
 				Collections.shuffle(SPAWNS, rand);
 
 				DPUtil.placeSpawner(SPAWNS, world, rand, pos);
@@ -166,11 +164,13 @@ public class WarpedGardenPieces
 			{
 				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 				DrownedEntity drowned = EntityType.DROWNED.create(world.getWorld());
-				ItemStack goldSword = new ItemStack(Items.GOLDEN_SWORD);
-				goldSword.setDamage(10);
-				drowned.setItemStackToSlot(EquipmentSlotType.MAINHAND, goldSword);
+				ItemStack goldAxe = new ItemStack(Items.GOLDEN_AXE);
+				goldAxe.setDamage(10);
+				drowned.setItemStackToSlot(EquipmentSlotType.MAINHAND, goldAxe);
 				drowned.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.AIR));
 				drowned.enablePersistence();
+				drowned.setPosition(pos.getX(), pos.getY(), pos.getZ());
+				world.addEntity(drowned);
 			}
 		}
 	}
