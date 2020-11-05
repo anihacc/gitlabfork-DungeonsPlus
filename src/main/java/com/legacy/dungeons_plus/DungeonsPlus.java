@@ -3,6 +3,7 @@ package com.legacy.dungeons_plus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.legacy.dungeons_plus.pieces.SoulPrisonPieces;
 import com.legacy.dungeons_plus.pieces.WarpedGardenPieces;
 import com.legacy.dungeons_plus.pools.BiggerDungeonPools;
 import com.legacy.dungeons_plus.pools.EndRuinsPools;
@@ -13,11 +14,11 @@ import com.legacy.dungeons_plus.structures.BiggerDungeonStructure;
 import com.legacy.dungeons_plus.structures.EndRuinsStructure;
 import com.legacy.dungeons_plus.structures.LeviathanStructure;
 import com.legacy.dungeons_plus.structures.SnowyTempleStructure;
+import com.legacy.dungeons_plus.structures.SoulPrisonStructure;
 import com.legacy.dungeons_plus.structures.TowerStructure;
 import com.legacy.dungeons_plus.structures.WarpedGardenStructure;
 import com.legacy.structure_gel.access_helpers.BiomeAccessHelper;
 import com.legacy.structure_gel.access_helpers.JigsawAccessHelper;
-import com.legacy.structure_gel.biome_dictionary.BiomeDictionary;
 import com.legacy.structure_gel.registrars.StructureRegistrar;
 
 import net.minecraft.util.ResourceLocation;
@@ -55,9 +56,8 @@ public class DungeonsPlus
 		BiomeAccessHelper.addStructureIfAllowed(event, Structures.LEVIATHAN.getStructureFeature());
 		BiomeAccessHelper.addStructureIfAllowed(event, Structures.SNOWY_TEMPLE.getStructureFeature());
 		BiomeAccessHelper.addStructureIfAllowed(event, Structures.END_RUINS.getStructureFeature());
-		
-		if (BiomeDictionary.OCEAN.contains(event.getName()))
-			BiomeAccessHelper.addStructure(event, Structures.WARPED_GARDEN.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.WARPED_GARDEN.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.SOUL_PRISON.getStructureFeature());
 	}
 
 	public static ResourceLocation locate(String key)
@@ -74,7 +74,8 @@ public class DungeonsPlus
 		public static StructureRegistrar<VillageConfig, SnowyTempleStructure> SNOWY_TEMPLE;
 		public static StructureRegistrar<VillageConfig, EndRuinsStructure> END_RUINS;
 		public static StructureRegistrar<NoFeatureConfig, WarpedGardenStructure> WARPED_GARDEN;
-		
+		public static StructureRegistrar<NoFeatureConfig, SoulPrisonStructure> SOUL_PRISON;
+
 		@SubscribeEvent
 		public static void onRegistry(final RegistryEvent.Register<Structure<?>> event)
 		{
@@ -85,7 +86,8 @@ public class DungeonsPlus
 			SNOWY_TEMPLE = StructureRegistrar.of(locate("snowy_temple"), new SnowyTempleStructure(VillageConfig.field_236533_a_, DPConfig.COMMON.snowyTemple), SnowyTempleStructure.Piece::new, new VillageConfig(() -> SnowyTemplePools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle().handleForge(registry);
 			END_RUINS = StructureRegistrar.of(locate("end_ruins"), new EndRuinsStructure(VillageConfig.field_236533_a_, DPConfig.COMMON.endRuins), EndRuinsStructure.Piece::new, new VillageConfig(() -> EndRuinsPools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle().handleForge(registry);
 			WARPED_GARDEN = StructureRegistrar.of(locate("warped_garden"), new WarpedGardenStructure(NoFeatureConfig.field_236558_a_, DPConfig.COMMON.warpedGarden), WarpedGardenPieces.Piece::new, NoFeatureConfig.NO_FEATURE_CONFIG, Decoration.SURFACE_STRUCTURES).handle().handleForge(registry);
-			
+			SOUL_PRISON = StructureRegistrar.of(locate("soul_prison"), new SoulPrisonStructure(NoFeatureConfig.field_236558_a_, DPConfig.COMMON.soulPrison), SoulPrisonPieces.Piece::new, NoFeatureConfig.NO_FEATURE_CONFIG, Decoration.SURFACE_STRUCTURES).handle().handleForge(registry);
+
 			JigsawAccessHelper.addIllagerStructures(TOWER.getStructure(), SNOWY_TEMPLE.getStructure());
 
 			TowerPools.init();

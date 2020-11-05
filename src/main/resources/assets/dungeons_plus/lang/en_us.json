@@ -18,9 +18,9 @@
 	"dungeons_plus:advancements.end.find_end_ruins.title": "A Ruined End",
 	"dungeons_plus:advancements.end.find_end_ruins.description": "Probably shouldn't stay long. (Find End Ruins)",
 	
-	"dungeons_plus:advancements.end.find_warped_garden.title": "Something Unnatural",
-	"dungeons_plus:advancements.end.find_warped_garden.description": "Go inside. What could go wrong? (Find a Warped Garden)",
+	"dungeons_plus:advancements.adventure.find_warped_garden.title": "Something Unnatural",
+	"dungeons_plus:advancements.adventure.find_warped_garden.description": "Go inside. What could go wrong? (Find a Warped Garden)",
 	
-	"dungeons_plus:advancements.end.find_soul_prison.title": "Caged Tears",
-	"dungeons_plus:advancements.end.find_soul_prison.description": "Not theirs though. (Find the Soul Prison)"
+	"dungeons_plus:advancements.nether.find_soul_prison.title": "Caged Tears",
+	"dungeons_plus:advancements.nether.find_soul_prison.description": "Not theirs though. (Find the Soul Prison)"
 }

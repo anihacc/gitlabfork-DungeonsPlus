@@ -49,7 +49,7 @@ public class WarpedGardenPieces
 {
 	private static final ResourceLocation[] FLOWERY = new ResourceLocation[] { locate("flower_0"), locate("flower_1"), locate("flower_2"), locate("flower_3") };
 	private static final ResourceLocation[] LOOT = new ResourceLocation[] { locate("portal"), locate("ship"), locate("nylium"), locate("volcano") };
-	private static final List<WeightedSpawnerEntity> SPAWNS = new ArrayList<>();
+	private static final List<WeightedSpawnerEntity> SPAWNER_SPAWNS = new ArrayList<>();
 
 	public static void assemble(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<StructurePiece> structurePieces, Random rand)
 	{
@@ -59,12 +59,12 @@ public class WarpedGardenPieces
 		positions.forEach(p -> structurePieces.add(new Piece(templateManager, getRandomPiece(rand), p, rotation)));
 	}
 
-	public static ResourceLocation locate(String name)
+	private static ResourceLocation locate(String name)
 	{
 		return DungeonsPlus.locate("warped_garden/" + name);
 	}
 
-	public static ResourceLocation getRandomPiece(Random rand)
+	private static ResourceLocation getRandomPiece(Random rand)
 	{
 		int i = rand.nextInt(FLOWERY.length + LOOT.length);
 		return i < FLOWERY.length ? FLOWERY[i] : LOOT[i - FLOWERY.length];
@@ -124,7 +124,7 @@ public class WarpedGardenPieces
 			}
 			if (key.equals("spawner"))
 			{
-				if (SPAWNS.isEmpty())
+				if (SPAWNER_SPAWNS.isEmpty())
 				{
 					CompoundNBT goldAxeNBT = new ItemStack(Items.GOLDEN_AXE).write(new CompoundNBT());
 					goldAxeNBT.putInt("Damage", 10);
@@ -143,7 +143,7 @@ public class WarpedGardenPieces
 						handDropChances.add(FloatNBT.valueOf(1.0F)); // Off hand
 						entityNBT.put("HandDropChances", handDropChances);
 
-						SPAWNS.add(SpawnerAccessHelper.createSpawnerEntity(1, EntityType.DROWNED, entityNBT));
+						SPAWNER_SPAWNS.add(SpawnerAccessHelper.createSpawnerEntity(1, EntityType.DROWNED, entityNBT));
 					}
 
 					CompoundNBT entityNBT = new CompoundNBT();
@@ -153,12 +153,12 @@ public class WarpedGardenPieces
 					entityNBT.put("HandItems", handItems);
 
 					int coralCount = BlockTags.CORAL_BLOCKS.getAllElements().size();
-					SPAWNS.add(SpawnerAccessHelper.createSpawnerEntity(coralCount == 0 ? 1 : coralCount * 5, EntityType.DROWNED, entityNBT));
+					SPAWNER_SPAWNS.add(SpawnerAccessHelper.createSpawnerEntity(coralCount == 0 ? 1 : coralCount * 5, EntityType.DROWNED, entityNBT));
 				}
 
-				Collections.shuffle(SPAWNS, rand);
+				Collections.shuffle(SPAWNER_SPAWNS, rand);
 
-				DPUtil.placeSpawner(SPAWNS, world, rand, pos);
+				DPUtil.placeSpawner(SPAWNER_SPAWNS, world, rand, pos);
 			}
 			if (key.equals("drowned"))
 			{

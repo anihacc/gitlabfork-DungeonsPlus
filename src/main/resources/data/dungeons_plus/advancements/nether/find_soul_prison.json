@@ -5,10 +5,10 @@
       "item": "minecraft:spawner"
     },
     "title": {
-      "translate": "dungeons_plus:advancements.adventure.find_soul_prison.title"
+      "translate": "dungeons_plus:advancements.nether.find_soul_prison.title"
     },
     "description": {
-      "translate": "dungeons_plus:advancements.adventure.find_soul_prison.description"
+      "translate": "dungeons_plus:advancements.nether.find_soul_prison.description"
     },
     "frame": "task",
     "show_toast": true,
