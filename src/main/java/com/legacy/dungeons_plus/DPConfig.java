@@ -9,7 +9,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public class DPConfig
 {
 	public static final Common COMMON;
-	public static final ForgeConfigSpec COMMON_SPEC;
+	protected static final ForgeConfigSpec COMMON_SPEC;
 	static
 	{
 		Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
@@ -27,7 +27,7 @@ public class DPConfig
 		public final StructureConfig warpedGarden;
 		public final StructureConfig soulPrison;
 
-		public Common(ForgeConfigSpec.Builder builder)
+		protected Common(ForgeConfigSpec.Builder builder)
 		{
 			this.tower = new StructureConfig(builder, "tower").probability(0.75D).spacing(25).offset(6).biomes(true, "#structure_gel:plains, #structure_gel:oak_forest, #structure_gel:dark_forest, #structure_gel:birch_forest, #structure_gel:mountain");
 			this.leviathan = new StructureConfig(builder, "leviathan").probability(1.0D).spacing(36).offset(8).biomes(true, "#structure_gel:desert");

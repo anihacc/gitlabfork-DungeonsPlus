@@ -46,10 +46,10 @@ public class DungeonsPlus
 	{
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DPConfig.COMMON_SPEC);
 		IEventBus forgeBus = MinecraftForge.EVENT_BUS;
-		forgeBus.addListener(this::biomeLoad);
+		forgeBus.addListener(DungeonsPlus::biomeLoad);
 	}
 
-	public void biomeLoad(final BiomeLoadingEvent event)
+	protected static void biomeLoad(final BiomeLoadingEvent event)
 	{
 		BiomeAccessHelper.addStructureIfAllowed(event, Structures.TOWER.getStructureFeature());
 		BiomeAccessHelper.addStructureIfAllowed(event, Structures.BIGGER_DUNGEON.getStructureFeature());
@@ -77,7 +77,7 @@ public class DungeonsPlus
 		public static StructureRegistrar<NoFeatureConfig, SoulPrisonStructure> SOUL_PRISON;
 
 		@SubscribeEvent
-		public static void onRegistry(final RegistryEvent.Register<Structure<?>> event)
+		protected static void onRegistry(final RegistryEvent.Register<Structure<?>> event)
 		{
 			IForgeRegistry<Structure<?>> registry = event.getRegistry();
 			TOWER = StructureRegistrar.of(locate("tower"), new TowerStructure(VillageConfig.field_236533_a_, DPConfig.COMMON.tower), TowerStructure.Piece::new, new VillageConfig(() -> TowerPools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle().handleForge(registry);

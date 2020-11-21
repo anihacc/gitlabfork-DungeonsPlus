@@ -28,7 +28,7 @@ public class DPEvents
 	private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> BURIED_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.BiggerDungeon.ZOMBIE, EntityType.SKELETON, DPLoot.BiggerDungeon.SKELETON));
 
 	@SubscribeEvent
-	public static void onEntitySpawn(EntityJoinWorldEvent event)
+	protected static void onEntitySpawn(EntityJoinWorldEvent event)
 	{
 		if (!event.getWorld().isRemote)
 		{
