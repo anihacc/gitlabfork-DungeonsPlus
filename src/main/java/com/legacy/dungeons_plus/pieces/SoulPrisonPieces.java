@@ -20,6 +20,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.monster.GhastEntity;
 import net.minecraft.entity.monster.WitherSkeletonEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -30,6 +31,7 @@ import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IServerWorld;
@@ -43,26 +45,26 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 public class SoulPrisonPieces
 {
 	private static final ResourceLocation TOP = locate("main/top_0");
+	private static final ResourceLocation TOP_GEL = locate("main/top_gel");
 	private static final ResourceLocation[] BOTTOM = new ResourceLocation[] { locate("main/bottom_0") };
 	private static final ResourceLocation UNDER_MAIN = locate("main/under");
-	private static final ResourceLocation[] CELLS = new ResourceLocation[] { locate("cells/cell_0") };
-
+	private static final ResourceLocation[] TURRETS = new ResourceLocation[] {locate("turrets/turret_0"), locate("turrets/turret_1")};
+	
 	public static void assemble(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<StructurePiece> structurePieces, Random rand)
 	{
 		pos = pos.add(-12, 0, -12);
-		structurePieces.add(new Piece(templateManager, BOTTOM[rand.nextInt(BOTTOM.length)], pos, rotation));
+		structurePieces.add(new Piece(templateManager, Util.getRandomObject(BOTTOM, rand), pos, rotation));
+		structurePieces.add(new Piece(templateManager, TOP_GEL, pos.up(11), rotation));
 		structurePieces.add(new Piece(templateManager, TOP, pos.up(11), rotation));
 		for (int i = 1; i < pos.getY(); i++)
 			structurePieces.add(new Piece(templateManager, UNDER_MAIN, pos.down(i), rotation, 1));
 
 		pos = pos.add(12, 0, 12);
 		int range = 32;
-		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(range, 0, 0), Rotation.randomRotation(rand)));
-		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(-range, 0, 0), Rotation.randomRotation(rand)));
-		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(0, 0, range), Rotation.randomRotation(rand)));
-		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(0, 0, -range), Rotation.randomRotation(rand)));
-		
-		// Add cells around main
+		structurePieces.add(new Piece(templateManager, Util.getRandomObject(TURRETS, rand), pos.add(range, 0, rand.nextInt(20) - 10), Rotation.randomRotation(rand)));
+		structurePieces.add(new Piece(templateManager, Util.getRandomObject(TURRETS, rand), pos.add(-range, 0, rand.nextInt(20) - 10), Rotation.randomRotation(rand)));
+		structurePieces.add(new Piece(templateManager, Util.getRandomObject(TURRETS, rand), pos.add(rand.nextInt(20) - 10, 0, range), Rotation.randomRotation(rand)));
+		structurePieces.add(new Piece(templateManager, Util.getRandomObject(TURRETS, rand), pos.add(rand.nextInt(20) - 10, 0, -range), Rotation.randomRotation(rand)));
 	}
 
 	private static ResourceLocation locate(String name)
@@ -132,6 +134,14 @@ public class SoulPrisonPieces
 				wither.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
 				wither.enablePersistence();
 				world.addEntity(wither);
+			}
+			else if (key.equals("ghast"))
+			{
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+				GhastEntity ghast = EntityType.GHAST.create(world.getWorld());
+				ghast.setPosition(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
+				ghast.enablePersistence();
+				world.addEntity(ghast);
 			}
 			else if (key.equals("spawner"))
 			{
