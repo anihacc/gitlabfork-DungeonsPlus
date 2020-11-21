@@ -103,7 +103,7 @@ public class EndRuinsStructure extends GelConfigJigsawStructure
 			if (key.contains("spawner"))
 			{
 				String[] data = key.split("-");
-				DPUtil.placeSpawner(data[1], world, rand, pos);
+				DPUtil.placeSpawner(data[1], world, pos);
 			}
 		}
 	}

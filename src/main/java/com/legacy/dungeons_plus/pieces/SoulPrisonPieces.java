@@ -6,7 +6,10 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
+import com.legacy.dungeons_plus.DPLoot;
+import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.structure_gel.access_helpers.SpawnerAccessHelper;
 import com.legacy.structure_gel.worldgen.GelPlacementSettings;
 import com.legacy.structure_gel.worldgen.processors.RandomBlockSwapProcessor;
 import com.legacy.structure_gel.worldgen.processors.RandomStateSwapProcessor;
@@ -16,7 +19,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.monster.WitherSkeletonEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
@@ -40,16 +49,18 @@ public class SoulPrisonPieces
 
 	public static void assemble(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<StructurePiece> structurePieces, Random rand)
 	{
+		pos = pos.add(-12, 0, -12);
 		structurePieces.add(new Piece(templateManager, BOTTOM[rand.nextInt(BOTTOM.length)], pos, rotation));
 		structurePieces.add(new Piece(templateManager, TOP, pos.up(11), rotation));
 		for (int i = 1; i < pos.getY(); i++)
 			structurePieces.add(new Piece(templateManager, UNDER_MAIN, pos.down(i), rotation, 1));
 
-		int range = 24;
-		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(range, 0, 0), rotation));
-		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(-range, 0, 0), rotation));
-		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(0, 0, range), rotation));
-		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(0, 0, -range), rotation));
+		pos = pos.add(12, 0, 12);
+		int range = 32;
+		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(range, 0, 0), Rotation.randomRotation(rand)));
+		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(-range, 0, 0), Rotation.randomRotation(rand)));
+		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(0, 0, range), Rotation.randomRotation(rand)));
+		structurePieces.add(new Piece(templateManager, CELLS[rand.nextInt(CELLS.length)], pos.add(0, 0, -range), Rotation.randomRotation(rand)));
 		
 		// Add cells around main
 	}
@@ -109,11 +120,35 @@ public class SoulPrisonPieces
 		}
 
 		@Override
-		protected void handleDataMarker(String function, BlockPos pos, IServerWorld worldIn, Random rand, MutableBoundingBox sbb)
+		protected void handleDataMarker(String key, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox bounds)
 		{
-			// guard (wither skeleton w/ bow)
-			// spawner (ghast long range)
-			// chest-facing
+			if (key.equals("guard"))
+			{
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+				WitherSkeletonEntity wither = EntityType.WITHER_SKELETON.create(world.getWorld());
+				wither.setPosition(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
+				wither.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+				wither.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+				wither.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+				wither.enablePersistence();
+				world.addEntity(wither);
+			}
+			else if (key.equals("spawner"))
+			{
+				DPUtil.placeSpawner(EntityType.GHAST, world, pos);
+				if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
+				{
+					MobSpawnerTileEntity tile = (MobSpawnerTileEntity) world.getTileEntity(pos);
+					SpawnerAccessHelper.setRequiredPlayerRange(tile, 32);
+					SpawnerAccessHelper.setMaxNearbyEntities(tile, 10);
+					SpawnerAccessHelper.setSpawnCount(tile, 5);
+					SpawnerAccessHelper.setSpawnRange(tile, 16);
+				}
+			}
+			else if (key.contains("chest"))
+			{
+				DPUtil.placeLootChest(DPLoot.SoulPrison.CHEST_COMMON, world, rand, pos, rotation, key.split("-")[1]);
+			}
 		}
 	}
 }

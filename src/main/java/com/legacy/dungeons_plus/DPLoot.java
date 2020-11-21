@@ -4,11 +4,15 @@ import net.minecraft.util.ResourceLocation;
 
 public class DPLoot
 {
+	// We need this because some mods break vanilla dungeon loot. It's literally a
+	// copy of the vanilla one :/
+	public static final ResourceLocation CHESTS_SIMPLE_DUNGEON = chest("vanilla_dungeon");
+
 	public static final class Tower
 	{
 		public static final ResourceLocation CHEST_VEX = chest("tower/vex");
 		public static final ResourceLocation CHEST_VEX_MAP = chest("tower/vex_map");
-		
+
 		public static final ResourceLocation SKELETON = entity("tower/skeleton");
 		public static final ResourceLocation SPIDER = entity("tower/spider");
 		public static final ResourceLocation ZOMBIE = entity("tower/zombie");
@@ -20,7 +24,7 @@ public class DPLoot
 		public static final ResourceLocation CHEST_HUSK_MAP = chest("bigger_dungeon/husk_map");
 		public static final ResourceLocation CHEST_STRAY = chest("bigger_dungeon/stray");
 		public static final ResourceLocation CHEST_STRAY_MAP = chest("bigger_dungeon/stray_map");
-		
+
 		public static final ResourceLocation SKELETON = entity("bigger_dungeon/skeleton");
 		public static final ResourceLocation ZOMBIE = entity("bigger_dungeon/zombie");
 	}
@@ -28,14 +32,14 @@ public class DPLoot
 	public static final class Leviathan
 	{
 		public static final ResourceLocation CHEST_COMMON = chest("leviathan/common");
-		
+
 		public static final ResourceLocation HUSK = entity("leviathan/husk");
 	}
 
 	public static final class SnowyTemple
 	{
 		public static final ResourceLocation CHEST_COMMON = chest("snowy_temple/common");
-		
+
 		public static final ResourceLocation STRAY = entity("snowy_temple/stray");
 	}
 

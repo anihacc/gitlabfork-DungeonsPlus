@@ -73,7 +73,7 @@ public class LeviathanStructure extends GelConfigJigsawStructure
 			}
 			if (key.equals("spawner"))
 			{
-				DPUtil.placeSpawner(EntityType.HUSK, world, rand, pos);
+				DPUtil.placeSpawner(EntityType.HUSK, world, pos);
 			}
 		}
 	}

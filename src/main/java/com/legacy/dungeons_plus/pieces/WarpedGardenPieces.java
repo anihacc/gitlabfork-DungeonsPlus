@@ -158,7 +158,7 @@ public class WarpedGardenPieces
 
 				Collections.shuffle(SPAWNER_SPAWNS, rand);
 
-				DPUtil.placeSpawner(SPAWNER_SPAWNS, world, rand, pos);
+				DPUtil.placeSpawner(SPAWNER_SPAWNS, world, pos);
 			}
 			if (key.equals("drowned"))
 			{

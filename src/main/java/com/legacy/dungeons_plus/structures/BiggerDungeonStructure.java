@@ -10,7 +10,6 @@ import com.legacy.structure_gel.worldgen.jigsaw.AbstractGelStructurePiece;
 import com.legacy.structure_gel.worldgen.jigsaw.GelConfigJigsawStructure;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -73,7 +72,7 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 				 */
 				if (rand.nextBoolean() || data[0].contains("map"))
 				{
-					ResourceLocation lootTable = LootTables.CHESTS_SIMPLE_DUNGEON;
+					ResourceLocation lootTable = DPLoot.CHESTS_SIMPLE_DUNGEON;
 					if (data[0].contains(":"))
 					{
 						switch (data[0].split(":")[1])
@@ -98,7 +97,7 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 			if (key.contains("spawner"))
 			{
 				String[] data = key.split("-");
-				DPUtil.placeSpawner(data[1], world, rand, pos);
+				DPUtil.placeSpawner(data[1], world, pos);
 			}
 		}
 	}

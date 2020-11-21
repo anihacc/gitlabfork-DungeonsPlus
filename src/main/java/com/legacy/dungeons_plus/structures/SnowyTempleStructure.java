@@ -73,7 +73,7 @@ public class SnowyTempleStructure extends GelConfigJigsawStructure
 			}
 			if (key.contains("spawner"))
 			{
-				DPUtil.placeSpawner(EntityType.STRAY, world, rand, pos);
+				DPUtil.placeSpawner(EntityType.STRAY, world, pos);
 			}
 		}
 	}

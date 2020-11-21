@@ -47,22 +47,22 @@ public class DPUtil
 			((ChestTileEntity) world.getTileEntity(pos)).setLootTable(lootTable, rand.nextLong());
 	}
 
-	public static void placeSpawner(String entity, IWorld world, Random rand, BlockPos pos)
+	public static void placeSpawner(String entity, IWorld world, BlockPos pos)
 	{
-		placeSpawner(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(entity)), world, rand, pos);
+		placeSpawner(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(entity)), world, pos);
 	}
 
-	public static void placeSpawner(EntityType<?> entity, IWorld world, Random rand, BlockPos pos)
+	public static void placeSpawner(EntityType<?> entity, IWorld world, BlockPos pos)
 	{
-		placeSpawner(SpawnerAccessHelper.createSpawnerEntity(entity), world, rand, pos);
+		placeSpawner(SpawnerAccessHelper.createSpawnerEntity(entity), world, pos);
 	}
 
-	public static void placeSpawner(WeightedSpawnerEntity spawnerEntity, IWorld world, Random rand, BlockPos pos)
+	public static void placeSpawner(WeightedSpawnerEntity spawnerEntity, IWorld world, BlockPos pos)
 	{
-		placeSpawner(Arrays.asList(spawnerEntity), world, rand, pos);
+		placeSpawner(Arrays.asList(spawnerEntity), world, pos);
 	}
 
-	public static void placeSpawner(List<WeightedSpawnerEntity> spawnerEntities, IWorld world, Random rand, BlockPos pos)
+	public static void placeSpawner(List<WeightedSpawnerEntity> spawnerEntities, IWorld world, BlockPos pos)
 	{
 		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);

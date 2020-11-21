@@ -18,7 +18,6 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -74,7 +73,7 @@ public class TowerStructure extends GelConfigJigsawStructure
 			if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				ResourceLocation lootTable = LootTables.CHESTS_SIMPLE_DUNGEON;
+				ResourceLocation lootTable = DPLoot.CHESTS_SIMPLE_DUNGEON;
 				if (data[0].contains(":"))
 				{
 					switch (data[0].split(":")[1])
@@ -92,7 +91,7 @@ public class TowerStructure extends GelConfigJigsawStructure
 			if (key.contains("spawner"))
 			{
 				String[] data = key.split("-");
-				DPUtil.placeSpawner(data[1], world, rand, pos);
+				DPUtil.placeSpawner(data[1], world, pos);
 			}
 			/**
 			 * Creating entities is a little simpler with the createEntity method. Doing
