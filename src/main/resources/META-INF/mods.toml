@@ -13,7 +13,7 @@ license="https://www.gnu.org/licenses/gpl-3.0.en.html"
 [[dependencies.dungeons_plus]]
     modId="forge"
     mandatory=true
-    versionRange="[35.0.0,)"
+    versionRange="[35.1.0,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.dungeons_plus]]
