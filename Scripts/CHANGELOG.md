@@ -1,5 +1,19 @@
 # MCGradle Scripts Changelog
 
+## 0.6.0
+
+- Completely rewritten from the ground up with Object-Oriented Programming!
+- Forgoing the bash version. This is mainly useful for people on Windows who can double click the batch file to run my program.
+- Will add more changelog details later.
+
+## 0.5.5
+
+- Fixed a bug where Windows PowerShell would not prompt to open the `build\libs` folder.
+
+## 0.5.4
+
+- After building your mod, you will be prompted if you want to open the `build\libs` folder. This is only for Windows users.
+
 ## 0.5.3
 
 - Ported the auto-updater for the bash scripts. PowerShell superiority is no more.
