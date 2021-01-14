@@ -105,13 +105,13 @@ public class WarpedGardenPieces
 
 		// Adjust the height to be under water
 		@Override
-		public boolean func_230383_a_(ISeedReader world, StructureManager structureManager, ChunkGenerator chunkGen, Random rand, MutableBoundingBox bounds, ChunkPos chunkPos, BlockPos pos)
+		public boolean generate(ISeedReader world, StructureManager structureManager, ChunkGenerator chunkGen, Random rand, MutableBoundingBox bounds, ChunkPos chunkPos, BlockPos pos)
 		{
 			int y = world.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, this.templatePosition.getX() + 6, this.templatePosition.getZ() + 6);
 			this.templatePosition = new BlockPos(this.templatePosition.getX(), y, this.templatePosition.getZ());
 			if (this.templatePosition.getY() + this.template.getSize().getY() > 60)
 				this.templatePosition = new BlockPos(this.templatePosition.getX(), 60 - this.template.getSize().getY(), this.templatePosition.getZ());
-			return super.func_230383_a_(world, structureManager, chunkGen, rand, bounds, chunkPos, pos);
+			return super.generate(world, structureManager, chunkGen, rand, bounds, chunkPos, pos);
 		}
 
 		@Override

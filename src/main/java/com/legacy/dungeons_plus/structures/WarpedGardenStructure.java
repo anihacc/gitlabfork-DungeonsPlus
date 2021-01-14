@@ -36,9 +36,8 @@ public class WarpedGardenStructure extends GelConfigStructure<NoFeatureConfig>
 			super(structureIn, chunkX, chunkZ, boundsIn, referenceIn, seed);
 		}
 
-		// init
 		@Override
-		public void func_230364_a_(DynamicRegistries registry, ChunkGenerator chunkGen, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig configIn)
+		public void init(DynamicRegistries registry, ChunkGenerator chunkGen, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig configIn)
 		{
 			WarpedGardenPieces.assemble(templateManagerIn, new BlockPos(chunkX * 16, 90, chunkZ * 16), Rotation.randomRotation(this.rand), this.components, this.rand);
 			this.recalculateStructureSize();

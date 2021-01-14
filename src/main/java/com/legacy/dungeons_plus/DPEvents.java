@@ -45,7 +45,7 @@ public class DPEvents
 
 	private static void ifInStructure(Entity entity, EntityType<?> entityTest, StructureRegistrar<?, ?> structure, Consumer<Entity> consumer)
 	{
-		if (entity.getType().equals(entityTest) && (((ServerWorld) entity.world).func_241112_a_()).getStructureStart(entity.getPosition(), false, structure.getStructure()).isValid())
+		if (entity.getType().equals(entityTest) && (((ServerWorld) entity.world).getStructureAccessor()).getStructureStart(entity.getPosition(), false, structure.getStructure()).isValid())
 			consumer.accept(entity);
 	}
 }

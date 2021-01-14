@@ -29,12 +29,12 @@ public class SoulPrisonStructure extends GelConfigStructure<NoFeatureConfig>
 	}
 
 	@Override
-	protected boolean func_230363_a_(ChunkGenerator chunkGen, BiomeProvider biomeProvider, long seed, SharedSeedRandom sharedSeedRand, int chunkPosX, int chunkPosZ, Biome biomeIn, ChunkPos chunkPos, NoFeatureConfig config)
+	protected boolean shouldStartAt(ChunkGenerator chunkGen, BiomeProvider biomeProvider, long seed, SharedSeedRandom sharedSeedRand, int chunkPosX, int chunkPosZ, Biome biomeIn, ChunkPos chunkPos, NoFeatureConfig config)
 	{
-		IBlockReader minPos = chunkGen.func_230348_a_(chunkPos.getXStart() + 3, chunkPos.getZStart() + 3);
-		IBlockReader maxPos = chunkGen.func_230348_a_(chunkPos.getXStart() + 22, chunkPos.getZStart() + 22);
+		IBlockReader minPos = chunkGen.getColumnSample(chunkPos.getXStart() + 3, chunkPos.getZStart() + 3);
+		IBlockReader maxPos = chunkGen.getColumnSample(chunkPos.getXStart() + 22, chunkPos.getZStart() + 22);
 		if (minPos.getBlockState(chunkPos.asBlockPos().up(29)).getBlock() == Blocks.LAVA && maxPos.getBlockState(chunkPos.asBlockPos().up(29)).getBlock() == Blocks.LAVA)
-			return super.func_230363_a_(chunkGen, biomeProvider, seed, sharedSeedRand, chunkPosX, chunkPosZ, biomeIn, chunkPos, config);
+			return super.shouldStartAt(chunkGen, biomeProvider, seed, sharedSeedRand, chunkPosX, chunkPosZ, biomeIn, chunkPos, config);
 		return false;
 	}
 
@@ -51,9 +51,8 @@ public class SoulPrisonStructure extends GelConfigStructure<NoFeatureConfig>
 			super(structureIn, chunkX, chunkZ, boundsIn, referenceIn, seed);
 		}
 
-		// init
 		@Override
-		public void func_230364_a_(DynamicRegistries registry, ChunkGenerator chunkGen, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig configIn)
+		public void init(DynamicRegistries registry, ChunkGenerator chunkGen, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig configIn)
 		{
 			SoulPrisonPieces.assemble(templateManagerIn, new BlockPos(chunkX * 16, 29, chunkZ * 16), Rotation.randomRotation(this.rand), this.components, this.rand);
 			this.recalculateStructureSize();
