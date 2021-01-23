@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.tileentity.MobSpawnerTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -43,8 +44,7 @@ public class DPUtil
 		boolean waterlog = world.getFluidState(pos).getFluid() == Fluids.WATER;
 		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).with(ChestBlock.WATERLOGGED, waterlog).rotate(world, pos, rotation), 3);
-		if (world.getTileEntity(pos) instanceof ChestTileEntity)
-			((ChestTileEntity) world.getTileEntity(pos)).setLootTable(lootTable, rand.nextLong());
+		LockableLootTileEntity.setLootTable(world, rand, pos, lootTable);
 	}
 
 	public static void placeSpawner(String entity, IWorld world, BlockPos pos)
