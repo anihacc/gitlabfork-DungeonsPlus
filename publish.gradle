@@ -6,14 +6,15 @@
 
 // shoves all of the sources in a jar
 task sourcesJar(type: Jar, dependsOn: classes) {
-	classifier = 'sources'
-	from sourceSets.main.allSource
+	archiveClassifier.set('sources')
+	from sourceSets.main.java.sourceDirectories
+	from sourceSets.main.output
 }
 
 // generates the javadocs and shoves them in a jar
 task javadocJar(type: Jar) {
 	from javadoc
-	classifier = 'javadoc'
+	archiveClassifier.set('javadoc')
 }
 
 // Ensures that the mod is built before it is published to the maven
