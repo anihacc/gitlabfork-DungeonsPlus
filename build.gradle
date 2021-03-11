@@ -99,7 +99,7 @@ println('')
 println('Structure Gel API Information')
 println('- ID: structure_gel')
 println('- Name: Structure Gel API')
-println('- Version: ' + "${mc_version}-${gel_version}".toString())
+println('- Version: ' + "${gel_version}".toString())
 println('')
 
 // Any repositories for dependencies go here.
