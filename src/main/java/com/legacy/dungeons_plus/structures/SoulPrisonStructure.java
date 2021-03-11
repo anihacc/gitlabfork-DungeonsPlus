@@ -21,6 +21,8 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
+import net.minecraft.world.gen.feature.structure.Structure.IStartFactory;
+
 public class SoulPrisonStructure extends GelConfigStructure<NoFeatureConfig>
 {
 	public SoulPrisonStructure(Codec<NoFeatureConfig> codec, StructureConfig config)
@@ -29,12 +31,12 @@ public class SoulPrisonStructure extends GelConfigStructure<NoFeatureConfig>
 	}
 
 	@Override
-	protected boolean shouldStartAt(ChunkGenerator chunkGen, BiomeProvider biomeProvider, long seed, SharedSeedRandom sharedSeedRand, int chunkPosX, int chunkPosZ, Biome biomeIn, ChunkPos chunkPos, NoFeatureConfig config)
+	protected boolean isFeatureChunk(ChunkGenerator chunkGen, BiomeProvider biomeProvider, long seed, SharedSeedRandom sharedSeedRand, int chunkPosX, int chunkPosZ, Biome biomeIn, ChunkPos chunkPos, NoFeatureConfig config)
 	{
-		IBlockReader minPos = chunkGen.getColumnSample(chunkPos.getXStart() + 3, chunkPos.getZStart() + 3);
-		IBlockReader maxPos = chunkGen.getColumnSample(chunkPos.getXStart() + 22, chunkPos.getZStart() + 22);
-		if (minPos.getBlockState(chunkPos.asBlockPos().up(29)).getBlock() == Blocks.LAVA && maxPos.getBlockState(chunkPos.asBlockPos().up(29)).getBlock() == Blocks.LAVA)
-			return super.shouldStartAt(chunkGen, biomeProvider, seed, sharedSeedRand, chunkPosX, chunkPosZ, biomeIn, chunkPos, config);
+		IBlockReader minPos = chunkGen.getBaseColumn(chunkPos.getMinBlockX() + 3, chunkPos.getMinBlockZ() + 3);
+		IBlockReader maxPos = chunkGen.getBaseColumn(chunkPos.getMinBlockX() + 22, chunkPos.getMinBlockZ() + 22);
+		if (minPos.getBlockState(chunkPos.getWorldPosition().above(29)).getBlock() == Blocks.LAVA && maxPos.getBlockState(chunkPos.getWorldPosition().above(29)).getBlock() == Blocks.LAVA)
+			return super.isFeatureChunk(chunkGen, biomeProvider, seed, sharedSeedRand, chunkPosX, chunkPosZ, biomeIn, chunkPos, config);
 		return false;
 	}
 
@@ -52,10 +54,10 @@ public class SoulPrisonStructure extends GelConfigStructure<NoFeatureConfig>
 		}
 
 		@Override
-		public void init(DynamicRegistries registry, ChunkGenerator chunkGen, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig configIn)
+		public void generatePieces(DynamicRegistries registry, ChunkGenerator chunkGen, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig configIn)
 		{
-			SoulPrisonPieces.assemble(templateManagerIn, new BlockPos(chunkX * 16, 29, chunkZ * 16), Rotation.randomRotation(this.rand), this.components, this.rand);
-			this.recalculateStructureSize();
+			SoulPrisonPieces.assemble(templateManagerIn, new BlockPos(chunkX * 16, 29, chunkZ * 16), Rotation.getRandom(this.random), this.pieces, this.random);
+			this.calculateBoundingBox();
 		}
 	}
 }

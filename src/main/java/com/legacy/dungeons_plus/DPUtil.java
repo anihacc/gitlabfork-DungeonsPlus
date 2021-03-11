@@ -30,7 +30,7 @@ public class DPUtil
 
 	public static void placeLootChest(ResourceLocation lootTable, IWorld world, Random rand, BlockPos pos, Rotation rotation, String facing, String chestType)
 	{
-		placeLootChest(lootTable, world, rand, pos, rotation, Direction.byName(facing), chestType.equals(ChestType.LEFT.getString()) ? ChestType.LEFT : (chestType.equals(ChestType.RIGHT.getString()) ? ChestType.RIGHT : ChestType.SINGLE));
+		placeLootChest(lootTable, world, rand, pos, rotation, Direction.byName(facing), chestType.equals(ChestType.LEFT.getSerializedName()) ? ChestType.LEFT : (chestType.equals(ChestType.RIGHT.getSerializedName()) ? ChestType.RIGHT : ChestType.SINGLE));
 	}
 
 	public static void placeLootChest(ResourceLocation lootTable, IWorld world, Random rand, BlockPos pos, Rotation rotation, Direction facing)
@@ -40,9 +40,9 @@ public class DPUtil
 
 	public static void placeLootChest(ResourceLocation lootTable, IWorld world, Random rand, BlockPos pos, Rotation rotation, Direction facing, ChestType chestType)
 	{
-		boolean waterlog = world.getFluidState(pos).getFluid() == Fluids.WATER;
-		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).with(ChestBlock.WATERLOGGED, waterlog).rotate(world, pos, rotation), 3);
+		boolean waterlog = world.getFluidState(pos).getType() == Fluids.WATER;
+		world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+		world.setBlock(pos, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, facing).setValue(ChestBlock.TYPE, chestType).setValue(ChestBlock.WATERLOGGED, waterlog).rotate(world, pos, rotation), 3);
 		LockableLootTileEntity.setLootTable(world, rand, pos, lootTable);
 	}
 
@@ -63,9 +63,9 @@ public class DPUtil
 
 	public static void placeSpawner(List<WeightedSpawnerEntity> spawnerEntities, IWorld world, BlockPos pos)
 	{
-		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(pos, Blocks.SPAWNER.getDefaultState(), 3);
-		if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
-			SpawnerAccessHelper.setSpawnPotentials((MobSpawnerTileEntity) world.getTileEntity(pos), spawnerEntities);
+		world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+		world.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), 3);
+		if (world.getBlockEntity(pos) instanceof MobSpawnerTileEntity)
+			SpawnerAccessHelper.setSpawnPotentials((MobSpawnerTileEntity) world.getBlockEntity(pos), spawnerEntities);
 	}
 }

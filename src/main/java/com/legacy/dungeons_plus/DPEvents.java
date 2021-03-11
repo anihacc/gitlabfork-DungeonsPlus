@@ -30,7 +30,7 @@ public class DPEvents
 	@SubscribeEvent
 	protected static void onEntitySpawn(EntityJoinWorldEvent event)
 	{
-		if (!event.getWorld().isRemote)
+		if (!event.getWorld().isClientSide)
 		{
 			Entity entity = event.getEntity();
 
@@ -45,7 +45,7 @@ public class DPEvents
 
 	private static void ifInStructure(Entity entity, EntityType<?> entityTest, StructureRegistrar<?, ?> structure, Consumer<Entity> consumer)
 	{
-		if (entity.getType().equals(entityTest) && (((ServerWorld) entity.world).getStructureAccessor()).getStructureStart(entity.getPosition(), false, structure.getStructure()).isValid())
+		if (entity.getType().equals(entityTest) && (((ServerWorld) entity.level).structureFeatureManager()).getStructureAt(entity.blockPosition(), false, structure.getStructure()).isValid())
 			consumer.accept(entity);
 	}
 }

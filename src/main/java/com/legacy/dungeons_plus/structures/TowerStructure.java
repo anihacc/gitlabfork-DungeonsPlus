@@ -62,7 +62,7 @@ public class TowerStructure extends GelConfigJigsawStructure
 		}
 
 		@Override
-		public IStructurePieceType getStructurePieceType()
+		public IStructurePieceType getType()
 		{
 			return DungeonsPlus.Structures.TOWER.getPieceType();
 		}
@@ -107,13 +107,13 @@ public class TowerStructure extends GelConfigJigsawStructure
 				setAir(world, pos);
 
 				ArmorStandEntity entity = createEntity(EntityType.ARMOR_STAND, world, pos, this.rotation);
-				entity.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+				entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
 
 				for (Item item : ImmutableList.of(Items.GOLDEN_HELMET, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS))
 					if (rand.nextFloat() < 0.25)
-						entity.setItemStackToSlot(MobEntity.getSlotForItemStack(new ItemStack(item)), new ItemStack(item));
+						entity.setItemSlot(MobEntity.getEquipmentSlotForItem(new ItemStack(item)), new ItemStack(item));
 
-				world.addEntity(entity);
+				world.addFreshEntity(entity);
 			}
 		}
 	}

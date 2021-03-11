@@ -52,19 +52,19 @@ public class SoulPrisonPieces
 	
 	public static void assemble(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<StructurePiece> structurePieces, Random rand)
 	{
-		pos = pos.add(-12, 0, -12);
-		structurePieces.add(new Piece(templateManager, Util.getRandomObject(BOTTOM, rand), pos, rotation));
-		structurePieces.add(new Piece(templateManager, TOP_GEL, pos.up(11), rotation));
-		structurePieces.add(new Piece(templateManager, TOP, pos.up(11), rotation));
+		pos = pos.offset(-12, 0, -12);
+		structurePieces.add(new Piece(templateManager, Util.getRandom(BOTTOM, rand), pos, rotation));
+		structurePieces.add(new Piece(templateManager, TOP_GEL, pos.above(11), rotation));
+		structurePieces.add(new Piece(templateManager, TOP, pos.above(11), rotation));
 		for (int i = 1; i < pos.getY(); i++)
-			structurePieces.add(new Piece(templateManager, UNDER_MAIN, pos.down(i), rotation, 1));
+			structurePieces.add(new Piece(templateManager, UNDER_MAIN, pos.below(i), rotation, 1));
 
-		pos = pos.add(12, 0, 12);
+		pos = pos.offset(12, 0, 12);
 		int range = 32;
-		structurePieces.add(new Piece(templateManager, Util.getRandomObject(TURRETS, rand), pos.add(range, 0, rand.nextInt(20) - 10), Rotation.randomRotation(rand)));
-		structurePieces.add(new Piece(templateManager, Util.getRandomObject(TURRETS, rand), pos.add(-range, 0, rand.nextInt(20) - 10), Rotation.randomRotation(rand)));
-		structurePieces.add(new Piece(templateManager, Util.getRandomObject(TURRETS, rand), pos.add(rand.nextInt(20) - 10, 0, range), Rotation.randomRotation(rand)));
-		structurePieces.add(new Piece(templateManager, Util.getRandomObject(TURRETS, rand), pos.add(rand.nextInt(20) - 10, 0, -range), Rotation.randomRotation(rand)));
+		structurePieces.add(new Piece(templateManager, Util.getRandom(TURRETS, rand), pos.offset(range, 0, rand.nextInt(20) - 10), Rotation.getRandom(rand)));
+		structurePieces.add(new Piece(templateManager, Util.getRandom(TURRETS, rand), pos.offset(-range, 0, rand.nextInt(20) - 10), Rotation.getRandom(rand)));
+		structurePieces.add(new Piece(templateManager, Util.getRandom(TURRETS, rand), pos.offset(rand.nextInt(20) - 10, 0, range), Rotation.getRandom(rand)));
+		structurePieces.add(new Piece(templateManager, Util.getRandom(TURRETS, rand), pos.offset(rand.nextInt(20) - 10, 0, -range), Rotation.getRandom(rand)));
 	}
 
 	private static ResourceLocation locate(String name)
@@ -96,9 +96,9 @@ public class SoulPrisonPieces
 		@Override
 		public PlacementSettings createPlacementSettings(TemplateManager templateManager)
 		{
-			BlockPos sizePos = templateManager.getTemplate(this.name).getSize();
+			BlockPos sizePos = templateManager.get(this.name).getSize();
 			BlockPos centerPos = new BlockPos(sizePos.getX() / 2, 0, sizePos.getZ() / 2);
-			return new GelPlacementSettings().setMaintainWater(false).setRotation(this.rotation).setMirror(Mirror.NONE).setCenterOffset(centerPos);
+			return new GelPlacementSettings().setMaintainWater(false).setRotation(this.rotation).setMirror(Mirror.NONE).setRotationPivot(centerPos);
 		}
 
 		@Override
@@ -106,8 +106,8 @@ public class SoulPrisonPieces
 		{
 			super.addProcessors(templateManager, placementSettings);
 			placementSettings.addProcessor(new RandomBlockSwapProcessor(Blocks.QUARTZ_BRICKS, 0.10F, Blocks.CHISELED_QUARTZ_BLOCK));
-			placementSettings.addProcessor(new RandomStateSwapProcessor(Blocks.POLISHED_BASALT.getDefaultState().with(RotatedPillarBlock.AXIS, Axis.Y), 0.55F, Blocks.BASALT.getDefaultState().with(RotatedPillarBlock.AXIS, Axis.Y)));
-			placementSettings.addProcessor(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new BlockMatchRuleTest(Blocks.QUARTZ_SLAB), new BlockMatchRuleTest(Blocks.LAVA), Blocks.LAVA.getDefaultState()))));
+			placementSettings.addProcessor(new RandomStateSwapProcessor(Blocks.POLISHED_BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Axis.Y), 0.55F, Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Axis.Y)));
+			placementSettings.addProcessor(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new BlockMatchRuleTest(Blocks.QUARTZ_SLAB), new BlockMatchRuleTest(Blocks.LAVA), Blocks.LAVA.defaultBlockState()))));
 			placementSettings.addProcessor(new RandomBlockSwapProcessor(Blocks.ORANGE_STAINED_GLASS, Blocks.LAVA));
 		}
 
@@ -116,7 +116,7 @@ public class SoulPrisonPieces
 		public BlockState modifyState(IServerWorld world, Random rand, BlockPos pos, BlockState originalState)
 		{
 			BlockState worldState = world.getBlockState(pos);
-			if (this.componentType == 1 && !(worldState.getBlock() == Blocks.LAVA || worldState.getMaterial() == Material.AIR))
+			if (this.genDepth == 1 && !(worldState.getBlock() == Blocks.LAVA || worldState.getMaterial() == Material.AIR))
 				return null;
 			return originalState;
 		}
@@ -126,29 +126,29 @@ public class SoulPrisonPieces
 		{
 			if (key.equals("guard"))
 			{
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-				WitherSkeletonEntity wither = EntityType.WITHER_SKELETON.create(world.getWorld());
-				wither.setPosition(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
-				wither.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
-				wither.setItemStackToSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				wither.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
-				wither.enablePersistence();
-				world.addEntity(wither);
+				world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+				WitherSkeletonEntity wither = EntityType.WITHER_SKELETON.create(world.getLevel());
+				wither.setPos(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
+				wither.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+				wither.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+				wither.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+				wither.setPersistenceRequired();
+				world.addFreshEntity(wither);
 			}
 			else if (key.equals("ghast"))
 			{
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-				GhastEntity ghast = EntityType.GHAST.create(world.getWorld());
-				ghast.setPosition(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
-				ghast.enablePersistence();
-				world.addEntity(ghast);
+				world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+				GhastEntity ghast = EntityType.GHAST.create(world.getLevel());
+				ghast.setPos(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
+				ghast.setPersistenceRequired();
+				world.addFreshEntity(ghast);
 			}
 			else if (key.equals("spawner"))
 			{
 				DPUtil.placeSpawner(EntityType.GHAST, world, pos);
-				if (world.getTileEntity(pos) instanceof MobSpawnerTileEntity)
+				if (world.getBlockEntity(pos) instanceof MobSpawnerTileEntity)
 				{
-					MobSpawnerTileEntity tile = (MobSpawnerTileEntity) world.getTileEntity(pos);
+					MobSpawnerTileEntity tile = (MobSpawnerTileEntity) world.getBlockEntity(pos);
 					SpawnerAccessHelper.setRequiredPlayerRange(tile, 32);
 					SpawnerAccessHelper.setMaxNearbyEntities(tile, 10);
 					SpawnerAccessHelper.setSpawnCount(tile, 5);

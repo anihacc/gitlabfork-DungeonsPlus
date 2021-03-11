@@ -52,12 +52,12 @@ public class EndRuinsStructure extends GelConfigJigsawStructure
 	{
 		int x = (chunkX * 16) + 7;
 		int z = (chunkZ * 16) + 7;
-		int y = chunkGen.getHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG);
+		int y = chunkGen.getBaseHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG);
 		if (y >= 60)
 		{
 			super.handleStartFactory(start, dynamicRegistries, chunkGen, templateManager, chunkX, chunkZ, biome, config);
-			start.getComponents().removeIf(c -> c.getBoundingBox().minY < 5);
-			start.recalculateStructureSize();
+			start.getPieces().removeIf(c -> c.getBoundingBox().y0 < 5);
+			start.calculateBoundingBox();
 		}
 	}
 
@@ -74,7 +74,7 @@ public class EndRuinsStructure extends GelConfigJigsawStructure
 		}
 
 		@Override
-		public IStructurePieceType getStructurePieceType()
+		public IStructurePieceType getType()
 		{
 			return DungeonsPlus.Structures.END_RUINS.getPieceType();
 		}
@@ -84,14 +84,14 @@ public class EndRuinsStructure extends GelConfigJigsawStructure
 		 * and obsidian under the pylons just in case.
 		 */
 		@Override
-		public boolean func_237001_a_(ISeedReader seedReader, StructureManager structureManager, ChunkGenerator chunkGen, Random rand, MutableBoundingBox bounds, BlockPos pos, boolean isLegacy)
+		public boolean place(ISeedReader seedReader, StructureManager structureManager, ChunkGenerator chunkGen, Random rand, MutableBoundingBox bounds, BlockPos pos, boolean isLegacy)
 		{
-			if (super.func_237001_a_(seedReader, structureManager, chunkGen, rand, bounds, pos, isLegacy))
+			if (super.place(seedReader, structureManager, chunkGen, rand, bounds, pos, isLegacy))
 			{
 				if (this.getLocation().toString().contains("end_ruins/tower/base_"))
-					this.extendDown(seedReader, Blocks.END_STONE.getDefaultState(), bounds, this.rotation, rand);
+					this.extendDown(seedReader, Blocks.END_STONE.defaultBlockState(), bounds, this.rotation, rand);
 				if (this.getLocation().toString().contains("end_ruins/pylon/"))
-					this.extendDown(seedReader, Blocks.OBSIDIAN.getDefaultState(), bounds, this.rotation, rand);
+					this.extendDown(seedReader, Blocks.OBSIDIAN.defaultBlockState(), bounds, this.rotation, rand);
 				return true;
 			}
 			return false;

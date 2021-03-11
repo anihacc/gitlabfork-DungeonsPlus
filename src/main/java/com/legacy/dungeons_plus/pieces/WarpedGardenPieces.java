@@ -53,9 +53,9 @@ public class WarpedGardenPieces
 
 	public static void assemble(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<StructurePiece> structurePieces, Random rand)
 	{
-		structurePieces.add(new Piece(templateManager, LOOT[rand.nextInt(LOOT.length)], pos.add(rand.nextInt(3) - 1, 0, rand.nextInt(3) - 1), rotation));
+		structurePieces.add(new Piece(templateManager, LOOT[rand.nextInt(LOOT.length)], pos.offset(rand.nextInt(3) - 1, 0, rand.nextInt(3) - 1), rotation));
 		int offset = 20;
-		List<BlockPos> positions = Arrays.asList(pos.add(-offset, 0, rand.nextInt(7) - 3), pos.add(offset, 0, rand.nextInt(7) - 3), pos.add(rand.nextInt(7) - 3, 0, offset), pos.add(rand.nextInt(7) - 3, 0, -offset));
+		List<BlockPos> positions = Arrays.asList(pos.offset(-offset, 0, rand.nextInt(7) - 3), pos.offset(offset, 0, rand.nextInt(7) - 3), pos.offset(rand.nextInt(7) - 3, 0, offset), pos.offset(rand.nextInt(7) - 3, 0, -offset));
 		positions.forEach(p -> structurePieces.add(new Piece(templateManager, getRandomPiece(rand), p, rotation)));
 	}
 
@@ -89,29 +89,29 @@ public class WarpedGardenPieces
 		@Override
 		public PlacementSettings createPlacementSettings(TemplateManager templateManager)
 		{
-			BlockPos sizePos = templateManager.getTemplate(this.name).getSize();
+			BlockPos sizePos = templateManager.get(this.name).getSize();
 			BlockPos centerPos = new BlockPos(sizePos.getX() / 2, 0, sizePos.getZ() / 2);
-			return new GelPlacementSettings().setMaintainWater(false).setRotation(this.rotation).setMirror(Mirror.NONE).setCenterOffset(centerPos);
+			return new GelPlacementSettings().setMaintainWater(false).setRotation(this.rotation).setMirror(Mirror.NONE).setRotationPivot(centerPos);
 		}
 
 		@Override
 		public void addProcessors(TemplateManager templateManager, PlacementSettings placementSettings)
 		{
 			super.addProcessors(templateManager, placementSettings);
-			placementSettings.addProcessor(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new BlockMatchRuleTest(Blocks.BLUE_STAINED_GLASS), new BlockMatchRuleTest(Blocks.WATER), Blocks.WATER.getDefaultState()))));
+			placementSettings.addProcessor(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new BlockMatchRuleTest(Blocks.BLUE_STAINED_GLASS), new BlockMatchRuleTest(Blocks.WATER), Blocks.WATER.defaultBlockState()))));
 			placementSettings.addProcessor(new RandomBlockSwapProcessor(Blocks.BLUE_STAINED_GLASS, Blocks.AIR));
 			placementSettings.addProcessor(new RandomBlockSwapProcessor(Blocks.OBSIDIAN, 0.35F, Blocks.CRYING_OBSIDIAN));
 		}
 
 		// Adjust the height to be under water
 		@Override
-		public boolean generate(ISeedReader world, StructureManager structureManager, ChunkGenerator chunkGen, Random rand, MutableBoundingBox bounds, ChunkPos chunkPos, BlockPos pos)
+		public boolean postProcess(ISeedReader world, StructureManager structureManager, ChunkGenerator chunkGen, Random rand, MutableBoundingBox bounds, ChunkPos chunkPos, BlockPos pos)
 		{
 			int y = world.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, this.templatePosition.getX() + 6, this.templatePosition.getZ() + 6);
 			this.templatePosition = new BlockPos(this.templatePosition.getX(), y, this.templatePosition.getZ());
 			if (this.templatePosition.getY() + this.template.getSize().getY() > 60)
 				this.templatePosition = new BlockPos(this.templatePosition.getX(), 60 - this.template.getSize().getY(), this.templatePosition.getZ());
-			return super.generate(world, structureManager, chunkGen, rand, bounds, chunkPos, pos);
+			return super.postProcess(world, structureManager, chunkGen, rand, bounds, chunkPos, pos);
 		}
 
 		@Override
@@ -126,16 +126,16 @@ public class WarpedGardenPieces
 			{
 				if (SPAWNER_SPAWNS.isEmpty())
 				{
-					CompoundNBT goldAxeNBT = new ItemStack(Items.GOLDEN_AXE).write(new CompoundNBT());
+					CompoundNBT goldAxeNBT = new ItemStack(Items.GOLDEN_AXE).save(new CompoundNBT());
 					goldAxeNBT.putInt("Damage", 10);
 
-					for (Block coral : BlockTags.CORAL_BLOCKS.getAllElements())
+					for (Block coral : BlockTags.CORAL_BLOCKS.getValues())
 					{
 						CompoundNBT entityNBT = new CompoundNBT();
 
 						ListNBT handItems = new ListNBT();
 						handItems.add(goldAxeNBT);
-						handItems.add(new ItemStack(coral).write(new CompoundNBT()));
+						handItems.add(new ItemStack(coral).save(new CompoundNBT()));
 						entityNBT.put("HandItems", handItems);
 
 						ListNBT handDropChances = new ListNBT();
@@ -152,7 +152,7 @@ public class WarpedGardenPieces
 					handItems.add(goldAxeNBT);
 					entityNBT.put("HandItems", handItems);
 
-					int coralCount = BlockTags.CORAL_BLOCKS.getAllElements().size();
+					int coralCount = BlockTags.CORAL_BLOCKS.getValues().size();
 					SPAWNER_SPAWNS.add(SpawnerAccessHelper.createSpawnerEntity(coralCount == 0 ? 1 : coralCount * 5, EntityType.DROWNED, entityNBT));
 				}
 
@@ -162,15 +162,15 @@ public class WarpedGardenPieces
 			}
 			if (key.equals("drowned"))
 			{
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-				DrownedEntity drowned = EntityType.DROWNED.create(world.getWorld());
+				world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+				DrownedEntity drowned = EntityType.DROWNED.create(world.getLevel());
 				ItemStack goldAxe = new ItemStack(Items.GOLDEN_AXE);
-				goldAxe.setDamage(10);
-				drowned.setItemStackToSlot(EquipmentSlotType.MAINHAND, goldAxe);
-				drowned.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.AIR));
-				drowned.enablePersistence();
-				drowned.setPosition(pos.getX(), pos.getY(), pos.getZ());
-				world.addEntity(drowned);
+				goldAxe.setDamageValue(10);
+				drowned.setItemSlot(EquipmentSlotType.MAINHAND, goldAxe);
+				drowned.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.AIR));
+				drowned.setPersistenceRequired();
+				drowned.setPos(pos.getX(), pos.getY(), pos.getZ());
+				world.addFreshEntity(drowned);
 			}
 		}
 	}

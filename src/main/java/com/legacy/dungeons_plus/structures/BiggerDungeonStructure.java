@@ -54,7 +54,7 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 		}
 
 		@Override
-		public IStructurePieceType getStructurePieceType()
+		public IStructurePieceType getType()
 		{
 			return DungeonsPlus.Structures.BIGGER_DUNGEON.getPieceType();
 		}

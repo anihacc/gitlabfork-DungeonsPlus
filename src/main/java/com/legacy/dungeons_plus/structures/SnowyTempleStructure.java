@@ -58,7 +58,7 @@ public class SnowyTempleStructure extends GelConfigJigsawStructure
 		}
 
 		@Override
-		public IStructurePieceType getStructurePieceType()
+		public IStructurePieceType getType()
 		{
 			return DungeonsPlus.Structures.SNOWY_TEMPLE.getPieceType();
 		}

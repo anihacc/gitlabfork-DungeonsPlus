@@ -16,6 +16,8 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
+import net.minecraft.world.gen.feature.structure.Structure.IStartFactory;
+
 public class WarpedGardenStructure extends GelConfigStructure<NoFeatureConfig>
 {
 	public WarpedGardenStructure(Codec<NoFeatureConfig> codec, StructureConfig config)
@@ -37,10 +39,10 @@ public class WarpedGardenStructure extends GelConfigStructure<NoFeatureConfig>
 		}
 
 		@Override
-		public void init(DynamicRegistries registry, ChunkGenerator chunkGen, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig configIn)
+		public void generatePieces(DynamicRegistries registry, ChunkGenerator chunkGen, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig configIn)
 		{
-			WarpedGardenPieces.assemble(templateManagerIn, new BlockPos(chunkX * 16, 90, chunkZ * 16), Rotation.randomRotation(this.rand), this.components, this.rand);
-			this.recalculateStructureSize();
+			WarpedGardenPieces.assemble(templateManagerIn, new BlockPos(chunkX * 16, 90, chunkZ * 16), Rotation.getRandom(this.random), this.pieces, this.random);
+			this.calculateBoundingBox();
 		}
 	}
 }
