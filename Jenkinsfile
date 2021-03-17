@@ -5,7 +5,7 @@ pipeline {
   agent {
     docker {
       args '-v gradle-cache:/home/gradle/.gradle'
-      image 'gradle:4.9.0-jdk8-alpine'
+      image 'gradle:6.8.3-jdk8'
     }
 
   }
