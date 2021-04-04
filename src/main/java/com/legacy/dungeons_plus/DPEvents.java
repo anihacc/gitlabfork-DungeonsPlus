@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableMap;
 import com.legacy.structure_gel.access_helpers.EntityAccessHelper;
-import com.legacy.structure_gel.registrars.StructureRegistrar;
+import com.legacy.structure_gel.registrars.StructureRegistrar2;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -43,7 +43,7 @@ public class DPEvents
 		}
 	}
 
-	private static void ifInStructure(Entity entity, EntityType<?> entityTest, StructureRegistrar<?, ?> structure, Consumer<Entity> consumer)
+	private static void ifInStructure(Entity entity, EntityType<?> entityTest, StructureRegistrar2<?, ?> structure, Consumer<Entity> consumer)
 	{
 		if (entity.getType().equals(entityTest) && (((ServerWorld) entity.level).structureFeatureManager()).getStructureAt(entity.blockPosition(), false, structure.getStructure()).isValid())
 			consumer.accept(entity);

@@ -26,13 +26,13 @@ eclipseClasspath {
 task sgDownloadFiles {
 	doLast {
 		download {
-			src "https://maven.moddinglegacy.com/artifactory/modding-legacy/com/legacy/structure-gel/${gel_version}/structure-gel-${gel_version}-sources.jar".toString()
+			src "https://maven.moddinglegacy.com/repository/modding-legacy/com/legacy/structure-gel/${gel_version}/structure-gel-${gel_version}-sources.jar".toString()
 			dest new File("libs/structure-gel-${gel_version}-sources.jar".toString())
 			overwrite true
 		}
 
 		download {
-			src "https://maven.moddinglegacy.com/artifactory/modding-legacy/com/legacy/structure-gel/${gel_version}/structure-gel-${gel_version}-javadoc.jar".toString()
+			src "https://maven.moddinglegacy.com/repository/modding-legacy/com/legacy/structure-gel/${gel_version}/structure-gel-${gel_version}-javadoc.jar".toString()
 			dest new File("libs/structure-gel-${gel_version}-javadoc.jar".toString())
 			overwrite true
 		}

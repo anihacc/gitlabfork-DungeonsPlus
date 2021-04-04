@@ -21,8 +21,6 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
-import net.minecraft.world.gen.feature.structure.Structure.IStartFactory;
-
 public class SoulPrisonStructure extends GelConfigStructure<NoFeatureConfig>
 {
 	public SoulPrisonStructure(Codec<NoFeatureConfig> codec, StructureConfig config)
@@ -56,7 +54,7 @@ public class SoulPrisonStructure extends GelConfigStructure<NoFeatureConfig>
 		@Override
 		public void generatePieces(DynamicRegistries registry, ChunkGenerator chunkGen, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig configIn)
 		{
-			SoulPrisonPieces.assemble(templateManagerIn, new BlockPos(chunkX * 16, 29, chunkZ * 16), Rotation.getRandom(this.random), this.pieces, this.random);
+			SoulPrisonPieces.assemble(templateManagerIn, new BlockPos(chunkX * 16 + 9, 29, chunkZ * 16 + 9), Rotation.getRandom(this.random), this.pieces, this.random);
 			this.calculateBoundingBox();
 		}
 	}

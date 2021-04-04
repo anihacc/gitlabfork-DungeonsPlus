@@ -19,7 +19,8 @@ import com.legacy.dungeons_plus.structures.TowerStructure;
 import com.legacy.dungeons_plus.structures.WarpedGardenStructure;
 import com.legacy.structure_gel.access_helpers.BiomeAccessHelper;
 import com.legacy.structure_gel.access_helpers.JigsawAccessHelper;
-import com.legacy.structure_gel.registrars.StructureRegistrar;
+import com.legacy.structure_gel.registrars.GelStructureRegistrar;
+import com.legacy.structure_gel.registrars.StructureRegistrar2;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.GenerationStage.Decoration;
@@ -68,13 +69,13 @@ public class DungeonsPlus
 	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 	public static class Structures
 	{
-		public static StructureRegistrar<VillageConfig, TowerStructure> TOWER = StructureRegistrar.of(locate("tower"), new TowerStructure(VillageConfig.CODEC, DPConfig.COMMON.tower), TowerStructure.Piece::new, new VillageConfig(() -> TowerPools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle();
-		public static StructureRegistrar<VillageConfig, BiggerDungeonStructure> BIGGER_DUNGEON = StructureRegistrar.of(locate("bigger_dungeon"), new BiggerDungeonStructure(VillageConfig.CODEC, DPConfig.COMMON.biggerDungeon), BiggerDungeonStructure.Piece::new, new VillageConfig(() -> BiggerDungeonPools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle();
-		public static StructureRegistrar<VillageConfig, LeviathanStructure> LEVIATHAN = StructureRegistrar.of(locate("leviathan"), new LeviathanStructure(VillageConfig.CODEC, DPConfig.COMMON.leviathan), LeviathanStructure.Piece::new, new VillageConfig(() -> LeviathanPools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle();
-		public static StructureRegistrar<VillageConfig, SnowyTempleStructure> SNOWY_TEMPLE = StructureRegistrar.of(locate("snowy_temple"), new SnowyTempleStructure(VillageConfig.CODEC, DPConfig.COMMON.snowyTemple), SnowyTempleStructure.Piece::new, new VillageConfig(() -> SnowyTemplePools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle();
-		public static StructureRegistrar<VillageConfig, EndRuinsStructure> END_RUINS = StructureRegistrar.of(locate("end_ruins"), new EndRuinsStructure(VillageConfig.CODEC, DPConfig.COMMON.endRuins), EndRuinsStructure.Piece::new, new VillageConfig(() -> EndRuinsPools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle();
-		public static StructureRegistrar<NoFeatureConfig, WarpedGardenStructure> WARPED_GARDEN = StructureRegistrar.of(locate("warped_garden"), new WarpedGardenStructure(NoFeatureConfig.CODEC, DPConfig.COMMON.warpedGarden), WarpedGardenPieces.Piece::new, NoFeatureConfig.NONE, Decoration.SURFACE_STRUCTURES).handle();
-		public static StructureRegistrar<NoFeatureConfig, SoulPrisonStructure> SOUL_PRISON = StructureRegistrar.of(locate("soul_prison"), new SoulPrisonStructure(NoFeatureConfig.CODEC, DPConfig.COMMON.soulPrison), SoulPrisonPieces.Piece::new, NoFeatureConfig.NONE, Decoration.SURFACE_STRUCTURES).handle();
+		public static StructureRegistrar2<VillageConfig, TowerStructure> TOWER = GelStructureRegistrar.of(locate("tower"), new TowerStructure(VillageConfig.CODEC, DPConfig.COMMON.tower), TowerStructure.Piece::new, new VillageConfig(() -> TowerPools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle();
+		public static StructureRegistrar2<VillageConfig, BiggerDungeonStructure> BIGGER_DUNGEON = GelStructureRegistrar.of(locate("bigger_dungeon"), new BiggerDungeonStructure(VillageConfig.CODEC, DPConfig.COMMON.biggerDungeon), BiggerDungeonStructure.Piece::new, new VillageConfig(() -> BiggerDungeonPools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle();
+		public static StructureRegistrar2<VillageConfig, LeviathanStructure> LEVIATHAN = GelStructureRegistrar.of(locate("leviathan"), new LeviathanStructure(VillageConfig.CODEC, DPConfig.COMMON.leviathan), LeviathanStructure.Piece::new, new VillageConfig(() -> LeviathanPools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle();
+		public static StructureRegistrar2<VillageConfig, SnowyTempleStructure> SNOWY_TEMPLE = GelStructureRegistrar.of(locate("snowy_temple"), new SnowyTempleStructure(VillageConfig.CODEC, DPConfig.COMMON.snowyTemple), SnowyTempleStructure.Piece::new, new VillageConfig(() -> SnowyTemplePools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle();
+		public static StructureRegistrar2<VillageConfig, EndRuinsStructure> END_RUINS = GelStructureRegistrar.of(locate("end_ruins"), new EndRuinsStructure(VillageConfig.CODEC, DPConfig.COMMON.endRuins), EndRuinsStructure.Piece::new, new VillageConfig(() -> EndRuinsPools.ROOT, 7), Decoration.SURFACE_STRUCTURES).handle();
+		public static StructureRegistrar2<NoFeatureConfig, WarpedGardenStructure> WARPED_GARDEN = GelStructureRegistrar.of(locate("warped_garden"), new WarpedGardenStructure(NoFeatureConfig.CODEC, DPConfig.COMMON.warpedGarden), WarpedGardenPieces.Piece::new, NoFeatureConfig.NONE, Decoration.SURFACE_STRUCTURES).handle();
+		public static StructureRegistrar2<NoFeatureConfig, SoulPrisonStructure> SOUL_PRISON = GelStructureRegistrar.of(locate("soul_prison"), new SoulPrisonStructure(NoFeatureConfig.CODEC, DPConfig.COMMON.soulPrison), SoulPrisonPieces.Piece::new, NoFeatureConfig.NONE, Decoration.SURFACE_STRUCTURES).handle();
 
 		@SubscribeEvent
 		protected static void onRegistry(final RegistryEvent.Register<Structure<?>> event)
