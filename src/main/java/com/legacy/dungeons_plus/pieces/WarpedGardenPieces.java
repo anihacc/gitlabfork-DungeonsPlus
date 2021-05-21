@@ -115,12 +115,12 @@ public class WarpedGardenPieces
 		}
 
 		@Override
-		protected void handleDataMarker(String key, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox sbb)
+		protected void handleDataMarker(String key, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox bounds)
 		{
 			if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				DPUtil.placeLootChest(DPLoot.WarpedGarden.CHEST_COMMON, world, rand, pos, this.rotation, data[1]);
+				DPUtil.createChest(this::createChest, world, bounds, rand, pos, DPLoot.WarpedGarden.CHEST_COMMON, this.rotation, data);
 			}
 			if (key.equals("spawner"))
 			{

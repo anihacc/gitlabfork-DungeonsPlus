@@ -69,7 +69,7 @@ public class LeviathanStructure extends GelConfigJigsawStructure
 			if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				DPUtil.placeLootChest(DPLoot.Leviathan.CHEST_COMMON, world, rand, pos, this.rotation, data[1]);
+				DPUtil.createChest(this::createChest, world, bounds, rand, pos, DPLoot.Leviathan.CHEST_COMMON, this.rotation, data);
 			}
 			if (key.equals("spawner"))
 			{

@@ -17,7 +17,6 @@ import com.legacy.dungeons_plus.structures.SnowyTempleStructure;
 import com.legacy.dungeons_plus.structures.SoulPrisonStructure;
 import com.legacy.dungeons_plus.structures.TowerStructure;
 import com.legacy.dungeons_plus.structures.WarpedGardenStructure;
-import com.legacy.structure_gel.access_helpers.BiomeAccessHelper;
 import com.legacy.structure_gel.access_helpers.JigsawAccessHelper;
 import com.legacy.structure_gel.registrars.GelStructureRegistrar;
 import com.legacy.structure_gel.registrars.StructureRegistrar2;
@@ -29,12 +28,14 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.IForgeRegistry;
 
 @Mod(DungeonsPlus.MODID)
@@ -42,25 +43,23 @@ public class DungeonsPlus
 {
 	public static final String MODID = "dungeons_plus";
 	public static final Logger LOGGER = LogManager.getLogger();
-
+	
+	public static boolean isLootrLoaded = false;
+	
 	public DungeonsPlus()
 	{
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DPConfig.COMMON_SPEC);
 		IEventBus forgeBus = MinecraftForge.EVENT_BUS;
-		forgeBus.addListener(DungeonsPlus::biomeLoad);
+		forgeBus.register(DPEvents.class);
+		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modBus.addListener(DungeonsPlus::commonInit);
 	}
 
-	protected static void biomeLoad(final BiomeLoadingEvent event)
+	protected static void commonInit(final FMLCommonSetupEvent event)
 	{
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.TOWER.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.BIGGER_DUNGEON.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.LEVIATHAN.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.SNOWY_TEMPLE.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.END_RUINS.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.WARPED_GARDEN.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.SOUL_PRISON.getStructureFeature());
+		isLootrLoaded = ModList.get().isLoaded("lootr");
 	}
-
+	
 	public static ResourceLocation locate(String key)
 	{
 		return new ResourceLocation(MODID, key);

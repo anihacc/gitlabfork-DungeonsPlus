@@ -69,7 +69,7 @@ public class SnowyTempleStructure extends GelConfigJigsawStructure
 			if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				DPUtil.placeLootChest(DPLoot.SnowyTemple.CHEST_COMMON, world, rand, pos, this.rotation, data[1]);
+				DPUtil.createChest(this::createChest, world, bounds, rand, pos, DPLoot.SnowyTemple.CHEST_COMMON, this.rotation, data);
 			}
 			if (key.contains("spawner"))
 			{

@@ -1,7 +1,7 @@
 /*
  * GradleWorks for ForgeGradle 4/3
  * Written by Jonathing
- * Version 3.3.0-ML
+ * Version 3.3.2-ML
  *
  * What was once just an effort to make life easier is now a fully-fledged buildscript that does almost all of the work
  * for you! The only things you will need to take care of yourself are dependencies, but that shouldn't be too big of a
@@ -15,7 +15,7 @@ import net.minecraftforge.gradle.common.util.ModConfig
 buildscript {
 	repositories {
 		// Minecraft Forge Maven
-		maven { url 'https://files.minecraftforge.net/maven' }
+		maven { url 'https://maven.minecraftforge.net' }
 
 		// SpongePowered Maven
 		maven { url 'https://repo.spongepowered.org/maven' }
@@ -36,9 +36,13 @@ buildscript {
 	}
 }
 
+ext {
+	timeOfExecution = new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+}
+
 println('GradleWorks for ForgeGradle '.concat(project.hasProperty('use_forgegradle3') && "${use_forgegradle3}".toString() == 'true' ? '3' : '4'))
 println('Written by Jonathing')
-println('Version 3.3.0')
+println('Version 3.3.2')
 
 // ForgeGradle - The heart and soul of the buildscript and the development environment.
 apply plugin: 'net.minecraftforge.gradle'
@@ -102,24 +106,20 @@ println('Mod Information')
 println('- ID: ' + "${mod_id}".toString())
 println('- Name: ' + "${mod_name}".toString())
 println('- Version: ' + "${version}".toString())
-println()
 
 // This section prints out information for Structure Gel API to make sure its values are correct.
 // It is commented out by default in case this specific project does not need compatibility with Structure Gel API.
 // ML exclusive
 if (project.hasProperty('gel_version')) {
+	println()
 	println('Structure Gel API Information')
 	println('- ID: structure_gel')
 	println('- Name: Structure Gel API')
-	println('- Version: ' + "${mc_version}-${gel_version}".toString())
-	println('')
+	println('- Version: ' + "${gel_version}".toString())
 }
 
 // Any repositories for dependencies go here. Feel free to add to them as needed.
 repositories {
-	// JCenter Repository
-	jcenter()
-
 	// CurseMaven
 	maven {
 		url "https://www.cursemaven.com"
@@ -133,7 +133,7 @@ repositories {
 	// Modding Legacy Maven (ML exclusive)
 	maven {
 		name "ModdingLegacyMaven"
-		url "https://maven.moddinglegacy.com/artifactory/modding-legacy/"
+		url "https://maven.moddinglegacy.com/maven"
 	}
 }
 
@@ -162,16 +162,15 @@ minecraft {
 				arg '-mixin.config=structure_gel.mixins.json'
 			}
 
-			// Disables refmaps for mixin in a dev environment (commented out by default, uncomment if using mixin)
-			if (project.hasProperty('mixin_version')) {
-				property 'mixin.env.disableRefMap', 'true'
-			}
+			// Remaps refmaps to workspace mappings for mixin
+			property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
 
 			// Logging markers for Forge. See default MDK for instructions
 			property 'forge.logging.markers', 'REGISTRIES'
 
 			// Console logging level (debug by default, change to info if it's too much)
-			property 'forge.logging.console.level', 'debug'
+			property 'forge.logging.console.level', 'info'
 
 			// Tells the mod if it is running in an IDE (must be configured in your project, but not required)
 			property "${mod_id}.iside".toString(), 'true'
@@ -200,16 +199,15 @@ minecraft {
 			// Additional arguments exclusive to the server (nogui by default, separated by ",")
 			args 'nogui'
 
-			// Disables refmaps for mixin in a dev environment (commented out by default, uncomment if using mixin)
-			if (project.hasProperty('mixin_version')) {
-				property 'mixin.env.disableRefMap', 'true'
-			}
+			// Remaps refmaps to workspace mappings for mixin
+			property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
 
 			// Logging markers for Forge. See default MDK for instructions
 			property 'forge.logging.markers', 'REGISTRIES'
 
 			// Console logging level (debug by default, change to info if it's too much)
-			property 'forge.logging.console.level', 'debug'
+			property 'forge.logging.console.level', 'info'
 
 			// Tells the mod if it is running in an IDE (must be configured in your project, but not required)
 			property "${mod_id}.iside".toString(), 'true'
@@ -238,16 +236,15 @@ minecraft {
 			// Additional arguments exclusive to data generation (do NOT change these unless necessary)
 			args '--mod', "${mod_id}".toString(), '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
-			// Disables refmaps for mixin in a dev environment (commented out by default, uncomment if using mixin)
-			if (project.hasProperty('mixin_version')) {
-				property 'mixin.env.disableRefMap', 'true'
-			}
+			// Remaps refmaps to workspace mappings for mixin
+			property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg".toString()
 
 			// Logging markers for Forge. See default MDK for instructions
 			property 'forge.logging.markers', 'REGISTRIES'
 
 			// Console logging level (debug by default, change to info if it's too much)
-			property 'forge.logging.console.level', 'debug'
+			property 'forge.logging.console.level', 'info'
 
 			// Tells the mod if it is running in an IDE (must be configured in your project, but not required)
 			property "${mod_id}.iside".toString(), 'true'
@@ -291,9 +288,9 @@ dependencies {
 		}
 	}
 
-	// Smooth Boot (Forge)
-	if (project.hasProperty('smoothboot_version')) {
-		runtimeOnly fg.deobf("io.github.ultimateboomer:smoothboot-forge:${smoothboot_version}".toString())
+	// Lazy DataFixerUpper(LazyDFU) [FORGE]
+	if (project.hasProperty('lazydfu_file_id')) {
+		runtimeOnly fg.deobf("curse.maven:lazy-dfu-forge-460819:${lazydfu_file_id}".toString())
 	}
 
 	// Structure Gel API (ML exclusive)

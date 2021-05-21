@@ -48,8 +48,8 @@ public class SoulPrisonPieces
 	private static final ResourceLocation TOP_GEL = locate("main/top_gel");
 	private static final ResourceLocation[] BOTTOM = new ResourceLocation[] { locate("main/bottom_0") };
 	private static final ResourceLocation UNDER_MAIN = locate("main/under");
-	private static final ResourceLocation[] TURRETS = new ResourceLocation[] {locate("turrets/turret_0"), locate("turrets/turret_1")};
-	
+	private static final ResourceLocation[] TURRETS = new ResourceLocation[] { locate("turrets/turret_0"), locate("turrets/turret_1") };
+
 	public static void assemble(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<StructurePiece> structurePieces, Random rand)
 	{
 		pos = pos.offset(-12, 0, -12);
@@ -157,7 +157,8 @@ public class SoulPrisonPieces
 			}
 			else if (key.contains("chest"))
 			{
-				DPUtil.placeLootChest(DPLoot.SoulPrison.CHEST_COMMON, world, rand, pos, rotation, key.split("-")[1]);
+				String[] data = key.split("-");
+				DPUtil.createChest(this::createChest, world, bounds, rand, pos, DPLoot.SoulPrison.CHEST_COMMON, this.rotation, data);
 			}
 		}
 	}

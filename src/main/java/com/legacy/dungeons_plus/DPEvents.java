@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableMap;
+import com.legacy.dungeons_plus.DungeonsPlus.Structures;
+import com.legacy.structure_gel.access_helpers.BiomeAccessHelper;
 import com.legacy.structure_gel.access_helpers.EntityAccessHelper;
 import com.legacy.structure_gel.registrars.StructureRegistrar2;
 
@@ -15,22 +17,23 @@ import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.monster.GhastEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class DPEvents
 {
 	private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> TOWER_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.Tower.ZOMBIE, EntityType.SPIDER, DPLoot.Tower.SPIDER, EntityType.SKELETON, DPLoot.Tower.SKELETON));
 	private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> BURIED_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.BiggerDungeon.ZOMBIE, EntityType.SKELETON, DPLoot.BiggerDungeon.SKELETON));
 
 	@SubscribeEvent
-	protected static void onEntitySpawn(EntityJoinWorldEvent event)
+	protected static void onEntitySpawn(final EntityJoinWorldEvent event)
 	{
-		if (!event.getWorld().isClientSide)
+		World world = event.getWorld();
+		if (!world.isClientSide)
 		{
 			Entity entity = event.getEntity();
 
@@ -47,5 +50,17 @@ public class DPEvents
 	{
 		if (entity.getType().equals(entityTest) && (((ServerWorld) entity.level).structureFeatureManager()).getStructureAt(entity.blockPosition(), false, structure.getStructure()).isValid())
 			consumer.accept(entity);
+	}
+
+	@SubscribeEvent
+	protected static void biomeLoad(final BiomeLoadingEvent event)
+	{
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.TOWER.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.BIGGER_DUNGEON.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.LEVIATHAN.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.SNOWY_TEMPLE.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.END_RUINS.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.WARPED_GARDEN.getStructureFeature());
+		BiomeAccessHelper.addStructureIfAllowed(event, Structures.SOUL_PRISON.getStructureFeature());
 	}
 }

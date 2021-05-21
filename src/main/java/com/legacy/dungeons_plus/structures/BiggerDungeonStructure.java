@@ -91,7 +91,7 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 							break;
 						}
 					}
-					DPUtil.placeLootChest(lootTable, world, rand, pos, this.rotation, data[1]);
+					DPUtil.createChest(this::createChest, world, bounds, rand, pos, lootTable, this.rotation, data);
 				}
 			}
 			if (key.contains("spawner"))
