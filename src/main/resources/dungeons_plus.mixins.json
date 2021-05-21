@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "com.legacy.dungeons_plus.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"refmap": "dungeons_plus.refmap.json",
+	"mixins": [
+		"ForgeHooksMixin"
+	],
+	"client": [
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"minVersion": "0.8"
+}

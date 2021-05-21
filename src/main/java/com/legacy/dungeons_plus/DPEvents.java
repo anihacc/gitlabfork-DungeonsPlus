@@ -16,10 +16,13 @@ import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.monster.GhastEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.loot.LootTables;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.NonNullLazy;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -62,5 +65,18 @@ public class DPEvents
 		BiomeAccessHelper.addStructureIfAllowed(event, Structures.END_RUINS.getStructureFeature());
 		BiomeAccessHelper.addStructureIfAllowed(event, Structures.WARPED_GARDEN.getStructureFeature());
 		BiomeAccessHelper.addStructureIfAllowed(event, Structures.SOUL_PRISON.getStructureFeature());
+	}
+
+	@SubscribeEvent
+	protected static void lootTableLoad(final LootTableLoadEvent event)
+	{
+		if (DPLoot.CHESTS_SIMPLE_DUNGEON.equals(event.getName()))
+		{
+			// Redirect our simple chest to recieve the data of a vanilla dungeon chest
+			// since it's the same
+			LootTableLoadEvent newEvent = new LootTableLoadEvent(LootTables.SIMPLE_DUNGEON, event.getTable(), event.getLootTableManager());
+			if (!MinecraftForge.EVENT_BUS.post(newEvent) && newEvent.getTable() != null)
+				event.setTable(newEvent.getTable());
+		}
 	}
 }
