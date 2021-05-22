@@ -68,9 +68,9 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 				String[] data = key.split("-");
 
 				/**
-				 * Generates the chests with a 50% chance, or if they are a map chest.
+				 * Generates the chests with a 70% chance, or if they are a map chest.
 				 */
-				if (rand.nextBoolean() || data[0].contains("map"))
+				if (rand.nextInt(100) < 70 || data[0].contains("map"))
 				{
 					ResourceLocation lootTable = DPLoot.CHESTS_SIMPLE_DUNGEON;
 					if (data[0].contains(":"))
@@ -98,6 +98,10 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 			{
 				String[] data = key.split("-");
 				DPUtil.placeSpawner(data[1], world, pos);
+			}
+			if (key.equals("monster_box"))
+			{
+				DPUtil.placeMonsterBox(world, pos, rand);
 			}
 		}
 	}

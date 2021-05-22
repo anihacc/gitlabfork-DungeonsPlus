@@ -29,6 +29,7 @@ import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class TowerStructure extends GelConfigJigsawStructure
 {
@@ -104,7 +105,7 @@ public class TowerStructure extends GelConfigJigsawStructure
 			 */
 			if (key.equals("armor_stand"))
 			{
-				setAir(world, pos);
+				this.setAir(world, pos);
 
 				ArmorStandEntity entity = createEntity(EntityType.ARMOR_STAND, world, pos, this.rotation);
 				entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
@@ -114,6 +115,10 @@ public class TowerStructure extends GelConfigJigsawStructure
 						entity.setItemSlot(MobEntity.getEquipmentSlotForItem(new ItemStack(item)), new ItemStack(item));
 
 				world.addFreshEntity(entity);
+			}
+			if (key.contains("waystone"))
+			{
+				DPUtil.placeWaystone(world, pos, rand, ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key.split("-")[1])));
 			}
 		}
 	}

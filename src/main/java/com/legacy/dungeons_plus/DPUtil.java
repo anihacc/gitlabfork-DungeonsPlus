@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import com.legacy.structure_gel.access_helpers.SpawnerAccessHelper;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -22,8 +23,11 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
+import net.minecraft.world.ISeedReader;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DPUtil
@@ -75,6 +79,60 @@ public class DPUtil
 		world.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), 3);
 		if (world.getBlockEntity(pos) instanceof MobSpawnerTileEntity)
 			SpawnerAccessHelper.setSpawnPotentials((MobSpawnerTileEntity) world.getBlockEntity(pos), spawnerEntities);
+	}
+
+	public static void placeMonsterBox(IServerWorld world, BlockPos pos, Random rand)
+	{
+		world.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+		if (DungeonsPlus.isQuarkLoaded && rand.nextInt(100) < DPConfig.COMMON.biggerDungeonMonsterBoxChance.get())
+		{
+			ResourceLocation boxLocation = new ResourceLocation("quark", "monster_box");
+			if (ForgeRegistries.BLOCKS.containsKey(boxLocation))
+			{
+				try
+				{
+					BlockState monsterBox = ForgeRegistries.BLOCKS.getValue(boxLocation).defaultBlockState();
+					world.setBlock(pos, monsterBox, 2);
+				}
+				catch (Throwable t)
+				{
+					DungeonsPlus.LOGGER.error(String.format("Failed to place monster box at (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
+					DungeonsPlus.LOGGER.error(t);
+				}
+			}
+		}
+	}
+
+	public static void placeWaystone(IServerWorld world, BlockPos pos, Random rand, @Nullable Block defaultBlock)
+	{
+		if (DungeonsPlus.isWaystonesLoaded && rand.nextInt(100) < DPConfig.COMMON.towerWaystoneChance.get())
+		{
+			world.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+
+			ResourceLocation waystoneLocation = new ResourceLocation("waystones", "waystone");
+			if (ForgeRegistries.FEATURES.containsKey(waystoneLocation))
+			{
+				try
+				{
+					if (world instanceof ISeedReader)
+					{
+						world.setBlock(pos.above(), Blocks.AIR.defaultBlockState(), 2);
+						@SuppressWarnings("unchecked")
+						Feature<NoFeatureConfig> waystoneFeature = (Feature<NoFeatureConfig>) ForgeRegistries.FEATURES.getValue(waystoneLocation);
+						waystoneFeature.place((ISeedReader) world, world.getLevel().getChunkSource().getGenerator(), rand, pos, NoFeatureConfig.INSTANCE);
+					}
+					return;
+				}
+				catch (Throwable t)
+				{
+					DungeonsPlus.LOGGER.error(String.format("Failed to place waystone at (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
+					DungeonsPlus.LOGGER.error(t);
+				}
+			}
+		}
+
+		world.setBlock(pos, (defaultBlock != null ? defaultBlock : Blocks.AIR).defaultBlockState(), 2);
+
 	}
 
 	public static interface ICreateChest

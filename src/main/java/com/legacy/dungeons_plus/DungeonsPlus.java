@@ -45,6 +45,8 @@ public class DungeonsPlus
 	public static final Logger LOGGER = LogManager.getLogger();
 	
 	public static boolean isLootrLoaded = false;
+	public static boolean isWaystonesLoaded = false;
+	public static boolean isQuarkLoaded = false;
 	
 	public DungeonsPlus()
 	{
@@ -58,6 +60,8 @@ public class DungeonsPlus
 	protected static void commonInit(final FMLCommonSetupEvent event)
 	{
 		isLootrLoaded = ModList.get().isLoaded("lootr");
+		isWaystonesLoaded = ModList.get().isLoaded("waystones");
+		isQuarkLoaded = ModList.get().isLoaded("quark");
 	}
 	
 	public static ResourceLocation locate(String key)

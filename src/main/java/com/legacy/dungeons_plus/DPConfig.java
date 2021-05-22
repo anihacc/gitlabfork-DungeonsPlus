@@ -28,6 +28,10 @@ public class DPConfig
 		public final StructureConfig warpedGarden;
 		public final StructureConfig soulPrison;
 
+		public final ForgeConfigSpec.IntValue biggerDungeonMonsterBoxChance;
+		
+		public final ForgeConfigSpec.IntValue towerWaystoneChance;
+
 		protected Common(ForgeConfigSpec.Builder builder)
 		{
 			this.tower = new StructureConfig(builder, "tower").probability(0.75D).spacing(25).offset(6).biomes(true, "#structure_gel:plains, #structure_gel:oak_forest, #structure_gel:dark_forest, #structure_gel:birch_forest, #structure_gel:mountain").validDimensions(Dimension.OVERWORLD.location().toString());
@@ -37,7 +41,14 @@ public class DPConfig
 			this.endRuins = new StructureConfig(builder, "end_ruins").probability(0.8D).spacing(24).offset(8).biomes(true, "#structure_gel:outer_end_island").validDimensions(Dimension.END.location().toString());
 			this.warpedGarden = new StructureConfig(builder, "warped_garden").spacing(36).offset(8).biomes(true, "#structure_gel:ocean, !#structure_gel:frozen").validDimensions(Dimension.OVERWORLD.location().toString());
 			this.soulPrison = new StructureConfig(builder, "soul_prison").spacing(25).offset(6).biomes(true, "minecraft:soul_sand_valley").validDimensions(Dimension.NETHER.location().toString());
-
+			
+			builder.push("quark compat");
+			this.biggerDungeonMonsterBoxChance = builder.comment("Percent chance for monster boxes from Quark to generate in the buried dungeon").defineInRange("bigger_dungeon_monster_box_chance", 35, 0, 100);
+			builder.pop();
+			
+			builder.push("waystones compat");
+			this.towerWaystoneChance = builder.comment("Percent chance for a waystone from Waystones to generate on top of the tower").defineInRange("tower_waystone_chance", 100, 0, 100);
+			builder.pop();
 		}
 	}
 }
