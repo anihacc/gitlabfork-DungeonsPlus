@@ -1,79 +1,72 @@
 package com.legacy.dungeons_plus.structures;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
-import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPLoot;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
-import com.legacy.structure_gel.worldgen.jigsaw.AbstractGelStructurePiece;
-import com.legacy.structure_gel.worldgen.jigsaw.GelConfigJigsawStructure;
+import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
+import com.legacy.structure_gel.api.config.StructureConfig;
+import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
+import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.biome.MobSpawnInfo;
-import net.minecraft.world.gen.feature.jigsaw.JigsawManager.IPieceFactory;
-import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.VillageConfig;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.InclusiveRange;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.SpawnData;
+import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.feature.StructurePieceType;
+import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
+import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
 public class SnowyTempleStructure extends GelConfigJigsawStructure
 {
-	public SnowyTempleStructure(Codec<VillageConfig> codec, StructureConfig config)
+	public SnowyTempleStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
 	{
-		super(codec, config, 0, true, true);
-		this.setSpawnList(EntityClassification.MONSTER, ImmutableList.of(new MobSpawnInfo.Spawners(EntityType.STRAY, 1, 2, 4)));
-	}
-
-	@Override
-	public int getSeed()
-	{
-		return 943137831;
-	}
-
-	@Override
-	public IPieceFactory getPieceType()
-	{
-		return Piece::new;
+		super(codec, config, 0, true, true, context -> true, Piece::new);
+		this.spawns.put(MobCategory.MONSTER, List.of(new SpawnerData(EntityType.STRAY, 1, 2, 4)));
 	}
 
 	public static class Piece extends AbstractGelStructurePiece
 	{
-		public Piece(TemplateManager template, JigsawPiece jigsawPiece, BlockPos pos, int groundLevelDelta, Rotation rotation, MutableBoundingBox boundingBox)
+		public Piece(StructureManager template, StructurePoolElement piece, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds)
 		{
-			super(template, jigsawPiece, pos, groundLevelDelta, rotation, boundingBox);
+			super(template, piece, pos, groundLevelDelta, rotation, bounds);
 		}
 
-		public Piece(TemplateManager template, CompoundNBT nbt)
+		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
-			super(template, nbt);
+			super(context, tag);
 		}
 
 		@Override
-		public IStructurePieceType getType()
+		public StructurePieceType getType()
 		{
 			return DungeonsPlus.Structures.SNOWY_TEMPLE.getPieceType();
 		}
 
 		@Override
-		public void handleDataMarker(String key, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox bounds)
+		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
 		{
 			if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				DPUtil.createChest(this::createChest, world, bounds, rand, pos, DPLoot.SnowyTemple.CHEST_COMMON, this.rotation, data);
+				DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.SnowyTemple.CHEST_COMMON, this.rotation, data);
 			}
 			if (key.contains("spawner"))
 			{
-				DPUtil.placeSpawner(EntityType.STRAY, world, pos);
+				SpawnData spawnData = SpawnerAccessHelper.createSpawnerEntity(EntityType.STRAY, new CompoundTag(), Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 8), new InclusiveRange<>(0, 14))));
+				DPUtil.placeSpawner(spawnData, level, pos);
 			}
 		}
 	}

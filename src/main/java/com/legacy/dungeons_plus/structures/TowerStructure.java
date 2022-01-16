@@ -1,75 +1,68 @@
 package com.legacy.dungeons_plus.structures;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
-import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPLoot;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
-import com.legacy.structure_gel.worldgen.jigsaw.AbstractGelStructurePiece;
-import com.legacy.structure_gel.worldgen.jigsaw.GelConfigJigsawStructure;
+import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
+import com.legacy.structure_gel.api.config.StructureConfig;
+import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
+import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.item.ArmorStandEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.gen.feature.jigsaw.JigsawManager.IPieceFactory;
-import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.VillageConfig;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.InclusiveRange;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.SpawnData;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.feature.StructurePieceType;
+import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
+import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class TowerStructure extends GelConfigJigsawStructure
 {
-	public TowerStructure(Codec<VillageConfig> codec, StructureConfig config)
+	public TowerStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
 	{
-		super(codec, config, 0, true, true);
-	}
-
-	@Override
-	public int getSeed()
-	{
-		return 155166;
-	}
-
-	@Override
-	public IPieceFactory getPieceType()
-	{
-		return Piece::new;
+		super(codec, config, 0, true, true, context -> true, Piece::new);
 	}
 
 	public static final class Piece extends AbstractGelStructurePiece
 	{
-		public Piece(TemplateManager templateManager, JigsawPiece jigsawPiece, BlockPos pos, int groundLevelDelta, Rotation rotation, MutableBoundingBox bounds)
+		private static final ItemStack[] ARMOR_STAND_ITEMS = List.of(Items.CHAINMAIL_HELMET, Items.GOLDEN_HELMET, Items.CHAINMAIL_BOOTS, Items.GOLDEN_LEGGINGS, Items.IRON_BOOTS, Items.GOLDEN_BOOTS).stream().map(ItemStack::new).toArray(ItemStack[]::new);
+
+		public Piece(StructureManager template, StructurePoolElement piece, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds)
 		{
-			super(templateManager, jigsawPiece, pos, groundLevelDelta, rotation, bounds);
+			super(template, piece, pos, groundLevelDelta, rotation, bounds);
 		}
 
-		public Piece(TemplateManager templateManager, CompoundNBT nbt)
+		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
-			super(templateManager, nbt);
+			super(context, tag);
 		}
 
 		@Override
-		public IStructurePieceType getType()
+		public StructurePieceType getType()
 		{
 			return DungeonsPlus.Structures.TOWER.getPieceType();
 		}
 
 		@Override
-		public void handleDataMarker(String key, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox bounds)
+		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
 		{
 			if (key.contains("chest"))
 			{
@@ -87,12 +80,15 @@ public class TowerStructure extends GelConfigJigsawStructure
 						break;
 					}
 				}
-				DPUtil.createChest(this::createChest, world, bounds, rand, pos, lootTable, this.rotation, data);
+				DPUtil.createChest(this::createChest, level, bounds, rand, pos, lootTable, this.rotation, data);
 			}
 			if (key.contains("spawner"))
 			{
 				String[] data = key.split("-");
-				DPUtil.placeSpawner(data[1], world, pos);
+				
+				EntityType<?> entity = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(data[1]));
+				SpawnData spawnData = SpawnerAccessHelper.createSpawnerEntity(entity, new CompoundTag(), Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 8), new InclusiveRange<>(0, 14))));
+				DPUtil.placeSpawner(spawnData, level, pos);
 			}
 			/**
 			 * Creating entities is a little simpler with the createEntity method. Doing
@@ -105,20 +101,20 @@ public class TowerStructure extends GelConfigJigsawStructure
 			 */
 			if (key.equals("armor_stand"))
 			{
-				this.setAir(world, pos);
+				this.setAir(level, pos);
 
-				ArmorStandEntity entity = createEntity(EntityType.ARMOR_STAND, world, pos, this.rotation);
-				entity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
+				ArmorStand entity = this.createEntity(EntityType.ARMOR_STAND, level, pos, this.rotation);
+				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
 
-				for (Item item : ImmutableList.of(Items.GOLDEN_HELMET, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS))
+				for (ItemStack item : ARMOR_STAND_ITEMS)
 					if (rand.nextFloat() < 0.25)
-						entity.setItemSlot(MobEntity.getEquipmentSlotForItem(new ItemStack(item)), new ItemStack(item));
+						entity.setItemSlot(Mob.getEquipmentSlotForItem(item), item);
 
-				world.addFreshEntity(entity);
+				level.addFreshEntity(entity);
 			}
 			if (key.contains("waystone"))
 			{
-				DPUtil.placeWaystone(world, pos, rand, ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key.split("-")[1])));
+				DPUtil.placeWaystone(level, pos, rand, ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key.split("-")[1])));
 			}
 		}
 	}

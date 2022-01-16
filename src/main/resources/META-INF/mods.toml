@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[36,)"
+loaderVersion="[39,)"
 issueTrackerURL="https://gitlab.com/groups/modding-legacy/-/issues"
 license="https://www.gnu.org/licenses/gpl-3.0.en.html"
 [[mods]]
@@ -13,18 +13,18 @@ license="https://www.gnu.org/licenses/gpl-3.0.en.html"
 [[dependencies.dungeons_plus]]
     modId="forge"
     mandatory=true
-    versionRange="[36.1.0,)"
+    versionRange="[39.0.36,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.dungeons_plus]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.5]"
+    versionRange="[1.18.1,1.18.9]"
     ordering="NONE"
     side="BOTH"
 [[dependencies.dungeons_plus]]
     modId="structure_gel"
     mandatory=true
-    versionRange="[1.7.6,]"
+    versionRange="[2.1.2,]"
     ordering="NONE"
     side="BOTH"

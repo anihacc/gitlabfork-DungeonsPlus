@@ -1,13 +1,13 @@
 package com.legacy.dungeons_plus.pools;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.structure_gel.worldgen.jigsaw.JigsawRegistryHelper;
+import com.legacy.structure_gel.api.structure.jigsaw.JigsawRegistryHelper;
 
-import net.minecraft.world.gen.feature.jigsaw.JigsawPattern;
+import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
 
 public class LeviathanPools
 {
-	public static final JigsawPattern ROOT;
+	public static final StructureTemplatePool ROOT;
 
 	public static void init()
 	{

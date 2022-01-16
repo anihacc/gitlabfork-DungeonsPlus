@@ -5,72 +5,60 @@ import java.util.Random;
 import com.legacy.dungeons_plus.DPLoot;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
-import com.legacy.structure_gel.worldgen.jigsaw.AbstractGelStructurePiece;
-import com.legacy.structure_gel.worldgen.jigsaw.GelConfigJigsawStructure;
+import com.legacy.structure_gel.api.config.StructureConfig;
+import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
+import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.gen.feature.jigsaw.JigsawManager.IPieceFactory;
-import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.VillageConfig;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.feature.StructurePieceType;
+import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
+import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
 public class BiggerDungeonStructure extends GelConfigJigsawStructure
 {
-	public BiggerDungeonStructure(Codec<VillageConfig> codec, StructureConfig config)
+	public BiggerDungeonStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
 	{
-		super(codec, config, 20, true, false);
-	}
-
-	@Override
-	public int getSeed()
-	{
-		return 973181;
-	}
-
-	@Override
-	public IPieceFactory getPieceType()
-	{
-		return Piece::new;
+		super(codec, config, 20, true, false, context -> true, Piece::new);
 	}
 
 	public static final class Piece extends AbstractGelStructurePiece
 	{
-		public Piece(TemplateManager templateManager, JigsawPiece jigsawPiece, BlockPos pos, int groundLevelDelta, Rotation rotation, MutableBoundingBox bounds)
+		public Piece(StructureManager template, StructurePoolElement piece, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds)
 		{
-			super(templateManager, jigsawPiece, pos, groundLevelDelta, rotation, bounds);
+			super(template, piece, pos, groundLevelDelta, rotation, bounds);
 		}
 
-		public Piece(TemplateManager templateManager, CompoundNBT nbt)
+		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
-			super(templateManager, nbt);
+			super(context, tag);
 		}
 
 		@Override
-		public IStructurePieceType getType()
+		public StructurePieceType getType()
 		{
 			return DungeonsPlus.Structures.BIGGER_DUNGEON.getPieceType();
 		}
 
 		@Override
-		public void handleDataMarker(String key, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox bounds)
+		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
 		{
 			if (key.contains("chest"))
 			{
-				this.setAir(world, pos);
+				this.setAir(level, pos);
 				String[] data = key.split("-");
 
 				/**
 				 * Generates the chests with a 70% chance, or if they are a map chest.
 				 */
-				if (rand.nextInt(100) < 70 || data[0].contains("map"))
+				if (rand.nextFloat() < 0.70F || data[0].contains("map"))
 				{
 					ResourceLocation lootTable = DPLoot.CHESTS_SIMPLE_DUNGEON;
 					if (data[0].contains(":"))
@@ -91,17 +79,17 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 							break;
 						}
 					}
-					DPUtil.createChest(this::createChest, world, bounds, rand, pos, lootTable, this.rotation, data);
+					DPUtil.createChest(this::createChest, level, bounds, rand, pos, lootTable, this.rotation, data);
 				}
 			}
 			if (key.contains("spawner"))
 			{
 				String[] data = key.split("-");
-				DPUtil.placeSpawner(data[1], world, pos);
+				DPUtil.placeSpawner(data[1], level, pos);
 			}
 			if (key.equals("monster_box"))
 			{
-				DPUtil.placeMonsterBox(world, pos, rand);
+				DPUtil.placeMonsterBox(level, pos, rand);
 			}
 		}
 	}

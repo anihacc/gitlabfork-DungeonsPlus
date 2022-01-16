@@ -1,6 +1,5 @@
 package com.legacy.dungeons_plus.pieces;
 
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -9,38 +8,40 @@ import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPLoot;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.structure_gel.access_helpers.SpawnerAccessHelper;
-import com.legacy.structure_gel.worldgen.GelPlacementSettings;
-import com.legacy.structure_gel.worldgen.processors.RandomBlockSwapProcessor;
-import com.legacy.structure_gel.worldgen.processors.RandomStateSwapProcessor;
-import com.legacy.structure_gel.worldgen.structure.GelTemplateStructurePiece;
+import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
+import com.legacy.structure_gel.api.structure.GelTemplateStructurePiece;
+import com.legacy.structure_gel.api.structure.processor.RandomBlockSwapProcessor;
+import com.legacy.structure_gel.api.structure.processor.RandomStateSwapProcessor;
+import com.legacy.structure_gel.api.structure.processor.RemoveGelStructureProcessor;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.GhastEntity;
-import net.minecraft.entity.monster.WitherSkeletonEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.MobSpawnerTileEntity;
-import net.minecraft.util.Direction.Axis;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.gen.feature.structure.StructurePiece;
-import net.minecraft.world.gen.feature.template.BlockMatchRuleTest;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.RuleEntry;
-import net.minecraft.world.gen.feature.template.RuleStructureProcessor;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Vec3i;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.monster.WitherSkeleton;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.material.Material;
 
 public class SoulPrisonPieces
 {
@@ -50,21 +51,21 @@ public class SoulPrisonPieces
 	private static final ResourceLocation UNDER_MAIN = locate("main/under");
 	private static final ResourceLocation[] TURRETS = new ResourceLocation[] { locate("turrets/turret_0"), locate("turrets/turret_1") };
 
-	public static void assemble(TemplateManager templateManager, BlockPos pos, Rotation rotation, List<StructurePiece> structurePieces, Random rand)
+	public static void assemble(StructureManager structureManager, BlockPos pos, Rotation rotation, StructurePiecesBuilder pieces, Random rand)
 	{
 		pos = pos.offset(-12, 0, -12);
-		structurePieces.add(new Piece(templateManager, Util.getRandom(BOTTOM, rand), pos, rotation));
-		structurePieces.add(new Piece(templateManager, TOP_GEL, pos.above(11), rotation));
-		structurePieces.add(new Piece(templateManager, TOP, pos.above(11), rotation));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(BOTTOM, rand), pos, rotation));
+		pieces.addPiece(new Piece(structureManager, TOP_GEL, pos.above(11), rotation));
+		pieces.addPiece(new Piece(structureManager, TOP, pos.above(11), rotation));
 		for (int i = 1; i < pos.getY(); i++)
-			structurePieces.add(new Piece(templateManager, UNDER_MAIN, pos.below(i), rotation, 1));
+			pieces.addPiece(new Piece(structureManager, UNDER_MAIN, pos.below(i), rotation, 1));
 
 		pos = pos.offset(12, 0, 12);
 		int range = 32;
-		structurePieces.add(new Piece(templateManager, Util.getRandom(TURRETS, rand), pos.offset(range, 0, rand.nextInt(20) - 10), Rotation.getRandom(rand)));
-		structurePieces.add(new Piece(templateManager, Util.getRandom(TURRETS, rand), pos.offset(-range, 0, rand.nextInt(20) - 10), Rotation.getRandom(rand)));
-		structurePieces.add(new Piece(templateManager, Util.getRandom(TURRETS, rand), pos.offset(rand.nextInt(20) - 10, 0, range), Rotation.getRandom(rand)));
-		structurePieces.add(new Piece(templateManager, Util.getRandom(TURRETS, rand), pos.offset(rand.nextInt(20) - 10, 0, -range), Rotation.getRandom(rand)));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(TURRETS, rand), pos.offset(range, 0, rand.nextInt(20) - 10), Rotation.getRandom(rand)));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(TURRETS, rand), pos.offset(-range, 0, rand.nextInt(20) - 10), Rotation.getRandom(rand)));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(TURRETS, rand), pos.offset(rand.nextInt(20) - 10, 0, range), Rotation.getRandom(rand)));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(TURRETS, rand), pos.offset(rand.nextInt(20) - 10, 0, -range), Rotation.getRandom(rand)));
 	}
 
 	private static ResourceLocation locate(String name)
@@ -74,46 +75,44 @@ public class SoulPrisonPieces
 
 	public static class Piece extends GelTemplateStructurePiece
 	{
-		public Piece(TemplateManager templateManager, ResourceLocation location, BlockPos pos, Rotation rotation, int componentType)
+		public Piece(StructureManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, int componentType)
 		{
-			super(DungeonsPlus.Structures.SOUL_PRISON.getPieceType(), location, componentType);
-			this.templatePosition = pos;
+			super(DungeonsPlus.Structures.SOUL_PRISON.getPieceType(), 0, structureManager, location, pos);
 			this.rotation = rotation;
-			this.setupTemplate(templateManager);
+			this.setupPlaceSettings(structureManager);
 		}
 
-		public Piece(TemplateManager templateManager, ResourceLocation location, BlockPos pos, Rotation rotation)
+		public Piece(StructureManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation)
 		{
-			this(templateManager, location, pos, rotation, 0);
+			this(structureManager, location, pos, rotation, 0);
 		}
 
-		public Piece(TemplateManager templateManager, CompoundNBT nbtCompound)
+		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
-			super(DungeonsPlus.Structures.SOUL_PRISON.getPieceType(), nbtCompound);
-			this.setupTemplate(templateManager);
-		}
-
-		@Override
-		public PlacementSettings createPlacementSettings(TemplateManager templateManager)
-		{
-			BlockPos sizePos = templateManager.get(this.name).getSize();
-			BlockPos centerPos = new BlockPos(sizePos.getX() / 2, 0, sizePos.getZ() / 2);
-			return new GelPlacementSettings().setMaintainWater(false).setRotation(this.rotation).setMirror(Mirror.NONE).setRotationPivot(centerPos);
+			super(DungeonsPlus.Structures.SOUL_PRISON.getPieceType(), tag, context.structureManager());
+			this.setupPlaceSettings(context.structureManager());
 		}
 
 		@Override
-		public void addProcessors(TemplateManager templateManager, PlacementSettings placementSettings)
+		protected StructurePlaceSettings getPlaceSettings(StructureManager structureManager)
 		{
-			super.addProcessors(templateManager, placementSettings);
-			placementSettings.addProcessor(new RandomBlockSwapProcessor(Blocks.QUARTZ_BRICKS, 0.10F, Blocks.CHISELED_QUARTZ_BLOCK));
-			placementSettings.addProcessor(new RandomStateSwapProcessor(Blocks.POLISHED_BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Axis.Y), 0.55F, Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Axis.Y)));
-			placementSettings.addProcessor(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new BlockMatchRuleTest(Blocks.QUARTZ_SLAB), new BlockMatchRuleTest(Blocks.LAVA), Blocks.LAVA.defaultBlockState()))));
-			placementSettings.addProcessor(new RandomBlockSwapProcessor(Blocks.ORANGE_STAINED_GLASS, Blocks.LAVA));
+			StructurePlaceSettings settings = new StructurePlaceSettings();
+			Vec3i size = structureManager.get(this.makeTemplateLocation()).get().getSize();
+			settings.setKeepLiquids(false);
+			settings.setRotationPivot(new BlockPos(size.getX() / 2, 0, size.getZ() / 2));
+
+			settings.addProcessor(RemoveGelStructureProcessor.INSTANCE);
+			settings.addProcessor(new RandomBlockSwapProcessor(Blocks.QUARTZ_BRICKS, 0.10F, Blocks.CHISELED_QUARTZ_BLOCK));
+			settings.addProcessor(new RandomStateSwapProcessor(Blocks.POLISHED_BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Axis.Y), 0.55F, Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Axis.Y)));
+			settings.addProcessor(new RuleProcessor(ImmutableList.of(new ProcessorRule(new BlockMatchTest(Blocks.QUARTZ_SLAB), new BlockMatchTest(Blocks.LAVA), Blocks.LAVA.defaultBlockState()))));
+			settings.addProcessor(new RandomBlockSwapProcessor(Blocks.ORANGE_STAINED_GLASS, Blocks.LAVA));
+
+			return settings;
 		}
 
 		@Override
 		@Nullable
-		public BlockState modifyState(IServerWorld world, Random rand, BlockPos pos, BlockState originalState)
+		public BlockState modifyState(ServerLevelAccessor world, Random rand, BlockPos pos, BlockState originalState)
 		{
 			BlockState worldState = world.getBlockState(pos);
 			if (this.genDepth == 1 && !(worldState.getBlock() == Blocks.LAVA || worldState.getMaterial() == Material.AIR))
@@ -122,43 +121,43 @@ public class SoulPrisonPieces
 		}
 
 		@Override
-		protected void handleDataMarker(String key, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox bounds)
+		protected void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
 		{
+			ServerLevel serverLevel = level.getLevel();
 			if (key.equals("guard"))
 			{
-				world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-				WitherSkeletonEntity wither = EntityType.WITHER_SKELETON.create(world.getLevel());
+				level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+				WitherSkeleton wither = EntityType.WITHER_SKELETON.create(serverLevel);
 				wither.setPos(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
-				wither.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
-				wither.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				wither.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+				wither.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
+				wither.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
+				wither.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 				wither.setPersistenceRequired();
-				world.addFreshEntity(wither);
+				level.addFreshEntity(wither);
 			}
 			else if (key.equals("ghast"))
 			{
-				world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-				GhastEntity ghast = EntityType.GHAST.create(world.getLevel());
+				level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+				Ghast ghast = EntityType.GHAST.create(serverLevel);
 				ghast.setPos(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
 				ghast.setPersistenceRequired();
-				world.addFreshEntity(ghast);
+				level.addFreshEntity(ghast);
 			}
 			else if (key.equals("spawner"))
 			{
-				DPUtil.placeSpawner(EntityType.GHAST, world, pos);
-				if (world.getBlockEntity(pos) instanceof MobSpawnerTileEntity)
+				DPUtil.placeSpawner(EntityType.GHAST, level, pos);
+				if (level.getBlockEntity(pos)instanceof SpawnerBlockEntity spawner)
 				{
-					MobSpawnerTileEntity tile = (MobSpawnerTileEntity) world.getBlockEntity(pos);
-					SpawnerAccessHelper.setRequiredPlayerRange(tile, 32);
-					SpawnerAccessHelper.setMaxNearbyEntities(tile, 10);
-					SpawnerAccessHelper.setSpawnCount(tile, 5);
-					SpawnerAccessHelper.setSpawnRange(tile, 16);
+					SpawnerAccessHelper.setRequiredPlayerRange(spawner, serverLevel, pos, 32);
+					SpawnerAccessHelper.setMaxNearbyEntities(spawner, serverLevel, pos, 10);
+					SpawnerAccessHelper.setSpawnCount(spawner, serverLevel, pos, 5);
+					SpawnerAccessHelper.setSpawnRange(spawner, serverLevel, pos, 16);
 				}
 			}
 			else if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				DPUtil.createChest(this::createChest, world, bounds, rand, pos, DPLoot.SoulPrison.CHEST_COMMON, this.rotation, data);
+				DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.SoulPrison.CHEST_COMMON, this.rotation, data);
 			}
 		}
 	}

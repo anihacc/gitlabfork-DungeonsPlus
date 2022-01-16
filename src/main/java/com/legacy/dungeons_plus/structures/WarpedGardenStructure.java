@@ -1,46 +1,30 @@
 package com.legacy.dungeons_plus.structures;
 
+import java.util.Random;
+
 import com.legacy.dungeons_plus.pieces.WarpedGardenPieces;
-import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
-import com.legacy.structure_gel.worldgen.structure.GelConfigStructure;
-import com.legacy.structure_gel.worldgen.structure.GelStructureStart;
+import com.legacy.structure_gel.api.config.StructureConfig;
+import com.legacy.structure_gel.api.structure.GelConfigStructure;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-public class WarpedGardenStructure extends GelConfigStructure<NoFeatureConfig>
+public class WarpedGardenStructure extends GelConfigStructure<NoneFeatureConfiguration>
 {
-	public WarpedGardenStructure(Codec<NoFeatureConfig> codec, StructureConfig config)
+	public WarpedGardenStructure(Codec<NoneFeatureConfiguration> codec, StructureConfig config)
 	{
-		super(codec, config);
+		super(codec, config, WarpedGardenStructure::generatePieces);
 	}
 
-	@Override
-	public IStartFactory<NoFeatureConfig> getStartFactory()
+	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
-		return Start::new;
-	}
-
-	public static class Start extends GelStructureStart<NoFeatureConfig>
-	{
-		public Start(Structure<NoFeatureConfig> structureIn, int chunkX, int chunkZ, MutableBoundingBox boundsIn, int referenceIn, long seed)
-		{
-			super(structureIn, chunkX, chunkZ, boundsIn, referenceIn, seed);
-		}
-
-		@Override
-		public void generatePieces(DynamicRegistries registry, ChunkGenerator chunkGen, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig configIn)
-		{
-			WarpedGardenPieces.assemble(templateManagerIn, new BlockPos(chunkX * 16 + 9, 90, chunkZ * 16 + 9), Rotation.getRandom(this.random), this.pieces, this.random);
-			this.calculateBoundingBox();
-		}
+		ChunkPos chunkPos = context.chunkPos();
+		Random rand = context.random();
+		WarpedGardenPieces.assemble(context.structureManager(), new BlockPos((chunkPos.x << 4) + 9, 90, (chunkPos.z << 4) + 9), Rotation.getRandom(rand), builder, rand);
 	}
 }

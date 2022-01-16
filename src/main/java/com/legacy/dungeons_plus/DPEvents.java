@@ -5,26 +5,22 @@ import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableMap;
 import com.legacy.dungeons_plus.DungeonsPlus.Structures;
-import com.legacy.structure_gel.access_helpers.BiomeAccessHelper;
-import com.legacy.structure_gel.access_helpers.EntityAccessHelper;
-import com.legacy.structure_gel.registrars.StructureRegistrar2;
+import com.legacy.structure_gel.api.entity.EntityAccessHelper;
+import com.legacy.structure_gel.api.events.AddStructureToBiomeEvent;
+import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.monster.EndermanEntity;
-import net.minecraft.entity.monster.GhastEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.loot.LootTables;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.MinecraftForge;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.NonNullLazy;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class DPEvents
@@ -35,48 +31,36 @@ public class DPEvents
 	@SubscribeEvent
 	protected static void onEntitySpawn(final EntityJoinWorldEvent event)
 	{
-		World world = event.getWorld();
-		if (!world.isClientSide)
+		Level level = event.getWorld();
+		if (!level.isClientSide)
 		{
 			Entity entity = event.getEntity();
 
-			TOWER_ENTITY_LOOT.get().forEach((type, loot) -> ifInStructure(entity, type, DungeonsPlus.Structures.TOWER, e -> EntityAccessHelper.setDeathLootTable((MobEntity) e, loot)));
-			BURIED_ENTITY_LOOT.get().forEach((type, loot) -> ifInStructure(entity, type, DungeonsPlus.Structures.BIGGER_DUNGEON, e -> EntityAccessHelper.setDeathLootTable((MobEntity) e, loot)));
-			ifInStructure(entity, EntityType.HUSK, DungeonsPlus.Structures.LEVIATHAN, e -> EntityAccessHelper.setDeathLootTable((MobEntity) e, DPLoot.Leviathan.HUSK));
-			ifInStructure(entity, EntityType.STRAY, DungeonsPlus.Structures.SNOWY_TEMPLE, e -> EntityAccessHelper.setDeathLootTable((MobEntity) e, DPLoot.SnowyTemple.STRAY));
-			ifInStructure(entity, EntityType.ENDERMAN, DungeonsPlus.Structures.END_RUINS, e -> ((EndermanEntity) e).targetSelector.addGoal(1, new NearestAttackableTargetGoal<>((EndermanEntity) e, PlayerEntity.class, true, false)));
-			ifInStructure(entity, EntityType.GHAST, DungeonsPlus.Structures.SOUL_PRISON, e -> ((GhastEntity) e).targetSelector.addGoal(1, new NearestAttackableTargetGoal<>((GhastEntity) e, PlayerEntity.class, true, false)));
+			TOWER_ENTITY_LOOT.get().forEach((type, loot) -> ifInStructure(entity, type, DungeonsPlus.Structures.TOWER, e -> EntityAccessHelper.setDeathLootTable((Mob) e, loot)));
+			BURIED_ENTITY_LOOT.get().forEach((type, loot) -> ifInStructure(entity, type, DungeonsPlus.Structures.BIGGER_DUNGEON, e -> EntityAccessHelper.setDeathLootTable((Mob) e, loot)));
+			ifInStructure(entity, EntityType.HUSK, DungeonsPlus.Structures.LEVIATHAN, e -> EntityAccessHelper.setDeathLootTable((Mob) e, DPLoot.Leviathan.HUSK));
+			ifInStructure(entity, EntityType.STRAY, DungeonsPlus.Structures.SNOWY_TEMPLE, e -> EntityAccessHelper.setDeathLootTable((Mob) e, DPLoot.SnowyTemple.STRAY));
+			ifInStructure(entity, EntityType.ENDERMAN, DungeonsPlus.Structures.END_RUINS, e -> ((EnderMan) e).targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>((EnderMan) e, Player.class, true, false)));
+			ifInStructure(entity, EntityType.GHAST, DungeonsPlus.Structures.SOUL_PRISON, e -> ((Ghast) e).targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>((Ghast) e, Player.class, true, false)));
 		}
 	}
 
-	private static void ifInStructure(Entity entity, EntityType<?> entityTest, StructureRegistrar2<?, ?> structure, Consumer<Entity> consumer)
+	private static void ifInStructure(Entity entity, EntityType<?> entityTest, StructureRegistrar<?, ?> structure, Consumer<Entity> consumer)
 	{
-		if (entity.getType().equals(entityTest) && (((ServerWorld) entity.level).structureFeatureManager()).getStructureAt(entity.blockPosition(), false, structure.getStructure()).isValid())
+		if (entity.getType().equals(entityTest) && entity.level instanceof ServerLevel && ((ServerLevel) entity.level).structureFeatureManager().getStructureWithPieceAt(entity.blockPosition(), structure.getStructure()).isValid())
 			consumer.accept(entity);
 	}
 
 	@SubscribeEvent
-	protected static void biomeLoad(final BiomeLoadingEvent event)
+	protected static void addStructureToBiome(final AddStructureToBiomeEvent event)
 	{
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.TOWER.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.BIGGER_DUNGEON.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.LEVIATHAN.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.SNOWY_TEMPLE.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.END_RUINS.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.WARPED_GARDEN.getStructureFeature());
-		BiomeAccessHelper.addStructureIfAllowed(event, Structures.SOUL_PRISON.getStructureFeature());
-	}
+		event.register(Structures.TOWER);
+		event.register(Structures.BIGGER_DUNGEON);
+		event.register(Structures.LEVIATHAN);
+		event.register(Structures.SNOWY_TEMPLE);
+		event.register(Structures.WARPED_GARDEN);
 
-	@SubscribeEvent
-	protected static void lootTableLoad(final LootTableLoadEvent event)
-	{
-		if (DPLoot.CHESTS_SIMPLE_DUNGEON.equals(event.getName()))
-		{
-			// Redirect our simple chest to recieve the data of a vanilla dungeon chest
-			// since it's the same
-			LootTableLoadEvent newEvent = new LootTableLoadEvent(LootTables.SIMPLE_DUNGEON, event.getTable(), event.getLootTableManager());
-			if (!MinecraftForge.EVENT_BUS.post(newEvent) && newEvent.getTable() != null)
-				event.setTable(newEvent.getTable());
-		}
+		event.register(Structures.END_RUINS);
+		event.register(Structures.SOUL_PRISON);
 	}
 }

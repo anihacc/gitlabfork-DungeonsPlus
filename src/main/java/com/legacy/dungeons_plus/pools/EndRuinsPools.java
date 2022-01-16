@@ -3,15 +3,14 @@ package com.legacy.dungeons_plus.pools;
 import com.google.common.collect.ImmutableMap;
 import com.legacy.dungeons_plus.DPProcessors;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.structure_gel.worldgen.jigsaw.JigsawPoolBuilder;
-import com.legacy.structure_gel.worldgen.jigsaw.JigsawRegistryHelper;
+import com.legacy.structure_gel.api.structure.jigsaw.JigsawPoolBuilder;
+import com.legacy.structure_gel.api.structure.jigsaw.JigsawRegistryHelper;
 
-import net.minecraft.world.gen.feature.jigsaw.JigsawPattern;
-import net.minecraft.world.gen.feature.jigsaw.JigsawPattern.PlacementBehaviour;
+import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
 
 public class EndRuinsPools
 {
-	public static final JigsawPattern ROOT;
+	public static final StructureTemplatePool ROOT;
 
 	public static void init()
 	{
@@ -26,7 +25,7 @@ public class EndRuinsPools
 		 * I'm using the terrain matching placement behavior to ensure the structures
 		 * that generate off of this plate are at ground level.
 		 */
-		registry.register("pylon_plate", registry.builder().names("pylon_plate").build(), PlacementBehaviour.TERRAIN_MATCHING);
+		registry.register("pylon_plate", registry.builder().names("pylon_plate").build(), StructureTemplatePool.Projection.TERRAIN_MATCHING);
 
 		/**
 		 * By using the .weight(int) method, I can set the weights of all structures in

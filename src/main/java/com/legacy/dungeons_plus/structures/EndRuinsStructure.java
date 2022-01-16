@@ -4,77 +4,57 @@ import java.util.Random;
 
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
-import com.legacy.structure_gel.worldgen.jigsaw.AbstractGelStructurePiece;
-import com.legacy.structure_gel.worldgen.jigsaw.GelConfigJigsawStructure;
-import com.legacy.structure_gel.worldgen.jigsaw.GelJigsawStructure;
+import com.legacy.structure_gel.api.config.StructureConfig;
+import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
+import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.jigsaw.JigsawManager.IPieceFactory;
-import net.minecraft.world.gen.feature.jigsaw.JigsawPiece;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraft.world.gen.feature.structure.VillageConfig;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.StructurePieceType;
+import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
+import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
 public class EndRuinsStructure extends GelConfigJigsawStructure
 {
-	public EndRuinsStructure(Codec<VillageConfig> codec, StructureConfig config)
+	public EndRuinsStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
 	{
-		super(codec, config, 0, true, true);
+		super(codec, config, 0, true, true, EndRuinsStructure::isValidHeight, Piece::new);
 	}
 
-	@Override
-	public int getSeed()
+	private static boolean isValidHeight(PieceGeneratorSupplier.Context<JigsawConfiguration> context)
 	{
-		return 843152;
-	}
-
-	@Override
-	public IPieceFactory getPieceType()
-	{
-		return Piece::new;
-	}
-
-	@Override
-	public void handleStartFactory(GelJigsawStructure.Start start, DynamicRegistries dynamicRegistries, ChunkGenerator chunkGen, TemplateManager templateManager, int chunkX, int chunkZ, Biome biome, VillageConfig config)
-	{
-		int x = (chunkX * 16) + 7;
-		int z = (chunkZ * 16) + 7;
-		int y = chunkGen.getBaseHeight(x, z, Heightmap.Type.WORLD_SURFACE_WG);
-		if (y >= 60)
-		{
-			super.handleStartFactory(start, dynamicRegistries, chunkGen, templateManager, chunkX, chunkZ, biome, config);
-			start.getPieces().removeIf(c -> c.getBoundingBox().y0 < 5);
-			start.calculateBoundingBox();
-		}
+		ChunkPos chunkPos = context.chunkPos();
+		int y = context.chunkGenerator().getBaseHeight(chunkPos.x << 4 + 7, chunkPos.z << 4 + 7, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor());
+		return y >= 60;
 	}
 
 	public static class Piece extends AbstractGelStructurePiece
 	{
-		public Piece(TemplateManager template, JigsawPiece jigsawPiece, BlockPos pos, int groundLevelDelta, Rotation rotation, MutableBoundingBox boundingBox)
+		public Piece(StructureManager template, StructurePoolElement piece, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds)
 		{
-			super(template, jigsawPiece, pos, groundLevelDelta, rotation, boundingBox);
+			super(template, piece, pos, groundLevelDelta, rotation, bounds);
 		}
 
-		public Piece(TemplateManager template, CompoundNBT nbt)
+		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
-			super(template, nbt);
+			super(context, tag);
 		}
 
 		@Override
-		public IStructurePieceType getType()
+		public StructurePieceType getType()
 		{
 			return DungeonsPlus.Structures.END_RUINS.getPieceType();
 		}
@@ -84,26 +64,26 @@ public class EndRuinsStructure extends GelConfigJigsawStructure
 		 * and obsidian under the pylons just in case.
 		 */
 		@Override
-		public boolean place(ISeedReader seedReader, StructureManager structureManager, ChunkGenerator chunkGen, Random rand, MutableBoundingBox bounds, BlockPos pos, boolean isLegacy)
+		public void place(WorldGenLevel level, StructureFeatureManager structureManager, ChunkGenerator chunkGen, Random rand, BoundingBox bounds, BlockPos pos, boolean isLegacy)
 		{
-			if (super.place(seedReader, structureManager, chunkGen, rand, bounds, pos, isLegacy))
+			if (pos.getY() > 5)
 			{
-				if (this.getLocation().toString().contains("end_ruins/tower/base_"))
-					this.extendDown(seedReader, Blocks.END_STONE.defaultBlockState(), bounds, this.rotation, rand);
-				if (this.getLocation().toString().contains("end_ruins/pylon/"))
-					this.extendDown(seedReader, Blocks.OBSIDIAN.defaultBlockState(), bounds, this.rotation, rand);
-				return true;
+				super.place(level, structureManager, chunkGen, rand, bounds, pos, isLegacy);
+				String name = this.getLocation().toString();
+				if (name.contains("end_ruins/tower/base_"))
+					this.extendDown(level, Blocks.END_STONE.defaultBlockState(), bounds, this.rotation, rand);
+				if (name.contains("end_ruins/pylon/"))
+					this.extendDown(level, Blocks.OBSIDIAN.defaultBlockState(), bounds, this.rotation, rand);
 			}
-			return false;
 		}
 
 		@Override
-		public void handleDataMarker(String key, BlockPos pos, IServerWorld world, Random rand, MutableBoundingBox bounds)
+		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
 		{
 			if (key.contains("spawner"))
 			{
 				String[] data = key.split("-");
-				DPUtil.placeSpawner(data[1], world, pos);
+				DPUtil.placeSpawner(data[1], level, pos);
 			}
 		}
 	}

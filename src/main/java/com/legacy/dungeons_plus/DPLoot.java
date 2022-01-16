@@ -1,6 +1,6 @@
 package com.legacy.dungeons_plus;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class DPLoot
 {

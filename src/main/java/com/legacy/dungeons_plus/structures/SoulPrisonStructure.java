@@ -1,61 +1,44 @@
 package com.legacy.dungeons_plus.structures;
 
+import java.util.Random;
+
 import com.legacy.dungeons_plus.pieces.SoulPrisonPieces;
-import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
-import com.legacy.structure_gel.worldgen.structure.GelConfigStructure;
-import com.legacy.structure_gel.worldgen.structure.GelStructureStart;
+import com.legacy.structure_gel.api.config.StructureConfig;
+import com.legacy.structure_gel.api.structure.GelConfigStructure;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.NoiseColumn;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-public class SoulPrisonStructure extends GelConfigStructure<NoFeatureConfig>
+public class SoulPrisonStructure extends GelConfigStructure<NoneFeatureConfiguration>
 {
-	public SoulPrisonStructure(Codec<NoFeatureConfig> codec, StructureConfig config)
+	public SoulPrisonStructure(Codec<NoneFeatureConfiguration> codec, StructureConfig config)
 	{
-		super(codec, config);
+		super(codec, config, PieceGeneratorSupplier.simple(context -> context.validBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG) && isValidPos(context), SoulPrisonStructure::generatePieces));
 	}
 
-	@Override
-	protected boolean isFeatureChunk(ChunkGenerator chunkGen, BiomeProvider biomeProvider, long seed, SharedSeedRandom sharedSeedRand, int chunkPosX, int chunkPosZ, Biome biomeIn, ChunkPos chunkPos, NoFeatureConfig config)
+	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
-		IBlockReader minPos = chunkGen.getBaseColumn(chunkPos.getMinBlockX() + 3, chunkPos.getMinBlockZ() + 3);
-		IBlockReader maxPos = chunkGen.getBaseColumn(chunkPos.getMinBlockX() + 22, chunkPos.getMinBlockZ() + 22);
-		if (minPos.getBlockState(chunkPos.getWorldPosition().above(29)).getBlock() == Blocks.LAVA && maxPos.getBlockState(chunkPos.getWorldPosition().above(29)).getBlock() == Blocks.LAVA)
-			return super.isFeatureChunk(chunkGen, biomeProvider, seed, sharedSeedRand, chunkPosX, chunkPosZ, biomeIn, chunkPos, config);
-		return false;
+		ChunkPos chunkPos = context.chunkPos();
+		Random rand = context.random();
+		SoulPrisonPieces.assemble(context.structureManager(), new BlockPos((chunkPos.x << 4) + 9, 29, (chunkPos.z << 4) + 9), Rotation.getRandom(rand), builder, rand);
 	}
 
-	@Override
-	public IStartFactory<NoFeatureConfig> getStartFactory()
+	private static boolean isValidPos(PieceGeneratorSupplier.Context<NoneFeatureConfiguration> context)
 	{
-		return Start::new;
-	}
-
-	public static class Start extends GelStructureStart<NoFeatureConfig>
-	{
-		public Start(Structure<NoFeatureConfig> structureIn, int chunkX, int chunkZ, MutableBoundingBox boundsIn, int referenceIn, long seed)
-		{
-			super(structureIn, chunkX, chunkZ, boundsIn, referenceIn, seed);
-		}
-
-		@Override
-		public void generatePieces(DynamicRegistries registry, ChunkGenerator chunkGen, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig configIn)
-		{
-			SoulPrisonPieces.assemble(templateManagerIn, new BlockPos(chunkX * 16 + 9, 29, chunkZ * 16 + 9), Rotation.getRandom(this.random), this.pieces, this.random);
-			this.calculateBoundingBox();
-		}
+		ChunkGenerator chunkGen = context.chunkGenerator();
+		ChunkPos chunkPos = context.chunkPos();
+		NoiseColumn minCorner = chunkGen.getBaseColumn(chunkPos.getMinBlockX() + 3, chunkPos.getMinBlockZ() + 3, context.heightAccessor());
+		NoiseColumn maxCorner = chunkGen.getBaseColumn(chunkPos.getMinBlockX() + 22, chunkPos.getMinBlockZ() + 22, context.heightAccessor());
+		return minCorner.getBlock(29).getBlock() == Blocks.LAVA && maxCorner.getBlock(29).getBlock() == Blocks.LAVA;
 	}
 }
