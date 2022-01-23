@@ -3,7 +3,7 @@ package com.legacy.dungeons_plus.structures;
 import java.util.Random;
 
 import com.legacy.dungeons_plus.DPUtil;
-import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
 import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
@@ -56,7 +56,7 @@ public class EndRuinsStructure extends GelConfigJigsawStructure
 		@Override
 		public StructurePieceType getType()
 		{
-			return DungeonsPlus.Structures.END_RUINS.getPieceType();
+			return DPStructures.END_RUINS.getPieceType();
 		}
 
 		/**

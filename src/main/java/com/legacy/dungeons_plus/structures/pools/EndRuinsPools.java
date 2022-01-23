@@ -1,8 +1,8 @@
-package com.legacy.dungeons_plus.pools;
+package com.legacy.dungeons_plus.structures.pools;
 
 import com.google.common.collect.ImmutableMap;
-import com.legacy.dungeons_plus.DPProcessors;
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.structures.DPProcessors;
 import com.legacy.structure_gel.api.structure.jigsaw.JigsawPoolBuilder;
 import com.legacy.structure_gel.api.structure.jigsaw.JigsawRegistryHelper;
 

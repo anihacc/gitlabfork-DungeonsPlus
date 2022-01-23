@@ -1,13 +1,14 @@
-package com.legacy.dungeons_plus.pieces;
+package com.legacy.dungeons_plus.structures.pieces;
 
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
-import com.legacy.dungeons_plus.DPLoot;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.data.DPLoot;
+import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
 import com.legacy.structure_gel.api.structure.GelTemplateStructurePiece;
 import com.legacy.structure_gel.api.structure.processor.RandomBlockSwapProcessor;
@@ -77,7 +78,7 @@ public class SoulPrisonPieces
 	{
 		public Piece(StructureManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, int componentType)
 		{
-			super(DungeonsPlus.Structures.SOUL_PRISON.getPieceType(), 0, structureManager, location, pos);
+			super(DPStructures.SOUL_PRISON.getPieceType(), 0, structureManager, location, pos);
 			this.rotation = rotation;
 			this.setupPlaceSettings(structureManager);
 		}
@@ -89,7 +90,7 @@ public class SoulPrisonPieces
 
 		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
-			super(DungeonsPlus.Structures.SOUL_PRISON.getPieceType(), tag, context.structureManager());
+			super(DPStructures.SOUL_PRISON.getPieceType(), tag, context.structureManager());
 			this.setupPlaceSettings(context.structureManager());
 		}
 

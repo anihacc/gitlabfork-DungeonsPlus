@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import com.legacy.dungeons_plus.DPLoot;
 import com.legacy.dungeons_plus.DPUtil;
-import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.data.DPLoot;
+import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
@@ -58,7 +58,7 @@ public class TowerStructure extends GelConfigJigsawStructure
 		@Override
 		public StructurePieceType getType()
 		{
-			return DungeonsPlus.Structures.TOWER.getPieceType();
+			return DPStructures.TOWER.getPieceType();
 		}
 
 		@Override

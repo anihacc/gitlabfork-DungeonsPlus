@@ -2,9 +2,9 @@ package com.legacy.dungeons_plus.structures;
 
 import java.util.Random;
 
-import com.legacy.dungeons_plus.DPLoot;
 import com.legacy.dungeons_plus.DPUtil;
-import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.data.DPLoot;
+import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
 import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
@@ -44,7 +44,7 @@ public class BiggerDungeonStructure extends GelConfigJigsawStructure
 		@Override
 		public StructurePieceType getType()
 		{
-			return DungeonsPlus.Structures.BIGGER_DUNGEON.getPieceType();
+			return DPStructures.BIGGER_DUNGEON.getPieceType();
 		}
 
 		@Override

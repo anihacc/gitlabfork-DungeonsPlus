@@ -1,5 +1,6 @@
-package com.legacy.dungeons_plus;
+package com.legacy.dungeons_plus.structures;
 
+import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.structure_gel.api.registry.RegistryHelper;
 import com.legacy.structure_gel.api.structure.processor.RandomBlockSwapProcessor;
 

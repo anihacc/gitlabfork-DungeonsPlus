@@ -1,4 +1,6 @@
-package com.legacy.dungeons_plus;
+package com.legacy.dungeons_plus.data;
+
+import com.legacy.dungeons_plus.DungeonsPlus;
 
 import net.minecraft.resources.ResourceLocation;
 

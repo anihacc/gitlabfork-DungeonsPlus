@@ -2,7 +2,7 @@ package com.legacy.dungeons_plus.structures;
 
 import java.util.Random;
 
-import com.legacy.dungeons_plus.pieces.SoulPrisonPieces;
+import com.legacy.dungeons_plus.structures.pieces.SoulPrisonPieces;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigStructure;
 import com.mojang.serialization.Codec;

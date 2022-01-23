@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.pieces;
+package com.legacy.dungeons_plus.structures.pieces;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,9 +8,10 @@ import java.util.Optional;
 import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
-import com.legacy.dungeons_plus.DPLoot;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.data.DPLoot;
+import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
 import com.legacy.structure_gel.api.structure.GelTemplateStructurePiece;
 import com.legacy.structure_gel.api.structure.processor.RandomBlockSwapProcessor;
@@ -76,14 +77,14 @@ public class WarpedGardenPieces
 	{
 		public Piece(StructureManager structureMananger, ResourceLocation location, BlockPos pos, Rotation rotation)
 		{
-			super(DungeonsPlus.Structures.WARPED_GARDEN.getPieceType(), 0, structureMananger, location, pos);
+			super(DPStructures.WARPED_GARDEN.getPieceType(), 0, structureMananger, location, pos);
 			this.rotation = rotation;
 			this.setupPlaceSettings(structureMananger);
 		}
 
 		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
-			super(DungeonsPlus.Structures.WARPED_GARDEN.getPieceType(), tag, context.structureManager());
+			super(DPStructures.WARPED_GARDEN.getPieceType(), tag, context.structureManager());
 			this.setupPlaceSettings(context.structureManager());
 		}
 
