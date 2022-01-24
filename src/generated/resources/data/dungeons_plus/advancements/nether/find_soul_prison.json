@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:nether/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:spawner"
+    },
+    "title": {
+      "translate": "advancements.dungeons_plus.nether.find_soul_prison"
+    },
+    "description": {
+      "translate": "advancements.dungeons_plus.nether.find_soul_prison.desc"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "enter_structure": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "location": {
+          "feature": "dungeons_plus:soul_prison"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "enter_structure"
+    ]
+  ]
+}

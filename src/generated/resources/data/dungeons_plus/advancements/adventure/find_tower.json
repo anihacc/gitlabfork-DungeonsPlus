@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:adventure/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:mossy_stone_bricks"
+    },
+    "title": {
+      "translate": "advancements.dungeons_plus.adventure.find_tower"
+    },
+    "description": {
+      "translate": "advancements.dungeons_plus.adventure.find_tower.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "enter_structure": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "location": {
+          "feature": "dungeons_plus:tower"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "enter_structure"
+    ]
+  ]
+}

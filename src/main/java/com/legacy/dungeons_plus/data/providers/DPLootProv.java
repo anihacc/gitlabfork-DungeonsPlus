@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.registry.DPBlocks;
 import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.Util;
@@ -21,6 +22,7 @@ import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -124,10 +126,10 @@ public class DPLootProv extends LootTableProvider
 		{
 			blocks().forEach(block ->
 			{
-				/*if (block == SkiesBlocks.turquoise_grass)
-					dropSelf(block);
+				if (block == DPBlocks.DYNAMIC_SPAWNER)
+					this.add(block, noDrop());
 				else
-					dropSelf(block);*/
+					this.dropSelf(block);
 			});
 		}
 

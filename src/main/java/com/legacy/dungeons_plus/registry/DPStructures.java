@@ -32,6 +32,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 public class DPStructures
 {
 	public static final GelStructureRegistrar<JigsawConfiguration, TowerStructure> TOWER = GelStructureRegistrar.of(DungeonsPlus.locate("tower"), new TowerStructure(JigsawConfiguration.CODEC, DPConfig.COMMON.tower), TowerStructure.Piece::new, new JigsawConfiguration(() -> TowerPools.ROOT, 7), Decoration.SURFACE_STRUCTURES);
+	// TODO rename to something caverns
 	public static final GelStructureRegistrar<JigsawConfiguration, BiggerDungeonStructure> BIGGER_DUNGEON = GelStructureRegistrar.of(DungeonsPlus.locate("bigger_dungeon"), new BiggerDungeonStructure(JigsawConfiguration.CODEC, DPConfig.COMMON.biggerDungeon), BiggerDungeonStructure.Piece::new, new JigsawConfiguration(() -> BiggerDungeonPools.ROOT, 7), Decoration.SURFACE_STRUCTURES);
 	public static final GelStructureRegistrar<JigsawConfiguration, LeviathanStructure> LEVIATHAN = GelStructureRegistrar.of(DungeonsPlus.locate("leviathan"), new LeviathanStructure(JigsawConfiguration.CODEC, DPConfig.COMMON.leviathan), LeviathanStructure.Piece::new, new JigsawConfiguration(() -> LeviathanPools.ROOT, 7), Decoration.SURFACE_STRUCTURES);
 	public static final GelStructureRegistrar<JigsawConfiguration, SnowyTempleStructure> SNOWY_TEMPLE = GelStructureRegistrar.of(DungeonsPlus.locate("snowy_temple"), new SnowyTempleStructure(JigsawConfiguration.CODEC, DPConfig.COMMON.snowyTemple), SnowyTempleStructure.Piece::new, new JigsawConfiguration(() -> SnowyTemplePools.ROOT, 7), Decoration.SURFACE_STRUCTURES);
