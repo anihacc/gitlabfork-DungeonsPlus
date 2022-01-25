@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.data.DPLoot;
 import com.legacy.dungeons_plus.registry.DPBlocks;
 import com.mojang.datafixers.util.Pair;
 
@@ -23,6 +24,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -41,6 +43,7 @@ import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
+import net.minecraft.world.level.storage.loot.functions.SetPotionFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -80,23 +83,68 @@ public class DPLootProv extends LootTableProvider
 		@Override
 		public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
-			//gatekeeperHouse(consumer);
+			this.warpedGarden(consumer);
 		}
 
-		/*private void gatekeeperHouse(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
+		private void tower(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
+		{
+			
+		}
+		
+		// TODO bigger dungeon replacement
+		private void biggerDungeon(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
+		{
+			
+		}
+		
+		private void leviathan(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
+		{
+			
+		}
+		
+		private void snowyTemple(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
+		{
+			
+		}
+		
+		private void warpedGarden(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
 			//@formatter:off
-			consumer.accept(GATEKEEPER_BOOK, tableOf(ImmutableList.of(
-					basicPool(Items.BOOK),
+			consumer.accept(DPLoot.WarpedGarden.CHEST_COMMON, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
-							basicEntry(Items.PAPER, 1, 4).setWeight(4),
-							basicEntry(Items.BREAD, 1, 2).setWeight(4),
-							basicEntry(Items.MAP).setWeight(2),
-							basicEntry(Items.EMERALD, 1, 2).setWeight(1)
-						)).setRolls(UniformGenerator.between(3, 8)))));
+							basicEntry(Items.ROTTEN_FLESH, 1, 3).setWeight(1),
+							basicEntry(Items.WARPED_ROOTS, 1, 2).setWeight(1),
+							basicEntry(Items.WARPED_FUNGUS, 1, 2).setWeight(1),
+							basicEntry(Items.GOLD_NUGGET, 1, 3).setWeight(1),
+							basicEntry(Items.QUARTZ, 1, 3).setWeight(1)
+						)).setRolls(UniformGenerator.between(4, 7)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.NETHERRACK, 1, 2).setWeight(1),
+							basicEntry(Items.POTION, 1, 3).setWeight(1).apply(SetPotionFunction.setPotion(Potions.WATER)),
+							basicEntry(Items.SCUTE, 1, 3).setWeight(1),
+							basicEntry(Items.WATER_BUCKET).setWeight(1),
+							basicEntry(Items.GOLD_INGOT, 1, 3).setWeight(3)
+						)).setRolls(UniformGenerator.between(3, 4)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.NAUTILUS_SHELL).setWeight(3),
+							basicEntry(Items.NETHER_GOLD_ORE, 5, 11).setWeight(10),
+							basicEntry(Items.PUFFERFISH).setWeight(7),
+							basicEntry(Items.BOOK).setWeight(5).apply(EnchantRandomlyFunction.randomEnchantment()),
+							basicEntry(Items.ENCHANTED_GOLDEN_APPLE).setWeight(1)
+						)).setRolls(UniformGenerator.between(2, 3)))));
 			
 			//@formatter:on
-		}*/
+		}
+		
+		private void soulPrison(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
+		{
+			
+		}
+		
+		private void endRuins(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
+		{
+			
+		}
 	}
 
 	private class DPEntityLoot extends EntityLoot implements LootPoolUtil
@@ -104,7 +152,7 @@ public class DPLootProv extends LootTableProvider
 		@Override
 		protected void addTables()
 		{
-
+			// TODO entity loot
 		}
 
 		private LootPool.Builder lootingPool(ItemLike item, int min, int max, int minLooting, int maxLooting)
