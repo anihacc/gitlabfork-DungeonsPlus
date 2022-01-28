@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.data.DPLoot;
 import com.legacy.dungeons_plus.registry.DPBlocks;
+import com.legacy.dungeons_plus.registry.DPStructures;
 import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.Util;
@@ -26,18 +27,23 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.LootTable.Builder;
 import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction;
+import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -48,13 +54,12 @@ import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DPLootProv extends LootTableProvider
 {
-	// Chests
-
 	public DPLootProv(DataGenerator dataGen)
 	{
 		super(dataGen);
@@ -67,9 +72,10 @@ public class DPLootProv extends LootTableProvider
 	}
 
 	@Override
-	protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationtracker)
+	protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext context)
 	{
-		map.forEach((location, table) -> LootTables.validate(validationtracker, location, table));
+		// Not validating anything because entity loot tables will fail since the vanilla one technically doesn't exist
+		//map.forEach((location, table) -> LootTables.validate(context, location, table));
 	}
 
 	@Override
@@ -83,30 +89,183 @@ public class DPLootProv extends LootTableProvider
 		@Override
 		public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
+			this.tower(consumer);
+			this.biggerDungeon(consumer);
+			this.leviathan(consumer);
+			this.snowyTemple(consumer);
 			this.warpedGarden(consumer);
+
+			this.soulPrison(consumer);
+			this.endRuins(consumer);
 		}
 
 		private void tower(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
-			
+			//@formatter:off
+			consumer.accept(DPLoot.Tower.CHEST_VEX, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.FEATHER, 1, 2).setWeight(1),
+							basicEntry(Items.IRON_NUGGET, 4, 9).setWeight(1),
+							basicEntry(Items.IRON_INGOT, 1, 5).setWeight(1),
+							basicEntry(Items.DARK_OAK_SAPLING, 1, 3).setWeight(1),
+							basicEntry(Items.LEATHER, 1, 3).setWeight(1)
+						)).setRolls(UniformGenerator.between(3, 5)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.LEATHER_HORSE_ARMOR).setWeight(2),
+							basicEntry(Items.GOLD_INGOT, 2, 4).setWeight(5),
+							basicEntry(Items.PHANTOM_MEMBRANE, 1, 3).setWeight(4),
+							basicEntry(Items.IRON_AXE).setWeight(1),
+							basicEntry(Items.IRON_AXE).setWeight(1),
+							basicEntry(Items.IRON_SHOVEL).setWeight(1),
+							basicEntry(Items.IRON_HOE).setWeight(1),
+							basicEntry(Items.IRON_PICKAXE).setWeight(1),
+							basicEntry(Items.IRON_SWORD).setWeight(1),
+							basicEntry(Items.SPYGLASS).setWeight(2),
+							basicEntry(Items.SOUL_SAND, 2, 3).setWeight(4)
+						)).setRolls(UniformGenerator.between(2, 4)))));
+
+			consumer.accept(DPLoot.Tower.CHEST_VEX_MAP, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPStructures.BIGGER_DUNGEON.getStructure()))
+						)),
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(DPLoot.Tower.CHEST_VEX)
+						)))));
+			//@formatter:on
 		}
-		
+
 		// TODO bigger dungeon replacement
 		private void biggerDungeon(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
+			//@formatter:off
+			consumer.accept(DPLoot.BiggerDungeon.CHEST_HUSK, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.SAND, 1, 2).setWeight(1),
+							basicEntry(Items.BONE, 1, 2).setWeight(1),
+							basicEntry(Items.ROTTEN_FLESH, 1, 5).setWeight(1),
+							basicEntry(Items.DEAD_BUSH).setWeight(1),
+							basicEntry(Items.GOLD_NUGGET, 2, 5).setWeight(1),
+							basicEntry(Items.IRON_INGOT, 1, 3).setWeight(1)
+						)).setRolls(UniformGenerator.between(3, 5)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.RED_SAND, 2, 3).setWeight(2),
+							basicEntry(Items.GLASS_BOTTLE).setWeight(1),
+							basicEntry(Items.GOLD_INGOT, 2, 4).setWeight(4),
+							basicEntry(Items.REDSTONE, 1, 3).setWeight(4),
+							basicEntry(Items.COAL, 1, 3).setWeight(4),
+							basicEntry(Items.IRON_SHOVEL).setWeight(1)
+						)).setRolls(UniformGenerator.between(2, 4)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.GOLDEN_APPLE).setWeight(1),
+							basicEntry(Items.BUCKET).setWeight(2),
+							basicEntry(Items.BOOK).setWeight(5).apply(enchant()),
+							basicEntry(Items.GOLD_NUGGET).setWeight(3)
+						)).setRolls(UniformGenerator.between(1, 3)))));
 			
+			consumer.accept(DPLoot.BiggerDungeon.CHEST_HUSK_MAP, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPStructures.LEVIATHAN.getStructure()))
+						)),
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(DPLoot.BiggerDungeon.CHEST_HUSK)
+						)))));
+			
+			consumer.accept(DPLoot.BiggerDungeon.CHEST_STRAY, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.ARROW, 1, 5).setWeight(3),
+							basicEntry(Items.BONE, 2, 5).setWeight(3),
+							basicEntry(Items.SNOWBALL, 1, 3).setWeight(2),
+							basicEntry(Items.FLINT, 1, 2).setWeight(1),
+							basicEntry(Items.FEATHER, 1, 2).setWeight(1),
+							basicEntry(Items.STRING, 1, 2).setWeight(1)
+						)).setRolls(UniformGenerator.between(3, 5)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.ICE, 2, 3).setWeight(2),
+							basicEntry(Items.TIPPED_ARROW, 2, 4).setWeight(4).apply(SetPotionFunction.setPotion(Potions.SLOWNESS)),
+							basicEntry(Items.IRON_INGOT, 2, 4).setWeight(4),
+							basicEntry(Items.REDSTONE, 1, 3).setWeight(4),
+							basicEntry(Items.COAL, 1, 3).setWeight(4),
+							basicEntry(Items.BOW).setWeight(1)
+						)).setRolls(UniformGenerator.between(2, 4)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.BOW).setWeight(2).apply(enchant()),
+							basicEntry(Items.CHAINMAIL_CHESTPLATE).setWeight(2),
+							basicEntry(Items.BOOK).setWeight(5).apply(enchant()),
+							basicEntry(Items.MUSIC_DISC_WAIT).setWeight(1)
+						)).setRolls(UniformGenerator.between(1, 3)))));
+			
+			consumer.accept(DPLoot.BiggerDungeon.CHEST_STRAY_MAP, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPStructures.SNOWY_TEMPLE.getStructure()))
+						)),
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(DPLoot.BiggerDungeon.CHEST_STRAY)
+						)))));
+			
+			//@formatter:on
 		}
-		
+
 		private void leviathan(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
+			//@formatter:off
+			consumer.accept(DPLoot.Leviathan.CHEST_COMMON, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.BONE, 1, 2).setWeight(10),
+							basicEntry(Items.RABBIT_HIDE, 1, 2).setWeight(10),
+							basicEntry(Items.ROTTEN_FLESH, 1, 5).setWeight(10),
+							basicEntry(Items.GOLD_NUGGET).setWeight(10),
+							basicEntry(Items.SAND, 1, 2).setWeight(10),
+							basicEntry(Items.DEAD_BUSH).setWeight(1)
+						)).setRolls(UniformGenerator.between(4, 7)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.QUARTZ, 1, 5).setWeight(1),
+							basicEntry(Items.LAPIS_LAZULI, 1, 5).setWeight(2),
+							basicEntry(Items.GOLD_INGOT, 2, 4).setWeight(5),
+							basicEntry(Items.EMERALD, 1, 3).setWeight(5),
+							basicEntry(Items.GOLDEN_SHOVEL).setWeight(3).apply(enchant())
+						)).setRolls(UniformGenerator.between(3, 4)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.GOLDEN_APPLE).setWeight(1),
+							basicEntry(Items.EXPERIENCE_BOTTLE, 1, 2).setWeight(3),
+							basicEntry(Items.GOLDEN_HORSE_ARMOR).setWeight(1),
+							basicEntry(Items.NAME_TAG).setWeight(1),
+							basicEntry(Items.BOOK).setWeight(3).apply(enchant())
+						)).setRolls(UniformGenerator.between(2, 3)))));
 			
+			//@formatter:on
 		}
-		
+
 		private void snowyTemple(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
+			//@formatter:off
+			consumer.accept(DPLoot.SnowyTemple.CHEST_COMMON, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.ICE, 1, 2).setWeight(1),
+							basicEntry(Items.SNOWBALL, 1, 2).setWeight(1),
+							basicEntry(Items.ARROW, 1, 4).setWeight(1),
+							basicEntry(Items.BONE, 1, 4).setWeight(1),
+							basicEntry(Items.FLINT, 1, 2).setWeight(1),
+							basicEntry(Items.FEATHER, 1, 2).setWeight(1)
+						)).setRolls(UniformGenerator.between(4, 7)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.PACKED_ICE, 1, 5).setWeight(1),
+							basicEntry(Items.TIPPED_ARROW, 2, 4).setWeight(2).apply(SetPotionFunction.setPotion(Potions.SLOWNESS)),
+							basicEntry(Items.IRON_INGOT, 1, 3).setWeight(5),
+							basicEntry(Items.LAPIS_LAZULI, 1, 3).setWeight(5),
+							basicEntry(Items.BOW).setWeight(1).apply(enchant()),
+							basicEntry(Items.POWDER_SNOW_BUCKET, 1, 2).setWeight(1)
+						)).setRolls(UniformGenerator.between(3, 4)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.EXPERIENCE_BOTTLE, 1, 2).setWeight(3),
+							basicEntry(Items.CHAINMAIL_CHESTPLATE).setWeight(1),
+							basicEntry(Items.CHAINMAIL_LEGGINGS).setWeight(1),
+							basicEntry(Items.BOOK).setWeight(3).apply(enchant()),
+							basicEntry(Items.LEATHER_BOOTS).setWeight(1).apply(enchant(Enchantments.FROST_WALKER, Enchantments.UNBREAKING, Enchantments.VANISHING_CURSE))
+						)).setRolls(UniformGenerator.between(2, 3)))));
 			
+			//@formatter:on
 		}
-		
+
 		private void warpedGarden(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
 			//@formatter:off
@@ -129,36 +288,112 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.NAUTILUS_SHELL).setWeight(3),
 							basicEntry(Items.NETHER_GOLD_ORE, 5, 11).setWeight(10),
 							basicEntry(Items.PUFFERFISH).setWeight(7),
-							basicEntry(Items.BOOK).setWeight(5).apply(EnchantRandomlyFunction.randomEnchantment()),
+							basicEntry(Items.BOOK).setWeight(5).apply(enchant()),
 							basicEntry(Items.ENCHANTED_GOLDEN_APPLE).setWeight(1)
 						)).setRolls(UniformGenerator.between(2, 3)))));
 			
 			//@formatter:on
 		}
-		
+
 		private void soulPrison(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
+			//@formatter:off
+			consumer.accept(DPLoot.SoulPrison.CHEST_COMMON, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.BONE, 1, 2).setWeight(1),
+							basicEntry(Items.ARROW, 1, 2).setWeight(1),
+							basicEntry(Items.FIRE_CHARGE, 1, 2).setWeight(1),
+							basicEntry(Items.GOLD_INGOT, 1, 3).setWeight(2),
+							basicEntry(Items.GUNPOWDER, 1, 2).setWeight(2)
+						)).setRolls(UniformGenerator.between(4, 7)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.GOLDEN_PICKAXE).setWeight(1),
+							basicEntry(Items.SOUL_LANTERN, 1, 2).setWeight(1).apply(SetPotionFunction.setPotion(Potions.WATER)),
+							basicEntry(Items.SOUL_SOIL, 1, 3).setWeight(2),
+							basicEntry(Items.GLOWSTONE, 1, 2).setWeight(2),
+							basicEntry(Items.BONE_BLOCK, 1, 2).setWeight(3),
+							basicEntry(Items.GHAST_TEAR, 1, 2).setWeight(3)
+						)).setRolls(UniformGenerator.between(3, 4)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.DIAMOND, 1, 2).setWeight(3),
+							basicEntry(Items.MUSIC_DISC_11).setWeight(4),
+							basicEntry(Items.BOOK).setWeight(4).apply(enchant()),
+							basicEntry(Items.GOLDEN_CARROT, 2, 4).setWeight(5),
+							LootTableReference.lootTableReference(DPLoot.SoulPrison.CHEST_GOLDEN_ARMOR)
+						)).setRolls(UniformGenerator.between(2, 3)))));
 			
+			consumer.accept(DPLoot.SoulPrison.CHEST_GOLDEN_ARMOR, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.GOLDEN_HELMET).setWeight(2).apply(enchant(Enchantments.BLAST_PROTECTION, Enchantments.FIRE_PROTECTION, Enchantments.UNBREAKING)),
+							basicEntry(Items.GOLDEN_CHESTPLATE).setWeight(2).apply(enchant(Enchantments.BLAST_PROTECTION, Enchantments.FIRE_PROTECTION, Enchantments.UNBREAKING)),
+							basicEntry(Items.GOLDEN_HELMET).setWeight(1).apply(enchant()),
+							basicEntry(Items.GOLDEN_CHESTPLATE).setWeight(1).apply(enchant())
+						)).setRolls(UniformGenerator.between(1, 2)))));
+			
+			//@formatter:on
 		}
-		
+
 		private void endRuins(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
-			
+
 		}
 	}
 
 	private class DPEntityLoot extends EntityLoot implements LootPoolUtil
 	{
 		@Override
-		protected void addTables()
+		public void accept(BiConsumer<ResourceLocation, Builder> consumer)
 		{
-			// TODO entity loot
+			//@formatter:off
+			consumer.accept(DPLoot.Tower.ENTITY_ZOMBIE, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(EntityType.ZOMBIE.getDefaultLootTable())
+						)).when(LootItemRandomChanceCondition.randomChance(0.5F)))));
+			
+			consumer.accept(DPLoot.Tower.ENTITY_SKELETON, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(EntityType.SKELETON.getDefaultLootTable())
+						)).when(LootItemRandomChanceCondition.randomChance(0.5F)))));
+			
+			consumer.accept(DPLoot.Tower.ENTITY_SPIDER, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(EntityType.SPIDER.getDefaultLootTable())
+						)).when(LootItemRandomChanceCondition.randomChance(0.5F)))));
+			
+			consumer.accept(DPLoot.BiggerDungeon.ENTITY_ZOMBIE, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(EntityType.ZOMBIE.getDefaultLootTable())
+						)).when(LootItemRandomChanceCondition.randomChance(0.25F)))));
+			
+			consumer.accept(DPLoot.BiggerDungeon.ENTITY_SKELETON, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(EntityType.SKELETON.getDefaultLootTable())
+						)).when(LootItemRandomChanceCondition.randomChance(0.25F)))));
+			
+			consumer.accept(DPLoot.Leviathan.ENTITY_HUSK, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.SAND, 0, 2).setWeight(1).apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, 1)))
+						)),
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(EntityType.HUSK.getDefaultLootTable())
+						)))));
+			
+			consumer.accept(DPLoot.SnowyTemple.ENTITY_STRAY, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.ICE, 0, 2).setWeight(128).apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, 1))),
+							basicEntry(Items.PACKED_ICE, 0, 2).setWeight(1).apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, 1)))
+						)),
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(EntityType.STRAY.getDefaultLootTable())
+						)))));
+			
+			//@formatter:on
 		}
 
-		private LootPool.Builder lootingPool(ItemLike item, int min, int max, int minLooting, int maxLooting)
+		/*private LootPool.Builder lootingPool(ItemLike item, int min, int max, int minLooting, int maxLooting)
 		{
 			return basicPool(item, min, max).apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(minLooting, maxLooting)));
-		}
+		}*/
 
 		@Override
 		protected Iterable<EntityType<?>> getKnownEntities()
@@ -345,10 +580,15 @@ public class DPLootProv extends LootTableProvider
 		 */
 		default LootItemConditionalFunction.Builder<?> enchant(Enchantment... enchantments)
 		{
-			EnchantRandomlyFunction.Builder func = new EnchantRandomlyFunction.Builder();
+			EnchantRandomlyFunction.Builder builder = EnchantRandomlyFunction.randomEnchantment();
 			for (Enchantment enchantment : enchantments)
-				func.withEnchantment(enchantment);
-			return func;
+				builder.withEnchantment(enchantment);
+			return builder;
+		}
+
+		default LootItemConditionalFunction.Builder<?> map(StructureFeature<?> structure)
+		{
+			return ExplorationMapFunction.makeExplorationMap().setDestination(structure).setMapDecoration(MapDecoration.Type.RED_X).setZoom((byte) 1).setSkipKnownStructures(false);
 		}
 
 		/**

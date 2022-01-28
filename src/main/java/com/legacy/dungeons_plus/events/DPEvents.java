@@ -42,8 +42,8 @@ public class DPEvents
 	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 	public static class ForgeBus
 	{
-		private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> TOWER_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.Tower.ZOMBIE, EntityType.SPIDER, DPLoot.Tower.SPIDER, EntityType.SKELETON, DPLoot.Tower.SKELETON));
-		private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> BURIED_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.BiggerDungeon.ZOMBIE, EntityType.SKELETON, DPLoot.BiggerDungeon.SKELETON));
+		private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> TOWER_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.Tower.ENTITY_ZOMBIE, EntityType.SPIDER, DPLoot.Tower.ENTITY_SPIDER, EntityType.SKELETON, DPLoot.Tower.ENTITY_SKELETON));
+		private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> BURIED_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.BiggerDungeon.ENTITY_ZOMBIE, EntityType.SKELETON, DPLoot.BiggerDungeon.ENTITY_SKELETON));
 
 		@SubscribeEvent
 		protected static void onEntitySpawn(final EntityJoinWorldEvent event)
@@ -55,8 +55,8 @@ public class DPEvents
 
 				TOWER_ENTITY_LOOT.get().forEach((type, loot) -> ifInStructure(entity, type, DPStructures.TOWER, e -> EntityAccessHelper.setDeathLootTable((Mob) e, loot)));
 				BURIED_ENTITY_LOOT.get().forEach((type, loot) -> ifInStructure(entity, type, DPStructures.BIGGER_DUNGEON, e -> EntityAccessHelper.setDeathLootTable((Mob) e, loot)));
-				ifInStructure(entity, EntityType.HUSK, DPStructures.LEVIATHAN, e -> EntityAccessHelper.setDeathLootTable((Mob) e, DPLoot.Leviathan.HUSK));
-				ifInStructure(entity, EntityType.STRAY, DPStructures.SNOWY_TEMPLE, e -> EntityAccessHelper.setDeathLootTable((Mob) e, DPLoot.SnowyTemple.STRAY));
+				ifInStructure(entity, EntityType.HUSK, DPStructures.LEVIATHAN, e -> EntityAccessHelper.setDeathLootTable((Mob) e, DPLoot.Leviathan.ENTITY_HUSK));
+				ifInStructure(entity, EntityType.STRAY, DPStructures.SNOWY_TEMPLE, e -> EntityAccessHelper.setDeathLootTable((Mob) e, DPLoot.SnowyTemple.ENTITY_STRAY));
 				ifInStructure(entity, EntityType.ENDERMAN, DPStructures.END_RUINS, e -> ((EnderMan) e).targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>((EnderMan) e, Player.class, true, false)));
 				ifInStructure(entity, EntityType.GHAST, DPStructures.SOUL_PRISON, e -> ((Ghast) e).targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>((Ghast) e, Player.class, true, false)));
 			}

@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:adventure/root",
+  "parent": "dungeons_plus:adventure/find_bigger_dungeon",
   "display": {
     "icon": {
       "item": "minecraft:bone_block"
