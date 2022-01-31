@@ -126,7 +126,7 @@ public class DPLootProv extends LootTableProvider
 
 			consumer.accept(DPLoot.Tower.CHEST_VEX_MAP, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
-							basicEntry(Items.MAP).setWeight(1).apply(map(DPStructures.BIGGER_DUNGEON.getStructure()))
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPStructures.REANIMATED_RUINS.getStructure()))
 						)),
 					poolOf(ImmutableList.of(
 							LootTableReference.lootTableReference(DPLoot.Tower.CHEST_VEX)
@@ -138,7 +138,7 @@ public class DPLootProv extends LootTableProvider
 		private void biggerDungeon(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
 			//@formatter:off
-			consumer.accept(DPLoot.BiggerDungeon.CHEST_HUSK, tableOf(ImmutableList.of(
+			consumer.accept(DPLoot.ReanimatedRuins.CHEST_HUSK, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
 							basicEntry(Items.SAND, 1, 2).setWeight(1),
 							basicEntry(Items.BONE, 1, 2).setWeight(1),
@@ -162,15 +162,15 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.GOLD_NUGGET).setWeight(3)
 						)).setRolls(UniformGenerator.between(1, 3)))));
 			
-			consumer.accept(DPLoot.BiggerDungeon.CHEST_HUSK_MAP, tableOf(ImmutableList.of(
+			consumer.accept(DPLoot.ReanimatedRuins.CHEST_HUSK_MAP, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
 							basicEntry(Items.MAP).setWeight(1).apply(map(DPStructures.LEVIATHAN.getStructure()))
 						)),
 					poolOf(ImmutableList.of(
-							LootTableReference.lootTableReference(DPLoot.BiggerDungeon.CHEST_HUSK)
+							LootTableReference.lootTableReference(DPLoot.ReanimatedRuins.CHEST_HUSK)
 						)))));
 			
-			consumer.accept(DPLoot.BiggerDungeon.CHEST_STRAY, tableOf(ImmutableList.of(
+			consumer.accept(DPLoot.ReanimatedRuins.CHEST_STRAY, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
 							basicEntry(Items.ARROW, 1, 5).setWeight(3),
 							basicEntry(Items.BONE, 2, 5).setWeight(3),
@@ -194,12 +194,12 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.MUSIC_DISC_WAIT).setWeight(1)
 						)).setRolls(UniformGenerator.between(1, 3)))));
 			
-			consumer.accept(DPLoot.BiggerDungeon.CHEST_STRAY_MAP, tableOf(ImmutableList.of(
+			consumer.accept(DPLoot.ReanimatedRuins.CHEST_STRAY_MAP, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
 							basicEntry(Items.MAP).setWeight(1).apply(map(DPStructures.SNOWY_TEMPLE.getStructure()))
 						)),
 					poolOf(ImmutableList.of(
-							LootTableReference.lootTableReference(DPLoot.BiggerDungeon.CHEST_STRAY)
+							LootTableReference.lootTableReference(DPLoot.ReanimatedRuins.CHEST_STRAY)
 						)))));
 			
 			//@formatter:on
@@ -360,12 +360,12 @@ public class DPLootProv extends LootTableProvider
 							LootTableReference.lootTableReference(EntityType.SPIDER.getDefaultLootTable())
 						)).when(LootItemRandomChanceCondition.randomChance(0.5F)))));
 			
-			consumer.accept(DPLoot.BiggerDungeon.ENTITY_ZOMBIE, tableOf(ImmutableList.of(
+			consumer.accept(DPLoot.ReanimatedRuins.ENTITY_ZOMBIE, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
 							LootTableReference.lootTableReference(EntityType.ZOMBIE.getDefaultLootTable())
 						)).when(LootItemRandomChanceCondition.randomChance(0.25F)))));
 			
-			consumer.accept(DPLoot.BiggerDungeon.ENTITY_SKELETON, tableOf(ImmutableList.of(
+			consumer.accept(DPLoot.ReanimatedRuins.ENTITY_SKELETON, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
 							LootTableReference.lootTableReference(EntityType.SKELETON.getDefaultLootTable())
 						)).when(LootItemRandomChanceCondition.randomChance(0.25F)))));

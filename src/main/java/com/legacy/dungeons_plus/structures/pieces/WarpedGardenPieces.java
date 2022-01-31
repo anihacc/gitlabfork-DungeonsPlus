@@ -1,18 +1,15 @@
 package com.legacy.dungeons_plus.structures.pieces;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.data.DPLoot;
+import com.legacy.dungeons_plus.data.managers.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPStructures;
-import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
 import com.legacy.structure_gel.api.structure.GelTemplateStructurePiece;
 import com.legacy.structure_gel.api.structure.processor.RandomBlockSwapProcessor;
 import com.legacy.structure_gel.api.structure.processor.RemoveGelStructureProcessor;
@@ -20,10 +17,7 @@ import com.legacy.structure_gel.api.structure.processor.RemoveGelStructureProces
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.FloatTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.Drowned;
@@ -31,10 +25,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -52,7 +44,6 @@ public class WarpedGardenPieces
 {
 	private static final ResourceLocation[] FLOWERY = new ResourceLocation[] { locate("flower_0"), locate("flower_1"), locate("flower_2"), locate("flower_3") };
 	private static final ResourceLocation[] LOOT = new ResourceLocation[] { locate("portal"), locate("ship"), locate("nylium"), locate("volcano") };
-	private static final List<SpawnData> SPAWNER_SPAWNS = new ArrayList<>();
 
 	public static void assemble(StructureManager structureMananger, BlockPos pos, Rotation rotation, StructurePiecesBuilder pieces, Random rand)
 	{
@@ -127,40 +118,7 @@ public class WarpedGardenPieces
 			}
 			if (key.equals("spawner"))
 			{
-				if (SPAWNER_SPAWNS.isEmpty())
-				{
-					CompoundTag goldAxe = new ItemStack(Items.GOLDEN_AXE).save(new CompoundTag());
-					goldAxe.putInt("Damage", 10);
-
-					for (Block coral : BlockTags.CORAL_BLOCKS.getValues())
-					{
-						CompoundTag entityTag = new CompoundTag();
-
-						ListTag handItems = new ListTag();
-						handItems.add(goldAxe);
-						handItems.add(new ItemStack(coral).save(new CompoundTag()));
-						entityTag.put("HandItems", handItems);
-
-						ListTag handDropChances = new ListTag();
-						handDropChances.add(FloatTag.valueOf(0.085F)); // Main hand
-						handDropChances.add(FloatTag.valueOf(1.0F)); // Off hand
-						entityTag.put("HandDropChances", handDropChances);
-
-						SPAWNER_SPAWNS.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()));
-					}
-
-					CompoundTag entityTag = new CompoundTag();
-
-					ListTag handItems = new ListTag();
-					handItems.add(goldAxe);
-					entityTag.put("HandItems", handItems);
-
-					SPAWNER_SPAWNS.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()));
-				}
-
-				Collections.shuffle(SPAWNER_SPAWNS, rand);
-
-				DPUtil.placeSpawner(SPAWNER_SPAWNS, level, pos);
+				DPUtil.placeSpawner(level, pos, DPSpawners.WARPED_GARDEN_DROWNED);
 			}
 			if (key.equals("drowned"))
 			{

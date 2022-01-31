@@ -104,7 +104,7 @@ public class DPAdvancementProv implements DataProvider
 
 			this.setSection("adventure");
 			findTower = this.builder(Blocks.MOSSY_STONE_BRICKS, "find_tower", FrameType.TASK).parent(adventureRoot).addCriterion("enter_structure", this.inStructure(DPStructures.TOWER.getStructure())).save(con, this.locate("find_tower"));
-			findBiggerDungeon = this.builder(Blocks.MOSSY_COBBLESTONE, "find_bigger_dungeon", FrameType.TASK).parent(findTower).addCriterion("enter_structure", this.inStructure(DPStructures.BIGGER_DUNGEON.getStructure())).save(con, this.locate("find_bigger_dungeon"));
+			findBiggerDungeon = this.builder(Blocks.MOSSY_COBBLESTONE, "find_bigger_dungeon", FrameType.TASK).parent(findTower).addCriterion("enter_structure", this.inStructure(DPStructures.REANIMATED_RUINS.getStructure())).save(con, this.locate("find_bigger_dungeon"));
 			findLeviathan = this.builder(Blocks.BONE_BLOCK, "find_leviathan", FrameType.GOAL).parent(findBiggerDungeon).addCriterion("enter_structure", this.inStructure(DPStructures.LEVIATHAN.getStructure())).save(con, this.locate("find_leviathan"));
 			findSnowyTemple = this.builder(Blocks.PACKED_ICE, "find_snowy_temple", FrameType.GOAL).parent(findBiggerDungeon).addCriterion("enter_structure", this.inStructure(DPStructures.SNOWY_TEMPLE.getStructure())).save(con, this.locate("find_snowy_temple"));
 			findWarpedGarden = this.builder(Blocks.WARPED_FUNGUS, "find_warped_garden", FrameType.TASK).parent(findTower).addCriterion("enter_structure", this.inStructure(DPStructures.WARPED_GARDEN.getStructure())).save(con, this.locate("find_warped_garden"));

@@ -1,13 +1,11 @@
 package com.legacy.dungeons_plus.structures;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.data.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
-import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
 import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
@@ -16,7 +14,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.InclusiveRange;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
@@ -24,7 +21,6 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.feature.StructurePieceType;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
@@ -64,7 +60,7 @@ public class TowerStructure extends GelConfigJigsawStructure
 		@Override
 		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
 		{
-			if (key.contains("chest"))
+			if (key.startsWith("chest"))
 			{
 				String[] data = key.split("-");
 				ResourceLocation lootTable = DPLoot.CHESTS_SIMPLE_DUNGEON;
@@ -82,13 +78,10 @@ public class TowerStructure extends GelConfigJigsawStructure
 				}
 				DPUtil.createChest(this::createChest, level, bounds, rand, pos, lootTable, this.rotation, data);
 			}
-			if (key.contains("spawner"))
+			if (key.startsWith("spawner"))
 			{
 				String[] data = key.split("-");
-				
-				EntityType<?> entity = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(data[1]));
-				SpawnData spawnData = SpawnerAccessHelper.createSpawnerEntity(entity, new CompoundTag(), Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 8), new InclusiveRange<>(0, 14))));
-				DPUtil.placeSpawner(spawnData, level, pos);
+				DPUtil.placeSpawner(level, pos, data[1]);
 			}
 			/**
 			 * Creating entities is a little simpler with the createEntity method. Doing
@@ -99,7 +92,7 @@ public class TowerStructure extends GelConfigJigsawStructure
 			 * the rotation of the structure to offset them. Do Rotation.add to the rotation
 			 * value passed in to rotate it according to how yours needs to be facing.
 			 */
-			if (key.equals("armor_stand"))
+			if (key.startsWith("armor_stand"))
 			{
 				this.setAir(level, pos);
 
@@ -112,7 +105,7 @@ public class TowerStructure extends GelConfigJigsawStructure
 
 				level.addFreshEntity(entity);
 			}
-			if (key.contains("waystone"))
+			if (key.startsWith("waystone"))
 			{
 				DPUtil.placeWaystone(level, pos, rand, ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key.split("-")[1])));
 			}

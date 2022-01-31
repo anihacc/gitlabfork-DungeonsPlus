@@ -20,15 +20,15 @@ public class DPLoot
 		public static final ResourceLocation ENTITY_ZOMBIE = entity("tower/zombie");
 	}
 
-	public static final class BiggerDungeon
+	public static final class ReanimatedRuins
 	{
-		public static final ResourceLocation CHEST_HUSK = chest("bigger_dungeon/husk");
-		public static final ResourceLocation CHEST_HUSK_MAP = chest("bigger_dungeon/husk_map");
-		public static final ResourceLocation CHEST_STRAY = chest("bigger_dungeon/stray");
-		public static final ResourceLocation CHEST_STRAY_MAP = chest("bigger_dungeon/stray_map");
+		public static final ResourceLocation CHEST_HUSK = chest("reanimated_ruins/husk");
+		public static final ResourceLocation CHEST_HUSK_MAP = chest("reanimated_ruins/husk_map");
+		public static final ResourceLocation CHEST_STRAY = chest("reanimated_ruins/stray");
+		public static final ResourceLocation CHEST_STRAY_MAP = chest("reanimated_ruins/stray_map");
 
-		public static final ResourceLocation ENTITY_SKELETON = entity("bigger_dungeon/skeleton");
-		public static final ResourceLocation ENTITY_ZOMBIE = entity("bigger_dungeon/zombie");
+		public static final ResourceLocation ENTITY_SKELETON = entity("reanimated_ruins/skeleton");
+		public static final ResourceLocation ENTITY_ZOMBIE = entity("reanimated_ruins/zombie");
 	}
 
 	public static final class Leviathan

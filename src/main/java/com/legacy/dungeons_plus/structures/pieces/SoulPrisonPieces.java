@@ -8,8 +8,8 @@ import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.data.DPLoot;
+import com.legacy.dungeons_plus.data.managers.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPStructures;
-import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
 import com.legacy.structure_gel.api.structure.GelTemplateStructurePiece;
 import com.legacy.structure_gel.api.structure.processor.RandomBlockSwapProcessor;
 import com.legacy.structure_gel.api.structure.processor.RandomStateSwapProcessor;
@@ -32,7 +32,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
@@ -146,14 +145,7 @@ public class SoulPrisonPieces
 			}
 			else if (key.equals("spawner"))
 			{
-				DPUtil.placeSpawner(EntityType.GHAST, level, pos);
-				if (level.getBlockEntity(pos)instanceof SpawnerBlockEntity spawner)
-				{
-					SpawnerAccessHelper.setRequiredPlayerRange(spawner, serverLevel, pos, 32);
-					SpawnerAccessHelper.setMaxNearbyEntities(spawner, serverLevel, pos, 10);
-					SpawnerAccessHelper.setSpawnCount(spawner, serverLevel, pos, 5);
-					SpawnerAccessHelper.setSpawnRange(spawner, serverLevel, pos, 16);
-				}
+				DPUtil.placeSpawner(level, pos, DPSpawners.SOUL_PRISON_GHAST);
 			}
 			else if (key.contains("chest"))
 			{

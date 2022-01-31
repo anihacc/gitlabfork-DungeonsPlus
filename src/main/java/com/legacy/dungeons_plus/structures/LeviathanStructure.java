@@ -1,13 +1,12 @@
 package com.legacy.dungeons_plus.structures;
 
-import java.util.Optional;
 import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.data.DPLoot;
+import com.legacy.dungeons_plus.data.managers.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPStructures;
-import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
 import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
@@ -15,11 +14,9 @@ import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.InclusiveRange;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.feature.StructurePieceType;
@@ -65,8 +62,7 @@ public class LeviathanStructure extends GelConfigJigsawStructure
 			}
 			if (key.equals("spawner"))
 			{
-				SpawnData spawnData = SpawnerAccessHelper.createSpawnerEntity(EntityType.HUSK, new CompoundTag(), Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 8), new InclusiveRange<>(0, 14))));
-				DPUtil.placeSpawner(spawnData, level, pos);
+				DPUtil.placeSpawner(level, pos, DPSpawners.LEVIATHAN_HUSK);
 			}
 		}
 	}

@@ -1,26 +1,23 @@
 package com.legacy.dungeons_plus;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
+import com.legacy.dungeons_plus.block_entities.DynamicSpawnerBlockEntity;
+import com.legacy.dungeons_plus.data.managers.DPSpawners;
+import com.legacy.dungeons_plus.registry.DPBlocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -52,34 +49,24 @@ public class DPUtil
 		 */
 		chestCreator.createChest(level, bounds, rand, pos, lootTable, chest);
 		/*
-		 * Only happens if lootr is loaded. This already happens once, so it's redund
+		 * Only happens if lootr is loaded. This already happens once, so it's redundant
 		 */
 		if (DungeonsPlus.isLootrLoaded)
 			RandomizableContainerBlockEntity.setLootTable(level, rand, pos, lootTable);
 	}
 
-	public static void placeSpawner(String entity, ServerLevelAccessor level, BlockPos pos)
+	public static void placeSpawner(ServerLevelAccessor level, BlockPos pos, String spawnerTypeName)
 	{
-		placeSpawner(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(entity)), level, pos);
+		placeSpawner(level, pos, DPSpawners.SpawnerType.get(new ResourceLocation(spawnerTypeName)));
 	}
-
-	public static void placeSpawner(EntityType<?> entity, ServerLevelAccessor level, BlockPos pos)
-	{
-		placeSpawner(SpawnerAccessHelper.createSpawnerEntity(entity), level, pos);
-	}
-
-	public static void placeSpawner(SpawnData spawnerEntity, ServerLevelAccessor level, BlockPos pos)
-	{
-		placeSpawner(Arrays.asList(spawnerEntity), level, pos);
-	}
-
-	public static void placeSpawner(List<SpawnData> spawnerEntities, ServerLevelAccessor level, BlockPos pos)
+	
+	public static void placeSpawner(ServerLevelAccessor level, BlockPos pos, DPSpawners.SpawnerType spawnerType)
 	{
 		level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-		level.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), 3);
-		if (level.getBlockEntity(pos)instanceof SpawnerBlockEntity spawner)
+		level.setBlock(pos, DPBlocks.DYNAMIC_SPAWNER.defaultBlockState(), 3);
+		if (level.getBlockEntity(pos)instanceof DynamicSpawnerBlockEntity dynSpawner)
 		{
-			SpawnerAccessHelper.setSpawnPotentials(spawner, level.getLevel(), pos, spawnerEntities.toArray(SpawnData[]::new));
+			dynSpawner.setSpawner(spawnerType);
 		}
 	}
 

@@ -43,7 +43,7 @@ public class DPEvents
 	public static class ForgeBus
 	{
 		private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> TOWER_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.Tower.ENTITY_ZOMBIE, EntityType.SPIDER, DPLoot.Tower.ENTITY_SPIDER, EntityType.SKELETON, DPLoot.Tower.ENTITY_SKELETON));
-		private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> BURIED_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.BiggerDungeon.ENTITY_ZOMBIE, EntityType.SKELETON, DPLoot.BiggerDungeon.ENTITY_SKELETON));
+		private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> BURIED_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.ReanimatedRuins.ENTITY_ZOMBIE, EntityType.SKELETON, DPLoot.ReanimatedRuins.ENTITY_SKELETON));
 
 		@SubscribeEvent
 		protected static void onEntitySpawn(final EntityJoinWorldEvent event)
@@ -54,7 +54,7 @@ public class DPEvents
 				Entity entity = event.getEntity();
 
 				TOWER_ENTITY_LOOT.get().forEach((type, loot) -> ifInStructure(entity, type, DPStructures.TOWER, e -> EntityAccessHelper.setDeathLootTable((Mob) e, loot)));
-				BURIED_ENTITY_LOOT.get().forEach((type, loot) -> ifInStructure(entity, type, DPStructures.BIGGER_DUNGEON, e -> EntityAccessHelper.setDeathLootTable((Mob) e, loot)));
+				BURIED_ENTITY_LOOT.get().forEach((type, loot) -> ifInStructure(entity, type, DPStructures.REANIMATED_RUINS, e -> EntityAccessHelper.setDeathLootTable((Mob) e, loot)));
 				ifInStructure(entity, EntityType.HUSK, DPStructures.LEVIATHAN, e -> EntityAccessHelper.setDeathLootTable((Mob) e, DPLoot.Leviathan.ENTITY_HUSK));
 				ifInStructure(entity, EntityType.STRAY, DPStructures.SNOWY_TEMPLE, e -> EntityAccessHelper.setDeathLootTable((Mob) e, DPLoot.SnowyTemple.ENTITY_STRAY));
 				ifInStructure(entity, EntityType.ENDERMAN, DPStructures.END_RUINS, e -> ((EnderMan) e).targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>((EnderMan) e, Player.class, true, false)));
@@ -72,7 +72,7 @@ public class DPEvents
 		protected static void addStructureToBiome(final AddStructureToBiomeEvent event)
 		{
 			event.register(DPStructures.TOWER);
-			event.register(DPStructures.BIGGER_DUNGEON);
+			event.register(DPStructures.REANIMATED_RUINS);
 			event.register(DPStructures.LEVIATHAN);
 			event.register(DPStructures.SNOWY_TEMPLE);
 			event.register(DPStructures.WARPED_GARDEN);
