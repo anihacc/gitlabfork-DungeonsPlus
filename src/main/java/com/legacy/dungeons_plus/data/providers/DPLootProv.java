@@ -10,8 +10,10 @@ import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.data.DPLoot;
+import com.legacy.dungeons_plus.loot.NamedLootItem;
+import com.legacy.dungeons_plus.loot.OptionalLootEntry;
 import com.legacy.dungeons_plus.registry.DPBlocks;
+import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.mojang.datafixers.util.Pair;
 
@@ -90,7 +92,7 @@ public class DPLootProv extends LootTableProvider
 		public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
 			this.tower(consumer);
-			this.biggerDungeon(consumer);
+			this.reanimatedRuins(consumer);
 			this.leviathan(consumer);
 			this.snowyTemple(consumer);
 			this.warpedGarden(consumer);
@@ -102,6 +104,36 @@ public class DPLootProv extends LootTableProvider
 		private void tower(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
 			//@formatter:off
+			consumer.accept(DPLoot.Tower.CHEST_COMMON, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.BONE, 1, 2).setWeight(10),
+							basicEntry(Items.RABBIT_HIDE, 1, 2).setWeight(10),
+							basicEntry(Items.ROTTEN_FLESH, 1, 5).setWeight(10),
+							basicEntry(Items.GOLD_NUGGET).setWeight(10),
+							basicEntry(Items.SAND, 1, 2).setWeight(10),
+							basicEntry(Items.DEAD_BUSH).setWeight(1)
+						)).setRolls(UniformGenerator.between(4, 7)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.QUARTZ, 1, 5).setWeight(1),
+							basicEntry(Items.LAPIS_LAZULI, 1, 5).setWeight(2),
+							basicEntry(Items.GOLD_INGOT, 2, 4).setWeight(5),
+							basicEntry(Items.EMERALD, 1, 3).setWeight(5),
+							basicEntry(Items.GOLDEN_SHOVEL).setWeight(3).apply(enchant())
+						)).setRolls(UniformGenerator.between(3, 4)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.GOLDEN_APPLE).setWeight(1),
+							basicEntry(Items.EXPERIENCE_BOTTLE, 1, 2).setWeight(3),
+							basicEntry(Items.GOLDEN_HORSE_ARMOR).setWeight(1),
+							basicEntry(Items.NAME_TAG).setWeight(1),
+							basicEntry(Items.BOOK).setWeight(3).apply(enchant())
+						)).setRolls(UniformGenerator.between(2, 3)))));
+			
+			consumer.accept(DPLoot.Tower.CHEST_BARREL, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.BLACK_DYE).setWeight(1),
+							OptionalLootEntry.of(NamedLootItem.lootTableItem("test_mod", "test_item"), basicEntry(Items.BLUE_DYE))
+						)).setRolls(UniformGenerator.between(10, 10)))));
+			
 			consumer.accept(DPLoot.Tower.CHEST_VEX, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
 							basicEntry(Items.FEATHER, 1, 2).setWeight(1),
@@ -134,8 +166,8 @@ public class DPLootProv extends LootTableProvider
 			//@formatter:on
 		}
 
-		// TODO bigger dungeon replacement
-		private void biggerDungeon(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
+		// TODO
+		private void reanimatedRuins(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
 			//@formatter:off
 			consumer.accept(DPLoot.ReanimatedRuins.CHEST_HUSK, tableOf(ImmutableList.of(

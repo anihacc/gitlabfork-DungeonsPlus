@@ -1,10 +1,9 @@
-package com.legacy.dungeons_plus.items;
+package com.legacy.dungeons_plus.registry;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.registry.DPBlocks;
 
 import net.minecraft.world.item.Item;
 import net.minecraftforge.event.RegistryEvent;

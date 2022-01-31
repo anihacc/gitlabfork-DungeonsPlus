@@ -1,19 +1,35 @@
-package com.legacy.dungeons_plus.data;
+package com.legacy.dungeons_plus.registry;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.loot.NamedLootItem;
+import com.legacy.dungeons_plus.loot.OptionalLootEntry;
 
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.Serializer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 
 public class DPLoot
 {
-	// We need this because some mods break vanilla dungeon loot. It's literally a
-	// copy of the vanilla one :/
-	public static final ResourceLocation CHESTS_SIMPLE_DUNGEON = chest("vanilla_dungeon");
+	public static final LootPoolEntryType NAMED_ITEM = registerEntry("named_item", new NamedLootItem.Serializer());
+	public static final LootPoolEntryType OPTIONAL_ENTRY = registerEntry("optional_entry", new OptionalLootEntry.Serializer());
+
+	public static void init()
+	{
+	}
+
+	private static LootPoolEntryType registerEntry(String name, Serializer<? extends LootPoolEntryContainer> serializer)
+	{
+		return Registry.register(Registry.LOOT_POOL_ENTRY_TYPE, DungeonsPlus.locate(name), new LootPoolEntryType(serializer));
+	}
 
 	public static final class Tower
 	{
 		public static final ResourceLocation CHEST_VEX = chest("tower/vex");
 		public static final ResourceLocation CHEST_VEX_MAP = chest("tower/vex_map");
+		public static final ResourceLocation CHEST_COMMON = chest("tower/common");
+		public static final ResourceLocation CHEST_BARREL = chest("tower/barrel");
 
 		public static final ResourceLocation ENTITY_SKELETON = entity("tower/skeleton");
 		public static final ResourceLocation ENTITY_SPIDER = entity("tower/spider");

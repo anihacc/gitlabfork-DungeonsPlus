@@ -20,7 +20,7 @@
       "trigger": "minecraft:location",
       "conditions": {
         "location": {
-          "feature": "dungeons_plus:bigger_dungeon"
+          "feature": "dungeons_plus:reanimated_ruins"
         }
       }
     }

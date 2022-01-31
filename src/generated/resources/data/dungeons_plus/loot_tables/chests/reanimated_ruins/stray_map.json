@@ -26,7 +26,7 @@
       "entries": [
         {
           "type": "minecraft:loot_table",
-          "name": "dungeons_plus:chests/bigger_dungeon/stray"
+          "name": "dungeons_plus:chests/reanimated_ruins/stray"
         }
       ]
     }

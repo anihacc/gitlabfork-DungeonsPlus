@@ -3,7 +3,7 @@ package com.legacy.dungeons_plus.structures;
 import java.util.Random;
 
 import com.legacy.dungeons_plus.DPUtil;
-import com.legacy.dungeons_plus.data.DPLoot;
+import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
@@ -60,7 +60,8 @@ public class ReanimatedRuinsStructure extends GelConfigJigsawStructure
 				 */
 				if (rand.nextFloat() < 0.70F || data[0].contains("map"))
 				{
-					ResourceLocation lootTable = DPLoot.CHESTS_SIMPLE_DUNGEON;
+					// TODO basic chest
+					ResourceLocation lootTable = DPLoot.ReanimatedRuins.CHEST_HUSK;
 					if (data[0].contains(":"))
 					{
 						switch (data[0].split(":")[1])

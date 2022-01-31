@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.legacy.dungeons_plus.DPUtil;
-import com.legacy.dungeons_plus.data.DPLoot;
+import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
@@ -63,7 +63,7 @@ public class TowerStructure extends GelConfigJigsawStructure
 			if (key.startsWith("chest"))
 			{
 				String[] data = key.split("-");
-				ResourceLocation lootTable = DPLoot.CHESTS_SIMPLE_DUNGEON;
+				ResourceLocation lootTable = DPLoot.Tower.CHEST_COMMON;
 				if (data[0].contains(":"))
 				{
 					switch (data[0].split(":")[1])

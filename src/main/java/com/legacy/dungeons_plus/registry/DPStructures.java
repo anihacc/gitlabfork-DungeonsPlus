@@ -19,10 +19,12 @@ import com.legacy.dungeons_plus.structures.pools.TowerPools;
 import com.legacy.structure_gel.api.registry.registrar.GelStructureRegistrar;
 import com.legacy.structure_gel.api.structure.StructureAccessHelper;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.GenerationStep.Decoration;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -38,7 +40,7 @@ public class DPStructures
 	public static final GelStructureRegistrar<JigsawConfiguration, EndRuinsStructure> END_RUINS = GelStructureRegistrar.of(DungeonsPlus.locate("end_ruins"), new EndRuinsStructure(JigsawConfiguration.CODEC, DPConfig.COMMON.endRuins), EndRuinsStructure.Piece::new, new JigsawConfiguration(() -> EndRuinsPools.ROOT, 7), Decoration.SURFACE_STRUCTURES);
 	public static final GelStructureRegistrar<NoneFeatureConfiguration, WarpedGardenStructure> WARPED_GARDEN = GelStructureRegistrar.of(DungeonsPlus.locate("warped_garden"), new WarpedGardenStructure(NoneFeatureConfiguration.CODEC, DPConfig.COMMON.warpedGarden), WarpedGardenPieces.Piece::new, NoneFeatureConfiguration.NONE, Decoration.SURFACE_STRUCTURES);
 	public static final GelStructureRegistrar<NoneFeatureConfiguration, SoulPrisonStructure> SOUL_PRISON = GelStructureRegistrar.of(DungeonsPlus.locate("soul_prison"), new SoulPrisonStructure(NoneFeatureConfiguration.CODEC, DPConfig.COMMON.soulPrison), SoulPrisonPieces.Piece::new, NoneFeatureConfiguration.NONE, Decoration.SURFACE_STRUCTURES);
-	
+
 	@SubscribeEvent
 	protected static void onRegistry(final RegistryEvent.Register<StructureFeature<?>> event)
 	{
@@ -58,5 +60,31 @@ public class DPStructures
 		LeviathanPools.init();
 		SnowyTemplePools.init();
 		EndRuinsPools.init();
+
+		// TODO use structure gel 2.2.0
+		DummyStructure.createDummy(DungeonsPlus.MODID, "bigger_dungeon");
+	}
+
+	private static final class DummyStructure extends StructureFeature<NoneFeatureConfiguration>
+	{
+		private DummyStructure()
+		{
+			super(NoneFeatureConfiguration.CODEC, PieceGeneratorSupplier.simple(context -> false, (builder, context) ->
+			{
+			}));
+		}
+
+		public static void createDummy(String modID, String name)
+		{
+			String strName = new ResourceLocation(modID, name).toString();
+			if (!StructureFeature.STRUCTURES_REGISTRY.containsKey(strName))
+				StructureFeature.STRUCTURES_REGISTRY.put(strName, new DummyStructure());
+		}
+
+		@Override
+		public Decoration step()
+		{
+			return Decoration.SURFACE_STRUCTURES;
+		}
 	}
 }

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 10.0,
+        "max": 10.0
+      },
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:black_dye"
+        },
+        {
+          "type": "dungeons_plus:optional_entry",
+          "optional_entry": {
+            "type": "dungeons_plus:named_item",
+            "name": "test_mod:test_item"
+          },
+          "default_entry": {
+            "type": "minecraft:item",
+            "name": "minecraft:blue_dye"
+          }
+        }
+      ]
+    }
+  ]
+}

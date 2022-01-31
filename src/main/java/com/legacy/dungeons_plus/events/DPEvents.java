@@ -5,12 +5,12 @@ import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableMap;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.data.DPLoot;
 import com.legacy.dungeons_plus.data.managers.DPSpawners;
 import com.legacy.dungeons_plus.data.providers.DPAdvancementProv;
 import com.legacy.dungeons_plus.data.providers.DPLangProvider;
 import com.legacy.dungeons_plus.data.providers.DPLootProv;
 import com.legacy.dungeons_plus.data.providers.DPTagProv;
+import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.entity.EntityAccessHelper;
 import com.legacy.structure_gel.api.events.AddStructureToBiomeEvent;
@@ -92,6 +92,8 @@ public class DPEvents
 			DungeonsPlus.isLootrLoaded = modList.isLoaded("lootr");
 			DungeonsPlus.isWaystonesLoaded = modList.isLoaded("waystones");
 			DungeonsPlus.isQuarkLoaded = modList.isLoaded("quark");
+			
+			DPLoot.init();
 			
 			DPSpawners.init();
 		}

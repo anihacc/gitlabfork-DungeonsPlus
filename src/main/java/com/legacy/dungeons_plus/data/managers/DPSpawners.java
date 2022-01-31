@@ -8,8 +8,8 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.data.DPLoot;
 import com.legacy.dungeons_plus.registry.DPBlocks;
+import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.structure_gel.api.block_entity.SpawnerAccessHelper;
 
 import net.minecraft.core.BlockPos;
