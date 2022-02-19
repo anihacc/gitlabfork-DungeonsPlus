@@ -25,6 +25,6 @@ license="https://www.gnu.org/licenses/gpl-3.0.en.html"
 [[dependencies.dungeons_plus]]
     modId="structure_gel"
     mandatory=true
-    versionRange="[2.1.2,]"
+    #versionRange="[2.2.0,]"
     ordering="NONE"
     side="BOTH"

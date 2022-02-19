@@ -74,15 +74,14 @@ public class OptionalLootEntry extends LootPoolSingletonContainer
 		@Override
 		protected OptionalLootEntry deserialize(JsonObject json, JsonDeserializationContext context, int weight, int quality, LootItemCondition[] conditions, LootItemFunction[] functions)
 		{
-			LootPoolEntryContainer optionalEntry = null;
+			LootPoolEntryContainer optionalEntry;
 			try
 			{
 				optionalEntry = GsonHelper.getAsObject(json, "optional_entry", context, LootPoolEntryContainer.class);
 			}
 			catch (Exception e)
 			{
-				System.out.println("FAILED TO READ OPTIONAL ENTRY, DEFAULTING");
-				// Silently fail on the optional one
+				optionalEntry = null;
 			}
 			LootPoolEntryContainer defaultEntry = GsonHelper.getAsObject(json, "default_entry", context, LootPoolEntryContainer.class);
 

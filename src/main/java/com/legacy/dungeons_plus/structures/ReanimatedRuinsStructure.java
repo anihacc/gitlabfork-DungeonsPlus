@@ -60,27 +60,19 @@ public class ReanimatedRuinsStructure extends GelConfigJigsawStructure
 				 */
 				if (rand.nextFloat() < 0.70F || data[0].contains("map"))
 				{
-					// TODO basic chest
-					ResourceLocation lootTable = DPLoot.ReanimatedRuins.CHEST_HUSK;
+					ResourceLocation lootTable = DPLoot.ReanimatedRuins.CHEST_COMMON;
 					if (data[0].contains(":"))
 					{
-						switch (data[0].split(":")[1])
+						lootTable = switch (data[0].split(":")[1])
 						{
-						case "huskmap":
-							lootTable = DPLoot.ReanimatedRuins.CHEST_HUSK_MAP;
-							break;
-						case "husk":
-							lootTable = DPLoot.ReanimatedRuins.CHEST_HUSK;
-							break;
-						case "straymap":
-							lootTable = DPLoot.ReanimatedRuins.CHEST_STRAY_MAP;
-							break;
-						case "stray":
-							lootTable = DPLoot.ReanimatedRuins.CHEST_STRAY;
-							break;
-						}
+						case "huskmap" -> DPLoot.ReanimatedRuins.CHEST_HUSK_MAP;
+						case "husk" -> DPLoot.ReanimatedRuins.CHEST_HUSK;
+						case "straymap" -> DPLoot.ReanimatedRuins.CHEST_STRAY_MAP;
+						case "stray" -> DPLoot.ReanimatedRuins.CHEST_STRAY;
+						default -> lootTable;
+						};
 					}
-					DPUtil.createChest(this::createChest, level, bounds, rand, pos, lootTable, this.rotation, data);
+					//DPUtil.createChest(this::createChest, level, bounds, rand, pos, lootTable, this.rotation, data);
 				}
 			}
 			if (key.contains("spawner"))

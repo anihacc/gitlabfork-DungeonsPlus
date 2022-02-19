@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.legacy.dungeons_plus.DPUtil;
-import com.legacy.dungeons_plus.data.managers.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPLoot;
+import com.legacy.dungeons_plus.registry.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
@@ -58,11 +58,11 @@ public class SnowyTempleStructure extends GelConfigJigsawStructure
 			if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.SnowyTemple.CHEST_COMMON, this.rotation, data);
+				//DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.SnowyTemple.CHEST_COMMON, this.rotation, data);
 			}
 			if (key.contains("spawner"))
 			{
-				DPUtil.placeSpawner(level, pos, DPSpawners.SNOWY_TEMPLE_STRAY);
+				//DPUtil.placeSpawner(level, pos, DPSpawners.SNOWY_TEMPLE_STRAY);
 			}
 		}
 	}

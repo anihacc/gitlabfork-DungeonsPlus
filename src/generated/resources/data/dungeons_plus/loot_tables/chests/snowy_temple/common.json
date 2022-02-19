@@ -250,9 +250,9 @@
             {
               "function": "minecraft:enchant_randomly",
               "enchantments": [
-                "minecraft:frost_walker",
                 "minecraft:vanishing_curse",
-                "minecraft:unbreaking"
+                "minecraft:unbreaking",
+                "minecraft:frost_walker"
               ]
             }
           ],

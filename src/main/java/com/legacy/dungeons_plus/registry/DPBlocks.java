@@ -5,15 +5,11 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.blocks.DynamicSpawnerBlock;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,7 +21,7 @@ public class DPBlocks
 	private static List<Block> objs = new ArrayList<>();
 	public static List<BlockItem> blockItems = new ArrayList<>();
 	
-	public static final DynamicSpawnerBlock DYNAMIC_SPAWNER = register("dynamic_spawner", new DynamicSpawnerBlock(BlockBehaviour.Properties.copy(Blocks.SPAWNER)), new Item.Properties().rarity(Rarity.EPIC));
+	//public static final DynamicSpawnerBlock DYNAMIC_SPAWNER = register("dynamic_spawner", new DynamicSpawnerBlock(BlockBehaviour.Properties.copy(Blocks.SPAWNER)), new Item.Properties().rarity(Rarity.EPIC));
 	
 	@SubscribeEvent
 	protected static void onRegistry(final RegistryEvent.Register<Block> event)

@@ -1,7 +1,6 @@
 package com.legacy.dungeons_plus.data.providers;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.registry.DPBlocks;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -32,10 +31,8 @@ public class DPTagProv
 
 		public void vanilla()
 		{
-			this.tag(BlockTags.FEATURES_CANNOT_REPLACE).add(DPBlocks.DYNAMIC_SPAWNER);
-			this.tag(BlockTags.LAVA_POOL_STONE_CANNOT_REPLACE).add(DPBlocks.DYNAMIC_SPAWNER);
 
-			this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(DPBlocks.DYNAMIC_SPAWNER);
+			this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add();
 		}
 
 		@Override

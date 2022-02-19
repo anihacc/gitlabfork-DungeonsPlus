@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.data.managers.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPLoot;
+import com.legacy.dungeons_plus.registry.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.structure.GelTemplateStructurePiece;
 import com.legacy.structure_gel.api.structure.processor.RandomBlockSwapProcessor;
@@ -145,12 +145,12 @@ public class SoulPrisonPieces
 			}
 			else if (key.equals("spawner"))
 			{
-				DPUtil.placeSpawner(level, pos, DPSpawners.SOUL_PRISON_GHAST);
+				//DPUtil.placeSpawner(level, pos, DPSpawners.SOUL_PRISON_GHAST);
 			}
 			else if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.SoulPrison.CHEST_COMMON, this.rotation, data);
+				//DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.SoulPrison.CHEST_COMMON, this.rotation, data);
 			}
 		}
 	}

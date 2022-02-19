@@ -7,8 +7,8 @@ import java.util.Random;
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.data.managers.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPLoot;
+import com.legacy.dungeons_plus.registry.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.structure.GelTemplateStructurePiece;
 import com.legacy.structure_gel.api.structure.processor.RandomBlockSwapProcessor;
@@ -114,11 +114,11 @@ public class WarpedGardenPieces
 			if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.WarpedGarden.CHEST_COMMON, this.rotation, data);
+				//DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.WarpedGarden.CHEST_COMMON, this.rotation, data);
 			}
 			if (key.equals("spawner"))
 			{
-				DPUtil.placeSpawner(level, pos, DPSpawners.WARPED_GARDEN_DROWNED);
+				//DPUtil.placeSpawner(level, pos, DPSpawners.WARPED_GARDEN_DROWNED);
 			}
 			if (key.equals("drowned"))
 			{

@@ -4,8 +4,8 @@ import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPUtil;
-import com.legacy.dungeons_plus.data.managers.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPLoot;
+import com.legacy.dungeons_plus.registry.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
@@ -58,11 +58,11 @@ public class LeviathanStructure extends GelConfigJigsawStructure
 			if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.Leviathan.CHEST_COMMON, this.rotation, data);
+				//DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.Leviathan.CHEST_COMMON, this.rotation, data);
 			}
 			if (key.equals("spawner"))
 			{
-				DPUtil.placeSpawner(level, pos, DPSpawners.LEVIATHAN_HUSK);
+				//DPUtil.placeSpawner(level, pos, DPSpawners.LEVIATHAN_HUSK);
 			}
 		}
 	}

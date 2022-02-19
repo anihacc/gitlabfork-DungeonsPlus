@@ -12,6 +12,7 @@ import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -21,7 +22,9 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.levelgen.feature.StructurePieceType;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.feature.structures.StructurePoolElement;
@@ -63,25 +66,23 @@ public class TowerStructure extends GelConfigJigsawStructure
 			if (key.startsWith("chest"))
 			{
 				String[] data = key.split("-");
-				ResourceLocation lootTable = DPLoot.Tower.CHEST_COMMON;
-				if (data[0].contains(":"))
+				ResourceLocation lootTable = switch (data[1])
 				{
-					switch (data[0].split(":")[1])
-					{
-					case "vex":
-						lootTable = DPLoot.Tower.CHEST_VEX_MAP;
-						break;
-					case "map":
-						lootTable = DPLoot.Tower.CHEST_VEX;
-						break;
-					}
-				}
-				DPUtil.createChest(this::createChest, level, bounds, rand, pos, lootTable, this.rotation, data);
+				case "vex" -> DPLoot.Tower.CHEST_VEX;
+				case "vex_map" -> DPLoot.Tower.CHEST_VEX_MAP;
+				default -> DPLoot.Tower.CHEST_COMMON;
+				};
+
+				//DPUtil.setLoot(level, rand, pos, pos.below(), lootTable);
+			}
+			if (key.startsWith("barrel"))
+			{
+				//DPUtil.setLoot(level, rand, pos, pos.below(), DPLoot.Tower.CHEST_BARREL);
 			}
 			if (key.startsWith("spawner"))
 			{
 				String[] data = key.split("-");
-				DPUtil.placeSpawner(level, pos, data[1]);
+				//DPUtil.placeSpawner(level, pos, data[1]);
 			}
 			/**
 			 * Creating entities is a little simpler with the createEntity method. Doing

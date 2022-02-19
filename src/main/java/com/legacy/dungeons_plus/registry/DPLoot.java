@@ -26,10 +26,10 @@ public class DPLoot
 
 	public static final class Tower
 	{
-		public static final ResourceLocation CHEST_VEX = chest("tower/vex");
-		public static final ResourceLocation CHEST_VEX_MAP = chest("tower/vex_map");
 		public static final ResourceLocation CHEST_COMMON = chest("tower/common");
 		public static final ResourceLocation CHEST_BARREL = chest("tower/barrel");
+		public static final ResourceLocation CHEST_VEX = chest("tower/vex");
+		public static final ResourceLocation CHEST_VEX_MAP = chest("tower/vex_map");
 
 		public static final ResourceLocation ENTITY_SKELETON = entity("tower/skeleton");
 		public static final ResourceLocation ENTITY_SPIDER = entity("tower/spider");
@@ -38,6 +38,7 @@ public class DPLoot
 
 	public static final class ReanimatedRuins
 	{
+		public static final ResourceLocation CHEST_COMMON = chest("reanimated_ruins/common");
 		public static final ResourceLocation CHEST_HUSK = chest("reanimated_ruins/husk");
 		public static final ResourceLocation CHEST_HUSK_MAP = chest("reanimated_ruins/husk_map");
 		public static final ResourceLocation CHEST_STRAY = chest("reanimated_ruins/stray");

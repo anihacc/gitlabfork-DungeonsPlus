@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableMap;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.data.managers.DPSpawners;
 import com.legacy.dungeons_plus.data.providers.DPAdvancementProv;
 import com.legacy.dungeons_plus.data.providers.DPLangProvider;
 import com.legacy.dungeons_plus.data.providers.DPLootProv;
@@ -89,13 +88,10 @@ public class DPEvents
 		protected static void commonInit(final FMLCommonSetupEvent event)
 		{
 			ModList modList = ModList.get();
-			DungeonsPlus.isLootrLoaded = modList.isLoaded("lootr");
 			DungeonsPlus.isWaystonesLoaded = modList.isLoaded("waystones");
 			DungeonsPlus.isQuarkLoaded = modList.isLoaded("quark");
 			
 			DPLoot.init();
-			
-			DPSpawners.init();
 		}
 
 		@SubscribeEvent
