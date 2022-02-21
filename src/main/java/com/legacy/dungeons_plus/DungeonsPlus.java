@@ -8,6 +8,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
+// TODO Fix mods.toml structure gel dependency
 @Mod(DungeonsPlus.MODID)
 public class DungeonsPlus
 {

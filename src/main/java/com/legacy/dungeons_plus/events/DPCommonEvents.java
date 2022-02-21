@@ -1,5 +1,7 @@
 package com.legacy.dungeons_plus.events;
 
+import static com.legacy.dungeons_plus.DungeonsPlus.*;
+
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -13,6 +15,7 @@ import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.entity.EntityAccessHelper;
 import com.legacy.structure_gel.api.events.AddStructureToBiomeEvent;
+import com.legacy.structure_gel.api.events.RegisterLootTableAliasEvent;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
 import net.minecraft.data.DataGenerator;
@@ -36,7 +39,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
-public class DPEvents
+public class DPCommonEvents
 {
 	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 	public static class ForgeBus
@@ -90,12 +93,53 @@ public class DPEvents
 			ModList modList = ModList.get();
 			DungeonsPlus.isWaystonesLoaded = modList.isLoaded("waystones");
 			DungeonsPlus.isQuarkLoaded = modList.isLoaded("quark");
-			
+
 			DPLoot.init();
 		}
 
 		@SubscribeEvent
-		public static void gatherData(final GatherDataEvent event)
+		protected static void registerLootTableAlias(final RegisterLootTableAliasEvent event)
+		{
+			// Tower
+			event.register(locate("tower/common"), DPLoot.Tower.CHEST_COMMON);
+			event.register(locate("tower/barrel"), DPLoot.Tower.CHEST_BARREL);
+			event.register(locate("tower/vex"), DPLoot.Tower.CHEST_VEX);
+			event.register(locate("tower/vex_map"), DPLoot.Tower.CHEST_VEX_MAP);
+
+			event.register(locate("tower/skeleton"), DPLoot.Tower.ENTITY_SKELETON);
+			event.register(locate("tower/spider"), DPLoot.Tower.ENTITY_SPIDER);
+			event.register(locate("tower/zombie"), DPLoot.Tower.ENTITY_ZOMBIE);
+
+			// Reanimated ruins
+			event.register(locate("reanimated_ruins/common"), DPLoot.ReanimatedRuins.CHEST_COMMON);
+			event.register(locate("reanimated_ruins/husk"), DPLoot.ReanimatedRuins.CHEST_HUSK);
+			event.register(locate("reanimated_ruins/husk_map"), DPLoot.ReanimatedRuins.CHEST_HUSK_MAP);
+			event.register(locate("reanimated_ruins/stray"), DPLoot.ReanimatedRuins.CHEST_STRAY);
+			event.register(locate("reanimated_ruins/stray_map"), DPLoot.ReanimatedRuins.CHEST_STRAY_MAP);
+
+			event.register(locate("reanimated_ruins/skeleton"), DPLoot.ReanimatedRuins.ENTITY_SKELETON);
+			event.register(locate("reanimated_ruins/zombie"), DPLoot.ReanimatedRuins.ENTITY_ZOMBIE);
+
+			// Leviathan
+			event.register(locate("leviathan/common"), DPLoot.Leviathan.CHEST_COMMON);
+
+			event.register(locate("leviathan/husk"), DPLoot.Leviathan.ENTITY_HUSK);
+
+			// Snowy Temple
+			event.register(locate("snowy_temple/common"), DPLoot.SnowyTemple.CHEST_COMMON);
+
+			event.register(locate("snowy_temple/stray"), DPLoot.SnowyTemple.ENTITY_STRAY);
+
+			// Warped Garden
+			event.register(locate("warped_garden/common"), DPLoot.WarpedGarden.CHEST_COMMON);
+
+			// Soul Prison
+			event.register(locate("soul_prison/common"), DPLoot.SoulPrison.CHEST_COMMON);
+			event.register(locate("soul_prison/golden_armor"), DPLoot.SoulPrison.CHEST_GOLDEN_ARMOR);
+		}
+
+		@SubscribeEvent
+		protected static void gatherData(final GatherDataEvent event)
 		{
 			DataGenerator gen = event.getGenerator();
 			ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
