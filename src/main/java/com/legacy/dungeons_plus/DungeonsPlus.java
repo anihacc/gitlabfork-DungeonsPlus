@@ -1,5 +1,7 @@
 package com.legacy.dungeons_plus;
 
+import java.util.Arrays;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,6 +28,16 @@ public class DungeonsPlus
 	public static ResourceLocation locate(String key)
 	{
 		return new ResourceLocation(MODID, key);
+	}
+	
+	public static ResourceLocation[] locateAll(String... keys)
+	{
+		return Arrays.stream(keys).map(DungeonsPlus::locate).toArray(ResourceLocation[]::new);
+	}
+	
+	public static ResourceLocation[] locateAllPrefix(String prefix, String... keys)
+	{
+		return Arrays.stream(keys).map(s -> DungeonsPlus.locate(prefix + s)).toArray(ResourceLocation[]::new);
 	}
 
 	public static Logger makeLogger(Class<?> containerClass)

@@ -5,10 +5,10 @@
       "item": "minecraft:mossy_stone_bricks"
     },
     "title": {
-      "translate": "advancements.dungeons_plus.adventure.find_tower"
+      "translate": "dungeons_plus:advancements.adventure.find_tower.title"
     },
     "description": {
-      "translate": "advancements.dungeons_plus.adventure.find_tower.desc"
+      "translate": "dungeons_plus:advancements.adventure.find_tower.description"
     },
     "frame": "task",
     "show_toast": true,

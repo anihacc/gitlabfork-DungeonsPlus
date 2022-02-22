@@ -5,10 +5,10 @@
       "item": "minecraft:bone_block"
     },
     "title": {
-      "translate": "advancements.dungeons_plus.adventure.find_leviathan"
+      "translate": "dungeons_plus:advancements.adventure.find_leviathan.title"
     },
     "description": {
-      "translate": "advancements.dungeons_plus.adventure.find_leviathan.desc"
+      "translate": "dungeons_plus:advancements.adventure.find_leviathan.description"
     },
     "frame": "goal",
     "show_toast": true,

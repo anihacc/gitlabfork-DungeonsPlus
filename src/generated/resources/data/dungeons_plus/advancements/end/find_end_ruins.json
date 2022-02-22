@@ -5,10 +5,10 @@
       "item": "minecraft:end_stone_bricks"
     },
     "title": {
-      "translate": "advancements.dungeons_plus.end.find_end_ruins"
+      "translate": "dungeons_plus:advancements.end.find_end_ruins.title"
     },
     "description": {
-      "translate": "advancements.dungeons_plus.end.find_end_ruins.desc"
+      "translate": "dungeons_plus:advancements.end.find_end_ruins.description"
     },
     "frame": "goal",
     "show_toast": true,

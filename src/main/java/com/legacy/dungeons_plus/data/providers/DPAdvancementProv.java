@@ -104,6 +104,7 @@ public class DPAdvancementProv implements DataProvider
 
 			this.setSection("adventure");
 			findTower = this.builder(Blocks.MOSSY_STONE_BRICKS, "find_tower", FrameType.TASK).parent(adventureRoot).addCriterion("enter_structure", this.inStructure(DPStructures.TOWER.getStructure())).save(con, this.locate("find_tower"));
+			// TODO update
 			findBiggerDungeon = this.builder(Blocks.MOSSY_COBBLESTONE, "find_bigger_dungeon", FrameType.TASK).parent(findTower).addCriterion("enter_structure", this.inStructure(DPStructures.REANIMATED_RUINS.getStructure())).save(con, this.locate("find_bigger_dungeon"));
 			findLeviathan = this.builder(Blocks.BONE_BLOCK, "find_leviathan", FrameType.GOAL).parent(findBiggerDungeon).addCriterion("enter_structure", this.inStructure(DPStructures.LEVIATHAN.getStructure())).save(con, this.locate("find_leviathan"));
 			findSnowyTemple = this.builder(Blocks.PACKED_ICE, "find_snowy_temple", FrameType.GOAL).parent(findBiggerDungeon).addCriterion("enter_structure", this.inStructure(DPStructures.SNOWY_TEMPLE.getStructure())).save(con, this.locate("find_snowy_temple"));
@@ -120,7 +121,7 @@ public class DPAdvancementProv implements DataProvider
 
 		private TranslatableComponent translate(String key)
 		{
-			return new TranslatableComponent("advancements." + DungeonsPlus.MODID + (section.equals("") ? "" : "." + section) + "." + key);
+			return new TranslatableComponent(DungeonsPlus.MODID + ":advancements" + (section.equals("") ? "" : "." + section) + "." + key);
 		}
 
 		private void setSection(String name)
@@ -140,7 +141,7 @@ public class DPAdvancementProv implements DataProvider
 
 		private Advancement.Builder builder(ItemLike displayItem, String name, ResourceLocation background, FrameType frameType, boolean showToast, boolean announceToChat, boolean hidden)
 		{
-			return Advancement.Builder.advancement().display(displayItem, translate(name), translate(name + ".desc"), background, frameType, showToast, announceToChat, hidden);
+			return Advancement.Builder.advancement().display(displayItem, translate(name + ".title"), translate(name + ".description"), background, frameType, showToast, announceToChat, hidden);
 		}
 
 		private Advancement.Builder builder(ItemLike displayItem, String name, FrameType frameType, boolean showToast, boolean announceToChat, boolean hidden)

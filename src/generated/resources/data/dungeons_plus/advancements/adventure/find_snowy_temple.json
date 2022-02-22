@@ -5,10 +5,10 @@
       "item": "minecraft:packed_ice"
     },
     "title": {
-      "translate": "advancements.dungeons_plus.adventure.find_snowy_temple"
+      "translate": "dungeons_plus:advancements.adventure.find_snowy_temple.title"
     },
     "description": {
-      "translate": "advancements.dungeons_plus.adventure.find_snowy_temple.desc"
+      "translate": "dungeons_plus:advancements.adventure.find_snowy_temple.description"
     },
     "frame": "goal",
     "show_toast": true,

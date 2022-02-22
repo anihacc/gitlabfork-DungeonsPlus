@@ -5,10 +5,10 @@
       "item": "minecraft:warped_fungus"
     },
     "title": {
-      "translate": "advancements.dungeons_plus.adventure.find_warped_garden"
+      "translate": "dungeons_plus:advancements.adventure.find_warped_garden.title"
     },
     "description": {
-      "translate": "advancements.dungeons_plus.adventure.find_warped_garden.desc"
+      "translate": "dungeons_plus:advancements.adventure.find_warped_garden.description"
     },
     "frame": "task",
     "show_toast": true,

@@ -5,10 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
-import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.registry.DPLoot;
-import com.legacy.dungeons_plus.registry.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.structure.GelTemplateStructurePiece;
 import com.legacy.structure_gel.api.structure.processor.RandomBlockSwapProcessor;
@@ -83,8 +80,8 @@ public class WarpedGardenPieces
 		protected StructurePlaceSettings getPlaceSettings(StructureManager structureManager)
 		{
 			StructurePlaceSettings settings = new StructurePlaceSettings();
-			Vec3i size = structureManager.get(this.makeTemplateLocation()).get().getSize();
 			settings.setKeepLiquids(false);
+			Vec3i size = structureManager.get(this.makeTemplateLocation()).get().getSize();
 			settings.setRotationPivot(new BlockPos(size.getX() / 2, 0, size.getZ() / 2));
 
 			settings.addProcessor(RemoveGelStructureProcessor.INSTANCE);

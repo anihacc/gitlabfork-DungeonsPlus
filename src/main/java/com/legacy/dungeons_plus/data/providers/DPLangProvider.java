@@ -27,9 +27,9 @@ public class DPLangProvider extends LanguageProvider
 	{
 		this.addAll(ForgeRegistries.BLOCKS, this::add, Map.of());
 		
-		this.add("filled_map.dungeons_plus.bigger_dungeon", "Buried Dungeon Map"); // TODO rename
-		this.add("filled_map.dungeons_plus.leviathan", "Leviathan Map");
-		this.add("filled_map.dungeons_plus.snowy_temple", "Snowy Temple Map");
+		this.add("filled_map.dungeons_plus:bigger_dungeon", "Buried Dungeon Map"); // TODO rename
+		this.add("filled_map.dungeons_plus:leviathan", "Leviathan Map");
+		this.add("filled_map.dungeons_plus:snowy_temple", "Snowy Temple Map");
 		
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findTower, "Battle Towers?", "Find a Tower");
 		//this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findTower, "Now this is a Dungeon", "Find a Buried Dungeon");

@@ -5,15 +5,11 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
-import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.registry.DPLoot;
-import com.legacy.dungeons_plus.registry.DPSpawners;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.structure.GelTemplateStructurePiece;
 import com.legacy.structure_gel.api.structure.processor.RandomBlockSwapProcessor;
 import com.legacy.structure_gel.api.structure.processor.RandomStateSwapProcessor;
-import com.legacy.structure_gel.api.structure.processor.RemoveGelStructureProcessor;
 
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -41,7 +37,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.material.Material;
 
 public class SoulPrisonPieces
 {
@@ -77,7 +72,7 @@ public class SoulPrisonPieces
 	{
 		public Piece(StructureManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, int componentType)
 		{
-			super(DPStructures.SOUL_PRISON.getPieceType(), 0, structureManager, location, pos);
+			super(DPStructures.SOUL_PRISON.getPieceType(), componentType, structureManager, location, pos);
 			this.rotation = rotation;
 			this.setupPlaceSettings(structureManager);
 		}
@@ -101,7 +96,6 @@ public class SoulPrisonPieces
 			settings.setKeepLiquids(false);
 			settings.setRotationPivot(new BlockPos(size.getX() / 2, 0, size.getZ() / 2));
 
-			settings.addProcessor(RemoveGelStructureProcessor.INSTANCE);
 			settings.addProcessor(new RandomBlockSwapProcessor(Blocks.QUARTZ_BRICKS, 0.10F, Blocks.CHISELED_QUARTZ_BLOCK));
 			settings.addProcessor(new RandomStateSwapProcessor(Blocks.POLISHED_BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Axis.Y), 0.55F, Blocks.BASALT.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Axis.Y)));
 			settings.addProcessor(new RuleProcessor(ImmutableList.of(new ProcessorRule(new BlockMatchTest(Blocks.QUARTZ_SLAB), new BlockMatchTest(Blocks.LAVA), Blocks.LAVA.defaultBlockState()))));
@@ -115,7 +109,7 @@ public class SoulPrisonPieces
 		public BlockState modifyState(ServerLevelAccessor world, Random rand, BlockPos pos, BlockState originalState)
 		{
 			BlockState worldState = world.getBlockState(pos);
-			if (this.genDepth == 1 && !(worldState.getBlock() == Blocks.LAVA || worldState.getMaterial() == Material.AIR))
+			if (this.genDepth == 1 && !(worldState.getBlock() == Blocks.LAVA || worldState.isAir()))
 				return null;
 			return originalState;
 		}
