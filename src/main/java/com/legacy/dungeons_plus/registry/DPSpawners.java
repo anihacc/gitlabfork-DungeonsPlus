@@ -3,6 +3,7 @@ package com.legacy.dungeons_plus.registry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -20,6 +21,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.InclusiveRange;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -41,7 +43,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class DPSpawners
 {
 	private static List<DynamicSpawnerType> objs = new ArrayList<>();
-	public static final Optional<SpawnData.CustomSpawnRules> SPAWN_IN_SKYLIGHT = Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 8), new InclusiveRange<>(0, 15)));
+	public static final Optional<SpawnData.CustomSpawnRules> SPAWN_IN_SKYLIGHT = Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 7), new InclusiveRange<>(0, 14)));
 
 	public static final DynamicSpawnerType TOWER_ZOMBIE = create("tower_zombie", DPSpawners::towerZombie);
 	public static final DynamicSpawnerType TOWER_SKELETON = create("tower_skeleton", DPSpawners::towerSkeleton);
@@ -65,7 +67,7 @@ public class DPSpawners
 		objs.forEach(event::register);
 		objs = null;
 	}
-	
+
 	private static DynamicSpawnerType create(String name, DynamicSpawnerType.SpawnerModifier spawnerModifier)
 	{
 		var dynSpawner = new DynamicSpawnerType(DungeonsPlus.locate(name), spawnerModifier);
@@ -75,17 +77,24 @@ public class DPSpawners
 
 	private static void towerZombie(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
 	{
-		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, towerMob(s, level, pos, EntityType.ZOMBIE, DPLoot.Tower.ENTITY_ZOMBIE));
+		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, towerMob(s, level, pos, EntityType.ZOMBIE, DPLoot.Tower.ENTITY_ZOMBIE, tag ->
+		{
+		}));
 	}
 
 	private static void towerSkeleton(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
 	{
-		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, towerMob(s, level, pos, EntityType.SKELETON, DPLoot.Tower.ENTITY_SKELETON));
+		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, towerMob(s, level, pos, EntityType.SKELETON, DPLoot.Tower.ENTITY_SKELETON, tag ->
+		{
+			handItems(tag, new ItemStack(Items.BOW), Mob.DEFAULT_EQUIPMENT_DROP_CHANCE);
+		}));
 	}
 
 	private static void towerSpider(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
 	{
-		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, towerMob(s, level, pos, EntityType.SPIDER, DPLoot.Tower.ENTITY_SPIDER));
+		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, towerMob(s, level, pos, EntityType.SPIDER, DPLoot.Tower.ENTITY_SPIDER, tag ->
+		{
+		}));
 	}
 
 	private static void towerVex(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
@@ -94,9 +103,10 @@ public class DPSpawners
 		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, spawnData);
 	}
 
-	private static SpawnData towerMob(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos, EntityType<?> type, ResourceLocation lootTable)
+	private static SpawnData towerMob(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos, EntityType<?> type, ResourceLocation lootTable, Consumer<CompoundTag> tagFunc)
 	{
 		CompoundTag tag = new CompoundTag();
+		tagFunc.accept(tag);
 		lootTable(tag, lootTable);
 		return SpawnerAccessHelper.createSpawnerEntity(type, tag, SPAWN_IN_SKYLIGHT);
 	}
@@ -127,7 +137,7 @@ public class DPSpawners
 		for (Block coral : corals)
 		{
 			CompoundTag entityTag = new CompoundTag();
-			handItems(entityTag, goldAxe, 0.085F, new ItemStack(coral), 1.0F);
+			handItems(entityTag, goldAxe, Mob.DEFAULT_EQUIPMENT_DROP_CHANCE, new ItemStack(coral), 1.0F);
 			spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), 1);
 		}
 
@@ -177,6 +187,6 @@ public class DPSpawners
 
 	public static void handItems(CompoundTag tag, ItemStack mainHand, float mainHandDropChance)
 	{
-		handItems(tag, mainHand, mainHandDropChance, ItemStack.EMPTY, 0);
+		handItems(tag, mainHand, mainHandDropChance, ItemStack.EMPTY, Mob.DEFAULT_EQUIPMENT_DROP_CHANCE);
 	}
 }

@@ -10,9 +10,6 @@ import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.loot.NamedLootItem;
-import com.legacy.dungeons_plus.loot.OptionalLootEntry;
-import com.legacy.dungeons_plus.registry.DPBlocks;
 import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.mojang.datafixers.util.Pair;
@@ -122,7 +119,8 @@ public class DPLootProv extends LootTableProvider
 						)).setRolls(UniformGenerator.between(2, 3)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.INFESTED_STONE_BRICKS, 1, 3).setWeight(3),
-							basicEntry(Items.ENDER_PEARL, 1, 2).setWeight(2),
+							basicEntry(Items.BOOK, 1, 2).setWeight(2),
+							basicEntry(Items.ENDER_PEARL, 1, 2).setWeight(1),
 							basicEntry(Items.SADDLE).setWeight(2),
 							basicEntry(Items.NAME_TAG).setWeight(1),
 							basicEntry(Items.BOOK).setWeight(1).apply(enchant())

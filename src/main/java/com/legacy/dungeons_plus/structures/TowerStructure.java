@@ -5,6 +5,7 @@ import java.util.Random;
 import com.legacy.dungeons_plus.structures.pieces.TowerPieces;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigStructure;
+import com.legacy.structure_gel.api.structure.GelStructure;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
@@ -44,34 +45,12 @@ public class TowerStructure extends GelConfigStructure<NoneFeatureConfiguration>
 				samples++;
 			}
 		}
-		BlockPos pos = new BlockPos((chunkPos.x << 4) + 8, y / samples, (chunkPos.z << 4) + 8);
+		BlockPos pos = new BlockPos(chunkPos.x << 4, y / samples, chunkPos.z << 4);
 		TowerPieces.assemble(context.structureManager(), pos, Rotation.getRandom(rand), builder, rand);
 	}
 
 	private static void afterPlace(WorldGenLevel level, StructureFeatureManager structureManager, ChunkGenerator chunkGen, Random rand, BoundingBox bounds, ChunkPos chunkPos, PiecesContainer pieces)
 	{
-		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		int minHeight = level.getMinBuildHeight();
-		BoundingBox pieceBounds = pieces.calculateBoundingBox();
-		int maxHeight = pieceBounds.minY();
-
-		for (int x = bounds.minX(); x <= bounds.maxX(); ++x)
-		{
-			for (int z = bounds.minZ(); z <= bounds.maxZ(); ++z)
-			{
-				pos.set(x, maxHeight, z);
-				if (!level.isEmptyBlock(pos) && pieceBounds.isInside(pos) && pieces.isInsidePiece(pos))
-				{
-					for (int y = maxHeight - 1; y > minHeight; --y)
-					{
-						pos.setY(y);
-						if (!level.isEmptyBlock(pos) && !level.getBlockState(pos).getMaterial().isLiquid())
-							break;
-
-						level.setBlock(pos, (rand.nextFloat() < 0.2 ? Blocks.MOSSY_COBBLESTONE : Blocks.COBBLESTONE).defaultBlockState(), 2);
-					}
-				}
-			}
-		}
+		GelStructure.fillBelow(level, rand, bounds, pieces, r -> (r.nextFloat() < 0.2 ? Blocks.MOSSY_COBBLESTONE : Blocks.COBBLESTONE).defaultBlockState());
 	}
 }
