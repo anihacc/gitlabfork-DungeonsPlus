@@ -101,6 +101,9 @@ public class DPSpawners
 	{
 		SpawnData spawnData = SpawnerAccessHelper.createSpawnerEntity(EntityType.VEX, new CompoundTag(), SPAWN_IN_SKYLIGHT);
 		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, spawnData);
+		SpawnerAccessHelper.setMinSpawnDelay(s, level, pos, 100);
+		SpawnerAccessHelper.setMaxSpawnDelay(s, level, pos, 400);
+		SpawnerAccessHelper.setSpawnCount(s, level, pos, 2);
 	}
 
 	private static SpawnData towerMob(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos, EntityType<?> type, ResourceLocation lootTable, Consumer<CompoundTag> tagFunc)

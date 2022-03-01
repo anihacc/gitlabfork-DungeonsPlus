@@ -27,12 +27,12 @@ public class DPLangProvider extends LanguageProvider
 	{
 		this.addAll(ForgeRegistries.BLOCKS, this::add, Map.of());
 		
-		this.add("filled_map.dungeons_plus:bigger_dungeon", "Buried Dungeon Map"); // TODO rename
+		this.add("filled_map.dungeons_plus:reanimated_ruins", "Reanimated Ruins Map");
 		this.add("filled_map.dungeons_plus:leviathan", "Leviathan Map");
 		this.add("filled_map.dungeons_plus:snowy_temple", "Snowy Temple Map");
 		
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findTower, "Battle Towers?", "Find a Tower");
-		//this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findTower, "Now this is a Dungeon", "Find a Buried Dungeon");
+		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findReanimatedRuins, "Now this is a Dungeon", "Find the Reanimated Ruins");
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findLeviathan, "Ancient Remains", "Find a Leviathan");
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findSnowyTemple, "Snowed In", "Find a Snowy Temple");
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findWarpedGarden, "Something Unnatural", "Find a Warped Garden");

@@ -26,7 +26,7 @@ public class ReanimatedRuinsStructure extends GelConfigJigsawStructure
 {
 	public ReanimatedRuinsStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
 	{
-		super(codec, config, 20, true, false, context -> true, Piece::new);
+		super(codec, config, 75/*20*/, true, false, context -> true, Piece::new);
 	}
 
 	public static final class Piece extends AbstractGelStructurePiece

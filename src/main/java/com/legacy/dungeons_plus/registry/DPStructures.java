@@ -41,7 +41,7 @@ public class DPStructures
 	public static final StructureRegistrar<JigsawConfiguration, ReanimatedRuinsStructure> REANIMATED_RUINS = 
 			StructureRegistrar.builder(DungeonsPlus.locate("reanimated_ruins"), new ReanimatedRuinsStructure(JigsawConfiguration.CODEC, DPConfig.COMMON.reanimatedRuins))
 				.addPiece(ReanimatedRuinsStructure.Piece::new)
-				.addConfigured(new JigsawConfiguration(() -> ReanimatedRuinsPools.ROOT, 7))
+				.addConfigured(new JigsawConfiguration(() -> ReanimatedRuinsPools.ROOT, 12))
 				.build();
 
 	public static final StructureRegistrar<JigsawConfiguration, LeviathanStructure> LEVIATHAN = 

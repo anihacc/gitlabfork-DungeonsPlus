@@ -1,5 +1,8 @@
 package com.legacy.dungeons_plus.structures.pools;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.structures.DPProcessors;
 import com.legacy.structure_gel.api.structure.jigsaw.JigsawPoolBuilder;
@@ -17,42 +20,31 @@ public class ReanimatedRuinsPools
 
 	static
 	{
-		// TODO redo
-		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "bigger_dungeon/");
+		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "reanimated_ruins/");
 
-		/**
-		 * Check TowerPieces for information on the JigsawRegistryHelper and
-		 * JigsawPoolBuilder.
-		 * 
-		 * Jigsaw structures generate at surface level by default. To prevent this, have
-		 * whatever structure starts the generation have generateAtSurface set to false.
-		 * You'll set the y level in the structure start like normal. In this case, it's
-		 * in BiggerDungeonStructure.Start.init
-		 */
-		ROOT = registry.register("root", registry.builder().names("root").maintainWater(false).build());
+		ROOT = registry.register("center", registry.builder().names("center/husk_0").maintainWater(false).build());
 
 		JigsawPoolBuilder basicPoolBuilder = registry.builder().maintainWater(false).processors(DPProcessors.COBBLE_TO_MOSSY);
-		registry.register("main_room", basicPoolBuilder.clone().names("main_room").build());
 
-		/**
-		 * Since basicRooms is cloning from basicPoolBuilder, they will have the
-		 * processor that converts some cobblestone to mossy cobble. Note: We have to
-		 * clone it otherwise we end up changing the instance, which affects all
-		 * builders associated with it.
-		 */
-		JigsawPoolBuilder basicRooms = basicPoolBuilder.clone().weight(8).names("side_room/skeleton", "side_room/zombie");
-		JigsawPoolBuilder strayRoom = registry.builder().names("side_room/stray").maintainWater(false).processors(DPProcessors.COBBLE_TO_ICE);
-		JigsawPoolBuilder huskRoom = registry.builder().names("side_room/husk").maintainWater(false).processors(DPProcessors.COBBLE_TO_TERRACOTTA);
+		registry.register("terminator", basicPoolBuilder.clone().names("terminator/0", "terminator/1").build());
 
-		/**
-		 * Using the JigsawPoolBuilder's collect method, I can merge as many pools as I
-		 * want together. Doing this will maintain the input weights of each pool. In
-		 * this instance, a normal room has skeleton and zombies with a weight of 8 and
-		 * husks and strays with a weight of 1 each.
-		 */
-		registry.register("normal_room", JigsawPoolBuilder.collect(basicRooms, strayRoom, huskRoom));
-
-		registry.register("special_room", JigsawPoolBuilder.collect(strayRoom, huskRoom));
-
+		Map<String, Integer> rooms = new HashMap<>();
+		for (int i = 0; i <= 11; i++)
+		{
+			rooms.put("room/small_" + i, 2);
+		}
+		for (int i = 0; i <= 4; i++)
+		{
+			rooms.put("room/large_" + i, 2);
+		}
+		for (int i = 0; i <= 12; i++)
+		{
+			rooms.put("hallway/" + i, 3);
+		}
+		for (int i = 0; i <= 2; i++)
+		{
+			rooms.put("stairs/" + i, 3);
+		}
+		registry.register("room", "terminator", basicPoolBuilder.clone().names(rooms).build());
 	}
 }
