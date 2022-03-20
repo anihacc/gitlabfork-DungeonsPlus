@@ -6,11 +6,12 @@ import com.legacy.dungeons_plus.structures.DPProcessors;
 import com.legacy.structure_gel.api.structure.jigsaw.JigsawPoolBuilder;
 import com.legacy.structure_gel.api.structure.jigsaw.JigsawRegistryHelper;
 
-import net.minecraft.world.level.levelgen.feature.structures.StructureTemplatePool;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
 public class EndRuinsPools
 {
-	public static final StructureTemplatePool ROOT;
+	public static final Holder<StructureTemplatePool> ROOT;
 
 	public static void init()
 	{

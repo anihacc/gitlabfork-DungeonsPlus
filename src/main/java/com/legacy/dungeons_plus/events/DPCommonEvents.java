@@ -2,10 +2,9 @@ package com.legacy.dungeons_plus.events;
 
 import static com.legacy.dungeons_plus.DungeonsPlus.*;
 
-import java.util.Map;
 import java.util.function.Consumer;
 
-import com.google.common.collect.ImmutableMap;
+import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.data.providers.DPAdvancementProv;
 import com.legacy.dungeons_plus.data.providers.DPLangProvider;
@@ -14,24 +13,20 @@ import com.legacy.dungeons_plus.data.providers.DPTagProv;
 import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.entity.EntityAccessHelper;
-import com.legacy.structure_gel.api.events.AddStructureToBiomeEvent;
 import com.legacy.structure_gel.api.events.RegisterLootTableAliasEvent;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -44,9 +39,6 @@ public class DPCommonEvents
 	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 	public static class ForgeBus
 	{
-		private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> TOWER_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.Tower.ENTITY_ZOMBIE, EntityType.SPIDER, DPLoot.Tower.ENTITY_SPIDER, EntityType.SKELETON, DPLoot.Tower.ENTITY_SKELETON));
-		private static final NonNullLazy<Map<EntityType<?>, ResourceLocation>> BURIED_ENTITY_LOOT = NonNullLazy.of(() -> ImmutableMap.of(EntityType.ZOMBIE, DPLoot.ReanimatedRuins.ENTITY_ZOMBIE, EntityType.SKELETON, DPLoot.ReanimatedRuins.ENTITY_SKELETON));
-
 		@SubscribeEvent
 		protected static void onEntitySpawn(final EntityJoinWorldEvent event)
 		{
@@ -55,32 +47,18 @@ public class DPCommonEvents
 			{
 				Entity entity = event.getEntity();
 
-				TOWER_ENTITY_LOOT.get().forEach((type, loot) -> ifInStructure(entity, type, DPStructures.TOWER, e -> EntityAccessHelper.setDeathLootTable((Mob) e, loot)));
-				BURIED_ENTITY_LOOT.get().forEach((type, loot) -> ifInStructure(entity, type, DPStructures.REANIMATED_RUINS, e -> EntityAccessHelper.setDeathLootTable((Mob) e, loot)));
-				ifInStructure(entity, EntityType.HUSK, DPStructures.LEVIATHAN, e -> EntityAccessHelper.setDeathLootTable((Mob) e, DPLoot.Leviathan.ENTITY_HUSK));
-				ifInStructure(entity, EntityType.STRAY, DPStructures.SNOWY_TEMPLE, e -> EntityAccessHelper.setDeathLootTable((Mob) e, DPLoot.SnowyTemple.ENTITY_STRAY));
-				ifInStructure(entity, EntityType.ENDERMAN, DPStructures.END_RUINS, e -> ((EnderMan) e).targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>((EnderMan) e, Player.class, true, false)));
-				ifInStructure(entity, EntityType.GHAST, DPStructures.SOUL_PRISON, e -> ((Ghast) e).targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>((Ghast) e, Player.class, true, false)));
+				ifInStructure(entity, EntityType.HUSK, DPStructures.LEVIATHAN, e -> EntityAccessHelper.setDeathLootTable(e, DPLoot.Leviathan.ENTITY_HUSK));
+				ifInStructure(entity, EntityType.STRAY, DPStructures.SNOWY_TEMPLE, e -> EntityAccessHelper.setDeathLootTable(e, DPLoot.SnowyTemple.ENTITY_STRAY));
+				ifInStructure(entity, EntityType.ENDERMAN, DPStructures.END_RUINS, e -> e.targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>((EnderMan) e, Player.class, true, false)));
+				ifInStructure(entity, EntityType.GHAST, DPStructures.SOUL_PRISON, e -> e.targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>((Ghast) e, Player.class, true, false)));
 			}
 		}
 
-		private static void ifInStructure(Entity entity, EntityType<?> entityTest, StructureRegistrar<?, ?> structure, Consumer<Entity> consumer)
+		@SuppressWarnings("unchecked")
+		private static <T extends Entity> void ifInStructure(Entity entity, EntityType<T> entityTest, StructureRegistrar<?, ?> structure, Consumer<T> consumer)
 		{
-			if (entity.getType().equals(entityTest) && entity.level instanceof ServerLevel && ((ServerLevel) entity.level).structureFeatureManager().getStructureWithPieceAt(entity.blockPosition(), structure.getStructure()).isValid())
-				consumer.accept(entity);
-		}
-
-		@SubscribeEvent
-		protected static void addStructureToBiome(final AddStructureToBiomeEvent event)
-		{
-			event.register(DPStructures.TOWER);
-			event.register(DPStructures.REANIMATED_RUINS);
-			event.register(DPStructures.LEVIATHAN);
-			event.register(DPStructures.SNOWY_TEMPLE);
-			event.register(DPStructures.WARPED_GARDEN);
-
-			event.register(DPStructures.END_RUINS);
-			event.register(DPStructures.SOUL_PRISON);
+			if (entity.getType().equals(entityTest) && entity.level instanceof ServerLevel serverLevel && DPUtil.isInStructure(serverLevel, structure.getStructure(), entity.blockPosition()))
+				consumer.accept((T) entity);
 		}
 	}
 

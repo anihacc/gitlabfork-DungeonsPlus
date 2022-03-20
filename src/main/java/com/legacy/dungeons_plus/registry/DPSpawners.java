@@ -13,6 +13,8 @@ import com.legacy.structure_gel.api.dynamic_spawner.DynamicSpawnerType;
 import com.legacy.structure_gel.api.events.RegisterDynamicSpawnerEvent;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderSet.Named;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.FloatTag;
 import net.minecraft.nbt.ListTag;
@@ -136,13 +138,13 @@ public class DPSpawners
 
 		ItemStack goldAxe = new ItemStack(Items.GOLDEN_AXE);
 		goldAxe.setDamageValue(10);
-		List<Block> corals = BlockTags.CORAL_BLOCKS.getValues();
-		for (Block coral : corals)
+		Named<Block> corals = Registry.BLOCK.getTag(BlockTags.CORAL_BLOCKS).get();
+		corals.forEach(holder ->
 		{
 			CompoundTag entityTag = new CompoundTag();
-			handItems(entityTag, goldAxe, Mob.DEFAULT_EQUIPMENT_DROP_CHANCE, new ItemStack(coral), 1.0F);
+			handItems(entityTag, goldAxe, Mob.DEFAULT_EQUIPMENT_DROP_CHANCE, new ItemStack(holder.value()), 1.0F);
 			spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), 1);
-		}
+		});
 
 		CompoundTag entityTag = new CompoundTag();
 		handItems(entityTag, goldAxe, 0.085F);

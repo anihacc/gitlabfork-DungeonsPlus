@@ -5,7 +5,6 @@ import com.legacy.dungeons_plus.DungeonsPlus;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class DPTagProv
@@ -32,7 +31,7 @@ public class DPTagProv
 		public void vanilla()
 		{
 
-			this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add();
+			//this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add();
 		}
 
 		@Override
