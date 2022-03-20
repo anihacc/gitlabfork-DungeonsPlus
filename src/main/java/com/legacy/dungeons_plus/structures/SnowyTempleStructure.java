@@ -1,6 +1,5 @@
 package com.legacy.dungeons_plus.structures;
 
-import java.util.List;
 import java.util.Random;
 
 import com.legacy.dungeons_plus.registry.DPStructures;
@@ -11,10 +10,7 @@ import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -28,7 +24,6 @@ public class SnowyTempleStructure extends GelConfigJigsawStructure
 	public SnowyTempleStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
 	{
 		super(codec, config, 0, true, true, context -> true, Piece::new);
-		this.spawns.put(MobCategory.MONSTER, List.of(new SpawnerData(EntityType.STRAY, 1, 2, 4)));
 	}
 
 	public static class Piece extends AbstractGelStructurePiece

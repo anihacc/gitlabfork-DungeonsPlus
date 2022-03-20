@@ -35,14 +35,79 @@ public class DPConfig
 		protected Common(ForgeConfigSpec.Builder builder)
 		{
 			builder.push("Structures");
-			this.tower = new StructureConfig(builder, "tower").probability(75).spacing(25).offset(6).biomes(true, "#structure_gel:plains", "#structure_gel:oak_forest", "#structure_gel:dark_forest", "#structure_gel:birch_forest", "#structure_gel:mountain").validDimensions(DimensionType.OVERWORLD_LOCATION.location().toString());
-			this.leviathan = new StructureConfig(builder, "leviathan").probability(100).spacing(36).offset(8).biomes(true, "#structure_gel:desert").validDimensions(DimensionType.OVERWORLD_LOCATION.location().toString());
-			this.snowyTemple = new StructureConfig(builder, "snowy_temple").probability(100).spacing(36).offset(8).biomes(true, "#structure_gel:snowy_plains", "#structure_gel:snowy_spruce_forest").validDimensions(DimensionType.OVERWORLD_LOCATION.location().toString());
-			this.reanimatedRuins = new StructureConfig(builder, "reanimated_ruins").probability(40).spacing(12).offset(5).biomes(true, "#forge:overworld", "!minecraft:mushroom_fields").validDimensions(DimensionType.OVERWORLD_LOCATION.location().toString());
-			this.endRuins = new StructureConfig(builder, "end_ruins").probability(80).spacing(24).offset(8).biomes(true, "#structure_gel:outer_end_island").validDimensions(DimensionType.END_LOCATION.location().toString());
-			this.warpedGarden = new StructureConfig(builder, "warped_garden").spacing(36).offset(8).biomes(true, "#structure_gel:ocean", "!#structure_gel:frozen").validDimensions(DimensionType.OVERWORLD_LOCATION.location().toString());
-			this.soulPrison = new StructureConfig(builder, "soul_prison").spacing(25).offset(6).biomes(true, "minecraft:soul_sand_valley").validDimensions(DimensionType.NETHER_LOCATION.location().toString());
+			// @formatter:off
+			this.tower = StructureConfig.builder(builder, "tower")
+					.pushPlacement()
+						.spacing(25)
+						.probability(75)
+					.popPlacement()
+					.pushConfigured("configured")
+						.biomes(true, "#structure_gel:plains", "#structure_gel:oak_forest", "#structure_gel:dark_forest", "#structure_gel:birch_forest", "#structure_gel:mountain")
+					.popConfigured()
+					.build();
+			
+			this.leviathan = StructureConfig.builder(builder, "leviathan")
+					.pushPlacement()
+						.spacing(36)
+						.probability(100)
+					.popPlacement()
+					.pushConfigured("configured")
+						.biomes(true, "#structure_gel:desert")
+					.popConfigured()
+					.build();
+			
+			this.snowyTemple = StructureConfig.builder(builder, "snowy_temple")
+					.pushPlacement()
+						.spacing(36)
+						.probability(100)
+					.popPlacement()
+					.pushConfigured("configured")
+						.biomes(true, "#structure_gel:snowy_plains", "#structure_gel:snowy_spruce_forest")
+					.popConfigured()
+					.build();
+			
+			this.reanimatedRuins = StructureConfig.builder(builder, "reanimated_ruins")
+					.pushPlacement()
+						.spacing(12)
+						.probability(40)
+					.popPlacement()
+					.pushConfigured("configured")
+						.biomes(true, "#forge:overworld", "!minecraft:mushroom_fields")
+					.popConfigured()
+					.build();
+			
+			this.endRuins = StructureConfig.builder(builder, "end_ruins")
+					.pushPlacement()
+						.spacing(24)
+						.probability(80)
+					.popPlacement()
+					.pushConfigured("configured")
+						.biomes(true, "#structure_gel:outer_end_island")
+					.popConfigured()
+					.build();
+			
+			this.warpedGarden = StructureConfig.builder(builder, "warped_garden")
+					.pushPlacement()
+						.spacing(36)
+						.probability(100)
+					.popPlacement()
+					.pushConfigured("configured")
+						.biomes(true, "#structure_gel:ocean", "!#structure_gel:frozen")
+					.popConfigured()
+					.build();
+			
+			this.soulPrison = StructureConfig.builder(builder, "soul_prison")
+					.pushPlacement()
+						.spacing(25)
+						.probability(100)
+					.popPlacement()
+					.pushConfigured("configured")
+						.biomes(true, "minecraft:soul_sand_valley")
+					.popConfigured()
+					.build();
+			
 			builder.pop();
+			// @formatter:on
 
 			builder.push("Mod Compat");
 			builder.push("Quark");

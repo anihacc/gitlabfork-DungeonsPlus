@@ -2,7 +2,6 @@ package com.legacy.dungeons_plus.structures;
 
 import java.util.Random;
 
-import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
@@ -11,10 +10,7 @@ import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -28,7 +24,6 @@ public class LeviathanStructure extends GelConfigJigsawStructure
 	public LeviathanStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
 	{
 		super(codec, config, -1, true, true, context -> true, Piece::new);
-		this.spawns.put(MobCategory.MONSTER, ImmutableList.of(new SpawnerData(EntityType.HUSK, 1, 4, 4)));
 	}
 
 	public static class Piece extends AbstractGelStructurePiece
