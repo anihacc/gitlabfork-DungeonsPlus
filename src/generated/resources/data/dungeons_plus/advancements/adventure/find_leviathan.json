@@ -1,5 +1,5 @@
 {
-  "parent": "dungeons_plus:adventure/find_bigger_dungeon",
+  "parent": "dungeons_plus:adventure/find_reanimated_ruins",
   "display": {
     "icon": {
       "item": "minecraft:bone_block"
@@ -16,7 +16,7 @@
     "hidden": false
   },
   "criteria": {
-    "enter_structure": {
+    "in_structure": {
       "trigger": "minecraft:location",
       "conditions": {
         "location": {
@@ -27,7 +27,7 @@
   },
   "requirements": [
     [
-      "enter_structure"
+      "in_structure"
     ]
   ]
 }

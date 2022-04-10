@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.structures;
+package com.legacy.dungeons_plus.structures.end_ruins;
 
 import java.util.Random;
 
@@ -26,7 +26,7 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
-public class EndRuinsStructure extends GelConfigJigsawStructure
+public class EndRuinsStructure extends GelConfigJigsawStructure<JigsawConfiguration>
 {
 	public EndRuinsStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
 	{

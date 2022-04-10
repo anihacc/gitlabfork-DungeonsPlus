@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.data.DPTags;
 import com.legacy.dungeons_plus.registry.DPLoot;
-import com.legacy.dungeons_plus.registry.DPStructures;
 import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.Util;
@@ -22,6 +22,7 @@ import net.minecraft.data.loot.EntityLoot;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
@@ -29,7 +30,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -166,7 +167,7 @@ public class DPLootProv extends LootTableProvider
 
 			consumer.accept(DPLoot.Tower.CHEST_VEX_MAP, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
-							basicEntry(Items.MAP).setWeight(1).apply(map(DPStructures.REANIMATED_RUINS.getStructure()))
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.StructureTags.ON_REANIMATED_RUINS_MAPS))
 						)),
 					poolOf(ImmutableList.of(
 							LootTableReference.lootTableReference(DPLoot.Tower.CHEST_VEX)
@@ -202,7 +203,7 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.BOOK).setWeight(1).apply(enchant())
 						)).setRolls(UniformGenerator.between(0, 2)))));
 			
-			consumer.accept(DPLoot.ReanimatedRuins.CHEST_HUSK, tableOf(ImmutableList.of(
+			consumer.accept(DPLoot.ReanimatedRuins.CHEST_DESERT, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
 							basicEntry(Items.SAND, 1, 2).setWeight(1),
 							basicEntry(Items.BONE, 1, 2).setWeight(1),
@@ -226,15 +227,15 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.GOLD_NUGGET).setWeight(3)
 						)).setRolls(UniformGenerator.between(1, 3)))));
 			
-			consumer.accept(DPLoot.ReanimatedRuins.CHEST_HUSK_MAP, tableOf(ImmutableList.of(
+			consumer.accept(DPLoot.ReanimatedRuins.CHEST_DESERT_MAP, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
-							basicEntry(Items.MAP).setWeight(1).apply(map(DPStructures.LEVIATHAN.getStructure()))
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.StructureTags.ON_LEVIATHAN_MAPS))
 						)),
 					poolOf(ImmutableList.of(
-							LootTableReference.lootTableReference(DPLoot.ReanimatedRuins.CHEST_HUSK)
+							LootTableReference.lootTableReference(DPLoot.ReanimatedRuins.CHEST_DESERT)
 						)))));
 			
-			consumer.accept(DPLoot.ReanimatedRuins.CHEST_STRAY, tableOf(ImmutableList.of(
+			consumer.accept(DPLoot.ReanimatedRuins.CHEST_FROZEN, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
 							basicEntry(Items.ARROW, 1, 5).setWeight(3),
 							basicEntry(Items.BONE, 2, 5).setWeight(3),
@@ -258,12 +259,45 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.MUSIC_DISC_WAIT).setWeight(1)
 						)).setRolls(UniformGenerator.between(1, 3)))));
 			
-			consumer.accept(DPLoot.ReanimatedRuins.CHEST_STRAY_MAP, tableOf(ImmutableList.of(
+			consumer.accept(DPLoot.ReanimatedRuins.CHEST_FROZEN_MAP, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
-							basicEntry(Items.MAP).setWeight(1).apply(map(DPStructures.SNOWY_TEMPLE.getStructure()))
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.StructureTags.ON_SNOWY_TEMPLE_MAPS))
 						)),
 					poolOf(ImmutableList.of(
-							LootTableReference.lootTableReference(DPLoot.ReanimatedRuins.CHEST_STRAY)
+							LootTableReference.lootTableReference(DPLoot.ReanimatedRuins.CHEST_FROZEN)
+						)))));
+			
+			// TODO Make loot
+			consumer.accept(DPLoot.ReanimatedRuins.CHEST_MOSSY, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.ARROW, 1, 5).setWeight(3),
+							basicEntry(Items.BONE, 2, 5).setWeight(3),
+							basicEntry(Items.SNOWBALL, 1, 3).setWeight(2),
+							basicEntry(Items.FLINT, 1, 2).setWeight(1),
+							basicEntry(Items.FEATHER, 1, 2).setWeight(1),
+							basicEntry(Items.STRING, 1, 2).setWeight(1)
+						)).setRolls(UniformGenerator.between(3, 5)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.ICE, 2, 3).setWeight(2),
+							basicEntry(Items.TIPPED_ARROW, 2, 4).setWeight(4).apply(SetPotionFunction.setPotion(Potions.SLOWNESS)),
+							basicEntry(Items.IRON_INGOT, 2, 4).setWeight(4),
+							basicEntry(Items.REDSTONE, 1, 3).setWeight(4),
+							basicEntry(Items.COAL, 1, 3).setWeight(4),
+							basicEntry(Items.BOW).setWeight(1)
+						)).setRolls(UniformGenerator.between(2, 4)),
+					poolOf(ImmutableList.of(
+							basicEntry(Items.BOW).setWeight(2).apply(enchant()),
+							basicEntry(Items.CHAINMAIL_CHESTPLATE).setWeight(2),
+							basicEntry(Items.BOOK).setWeight(5).apply(enchant()),
+							basicEntry(Items.MUSIC_DISC_WAIT).setWeight(1)
+						)).setRolls(UniformGenerator.between(1, 3)))));
+			
+			consumer.accept(DPLoot.ReanimatedRuins.CHEST_MOSSY_MAP, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.StructureTags.ON_WARPED_GARDEN_MAPS))
+						)),
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(DPLoot.ReanimatedRuins.CHEST_MOSSY)
 						)))));
 			
 			//@formatter:on
@@ -650,7 +684,7 @@ public class DPLootProv extends LootTableProvider
 			return builder;
 		}
 
-		default LootItemConditionalFunction.Builder<?> map(StructureFeature<?> structure)
+		default LootItemConditionalFunction.Builder<?> map(TagKey<ConfiguredStructureFeature<?, ?>> structure)
 		{
 			return ExplorationMapFunction.makeExplorationMap().setDestination(structure).setMapDecoration(MapDecoration.Type.RED_X).setZoom((byte) 1).setSkipKnownStructures(false);
 		}

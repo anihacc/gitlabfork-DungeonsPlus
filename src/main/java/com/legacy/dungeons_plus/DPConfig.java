@@ -2,9 +2,11 @@ package com.legacy.dungeons_plus;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.legacy.structure_gel.api.biome_dictionary.BiomeDictionary;
+import com.legacy.structure_gel.api.biome_dictionary.BiomeType;
 import com.legacy.structure_gel.api.config.StructureConfig;
 
-import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class DPConfig
@@ -41,8 +43,8 @@ public class DPConfig
 						.spacing(25)
 						.probability(75)
 					.popPlacement()
-					.pushConfigured("configured")
-						.biomes(true, "#structure_gel:plains", "#structure_gel:oak_forest", "#structure_gel:dark_forest", "#structure_gel:birch_forest", "#structure_gel:mountain")
+					.pushConfigured()
+						.biomes(BiomeType.builder().parents(BiomeDictionary.PLAINS, BiomeDictionary.OAK_FOREST, BiomeDictionary.DARK_FOREST, BiomeDictionary.BIRCH_FOREST, BiomeDictionary.MOUNTAIN).build())
 					.popConfigured()
 					.build();
 			
@@ -51,8 +53,8 @@ public class DPConfig
 						.spacing(36)
 						.probability(100)
 					.popPlacement()
-					.pushConfigured("configured")
-						.biomes(true, "#structure_gel:desert")
+					.pushConfigured()
+						.biomes(BiomeDictionary.DESERT)
 					.popConfigured()
 					.build();
 			
@@ -61,8 +63,8 @@ public class DPConfig
 						.spacing(36)
 						.probability(100)
 					.popPlacement()
-					.pushConfigured("configured")
-						.biomes(true, "#structure_gel:snowy_plains", "#structure_gel:snowy_spruce_forest")
+					.pushConfigured()
+						.biomes(BiomeType.builder().parents(BiomeDictionary.SNOWY_PLAINS, BiomeDictionary.SNOWY_SPRUCE_FOREST).build())
 					.popConfigured()
 					.build();
 			
@@ -71,8 +73,8 @@ public class DPConfig
 						.spacing(12)
 						.probability(40)
 					.popPlacement()
-					.pushConfigured("configured")
-						.biomes(true, "#forge:overworld", "!minecraft:mushroom_fields")
+					.pushConfigured()
+						.biomes(BiomeDictionary.OVERWORLD, BiomeType.builder().biomes(Biomes.MUSHROOM_FIELDS).build())
 					.popConfigured()
 					.build();
 			
@@ -81,8 +83,8 @@ public class DPConfig
 						.spacing(24)
 						.probability(80)
 					.popPlacement()
-					.pushConfigured("configured")
-						.biomes(true, "#structure_gel:outer_end_island")
+					.pushConfigured()
+						.biomes(BiomeDictionary.OUTER_END_ISLAND)
 					.popConfigured()
 					.build();
 			
@@ -91,8 +93,8 @@ public class DPConfig
 						.spacing(36)
 						.probability(100)
 					.popPlacement()
-					.pushConfigured("configured")
-						.biomes(true, "#structure_gel:ocean", "!#structure_gel:frozen")
+					.pushConfigured()
+						.biomes(BiomeDictionary.OCEAN, BiomeDictionary.FROZEN)
 					.popConfigured()
 					.build();
 			
@@ -101,8 +103,8 @@ public class DPConfig
 						.spacing(25)
 						.probability(100)
 					.popPlacement()
-					.pushConfigured("configured")
-						.biomes(true, "minecraft:soul_sand_valley")
+					.pushConfigured()
+						.biomes(BiomeType.builder().biomes(Biomes.SOUL_SAND_VALLEY).build())
 					.popConfigured()
 					.build();
 			

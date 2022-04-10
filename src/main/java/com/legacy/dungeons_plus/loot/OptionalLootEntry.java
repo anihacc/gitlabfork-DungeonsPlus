@@ -35,7 +35,7 @@ public class OptionalLootEntry extends LootPoolSingletonContainer
 	@Override
 	public LootPoolEntryType getType()
 	{
-		return DPLoot.OPTIONAL_ENTRY;
+		return DPLoot.OPTIONAL_ENTRY.get();
 	}
 
 	@Override

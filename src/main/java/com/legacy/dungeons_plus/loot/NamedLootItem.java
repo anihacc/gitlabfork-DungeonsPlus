@@ -36,7 +36,7 @@ public class NamedLootItem extends LootPoolSingletonContainer
 	@Override
 	public LootPoolEntryType getType()
 	{
-		return DPLoot.NAMED_ITEM;
+		return DPLoot.NAMED_ITEM.get();
 	}
 
 	@Override

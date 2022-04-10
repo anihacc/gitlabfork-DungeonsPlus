@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.structures.pools;
+package com.legacy.dungeons_plus.structures.end_ruins;
 
 import com.google.common.collect.ImmutableMap;
 import com.legacy.dungeons_plus.DungeonsPlus;

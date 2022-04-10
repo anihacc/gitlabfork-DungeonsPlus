@@ -6,30 +6,18 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class DPUtil
 {
-	public static boolean isInStructure(ServerLevel serverLevel, StructureFeature<?> structure, BlockPos pos)
-	{
-		return ChunkGenerator.allConfigurations(serverLevel.registryAccess().registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY), structure).anyMatch(configured ->
-		{
-			return serverLevel.structureFeatureManager().getStructureWithPieceAt(pos, configured).isValid();
-		});
-	}
-
 	public static void placeMonsterBox(ServerLevelAccessor level, BlockPos pos, Random rand)
 	{
 		level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);

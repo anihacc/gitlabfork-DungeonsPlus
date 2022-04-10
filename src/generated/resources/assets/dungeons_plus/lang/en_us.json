@@ -1,6 +1,8 @@
 {
   "dungeons_plus:advancements.adventure.find_leviathan.description": "Find a Leviathan",
   "dungeons_plus:advancements.adventure.find_leviathan.title": "Ancient Remains",
+  "dungeons_plus:advancements.adventure.find_reanimated_ruins.description": "Find the Reanimated Ruins",
+  "dungeons_plus:advancements.adventure.find_reanimated_ruins.title": "Now this is a Dungeon",
   "dungeons_plus:advancements.adventure.find_snowy_temple.description": "Find a Snowy Temple",
   "dungeons_plus:advancements.adventure.find_snowy_temple.title": "Snowed In",
   "dungeons_plus:advancements.adventure.find_tower.description": "Find a Tower",
@@ -11,7 +13,7 @@
   "dungeons_plus:advancements.end.find_end_ruins.title": "A Ruined End",
   "dungeons_plus:advancements.nether.find_soul_prison.description": "Find the Soul Prison",
   "dungeons_plus:advancements.nether.find_soul_prison.title": "Caged Tears",
-  "filled_map.dungeons_plus:bigger_dungeon": "Buried Dungeon Map",
   "filled_map.dungeons_plus:leviathan": "Leviathan Map",
+  "filled_map.dungeons_plus:reanimated_ruins": "Reanimated Ruins Map",
   "filled_map.dungeons_plus:snowy_temple": "Snowy Temple Map"
 }

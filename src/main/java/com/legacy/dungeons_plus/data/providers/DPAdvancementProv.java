@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.registry.DPStructures;
+import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
@@ -24,11 +25,12 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 
 @SuppressWarnings("unused")
 public class DPAdvancementProv implements DataProvider
@@ -103,17 +105,17 @@ public class DPAdvancementProv implements DataProvider
 			Advancement endEnterGateway = this.builder(Items.STONE, "end", FrameType.TASK).addCriterion("trigger", KilledTrigger.TriggerInstance.playerKilledEntity()).build(new ResourceLocation("end/enter_end_gateway"));
 
 			this.setSection("adventure");
-			findTower = this.builder(Blocks.MOSSY_STONE_BRICKS, "find_tower", FrameType.TASK).parent(adventureRoot).addCriterion("enter_structure", this.inStructure(DPStructures.TOWER.getStructure())).save(con, this.locate("find_tower"));
-			findReanimatedRuins = this.builder(Blocks.MOSSY_COBBLESTONE, "find_reanimated_ruins", FrameType.TASK).parent(findTower).addCriterion("enter_structure", this.inStructure(DPStructures.REANIMATED_RUINS.getStructure())).save(con, this.locate("find_reanimated_ruins"));
-			findLeviathan = this.builder(Blocks.BONE_BLOCK, "find_leviathan", FrameType.GOAL).parent(findReanimatedRuins).addCriterion("enter_structure", this.inStructure(DPStructures.LEVIATHAN.getStructure())).save(con, this.locate("find_leviathan"));
-			findSnowyTemple = this.builder(Blocks.PACKED_ICE, "find_snowy_temple", FrameType.GOAL).parent(findReanimatedRuins).addCriterion("enter_structure", this.inStructure(DPStructures.SNOWY_TEMPLE.getStructure())).save(con, this.locate("find_snowy_temple"));
-			findWarpedGarden = this.builder(Blocks.WARPED_FUNGUS, "find_warped_garden", FrameType.TASK).parent(findTower).addCriterion("enter_structure", this.inStructure(DPStructures.WARPED_GARDEN.getStructure())).save(con, this.locate("find_warped_garden"));
+			findTower = this.inAnyStructure(this.builder(Blocks.MOSSY_STONE_BRICKS, "find_tower", FrameType.TASK).parent(adventureRoot), DPStructures.TOWER).save(con, this.locate("find_tower"));
+			findReanimatedRuins = this.inAnyStructure(this.builder(Blocks.MOSSY_COBBLESTONE, "find_reanimated_ruins", FrameType.TASK).parent(findTower), DPStructures.REANIMATED_RUINS).save(con, this.locate("find_reanimated_ruins"));
+			findLeviathan = this.inAnyStructure(this.builder(Blocks.BONE_BLOCK, "find_leviathan", FrameType.GOAL).parent(findReanimatedRuins), DPStructures.LEVIATHAN).save(con, this.locate("find_leviathan"));
+			findSnowyTemple = this.inAnyStructure(this.builder(Blocks.PACKED_ICE, "find_snowy_temple", FrameType.GOAL).parent(findReanimatedRuins), DPStructures.SNOWY_TEMPLE).save(con, this.locate("find_snowy_temple"));
+			findWarpedGarden = this.inAnyStructure(this.builder(Blocks.WARPED_FUNGUS, "find_warped_garden", FrameType.TASK).parent(findTower), DPStructures.WARPED_GARDEN).save(con, this.locate("find_warped_garden"));
 
 			this.setSection("nether");
-			findSoulPrison = this.builder(Blocks.SPAWNER, "find_soul_prison", FrameType.GOAL).parent(netherRoot).addCriterion("enter_structure", this.inStructure(DPStructures.SOUL_PRISON.getStructure())).save(con, this.locate("find_soul_prison"));
-			
+			findSoulPrison = this.inAnyStructure(this.builder(Blocks.SPAWNER, "find_soul_prison", FrameType.GOAL).parent(netherRoot), DPStructures.SOUL_PRISON).save(con, this.locate("find_soul_prison"));
+
 			this.setSection("end");
-			findEndRuins = this.builder(Blocks.END_STONE_BRICKS, "find_end_ruins", FrameType.GOAL).parent(endEnterGateway).addCriterion("enter_structure", this.inStructure(DPStructures.END_RUINS.getStructure())).save(con, this.locate("find_end_ruins"));
+			findEndRuins = this.inAnyStructure(this.builder(Blocks.END_STONE_BRICKS, "find_end_ruins", FrameType.GOAL).parent(endEnterGateway), DPStructures.END_RUINS).save(con, this.locate("find_end_ruins"));
 
 			// TODO add advancements
 		}
@@ -128,9 +130,20 @@ public class DPAdvancementProv implements DataProvider
 			this.section = name;
 		}
 
-		private LocationTrigger.TriggerInstance inStructure(StructureFeature<?> structure)
+		private LocationTrigger.TriggerInstance inStructure(ResourceKey<ConfiguredStructureFeature<?, ?>> structure)
 		{
 			return LocationTrigger.TriggerInstance.located(LocationPredicate.inFeature(structure));
+		}
+
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		private Advancement.Builder inAnyStructure(Advancement.Builder builder, StructureRegistrar<?, ?> structure)
+		{
+			structure.getConfiguredStructures().forEach((name, holder) ->
+			{
+				builder.addCriterion("in_" + (name.isEmpty() ? "structure" : name), this.inStructure((ResourceKey) holder.unwrapKey().get()));
+			});
+			builder.requirements(RequirementsStrategy.OR);
+			return builder;
 		}
 
 		private String locate(String key)

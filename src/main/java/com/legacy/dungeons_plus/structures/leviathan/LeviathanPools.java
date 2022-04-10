@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.structures.pools;
+package com.legacy.dungeons_plus.structures.leviathan;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.structure_gel.api.structure.jigsaw.JigsawRegistryHelper;

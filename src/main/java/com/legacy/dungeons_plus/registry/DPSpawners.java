@@ -13,7 +13,7 @@ import com.legacy.structure_gel.api.dynamic_spawner.DynamicSpawnerType;
 import com.legacy.structure_gel.api.events.RegisterDynamicSpawnerEvent;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderSet.Named;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.FloatTag;
@@ -28,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
+import net.minecraft.world.level.SpawnData.CustomSpawnRules;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -45,12 +46,19 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 public class DPSpawners
 {
 	private static List<DynamicSpawnerType> objs = new ArrayList<>();
-	public static final Optional<SpawnData.CustomSpawnRules> SPAWN_IN_SKYLIGHT = Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 7), new InclusiveRange<>(0, 14)));
+	public static final Optional<SpawnData.CustomSpawnRules> SPAWN_IN_SKYLIGHT = Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 7), new InclusiveRange<>(0, 15)));
+	public static final Optional<SpawnData.CustomSpawnRules> SPAWN_IN_PARTIAL_DARK = Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 7), new InclusiveRange<>(0, 7)));
 
+	private static final float DROP_CHANCE = Mob.DEFAULT_EQUIPMENT_DROP_CHANCE;
+	
 	public static final DynamicSpawnerType TOWER_ZOMBIE = create("tower_zombie", DPSpawners::towerZombie);
 	public static final DynamicSpawnerType TOWER_SKELETON = create("tower_skeleton", DPSpawners::towerSkeleton);
 	public static final DynamicSpawnerType TOWER_SPIDER = create("tower_spider", DPSpawners::towerSpider);
 	public static final DynamicSpawnerType TOWER_VEX = create("tower_vex", DPSpawners::towerVex);
+
+	public static final DynamicSpawnerType REANIMATED_RUINS_MOSSY = create("reanimated_ruins_mossy", DPSpawners::reanRuinsMossy);
+	public static final DynamicSpawnerType REANIMATED_RUINS_DESERT = create("reanimated_ruins_desert", DPSpawners::reanRuinsDesert);
+	public static final DynamicSpawnerType REANIMATED_RUINS_FROZEN = create("reanimated_ruins_frozen", DPSpawners::reanRuinsFrozen);
 
 	public static final DynamicSpawnerType LEVIATHAN_HUSK = create("leviathan_husk", DPSpawners::leviathanHusk);
 
@@ -79,24 +87,20 @@ public class DPSpawners
 
 	private static void towerZombie(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
 	{
-		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, towerMob(s, level, pos, EntityType.ZOMBIE, DPLoot.Tower.ENTITY_ZOMBIE, tag ->
-		{
-		}));
+		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, basicMob(s, level, pos, EntityType.ZOMBIE, DPLoot.Tower.ENTITY_ZOMBIE, SPAWN_IN_SKYLIGHT));
 	}
 
 	private static void towerSkeleton(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
 	{
-		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, towerMob(s, level, pos, EntityType.SKELETON, DPLoot.Tower.ENTITY_SKELETON, tag ->
+		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, basicMob(s, level, pos, EntityType.SKELETON, DPLoot.Tower.ENTITY_SKELETON, SPAWN_IN_SKYLIGHT, tag ->
 		{
-			handItems(tag, new ItemStack(Items.BOW), Mob.DEFAULT_EQUIPMENT_DROP_CHANCE);
+			handItems(tag, new ItemStack(Items.BOW), DROP_CHANCE);
 		}));
 	}
 
 	private static void towerSpider(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
 	{
-		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, towerMob(s, level, pos, EntityType.SPIDER, DPLoot.Tower.ENTITY_SPIDER, tag ->
-		{
-		}));
+		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, basicMob(s, level, pos, EntityType.SPIDER, DPLoot.Tower.ENTITY_SPIDER, SPAWN_IN_SKYLIGHT));
 	}
 
 	private static void towerVex(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
@@ -108,12 +112,43 @@ public class DPSpawners
 		SpawnerAccessHelper.setSpawnCount(s, level, pos, 2);
 	}
 
-	private static SpawnData towerMob(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos, EntityType<?> type, ResourceLocation lootTable, Consumer<CompoundTag> tagFunc)
+	private static void reanRuinsMossy(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
 	{
-		CompoundTag tag = new CompoundTag();
-		tagFunc.accept(tag);
-		lootTable(tag, lootTable);
-		return SpawnerAccessHelper.createSpawnerEntity(type, tag, SPAWN_IN_SKYLIGHT);
+		SimpleWeightedRandomList.Builder<SpawnData> builder = SimpleWeightedRandomList.builder();
+		builder.add(basicMob(s, level, pos, EntityType.ZOMBIE, DPLoot.ReanimatedRuins.ENTITY_ZOMBIE, SPAWN_IN_PARTIAL_DARK), 2);
+		builder.add(basicMob(s, level, pos, EntityType.DROWNED, null, SPAWN_IN_PARTIAL_DARK, tag ->
+		{
+			handItems(tag, new ItemStack(Items.STONE_SWORD), DROP_CHANCE, ItemStack.EMPTY, DROP_CHANCE);
+		}), 1);
+		builder.add(basicMob(s, level, pos, EntityType.SLIME, null, SPAWN_IN_PARTIAL_DARK, tag ->
+		{
+			tag.putInt("Size", 2);
+		}), 1);
+		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, builder.build());
+	}
+
+	private static void reanRuinsDesert(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
+	{
+		SimpleWeightedRandomList.Builder<SpawnData> builder = SimpleWeightedRandomList.builder();
+		builder.add(basicMob(s, level, pos, EntityType.ZOMBIE, DPLoot.ReanimatedRuins.ENTITY_ZOMBIE, Optional.empty()), 2);
+		builder.add(basicMob(s, level, pos, EntityType.HUSK, null, Optional.empty()), 2);
+		builder.add(basicMob(s, level, pos, EntityType.SKELETON, DPLoot.ReanimatedRuins.ENTITY_SKELETON, Optional.empty(), tag ->
+		{
+			handItems(tag, new ItemStack(Items.GOLDEN_PICKAXE), DROP_CHANCE);
+		}), 1);
+		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, builder.build());
+	}
+
+	private static void reanRuinsFrozen(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
+	{
+		SimpleWeightedRandomList.Builder<SpawnData> builder = SimpleWeightedRandomList.builder();
+		builder.add(basicMob(s, level, pos, EntityType.SKELETON, DPLoot.ReanimatedRuins.ENTITY_SKELETON, Optional.empty(), tag ->
+		{
+			handItems(tag, new ItemStack(Items.BOW), DROP_CHANCE);
+		}), 3);
+		builder.add(basicMob(s, level, pos, EntityType.STRAY, null, Optional.empty()), 2);
+		builder.add(basicMob(s, level, pos, EntityType.CAVE_SPIDER, null, Optional.empty()), 1);
+		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, builder.build());
 	}
 
 	private static void leviathanHusk(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
@@ -138,16 +173,16 @@ public class DPSpawners
 
 		ItemStack goldAxe = new ItemStack(Items.GOLDEN_AXE);
 		goldAxe.setDamageValue(10);
-		Named<Block> corals = Registry.BLOCK.getTag(BlockTags.CORAL_BLOCKS).get();
+		HolderSet<Block> corals = Registry.BLOCK.getOrCreateTag(BlockTags.CORAL_BLOCKS);
 		corals.forEach(holder ->
 		{
 			CompoundTag entityTag = new CompoundTag();
-			handItems(entityTag, goldAxe, Mob.DEFAULT_EQUIPMENT_DROP_CHANCE, new ItemStack(holder.value()), 1.0F);
+			handItems(entityTag, goldAxe, DROP_CHANCE, new ItemStack(holder.value()), 1.0F);
 			spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), 1);
 		});
 
 		CompoundTag entityTag = new CompoundTag();
-		handItems(entityTag, goldAxe, 0.085F);
+		handItems(entityTag, goldAxe, DROP_CHANCE);
 		spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), corals.size() / 2);
 
 		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, spawns.build());
@@ -192,6 +227,22 @@ public class DPSpawners
 
 	public static void handItems(CompoundTag tag, ItemStack mainHand, float mainHandDropChance)
 	{
-		handItems(tag, mainHand, mainHandDropChance, ItemStack.EMPTY, Mob.DEFAULT_EQUIPMENT_DROP_CHANCE);
+		handItems(tag, mainHand, mainHandDropChance, ItemStack.EMPTY, DROP_CHANCE);
+	}
+
+	private static SpawnData basicMob(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos, EntityType<?> type, @Nullable ResourceLocation lootTable, Optional<CustomSpawnRules> customSpawnRules, Consumer<CompoundTag> tagFunc)
+	{
+		CompoundTag tag = new CompoundTag();
+		tagFunc.accept(tag);
+		if (lootTable != null)
+			lootTable(tag, lootTable);
+		return SpawnerAccessHelper.createSpawnerEntity(type, tag, customSpawnRules);
+	}
+
+	private static SpawnData basicMob(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos, EntityType<?> type, @Nullable ResourceLocation lootTable, Optional<CustomSpawnRules> customSpawnRules)
+	{
+		return basicMob(s, level, pos, type, lootTable, customSpawnRules, tag ->
+		{
+		});
 	}
 }

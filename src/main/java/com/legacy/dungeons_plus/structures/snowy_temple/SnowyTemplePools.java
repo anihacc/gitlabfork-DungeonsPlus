@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.structures.pools;
+package com.legacy.dungeons_plus.structures.snowy_temple;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.structures.DPProcessors;

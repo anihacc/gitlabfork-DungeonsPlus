@@ -1,0 +1,51 @@
+{
+  "parent": "dungeons_plus:adventure/find_tower",
+  "display": {
+    "icon": {
+      "item": "minecraft:mossy_cobblestone"
+    },
+    "title": {
+      "translate": "dungeons_plus:advancements.adventure.find_reanimated_ruins.title"
+    },
+    "description": {
+      "translate": "dungeons_plus:advancements.adventure.find_reanimated_ruins.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "in_mossy": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "location": {
+          "feature": "dungeons_plus:reanimated_ruins_mossy"
+        }
+      }
+    },
+    "in_frozen": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "location": {
+          "feature": "dungeons_plus:reanimated_ruins_frozen"
+        }
+      }
+    },
+    "in_desert": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "location": {
+          "feature": "dungeons_plus:reanimated_ruins_desert"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "in_mossy",
+      "in_frozen",
+      "in_desert"
+    ]
+  ]
+}

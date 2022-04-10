@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.structures.pieces;
+package com.legacy.dungeons_plus.structures.tower;
 
 import java.util.ArrayList;
 import java.util.Arrays;

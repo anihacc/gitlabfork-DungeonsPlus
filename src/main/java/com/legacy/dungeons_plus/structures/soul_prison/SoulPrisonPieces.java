@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.structures.pieces;
+package com.legacy.dungeons_plus.structures.soul_prison;
 
 import java.util.Random;
 

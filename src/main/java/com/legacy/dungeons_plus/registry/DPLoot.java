@@ -6,23 +6,16 @@ import com.legacy.dungeons_plus.loot.OptionalLootEntry;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.Serializer;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 public class DPLoot
 {
-	public static final LootPoolEntryType NAMED_ITEM = registerEntry("named_item", new NamedLootItem.Serializer());
-	public static final LootPoolEntryType OPTIONAL_ENTRY = registerEntry("optional_entry", new OptionalLootEntry.Serializer());
+	public static final DeferredRegister<LootPoolEntryType> LOOT_POOLS_TYPES = DeferredRegister.create(Registry.LOOT_POOL_ENTRY_TYPE.key(), DungeonsPlus.MODID);
 
-	public static void init()
-	{
-	}
-
-	private static LootPoolEntryType registerEntry(String name, Serializer<? extends LootPoolEntryContainer> serializer)
-	{
-		return Registry.register(Registry.LOOT_POOL_ENTRY_TYPE, DungeonsPlus.locate(name), new LootPoolEntryType(serializer));
-	}
+	public static final RegistryObject<LootPoolEntryType> NAMED_ITEM = LOOT_POOLS_TYPES.register("named_item", () -> new LootPoolEntryType(new NamedLootItem.Serializer()));
+	public static final RegistryObject<LootPoolEntryType> OPTIONAL_ENTRY = LOOT_POOLS_TYPES.register("optional_entry", () -> new LootPoolEntryType(new OptionalLootEntry.Serializer()));
 
 	public static final class Tower
 	{
@@ -39,10 +32,12 @@ public class DPLoot
 	public static final class ReanimatedRuins
 	{
 		public static final ResourceLocation CHEST_COMMON = chest("reanimated_ruins/common");
-		public static final ResourceLocation CHEST_HUSK = chest("reanimated_ruins/husk");
-		public static final ResourceLocation CHEST_HUSK_MAP = chest("reanimated_ruins/husk_map");
-		public static final ResourceLocation CHEST_STRAY = chest("reanimated_ruins/stray");
-		public static final ResourceLocation CHEST_STRAY_MAP = chest("reanimated_ruins/stray_map");
+		public static final ResourceLocation CHEST_DESERT = chest("reanimated_ruins/desert");
+		public static final ResourceLocation CHEST_DESERT_MAP = chest("reanimated_ruins/desert_map");
+		public static final ResourceLocation CHEST_FROZEN = chest("reanimated_ruins/frozen");
+		public static final ResourceLocation CHEST_FROZEN_MAP = chest("reanimated_ruins/frozen_map");
+		public static final ResourceLocation CHEST_MOSSY = chest("reanimated_ruins/mossy");
+		public static final ResourceLocation CHEST_MOSSY_MAP = chest("reanimated_ruins/mossy_map");
 
 		public static final ResourceLocation ENTITY_SKELETON = entity("reanimated_ruins/skeleton");
 		public static final ResourceLocation ENTITY_ZOMBIE = entity("reanimated_ruins/zombie");

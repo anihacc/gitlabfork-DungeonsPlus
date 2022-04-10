@@ -1,18 +1,16 @@
-package com.legacy.dungeons_plus.structures;
+package com.legacy.dungeons_plus.structures.leviathan;
 
 import java.util.Random;
 
-import com.legacy.dungeons_plus.DPUtil;
-import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
 import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
+import com.legacy.structure_gel.api.structure.jigsaw.ExtendedJigsawConfiguration;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
@@ -22,14 +20,14 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
-public class ReanimatedRuinsStructure extends GelConfigJigsawStructure
+public class LeviathanStructure extends GelConfigJigsawStructure<JigsawConfiguration>
 {
-	public ReanimatedRuinsStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
+	public LeviathanStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
 	{
-		super(codec, config, 75/*20*/, true, false, context -> true, Piece::new);
+		super(codec, config, -1, true, true, context -> true, Piece::new);
 	}
 
-	public static final class Piece extends AbstractGelStructurePiece
+	public static class Piece extends AbstractGelStructurePiece
 	{
 		public Piece(StructureManager template, StructurePoolElement piece, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds)
 		{
@@ -44,7 +42,7 @@ public class ReanimatedRuinsStructure extends GelConfigJigsawStructure
 		@Override
 		public StructurePieceType getType()
 		{
-			return DPStructures.REANIMATED_RUINS.getPieceType();
+			return DPStructures.LEVIATHAN.getPieceType();
 		}
 
 		@Override
@@ -52,38 +50,12 @@ public class ReanimatedRuinsStructure extends GelConfigJigsawStructure
 		{
 			if (key.contains("chest"))
 			{
-				this.setAir(level, pos);
 				String[] data = key.split("-");
-
-				/**
-				 * Generates the chests with a 70% chance, or if they are a map chest.
-				 */
-				if (rand.nextFloat() < 0.70F || data[0].contains("map"))
-				{
-					ResourceLocation lootTable = DPLoot.ReanimatedRuins.CHEST_COMMON;
-					if (data[0].contains(":"))
-					{
-						lootTable = switch (data[0].split(":")[1])
-						{
-						case "huskmap" -> DPLoot.ReanimatedRuins.CHEST_HUSK_MAP;
-						case "husk" -> DPLoot.ReanimatedRuins.CHEST_HUSK;
-						case "straymap" -> DPLoot.ReanimatedRuins.CHEST_STRAY_MAP;
-						case "stray" -> DPLoot.ReanimatedRuins.CHEST_STRAY;
-						default -> lootTable;
-						};
-					}
-					//DPUtil.createChest(this::createChest, level, bounds, rand, pos, lootTable, this.rotation, data);
-				}
+				//DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.Leviathan.CHEST_COMMON, this.rotation, data);
 			}
-			if (key.contains("spawner"))
+			if (key.equals("spawner"))
 			{
-				// TODO spawners
-				String[] data = key.split("-");
-				//DPUtil.placeSpawner(data[1], level, pos);
-			}
-			if (key.equals("monster_box"))
-			{
-				DPUtil.placeMonsterBox(level, pos, rand);
+				//DPUtil.placeSpawner(level, pos, DPSpawners.LEVIATHAN_HUSK);
 			}
 		}
 	}

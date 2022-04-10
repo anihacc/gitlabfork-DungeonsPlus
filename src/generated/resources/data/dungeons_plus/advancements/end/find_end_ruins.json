@@ -16,7 +16,7 @@
     "hidden": false
   },
   "criteria": {
-    "enter_structure": {
+    "in_structure": {
       "trigger": "minecraft:location",
       "conditions": {
         "location": {
@@ -27,7 +27,7 @@
   },
   "requirements": [
     [
-      "enter_structure"
+      "in_structure"
     ]
   ]
 }

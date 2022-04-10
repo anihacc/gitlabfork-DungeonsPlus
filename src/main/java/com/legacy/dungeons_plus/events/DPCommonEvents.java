@@ -4,7 +4,6 @@ import static com.legacy.dungeons_plus.DungeonsPlus.*;
 
 import java.util.function.Consumer;
 
-import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.data.providers.DPAdvancementProv;
 import com.legacy.dungeons_plus.data.providers.DPLangProvider;
@@ -15,6 +14,7 @@ import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.entity.EntityAccessHelper;
 import com.legacy.structure_gel.api.events.RegisterLootTableAliasEvent;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
+import com.legacy.structure_gel.api.structure.StructureAccessHelper;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -57,7 +57,7 @@ public class DPCommonEvents
 		@SuppressWarnings("unchecked")
 		private static <T extends Entity> void ifInStructure(Entity entity, EntityType<T> entityTest, StructureRegistrar<?, ?> structure, Consumer<T> consumer)
 		{
-			if (entity.getType().equals(entityTest) && entity.level instanceof ServerLevel serverLevel && DPUtil.isInStructure(serverLevel, structure.getStructure(), entity.blockPosition()))
+			if (entity.getType().equals(entityTest) && entity.level instanceof ServerLevel serverLevel && StructureAccessHelper.isInStructurePiece(serverLevel, structure.getStructure(), entity.blockPosition()))
 				consumer.accept((T) entity);
 		}
 	}
@@ -71,8 +71,6 @@ public class DPCommonEvents
 			ModList modList = ModList.get();
 			DungeonsPlus.isWaystonesLoaded = modList.isLoaded("waystones");
 			DungeonsPlus.isQuarkLoaded = modList.isLoaded("quark");
-
-			DPLoot.init();
 		}
 
 		@SubscribeEvent
@@ -90,11 +88,13 @@ public class DPCommonEvents
 
 			// Reanimated ruins
 			event.register(locate("reanimated_ruins/common"), DPLoot.ReanimatedRuins.CHEST_COMMON);
-			event.register(locate("reanimated_ruins/husk"), DPLoot.ReanimatedRuins.CHEST_HUSK);
-			event.register(locate("reanimated_ruins/husk_map"), DPLoot.ReanimatedRuins.CHEST_HUSK_MAP);
-			event.register(locate("reanimated_ruins/stray"), DPLoot.ReanimatedRuins.CHEST_STRAY);
-			event.register(locate("reanimated_ruins/stray_map"), DPLoot.ReanimatedRuins.CHEST_STRAY_MAP);
-
+			event.register(locate("reanimated_ruins/desert"), DPLoot.ReanimatedRuins.CHEST_DESERT);
+			event.register(locate("reanimated_ruins/desert_map"), DPLoot.ReanimatedRuins.CHEST_DESERT_MAP);
+			event.register(locate("reanimated_ruins/frozen"), DPLoot.ReanimatedRuins.CHEST_FROZEN);
+			event.register(locate("reanimated_ruins/frozen_map"), DPLoot.ReanimatedRuins.CHEST_FROZEN_MAP);
+			event.register(locate("reanimated_ruins/mossy"), DPLoot.ReanimatedRuins.CHEST_MOSSY);
+			event.register(locate("reanimated_ruins/mossy_map"), DPLoot.ReanimatedRuins.CHEST_MOSSY_MAP);
+			
 			event.register(locate("reanimated_ruins/skeleton"), DPLoot.ReanimatedRuins.ENTITY_SKELETON);
 			event.register(locate("reanimated_ruins/zombie"), DPLoot.ReanimatedRuins.ENTITY_ZOMBIE);
 
@@ -118,14 +118,15 @@ public class DPCommonEvents
 
 		@SubscribeEvent
 		protected static void gatherData(final GatherDataEvent event)
-		{
+		{			
 			DataGenerator gen = event.getGenerator();
 			ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
 			// data
-			BlockTagsProvider blockTagProv = new DPTagProv.Block(gen, event.getExistingFileHelper());
+			BlockTagsProvider blockTagProv = new DPTagProv.BlockProv(gen, event.getExistingFileHelper());
 			gen.addProvider(blockTagProv);
-			gen.addProvider(new DPTagProv.Item(gen, blockTagProv, existingFileHelper));
+			gen.addProvider(new DPTagProv.ItemProv(gen, blockTagProv, existingFileHelper));
+			gen.addProvider(new DPTagProv.ConfiguredStructureFeatureProv(gen, existingFileHelper));
 			gen.addProvider(new DPAdvancementProv(gen));
 			gen.addProvider(new DPLootProv(gen));
 

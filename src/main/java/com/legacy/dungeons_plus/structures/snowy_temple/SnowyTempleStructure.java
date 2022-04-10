@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.structures;
+package com.legacy.dungeons_plus.structures.snowy_temple;
 
 import java.util.Random;
 
@@ -19,11 +19,11 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
-public class LeviathanStructure extends GelConfigJigsawStructure
+public class SnowyTempleStructure extends GelConfigJigsawStructure<JigsawConfiguration>
 {
-	public LeviathanStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
+	public SnowyTempleStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
 	{
-		super(codec, config, -1, true, true, context -> true, Piece::new);
+		super(codec, config, 0, true, true, context -> true, Piece::new);
 	}
 
 	public static class Piece extends AbstractGelStructurePiece
@@ -41,7 +41,7 @@ public class LeviathanStructure extends GelConfigJigsawStructure
 		@Override
 		public StructurePieceType getType()
 		{
-			return DPStructures.LEVIATHAN.getPieceType();
+			return DPStructures.SNOWY_TEMPLE.getPieceType();
 		}
 
 		@Override
@@ -50,11 +50,11 @@ public class LeviathanStructure extends GelConfigJigsawStructure
 			if (key.contains("chest"))
 			{
 				String[] data = key.split("-");
-				//DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.Leviathan.CHEST_COMMON, this.rotation, data);
+				//DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.SnowyTemple.CHEST_COMMON, this.rotation, data);
 			}
-			if (key.equals("spawner"))
+			if (key.contains("spawner"))
 			{
-				//DPUtil.placeSpawner(level, pos, DPSpawners.LEVIATHAN_HUSK);
+				//DPUtil.placeSpawner(level, pos, DPSpawners.SNOWY_TEMPLE_STRAY);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package com.legacy.dungeons_plus.structures.pieces;
+package com.legacy.dungeons_plus.structures.warped_garden;
 
 import java.util.Arrays;
 import java.util.List;
