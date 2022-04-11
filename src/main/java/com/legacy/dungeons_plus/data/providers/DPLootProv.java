@@ -175,7 +175,6 @@ public class DPLootProv extends LootTableProvider
 			//@formatter:on
 		}
 
-		// TODO
 		private void reanimatedRuins(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
 			//@formatter:off
@@ -186,18 +185,18 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.ROTTEN_FLESH, 2, 4).setWeight(1),
 							basicEntry(Items.STRING, 1, 3).setWeight(1),
 							basicEntry(Items.FEATHER, 1, 2).setWeight(1),
-							basicEntry(Items.FLINT, 1, 2).setWeight(1)
+							basicEntry(Items.STONE_BRICKS, 3, 5).setWeight(1)
 						)).setRolls(UniformGenerator.between(3, 6)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.IRON_NUGGET, 1, 3).setWeight(3),
 							basicEntry(Items.REDSTONE, 1, 3).setWeight(2),
-							basicEntry(Items.LAPIS_LAZULI, 2, 4).setWeight(1),
+							basicEntry(Items.HONEYCOMB, 1, 2).setWeight(1),
 							basicEntry(Items.BOOK, 1, 3).setWeight(2),
-							basicEntry(Items.GOLD_INGOT, 1, 2).setWeight(1)
+							basicEntry(Items.GOLD_NUGGET, 2, 4).setWeight(1)
 						)).setRolls(UniformGenerator.between(2, 3)),
 					poolOf(ImmutableList.of(
-							basicEntry(Items.INFESTED_STONE_BRICKS, 1, 3).setWeight(3),
-							basicEntry(Items.ENDER_PEARL, 1, 2).setWeight(2),
+							basicEntry(Items.BREAD, 1, 3).setWeight(4),
+							basicEntry(Items.ENDER_PEARL, 0, 1).setWeight(2),
 							basicEntry(Items.SADDLE).setWeight(2),
 							basicEntry(Items.NAME_TAG).setWeight(1),
 							basicEntry(Items.BOOK).setWeight(1).apply(enchant())
@@ -224,7 +223,7 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.GOLDEN_APPLE).setWeight(1),
 							basicEntry(Items.BUCKET).setWeight(2),
 							basicEntry(Items.BOOK).setWeight(5).apply(enchant()),
-							basicEntry(Items.GOLD_NUGGET).setWeight(3)
+							basicEntry(Items.GOLD_NUGGET).setWeight(5)
 						)).setRolls(UniformGenerator.between(1, 3)))));
 			
 			consumer.accept(DPLoot.ReanimatedRuins.CHEST_DESERT_MAP, tableOf(ImmutableList.of(
@@ -267,29 +266,28 @@ public class DPLootProv extends LootTableProvider
 							LootTableReference.lootTableReference(DPLoot.ReanimatedRuins.CHEST_FROZEN)
 						)))));
 			
-			// TODO Make loot
 			consumer.accept(DPLoot.ReanimatedRuins.CHEST_MOSSY, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
-							basicEntry(Items.ARROW, 1, 5).setWeight(3),
-							basicEntry(Items.BONE, 2, 5).setWeight(3),
-							basicEntry(Items.SNOWBALL, 1, 3).setWeight(2),
-							basicEntry(Items.FLINT, 1, 2).setWeight(1),
-							basicEntry(Items.FEATHER, 1, 2).setWeight(1),
+							basicEntry(Items.ROTTEN_FLESH, 1, 5).setWeight(3),
+							basicEntry(Items.GLOW_BERRIES, 2, 5).setWeight(3),
+							basicEntry(Items.SMALL_DRIPLEAF, 1, 3).setWeight(2),
+							basicEntry(Items.RAW_COPPER, 1, 2).setWeight(1),
+							basicEntry(Items.CLAY_BALL, 1, 2).setWeight(1),
 							basicEntry(Items.STRING, 1, 2).setWeight(1)
 						)).setRolls(UniformGenerator.between(3, 5)),
 					poolOf(ImmutableList.of(
-							basicEntry(Items.ICE, 2, 3).setWeight(2),
-							basicEntry(Items.TIPPED_ARROW, 2, 4).setWeight(4).apply(SetPotionFunction.setPotion(Potions.SLOWNESS)),
-							basicEntry(Items.IRON_INGOT, 2, 4).setWeight(4),
-							basicEntry(Items.REDSTONE, 1, 3).setWeight(4),
+							basicEntry(Items.MOSS_BLOCK, 2, 3).setWeight(2),
+							basicEntry(Items.SLIME_BALL, 2, 4).setWeight(4),
+							basicEntry(Items.GOLD_NUGGET, 1, 4).setWeight(3),
+							basicEntry(Items.RAW_COPPER, 1, 2).setWeight(3),
 							basicEntry(Items.COAL, 1, 3).setWeight(4),
-							basicEntry(Items.BOW).setWeight(1)
+							basicEntry(Items.MINECART).setWeight(1)
 						)).setRolls(UniformGenerator.between(2, 4)),
 					poolOf(ImmutableList.of(
-							basicEntry(Items.BOW).setWeight(2).apply(enchant()),
-							basicEntry(Items.CHAINMAIL_CHESTPLATE).setWeight(2),
-							basicEntry(Items.BOOK).setWeight(5).apply(enchant()),
-							basicEntry(Items.MUSIC_DISC_WAIT).setWeight(1)
+							basicEntry(Items.RAW_COPPER_BLOCK, 0, 2).setWeight(5),
+							basicEntry(Items.WATER_BUCKET).setWeight(1),
+							basicEntry(Items.BOOK).setWeight(2).apply(enchant()),
+							basicEntry(Items.IRON_PICKAXE).setWeight(1).apply(enchant(Enchantments.BLOCK_EFFICIENCY, Enchantments.UNBREAKING, Enchantments.SILK_TOUCH, Enchantments.VANISHING_CURSE)).apply(setDamage(10, 60))
 						)).setRolls(UniformGenerator.between(1, 3)))));
 			
 			consumer.accept(DPLoot.ReanimatedRuins.CHEST_MOSSY_MAP, tableOf(ImmutableList.of(

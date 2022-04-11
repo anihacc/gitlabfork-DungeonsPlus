@@ -91,13 +91,13 @@
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "min": 3.0,
+                "max": 5.0
               },
               "add": false
             }
           ],
-          "name": "minecraft:flint"
+          "name": "minecraft:stone_bricks"
         }
       ]
     },
@@ -148,13 +148,13 @@
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 4.0
+                "min": 1.0,
+                "max": 2.0
               },
               "add": false
             }
           ],
-          "name": "minecraft:lapis_lazuli"
+          "name": "minecraft:honeycomb"
         },
         {
           "type": "minecraft:item",
@@ -179,13 +179,13 @@
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "min": 2.0,
+                "max": 4.0
               },
               "add": false
             }
           ],
-          "name": "minecraft:gold_ingot"
+          "name": "minecraft:gold_nugget"
         }
       ]
     },
@@ -199,7 +199,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 4,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -211,7 +211,7 @@
               "add": false
             }
           ],
-          "name": "minecraft:infested_stone_bricks"
+          "name": "minecraft:bread"
         },
         {
           "type": "minecraft:item",
@@ -221,8 +221,8 @@
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "min": 0.0,
+                "max": 1.0
               },
               "add": false
             }

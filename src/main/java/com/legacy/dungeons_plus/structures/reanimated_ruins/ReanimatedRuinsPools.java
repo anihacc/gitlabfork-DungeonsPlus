@@ -22,7 +22,7 @@ public class ReanimatedRuinsPools
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "reanimated_ruins/");
 
-		DESERT_ROOT = registry.register("center", registry.builder().names("center/desert_0").maintainWater(false).build());
+		DESERT_ROOT = registry.register("center", registry.builder().names("center/desert_0", "center/frozen_0", "center/mossy_0").maintainWater(false).build());
 
 		JigsawPoolBuilder basicPoolBuilder = registry.builder().maintainWater(false);
 
@@ -35,7 +35,7 @@ public class ReanimatedRuinsPools
 		}
 		for (int i = 0; i <= 4; i++)
 		{
-			rooms.put("room/large_" + i, 2);
+			rooms.put("room/large_3"/* + i*/, 2);
 		}
 		for (int i = 0; i <= 12; i++)
 		{
