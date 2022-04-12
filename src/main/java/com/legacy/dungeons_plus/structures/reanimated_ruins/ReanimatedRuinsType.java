@@ -1,6 +1,7 @@
 package com.legacy.dungeons_plus.structures.reanimated_ruins;
 
 import java.util.Random;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -9,10 +10,13 @@ import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPSpawners;
+import com.legacy.dungeons_plus.structures.BlockModifierMap;
 import com.legacy.dungeons_plus.structures.PsuedoFeature;
 import com.legacy.dungeons_plus.structures.PsuedoFeature.IPlacement;
 import com.legacy.structure_gel.api.dynamic_spawner.DynamicSpawnerType;
+import com.legacy.structure_gel.api.structure.base.IModifyState;
 
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.data.worldgen.features.CaveFeatures;
@@ -21,32 +25,32 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public enum ReanimatedRuinsType implements StringRepresentable
 {
-	MOSSY("mossy", DPLoot.ReanimatedRuins.CHEST_MOSSY, DPSpawners.REANIMATED_RUINS_MOSSY, ReanimatedRuinsType::mossyFeatures),
-	DESERT("desert", DPLoot.ReanimatedRuins.CHEST_DESERT, DPSpawners.REANIMATED_RUINS_DESERT, ReanimatedRuinsType::desertFeatures),
-	FROZEN("frozen", DPLoot.ReanimatedRuins.CHEST_FROZEN, DPSpawners.REANIMATED_RUINS_FROZEN, ReanimatedRuinsType::frozenFeatures);
+	MOSSY("mossy", DPLoot.ReanimatedRuins.CHEST_MOSSY, DPSpawners.REANIMATED_RUINS_MOSSY, mossyBlockModifier(), ReanimatedRuinsType::mossyFeatures),
+	DESERT("desert", DPLoot.ReanimatedRuins.CHEST_DESERT, DPSpawners.REANIMATED_RUINS_DESERT, desertBlockModifier(), ReanimatedRuinsType::desertFeatures),
+	FROZEN("frozen", DPLoot.ReanimatedRuins.CHEST_FROZEN, DPSpawners.REANIMATED_RUINS_FROZEN, frozenBlockModifier(), ReanimatedRuinsType::frozenFeatures);
 
 	private final String name;
 	public final ResourceLocation loot;
 	public final DynamicSpawnerType spawner;
+	public final BlockModifierMap modifierMap;
 	private final ImmutableList<PsuedoFeature> features;
-	//TODO 
-	Consumer<ImmutableList.Builder<PsuedoFeature>> featureCon;
 
-	ReanimatedRuinsType(String name, ResourceLocation loot, DynamicSpawnerType spawner, Consumer<ImmutableList.Builder<PsuedoFeature>> features)
+	ReanimatedRuinsType(String name, ResourceLocation loot, DynamicSpawnerType spawner, BlockModifierMap modifierMap, Consumer<ImmutableList.Builder<PsuedoFeature>> features)
 	{
 		this.name = name;
 		this.loot = loot;
 		this.spawner = spawner;
+		this.modifierMap = modifierMap;
 		ImmutableList.Builder<PsuedoFeature> builder = ImmutableList.builder();
 		features.accept(builder);
 		this.features = builder.build();
-		// TODO
-		this.featureCon = features;
 	}
 
 	@Override
@@ -63,25 +67,16 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		return MOSSY;
 	}
 
-	public ImmutableList<PsuedoFeature> getFeatures()
-	{
-		// TODO
-		ImmutableList.Builder<PsuedoFeature> builder = ImmutableList.builder();
-		featureCon.accept(builder);
-		return builder.build();
-		//return this.features;
-	}
-
 	public void decorate(ServerLevelAccessor level, BlockPos pos, Random rand)
 	{
-		for (var f : this.getFeatures())
+		for (var f : this.features)
 			f.place(level, pos, rand);
 	}
 
 	private static void mossyFeatures(ImmutableList.Builder<PsuedoFeature> list)
 	{
 		list.add(new PsuedoFeature(0, 2, IPlacement.FIND_LOWEST_AIR, ReanimatedRuinsType::puddle));
-		list.add(new PsuedoFeature(6, 9, IPlacement.NOOP, ReanimatedRuinsType::mossyCobble));
+		list.add(new PsuedoFeature(6, 9, IPlacement.NOOP, ReanimatedRuinsType::mossyStone));
 		list.add(new PsuedoFeature(2, 5, IPlacement.NOOP, ReanimatedRuinsType::grassFloor));
 		list.add(new PsuedoFeature(2, 5, IPlacement.FIND_LOWEST_AIR, ReanimatedRuinsType::dripleaf));
 		list.add(new PsuedoFeature(2, 6, IPlacement.FIND_LOWEST_AIR, ReanimatedRuinsType::tallGrass));
@@ -90,14 +85,19 @@ public enum ReanimatedRuinsType implements StringRepresentable
 
 	private static void desertFeatures(ImmutableList.Builder<PsuedoFeature> list)
 	{
-		
+		list.add(new PsuedoFeature(2, 6, IPlacement.FIND_LOWEST_AIR, ReanimatedRuinsType::deadBush));
+		list.add(new PsuedoFeature(0, 6, IPlacement.FIND_HIGHEST_AIR, ReanimatedRuinsType::dripstone));
 	}
-	
+
 	private static void frozenFeatures(ImmutableList.Builder<PsuedoFeature> list)
 	{
-		
+		list.add(new PsuedoFeature(0, 2, IPlacement.FIND_HIGHEST_AIR, ReanimatedRuinsType::ice));
+		list.add(new PsuedoFeature(0, 2, IPlacement.NOOP, ReanimatedRuinsType::diorite));
+		list.add(new PsuedoFeature(2, 5, IPlacement.NOOP, ReanimatedRuinsType::calciteFloor));
+		list.add(new PsuedoFeature(2, 6, IPlacement.FIND_LOWEST_AIR, ReanimatedRuinsType::snowPatch));
+		list.add(new PsuedoFeature(2, 6, IPlacement.NOOP, ReanimatedRuinsType::glowLichen));
 	}
-	
+
 	private static void puddle(ServerLevelAccessor level, BlockPos pos, Random rand)
 	{
 		pos = pos.below();
@@ -116,9 +116,23 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		}
 	}
 
-	private static void mossyCobble(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void mossyStone(ServerLevelAccessor level, BlockPos pos, Random rand)
 	{
-		DPUtil.fillBlob(level, pos, 4, Blocks.MOSSY_COBBLESTONE.defaultBlockState(), (l, p, s) -> s.is(Blocks.COBBLESTONE), rand, 0.20F);
+		DPUtil.fillBlob(level, pos, 4, (l, p, r) ->
+		{
+			BlockState s = level.getBlockState(p);
+			if (s.is(Blocks.COBBLESTONE))
+				return Blocks.MOSSY_COBBLESTONE.defaultBlockState();
+			else if (s.is(Blocks.STONE_BRICKS))
+				return Blocks.MOSSY_STONE_BRICKS.defaultBlockState();
+			else if (s.is(Blocks.INFESTED_STONE_BRICKS))
+				return Blocks.INFESTED_MOSSY_STONE_BRICKS.defaultBlockState();
+			else if (s.is(Blocks.STONE_BRICK_SLAB))
+				return IModifyState.mergeStates(Blocks.MOSSY_STONE_BRICK_SLAB.defaultBlockState(), s);
+			else if (s.is(Blocks.STONE_BRICK_STAIRS))
+				return IModifyState.mergeStates(Blocks.MOSSY_STONE_BRICK_STAIRS.defaultBlockState(), s);
+			return null;
+		}, rand, 0.20F);
 	}
 
 	private static void grassFloor(ServerLevelAccessor level, BlockPos pos, Random rand)
@@ -149,5 +163,101 @@ public enum ReanimatedRuinsType implements StringRepresentable
 			ServerLevel serverLev = level.getLevel();
 			CaveFeatures.CAVE_VINE.value().place(serverLev, serverLev.getChunkSource().getGenerator(), rand, pos);
 		}
+	}
+
+	private static void deadBush(ServerLevelAccessor level, BlockPos pos, Random rand)
+	{
+		BlockState deadBush = Blocks.DEAD_BUSH.defaultBlockState();
+		DPUtil.fillBlob(level, pos, 3, deadBush, (l, p, s) -> s.isAir() && deadBush.canSurvive(l, p), rand, 0.2F);
+	}
+
+	private static void dripstone(ServerLevelAccessor level, BlockPos pos, Random rand)
+	{
+		ServerLevel serverLev = level.getLevel();
+		CaveFeatures.DRIPSTONE_CLUSTER.value().place(serverLev, serverLev.getChunkSource().getGenerator(), rand, pos);
+	}
+
+	private static void diorite(ServerLevelAccessor level, BlockPos pos, Random rand)
+	{
+		DPUtil.fillBlob(level, pos, 4, (l, p, r) ->
+		{
+			BlockState s = level.getBlockState(p);
+			if (s.is(Blocks.COBBLESTONE))
+				return Blocks.DIORITE.defaultBlockState();
+			return null;
+		}, rand, 0.85F);
+	}
+
+	private static void calciteFloor(ServerLevelAccessor level, BlockPos pos, Random rand)
+	{
+		DPUtil.fillBlob(level, pos, 4, Blocks.CALCITE.defaultBlockState(), (l, p, s) -> s.is(Blocks.STONE) && l.getBlockState(p.above()).isAir(), rand, 0.60F);
+	}
+
+	private static void ice(ServerLevelAccessor level, BlockPos pos, Random rand)
+	{
+		DPUtil.fillBlob(level, pos, 4, Blocks.PACKED_ICE.defaultBlockState(), (l, p, s) -> s.is(Blocks.COBBLESTONE) && l.getBlockState(p.below()).isAir(), rand, 0.75F);
+	}
+
+	private static void snowPatch(ServerLevelAccessor level, BlockPos pos, Random rand)
+	{
+		BlockState snow = Blocks.SNOW.defaultBlockState();
+		DPUtil.fillBlob(level, pos, 3, snow, (l, p, s) -> s.isAir() && snow.canSurvive(l, p), rand, 0.75F);
+	}
+
+	private static void glowLichen(ServerLevelAccessor level, BlockPos pos, Random rand)
+	{
+		ServerLevel serverLev = level.getLevel();
+		CaveFeatures.GLOW_LICHEN.value().place(serverLev, serverLev.getChunkSource().getGenerator(), rand, pos);
+	}
+
+	private static BlockModifierMap mossyBlockModifier()
+	{
+		return Util.make(new BlockModifierMap(), map ->
+		{
+			map.put(Blocks.CANDLE, candleFunc(Blocks.CYAN_CANDLE, false));
+
+			map.put(Blocks.AZALEA_LEAVES, (s, r) -> r.nextFloat() < 0.10F ? IModifyState.mergeStates(Blocks.FLOWERING_AZALEA_LEAVES.defaultBlockState(), s) : s);
+		});
+	}
+
+	private static BlockModifierMap desertBlockModifier()
+	{
+		return Util.make(new BlockModifierMap(), map ->
+		{
+			map.put(Blocks.CANDLE, candleFunc(Blocks.RED_CANDLE, true));
+
+			map.put(Blocks.COBBLESTONE, Blocks.GRANITE);
+			map.put(Blocks.INFESTED_COBBLESTONE, Blocks.GRANITE);
+			map.merge(Blocks.COBBLESTONE_SLAB, Blocks.GRANITE_SLAB);
+			map.merge(Blocks.COBBLESTONE_STAIRS, Blocks.GRANITE_STAIRS);
+			map.merge(Blocks.COBBLESTONE_WALL, Blocks.GRANITE_WALL);
+
+			map.put(Blocks.STONE, Blocks.TERRACOTTA);
+			map.merge(Blocks.STONE_SLAB, Blocks.POLISHED_GRANITE_SLAB);
+			map.merge(Blocks.STONE_STAIRS, Blocks.POLISHED_GRANITE_STAIRS);
+
+			map.put(Blocks.STONE_BRICKS, Blocks.CUT_RED_SANDSTONE);
+			map.put(Blocks.INFESTED_STONE_BRICKS, Blocks.CUT_RED_SANDSTONE);
+			map.put(Blocks.CRACKED_STONE_BRICKS, Blocks.RED_SANDSTONE);
+			map.put(Blocks.INFESTED_CRACKED_STONE_BRICKS, Blocks.RED_SANDSTONE);
+			map.put(Blocks.CHISELED_STONE_BRICKS, Blocks.CHISELED_RED_SANDSTONE);
+			map.put(Blocks.INFESTED_CHISELED_STONE_BRICKS, Blocks.CHISELED_RED_SANDSTONE);
+			map.merge(Blocks.STONE_BRICK_SLAB, Blocks.CUT_RED_SANDSTONE_SLAB);
+			map.merge(Blocks.STONE_BRICK_STAIRS, Blocks.RED_SANDSTONE_STAIRS);
+			map.merge(Blocks.STONE_BRICK_WALL, Blocks.RED_SANDSTONE_WALL);
+		});
+	}
+
+	private static BlockModifierMap frozenBlockModifier()
+	{
+		return Util.make(new BlockModifierMap(), map ->
+		{
+			map.put(Blocks.CANDLE, candleFunc(Blocks.WHITE_CANDLE, false));
+		});
+	}
+
+	private static BiFunction<BlockState, Random, BlockState> candleFunc(Block candle, boolean lit)
+	{
+		return (s, r) -> r.nextFloat() < 0.65F ? IModifyState.mergeStates(candle.defaultBlockState(), s).setValue(CandleBlock.LIT, lit) : Blocks.AIR.defaultBlockState();
 	}
 }

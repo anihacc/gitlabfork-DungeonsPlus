@@ -125,6 +125,7 @@ public class DPSpawners
 			tag.putInt("Size", 2);
 		}), 1);
 		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, builder.build());
+		SpawnerAccessHelper.setSpawnCount(s, level, pos, 3);
 	}
 
 	private static void reanRuinsDesert(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
@@ -137,6 +138,7 @@ public class DPSpawners
 			handItems(tag, new ItemStack(Items.GOLDEN_PICKAXE), DROP_CHANCE);
 		}), 1);
 		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, builder.build());
+		SpawnerAccessHelper.setSpawnCount(s, level, pos, 3);
 	}
 
 	private static void reanRuinsFrozen(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
@@ -149,6 +151,7 @@ public class DPSpawners
 		builder.add(basicMob(s, level, pos, EntityType.STRAY, null, Optional.empty()), 2);
 		builder.add(basicMob(s, level, pos, EntityType.CAVE_SPIDER, null, Optional.empty()), 1);
 		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, builder.build());
+		SpawnerAccessHelper.setSpawnCount(s, level, pos, 3);
 	}
 
 	private static void leviathanHusk(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)

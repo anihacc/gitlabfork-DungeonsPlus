@@ -8,7 +8,6 @@ import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.block_entity.BlockEntityAccessHelper;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
-import com.legacy.structure_gel.api.structure.base.IModifyState;
 import com.legacy.structure_gel.api.structure.base.IPieceBuilderModifier;
 import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
 import com.legacy.structure_gel.api.structure.jigsaw.ExtendedJigsawConfiguration;
@@ -21,7 +20,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -80,28 +78,9 @@ public class ReanimatedRuinsStructure extends GelConfigJigsawStructure<Reanimate
 		}
 
 		@Override
-		public BlockState modifyState(ServerLevelAccessor level, Random rand, BlockPos pos, BlockState originalState)
+		public BlockState modifyState(ServerLevelAccessor level, Random rand, BlockPos pos, BlockState original)
 		{
-			if (originalState.is(Blocks.CANDLE))
-			{
-				if (rand.nextFloat() < 0.3F)
-					return Blocks.AIR.defaultBlockState();
-				return switch (this.type)
-				{
-				case MOSSY -> IModifyState.mergeStates(Blocks.CYAN_CANDLE.defaultBlockState(), originalState);
-				case DESERT -> IModifyState.mergeStates(Blocks.RED_CANDLE.defaultBlockState(), originalState);
-				case FROZEN -> IModifyState.mergeStates(Blocks.WHITE_CANDLE.defaultBlockState(), originalState);
-				default -> originalState;
-				};
-			}
-			
-			if (this.type == ReanimatedRuinsType.MOSSY)
-			{
-				if (originalState.is(Blocks.AZALEA_LEAVES))
-					return IModifyState.mergeStates(Blocks.FLOWERING_AZALEA_LEAVES.defaultBlockState(), originalState);
-			}
-
-			return originalState;
+			return this.type.modifierMap.modifiy(original, rand);
 		}
 
 		@Override
@@ -111,7 +90,7 @@ public class ReanimatedRuinsStructure extends GelConfigJigsawStructure<Reanimate
 			{
 				this.setAir(level, pos);
 
-				if (rand.nextFloat() < 0.40F || key.contains("always"))
+				if (rand.nextFloat() < 0.60F || key.contains("always"))
 				{
 					ResourceLocation loot = rand.nextFloat() < 0.50F ? loot = this.type.loot : DPLoot.ReanimatedRuins.CHEST_COMMON;
 					RandomizableContainerBlockEntity.setLootTable(level, rand, pos.below(), loot);
@@ -125,7 +104,7 @@ public class ReanimatedRuinsStructure extends GelConfigJigsawStructure<Reanimate
 			{
 				this.setAir(level, pos);
 
-				if (rand.nextFloat() < 0.50F || key.contains("always"))
+				if (rand.nextFloat() < 0.60F || key.contains("always"))
 					BlockEntityAccessHelper.placeDynamicSpawner(level, pos, this.type.spawner);
 			}
 			if (key.equals("decor"))

@@ -46,13 +46,13 @@ public class DPStructures
 	public static final StructureRegistrar<ReanimatedRuinsStructure.Configuration, ReanimatedRuinsStructure> REANIMATED_RUINS = 
 			StructureRegistrar.builder(DungeonsPlus.locate("reanimated_ruins"), () -> new ReanimatedRuinsStructure(ReanimatedRuinsStructure.Configuration.CODEC, DPConfig.COMMON.reanimatedRuins))
 				.addPiece(ReanimatedRuinsStructure.Piece::new)
-				.pushConfigured("mossy", new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.DESERT_ROOT, 10, ReanimatedRuinsType.MOSSY))
+				.pushConfigured("mossy", new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.MOSSY_ROOT, 10, ReanimatedRuinsType.MOSSY))
 					.biomes(Biomes.SWAMP)
 				.popConfigured()
 				.pushConfigured("desert", new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.DESERT_ROOT, 10, ReanimatedRuinsType.DESERT))
 					.biomes(Biomes.DESERT)
 				.popConfigured()
-				.pushConfigured("frozen", new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.DESERT_ROOT, 10, ReanimatedRuinsType.FROZEN))
+				.pushConfigured("frozen", new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.FROZEN_ROOT, 10, ReanimatedRuinsType.FROZEN))
 					.biomes(Biomes.SNOWY_PLAINS)
 				.popConfigured()
 				.build();
