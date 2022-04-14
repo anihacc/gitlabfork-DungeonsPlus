@@ -14,10 +14,6 @@ public class ReanimatedRuinsPools
 {
 	public static final Holder<StructureTemplatePool> DESERT_ROOT, FROZEN_ROOT, MOSSY_ROOT;
 
-	public static void init()
-	{
-	}
-
 	static
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "reanimated_ruins/");
@@ -37,7 +33,7 @@ public class ReanimatedRuinsPools
 		}
 		for (int i = 0; i <= 4; i++)
 		{
-			rooms.put("room/large_3"/* + i*/, 2);
+			rooms.put("room/large_" + i, 2);
 		}
 		for (int i = 0; i <= 12; i++)
 		{

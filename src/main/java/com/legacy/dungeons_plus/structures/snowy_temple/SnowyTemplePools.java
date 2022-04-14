@@ -11,10 +11,6 @@ public class SnowyTemplePools
 {
 	public static final Holder<StructureTemplatePool> ROOT;
 
-	public static void init()
-	{
-	}
-
 	static
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "snowy_temple/");

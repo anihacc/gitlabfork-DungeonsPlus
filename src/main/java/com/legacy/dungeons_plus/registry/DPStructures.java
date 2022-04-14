@@ -33,7 +33,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DPStructures
-{
+{	
 	//@formatter:off
 	public static final StructureRegistrar<NoneFeatureConfiguration, TowerStructure> TOWER = 
 			StructureRegistrar.builder(DungeonsPlus.locate("tower"), () -> new TowerStructure(NoneFeatureConfiguration.CODEC, DPConfig.COMMON.tower))
@@ -105,12 +105,5 @@ public class DPStructures
 	@SubscribeEvent
 	protected static void onRegistry(final RegistryEvent.Register<StructureFeature<?>> event)
 	{
-		// TODO "init" maybe not needed anymore?
-		ReanimatedRuinsPools.init();
-		LeviathanPools.init();
-		SnowyTemplePools.init();
-		EndRuinsPools.init();
-
-		// TODO DummyStructure.createDummy("dungeons_plus:bigger_dungeon");
 	}
 }

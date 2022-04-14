@@ -10,10 +10,6 @@ public class LeviathanPools
 {
 	public static final Holder<StructureTemplatePool> ROOT;
 
-	public static void init()
-	{
-	}
-
 	static
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "leviathan/");

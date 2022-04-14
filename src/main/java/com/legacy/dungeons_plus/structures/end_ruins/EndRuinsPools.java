@@ -13,10 +13,6 @@ public class EndRuinsPools
 {
 	public static final Holder<StructureTemplatePool> ROOT;
 
-	public static void init()
-	{
-	}
-
 	static
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "end_ruins/");
