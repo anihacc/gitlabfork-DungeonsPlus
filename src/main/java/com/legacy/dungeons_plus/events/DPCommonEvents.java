@@ -70,7 +70,6 @@ public class DPCommonEvents
 		{
 			ModList modList = ModList.get();
 			DungeonsPlus.isWaystonesLoaded = modList.isLoaded("waystones");
-			DungeonsPlus.isQuarkLoaded = modList.isLoaded("quark");
 		}
 
 		@SubscribeEvent

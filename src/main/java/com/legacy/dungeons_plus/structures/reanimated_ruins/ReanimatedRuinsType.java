@@ -1,12 +1,13 @@
 package com.legacy.dungeons_plus.structures.reanimated_ruins;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
-import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPSpawners;
@@ -19,16 +20,18 @@ import com.legacy.structure_gel.api.structure.base.IModifyState;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.features.CaveFeatures;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 
 public enum ReanimatedRuinsType implements StringRepresentable
 {
@@ -40,17 +43,17 @@ public enum ReanimatedRuinsType implements StringRepresentable
 	public final ResourceLocation loot;
 	public final DynamicSpawnerType spawner;
 	public final BlockModifierMap modifierMap;
-	private final ImmutableList<PsuedoFeature> features;
+	private final PsuedoFeature[] features;
 
-	ReanimatedRuinsType(String name, ResourceLocation loot, DynamicSpawnerType spawner, BlockModifierMap modifierMap, Consumer<ImmutableList.Builder<PsuedoFeature>> features)
+	ReanimatedRuinsType(String name, ResourceLocation loot, DynamicSpawnerType spawner, BlockModifierMap modifierMap, Consumer<List<PsuedoFeature>> features)
 	{
 		this.name = name;
 		this.loot = loot;
 		this.spawner = spawner;
 		this.modifierMap = modifierMap;
-		ImmutableList.Builder<PsuedoFeature> builder = ImmutableList.builder();
-		features.accept(builder);
-		this.features = builder.build();
+		List<PsuedoFeature> featuresList = new ArrayList<>();
+		features.accept(featuresList);
+		this.features = featuresList.toArray(PsuedoFeature[]::new);
 	}
 
 	@Override
@@ -73,7 +76,7 @@ public enum ReanimatedRuinsType implements StringRepresentable
 			f.place(level, pos, rand);
 	}
 
-	private static void mossyFeatures(ImmutableList.Builder<PsuedoFeature> list)
+	private static void mossyFeatures(List<PsuedoFeature> list)
 	{
 		list.add(new PsuedoFeature(0, 2, IPlacement.FIND_LOWEST_AIR, ReanimatedRuinsType::puddle));
 		list.add(new PsuedoFeature(6, 9, IPlacement.NOOP, ReanimatedRuinsType::mossyStone));
@@ -83,13 +86,13 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		list.add(new PsuedoFeature(8, 15, IPlacement.FIND_HIGHEST_AIR, ReanimatedRuinsType::caveVines));
 	}
 
-	private static void desertFeatures(ImmutableList.Builder<PsuedoFeature> list)
+	private static void desertFeatures(List<PsuedoFeature> list)
 	{
 		list.add(new PsuedoFeature(2, 6, IPlacement.FIND_LOWEST_AIR, ReanimatedRuinsType::deadBush));
 		list.add(new PsuedoFeature(0, 6, IPlacement.FIND_HIGHEST_AIR, ReanimatedRuinsType::dripstone));
 	}
 
-	private static void frozenFeatures(ImmutableList.Builder<PsuedoFeature> list)
+	private static void frozenFeatures(List<PsuedoFeature> list)
 	{
 		list.add(new PsuedoFeature(0, 2, IPlacement.FIND_HIGHEST_AIR, ReanimatedRuinsType::ice));
 		list.add(new PsuedoFeature(0, 2, IPlacement.NOOP, ReanimatedRuinsType::diorite));
@@ -145,8 +148,7 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		BlockState ground = level.getBlockState(pos.below());
 		if (ground.is(BlockTags.BIG_DRIPLEAF_PLACEABLE) || ground.is(BlockTags.SMALL_DRIPLEAF_PLACEABLE))
 		{
-			ServerLevel serverLev = level.getLevel();
-			CaveFeatures.DRIPLEAF.value().place(serverLev, serverLev.getChunkSource().getGenerator(), rand, pos);
+			placeFeature(level, pos, rand, CaveFeatures.DRIPLEAF);
 		}
 	}
 
@@ -160,8 +162,7 @@ public enum ReanimatedRuinsType implements StringRepresentable
 	{
 		if (Blocks.CAVE_VINES.defaultBlockState().canSurvive(level, pos))
 		{
-			ServerLevel serverLev = level.getLevel();
-			CaveFeatures.CAVE_VINE.value().place(serverLev, serverLev.getChunkSource().getGenerator(), rand, pos);
+			placeFeature(level, pos, rand, CaveFeatures.CAVE_VINE);
 		}
 	}
 
@@ -173,8 +174,7 @@ public enum ReanimatedRuinsType implements StringRepresentable
 
 	private static void dripstone(ServerLevelAccessor level, BlockPos pos, Random rand)
 	{
-		ServerLevel serverLev = level.getLevel();
-		CaveFeatures.DRIPSTONE_CLUSTER.value().place(serverLev, serverLev.getChunkSource().getGenerator(), rand, pos);
+		placeFeature(level, pos, rand, CaveFeatures.DRIPSTONE_CLUSTER);
 	}
 
 	private static void diorite(ServerLevelAccessor level, BlockPos pos, Random rand)
@@ -206,8 +206,13 @@ public enum ReanimatedRuinsType implements StringRepresentable
 
 	private static void glowLichen(ServerLevelAccessor level, BlockPos pos, Random rand)
 	{
-		ServerLevel serverLev = level.getLevel();
-		CaveFeatures.GLOW_LICHEN.value().place(serverLev, serverLev.getChunkSource().getGenerator(), rand, pos);
+		placeFeature(level, pos, rand, CaveFeatures.GLOW_LICHEN);
+	}
+
+	private static void placeFeature(ServerLevelAccessor level, BlockPos pos, Random rand, Holder<? extends ConfiguredFeature<?, ?>> feature)
+	{
+		if (level instanceof WorldGenLevel wgLevel)
+			feature.value().place(wgLevel, wgLevel.getLevel().getChunkSource().getGenerator(), rand, pos);
 	}
 
 	private static BlockModifierMap mossyBlockModifier()

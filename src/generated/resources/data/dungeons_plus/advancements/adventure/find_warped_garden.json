@@ -1,5 +1,5 @@
 {
-  "parent": "dungeons_plus:adventure/find_tower",
+  "parent": "dungeons_plus:adventure/find_reanimated_ruins",
   "display": {
     "icon": {
       "item": "minecraft:warped_fungus"

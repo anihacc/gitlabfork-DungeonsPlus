@@ -1,26 +1,27 @@
 {
-	"filled_map.dungeons_plus:bigger_dungeon": "Buried Dungeon Map",
-	"filled_map.dungeons_plus:leviathan": "Leviathan Map",
-	"filled_map.dungeons_plus:snowy_temple": "Snowy Temple Map",
-	
-	"dungeons_plus:advancements.adventure.find_tower.title": "Battle Towers?",
-	"dungeons_plus:advancements.adventure.find_tower.description": "Not quite, but there's still mobs to fight! (Find a Tower)",
-	
-	"dungeons_plus:advancements.adventure.find_bigger_dungeon.title": "Now this is a Dungeon",
-	"dungeons_plus:advancements.adventure.find_bigger_dungeon.description": "That's more spawners than I'm used to. (Find a Buried Dungeon)",
-	
-	"dungeons_plus:advancements.adventure.find_leviathan.title": "Ancient Remains",
-	"dungeons_plus:advancements.adventure.find_leviathan.description": "It must've come down with a... femur. (Find a Leviathan)",
-	
-	"dungeons_plus:advancements.adventure.find_snowy_temple.title": "Snowed In",
-	"dungeons_plus:advancements.adventure.find_snowy_temple.description": "I thought pyramids were in deserts... (Find a Snowy Temple)",
-	
-	"dungeons_plus:advancements.end.find_end_ruins.title": "A Ruined End",
-	"dungeons_plus:advancements.end.find_end_ruins.description": "Probably shouldn't stay long. (Find End Ruins)",
-	
-	"dungeons_plus:advancements.adventure.find_warped_garden.title": "Something Unnatural",
-	"dungeons_plus:advancements.adventure.find_warped_garden.description": "Go inside. What could go wrong? (Find a Warped Garden)",
-	
-	"dungeons_plus:advancements.nether.find_soul_prison.title": "Caged Tears",
-	"dungeons_plus:advancements.nether.find_soul_prison.description": "Not theirs though. (Find the Soul Prison)"
+  "dungeons_plus:advancements.adventure.find_leviathan.description": "Find a Leviathan",
+  "dungeons_plus:advancements.adventure.find_leviathan.title": "Ancient Remains",
+  "dungeons_plus:advancements.adventure.find_reanimated_ruins.description": "Find the Reanimated Ruins",
+  "dungeons_plus:advancements.adventure.find_reanimated_ruins.title": "Now this is a Dungeon",
+  "dungeons_plus:advancements.adventure.find_snowy_temple.description": "Find a Snowy Temple",
+  "dungeons_plus:advancements.adventure.find_snowy_temple.title": "Snowed In",
+  "dungeons_plus:advancements.adventure.find_tower.description": "Find a Tower",
+  "dungeons_plus:advancements.adventure.find_tower.title": "Battle Towers?",
+  "dungeons_plus:advancements.adventure.find_warped_garden.description": "Find a Warped Garden",
+  "dungeons_plus:advancements.adventure.find_warped_garden.title": "Something Unnatural",
+  "dungeons_plus:advancements.end.find_end_ruins.description": "Find End Ruins",
+  "dungeons_plus:advancements.end.find_end_ruins.title": "A Ruined End",
+  "dungeons_plus:advancements.nether.find_soul_prison.description": "Find the Soul Prison",
+  "dungeons_plus:advancements.nether.find_soul_prison.title": "Caged Tears",
+  "filled_map.dungeons_plus:leviathan": "Leviathan Map",
+  "filled_map.dungeons_plus:reanimated_ruins": "Reanimated Ruins Map",
+  "filled_map.dungeons_plus:snowy_temple": "Snowy Temple Map",
+  "filled_map.dungeons_plus:warped_garden": "Warped Garden Map",
+  "worldgen.structure_feature.dungeons_plus.end_ruins": "End Ruins",
+  "worldgen.structure_feature.dungeons_plus.leviathan": "Leviathan",
+  "worldgen.structure_feature.dungeons_plus.reanimated_ruins": "Reanimated Ruins",
+  "worldgen.structure_feature.dungeons_plus.snowy_temple": "Snowy Temple",
+  "worldgen.structure_feature.dungeons_plus.soul_prison": "Soul Prison",
+  "worldgen.structure_feature.dungeons_plus.tower": "Tower",
+  "worldgen.structure_feature.dungeons_plus.warped_garden": "Warped Garden"
 }

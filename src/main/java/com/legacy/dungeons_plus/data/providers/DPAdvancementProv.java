@@ -109,7 +109,7 @@ public class DPAdvancementProv implements DataProvider
 			findReanimatedRuins = this.inAnyStructure(this.builder(Blocks.MOSSY_COBBLESTONE, "find_reanimated_ruins", FrameType.TASK).parent(findTower), DPStructures.REANIMATED_RUINS).save(con, this.locate("find_reanimated_ruins"));
 			findLeviathan = this.inAnyStructure(this.builder(Blocks.BONE_BLOCK, "find_leviathan", FrameType.GOAL).parent(findReanimatedRuins), DPStructures.LEVIATHAN).save(con, this.locate("find_leviathan"));
 			findSnowyTemple = this.inAnyStructure(this.builder(Blocks.PACKED_ICE, "find_snowy_temple", FrameType.GOAL).parent(findReanimatedRuins), DPStructures.SNOWY_TEMPLE).save(con, this.locate("find_snowy_temple"));
-			findWarpedGarden = this.inAnyStructure(this.builder(Blocks.WARPED_FUNGUS, "find_warped_garden", FrameType.TASK).parent(findTower), DPStructures.WARPED_GARDEN).save(con, this.locate("find_warped_garden"));
+			findWarpedGarden = this.inAnyStructure(this.builder(Blocks.WARPED_FUNGUS, "find_warped_garden", FrameType.TASK).parent(findReanimatedRuins), DPStructures.WARPED_GARDEN).save(con, this.locate("find_warped_garden"));
 
 			this.setSection("nether");
 			findSoulPrison = this.inAnyStructure(this.builder(Blocks.SPAWNER, "find_soul_prison", FrameType.GOAL).parent(netherRoot), DPStructures.SOUL_PRISON).save(con, this.locate("find_soul_prison"));

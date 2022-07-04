@@ -6,7 +6,6 @@ import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
 import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
-import com.legacy.structure_gel.api.structure.jigsaw.ExtendedJigsawConfiguration;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
@@ -48,15 +47,6 @@ public class LeviathanStructure extends GelConfigJigsawStructure<JigsawConfigura
 		@Override
 		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
 		{
-			if (key.contains("chest"))
-			{
-				String[] data = key.split("-");
-				//DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.Leviathan.CHEST_COMMON, this.rotation, data);
-			}
-			if (key.equals("spawner"))
-			{
-				//DPUtil.placeSpawner(level, pos, DPSpawners.LEVIATHAN_HUSK);
-			}
 		}
 	}
 }

@@ -22,7 +22,6 @@ public class DungeonsPlus
 	public static final Logger LOGGER = LogManager.getLogger("ModdingLegacy/" + MODID);
 
 	public static boolean isWaystonesLoaded = false;
-	public static boolean isQuarkLoaded = false;
 
 	public DungeonsPlus()
 	{

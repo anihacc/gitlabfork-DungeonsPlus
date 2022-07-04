@@ -1,8 +1,8 @@
 package com.legacy.dungeons_plus.structures.reanimated_ruins;
 
+import java.util.List;
 import java.util.Random;
 
-import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.block_entity.BlockEntityAccessHelper;
@@ -23,8 +23,10 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
@@ -36,17 +38,30 @@ public class ReanimatedRuinsStructure extends GelConfigJigsawStructure<Reanimate
 {
 	public ReanimatedRuinsStructure(Codec<ReanimatedRuinsStructure.Configuration> codec, StructureConfig config)
 	{
-		super(codec, config, 75/*20*/, true, false, context -> true, Piece::new);
+		super(codec, config, 10, true, false, context -> true, Piece::new);
 	}
 
 	@Override
-	public void modifyPieceBuilder(StructurePiecesBuilder pieces, ReanimatedRuinsStructure.Configuration config)
+	public void modifyPieceBuilder(StructurePiecesBuilder pieceBuilder, IPieceBuilderModifier.Context<Configuration> context)
 	{
-		for (var p : IPieceBuilderModifier.getPieces(pieces))
-			if (p instanceof ReanimatedRuinsStructure.Piece piece)
-				piece.type = config.type;
+		List<StructurePiece> pieces = IPieceBuilderModifier.getPieces(pieceBuilder);
+		pieces.removeIf(p ->
+		{
+			BoundingBox bounds = p.getBoundingBox();
+			int minX = bounds.minX();
+			int maxY = bounds.maxY();
+			int minZ = bounds.maxZ();
 
-		// TODO Remove pieces that go above ground or below bedrock
+			if (maxY > context.chunkGen().getBaseHeight(minX, minZ, Heightmap.Types.WORLD_SURFACE_WG, context.level()) - 8)
+			{
+				// System.out.println("Removed a piece at " + new BlockPos(minX, maxY, minZ));
+				return true;
+			}
+			return false;
+		});
+		for (var p : pieces)
+			if (p instanceof ReanimatedRuinsStructure.Piece piece)
+				piece.type = context.config().type;
 	}
 
 	public static final class Piece extends AbstractGelStructurePiece
@@ -112,10 +127,6 @@ public class ReanimatedRuinsStructure extends GelConfigJigsawStructure<Reanimate
 				this.setAir(level, pos);
 
 				this.type.decorate(level, pos, rand);
-			}
-			if (key.equals("monster_box"))
-			{
-				DPUtil.placeMonsterBox(level, pos, rand);
 			}
 		}
 	}

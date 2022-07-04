@@ -68,29 +68,6 @@ public class DPUtil
 		return bounds - rand.nextInt(bounds * 2 + 1);
 	}
 
-	public static void placeMonsterBox(ServerLevelAccessor level, BlockPos pos, Random rand)
-	{
-		level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
-		if (DungeonsPlus.isQuarkLoaded && rand.nextInt(100) < DPConfig.COMMON.biggerDungeonMonsterBoxChance.get())
-		{
-			ResourceLocation boxLocation = new ResourceLocation("quark", "monster_box");
-			if (ForgeRegistries.BLOCKS.containsKey(boxLocation))
-			{
-				try
-				{
-					// TODO test
-					BlockState monsterBox = ForgeRegistries.BLOCKS.getValue(boxLocation).defaultBlockState();
-					level.setBlock(pos, monsterBox, 2);
-				}
-				catch (Throwable t)
-				{
-					DungeonsPlus.LOGGER.error(String.format("Failed to place monster box at (%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ()));
-					DungeonsPlus.LOGGER.error(t);
-				}
-			}
-		}
-	}
-
 	public static void placeWaystone(ServerLevelAccessor level, BlockPos pos, Random rand, @Nullable Block defaultBlock)
 	{
 		if (DungeonsPlus.isWaystonesLoaded && rand.nextInt(100) < DPConfig.COMMON.towerWaystoneChance.get())

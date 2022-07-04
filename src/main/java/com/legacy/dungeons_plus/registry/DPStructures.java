@@ -62,7 +62,8 @@ public class DPStructures
 				.addPiece(LeviathanStructure.Piece::new)
 				.pushConfigured(new JigsawConfiguration(LeviathanPools.ROOT, 7))
 					.biomes(DPConfig.COMMON.leviathan.getConfigured())
-					.spawns(MobCategory.MONSTER, BoundingBoxType.STRUCTURE, new SpawnerData(EntityType.HUSK, 1, 1, 4))
+					.noSpawns(BoundingBoxType.PIECE)
+					.spawns(MobCategory.MONSTER, BoundingBoxType.STRUCTURE, new SpawnerData(EntityType.HUSK, 4, 1, 4), new SpawnerData(EntityType.CREEPER, 1, 1, 2))
 				.popConfigured()
 				.build();
 

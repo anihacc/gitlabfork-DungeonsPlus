@@ -2,18 +2,19 @@ package com.legacy.dungeons_plus.data.providers;
 
 import java.util.Locale;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.registry.DPStructures;
+import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
+import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.DisplayInfo;
+import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.LanguageProvider;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public class DPLangProvider extends LanguageProvider
 {
@@ -22,15 +23,18 @@ public class DPLangProvider extends LanguageProvider
 		super(gen, DungeonsPlus.MODID, "en_us");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void addTranslations()
 	{
-		this.addAll(ForgeRegistries.BLOCKS, this::add, Map.of());
-		
-		this.add("filled_map.dungeons_plus:reanimated_ruins", "Reanimated Ruins Map");
-		this.add("filled_map.dungeons_plus:leviathan", "Leviathan Map");
-		this.add("filled_map.dungeons_plus:snowy_temple", "Snowy Temple Map");
-		
+		this.addAll(Registry.BLOCK, Map.of());
+		this.addAll(Registry.STRUCTURE_FEATURE, Map.of());
+
+		this.add(mapName(DPStructures.REANIMATED_RUINS), "Reanimated Ruins Map");
+		this.add(mapName(DPStructures.LEVIATHAN), "Leviathan Map");
+		this.add(mapName(DPStructures.SNOWY_TEMPLE), "Snowy Temple Map");
+		this.add(mapName(DPStructures.WARPED_GARDEN), "Warped Garden Map");
+
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findTower, "Battle Towers?", "Find a Tower");
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findReanimatedRuins, "Now this is a Dungeon", "Find the Reanimated Ruins");
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findLeviathan, "Ancient Remains", "Find a Leviathan");
@@ -44,30 +48,36 @@ public class DPLangProvider extends LanguageProvider
 		// TODO include maps, advancements, etc
 	}
 
+	public static String mapName(StructureRegistrar<?, ?> structure)
+	{
+		return "filled_map." + structure.getRegistryName();
+	}
+
 	private void addAdvancement(Advancement advancement, String title, String desc)
 	{
 		DisplayInfo display = advancement.getDisplay();
 		this.add(display.getTitle().getString(), title);
 		this.add(display.getDescription().getString(), desc);
 	}
-	
-	private <T extends IForgeRegistryEntry<T>> void addAll(IForgeRegistry<T> registry, BiConsumer<T, String> adder, Map<T, String> overrides)
+
+	private <T> void addAll(Registry<T> registry, Map<ResourceKey<T>, String> overrides)
 	{
-		registry.getValues().stream().filter(o ->
-		{
-			ResourceLocation name = o.getRegistryName();
-			return name != null && DungeonsPlus.MODID.equals(name.getNamespace());
-		}).filter(o ->
-		{
-			return !overrides.containsKey(o);
-		}).forEach(o ->
-		{
-			adder.accept(o, this.toName(o.getRegistryName()));
-		});
-		
-		overrides.forEach(adder::accept);
+		registry.keySet().stream().filter(name -> DungeonsPlus.MODID.equals(name.getNamespace())).map(name -> ResourceKey.create(registry.key(), name)).filter(key -> !overrides.containsKey(key)).forEach(this::add);
+
+		overrides.forEach(this::add);
 	}
 
+	private void add(ResourceKey<?> key)
+	{
+		this.add(key, this.toName(key.location()));
+	}
+
+	private void add(ResourceKey<?> key, String translation)
+	{
+		this.add(Util.makeDescriptionId(key.registry().getPath().replace('/', '.'), key.location()), translation);
+	}
+
+	// Converts camel case to a proper name. snowy_temple -> Snowy Temple
 	private String toName(ResourceLocation location)
 	{
 		String path = location.getPath();
