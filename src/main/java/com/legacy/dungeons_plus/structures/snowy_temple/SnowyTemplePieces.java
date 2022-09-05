@@ -36,6 +36,14 @@ public class SnowyTemplePieces
 
 	public static void assemble(StructureManager structureManager, BlockPos pos, Rotation rotation, StructurePiecesBuilder pieces, Random rand)
 	{
+		Direction dir = switch (rotation)
+		{
+		case NONE -> Direction.NORTH;
+		case CLOCKWISE_90 -> Direction.EAST;
+		case CLOCKWISE_180 -> Direction.SOUTH;
+		case COUNTERCLOCKWISE_90 -> Direction.WEST;
+		};
+		
 		BlockPos floorPos = pos;
 
 		pieces.addPiece(new Piece(structureManager, Util.getRandom(BASES, rand), floorPos, rotation));
@@ -55,14 +63,6 @@ public class SnowyTemplePieces
 		}
 
 		pieces.addPiece(new Piece(structureManager, Util.getRandom(TOP_FLOORS, rand), floorPos, rotation));
-
-		Direction dir = switch (rotation)
-		{
-		case NONE -> Direction.NORTH;
-		case CLOCKWISE_90 -> Direction.EAST;
-		case CLOCKWISE_180 -> Direction.SOUTH;
-		case COUNTERCLOCKWISE_90 -> Direction.WEST;
-		};
 
 		pieces.addPiece(new Piece(structureManager, Util.getRandom(PATHS, rand), pos.offset(11, 0, 2).relative(dir, 22), rotation));
 		

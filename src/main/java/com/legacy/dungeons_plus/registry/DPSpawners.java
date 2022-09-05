@@ -13,7 +13,6 @@ import com.legacy.structure_gel.api.dynamic_spawner.DynamicSpawnerType;
 import com.legacy.structure_gel.api.events.RegisterDynamicSpawnerEvent;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.FloatTag;
@@ -29,7 +28,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.SpawnData.CustomSpawnRules;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -50,7 +48,7 @@ public class DPSpawners
 	public static final Optional<SpawnData.CustomSpawnRules> SPAWN_IN_PARTIAL_DARK = Optional.of(new SpawnData.CustomSpawnRules(new InclusiveRange<>(0, 7), new InclusiveRange<>(0, 7)));
 
 	private static final float DROP_CHANCE = Mob.DEFAULT_EQUIPMENT_DROP_CHANCE;
-	
+
 	public static final DynamicSpawnerType TOWER_ZOMBIE = create("tower_zombie", DPSpawners::towerZombie);
 	public static final DynamicSpawnerType TOWER_SKELETON = create("tower_skeleton", DPSpawners::towerSkeleton);
 	public static final DynamicSpawnerType TOWER_SPIDER = create("tower_spider", DPSpawners::towerSpider);
@@ -164,10 +162,16 @@ public class DPSpawners
 
 	private static void snowyTempleStray(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
 	{
-		CompoundTag tag = new CompoundTag();
-		lootTable(tag, DPLoot.SnowyTemple.ENTITY_STRAY);
-		SpawnData spawnData = SpawnerAccessHelper.createSpawnerEntity(EntityType.STRAY, tag, SPAWN_IN_SKYLIGHT);
-		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, spawnData);
+		CompoundTag bowTag = new CompoundTag();
+		lootTable(bowTag, DPLoot.SnowyTemple.ENTITY_STRAY);
+		SpawnData strayBow = SpawnerAccessHelper.createSpawnerEntity(EntityType.STRAY, bowTag, SPAWN_IN_SKYLIGHT);
+
+		CompoundTag swordTag = new CompoundTag();
+		lootTable(swordTag, DPLoot.SnowyTemple.ENTITY_STRAY);
+		handItems(swordTag, Items.IRON_SWORD.getDefaultInstance(), DROP_CHANCE);
+		SpawnData straySword = SpawnerAccessHelper.createSpawnerEntity(EntityType.STRAY, swordTag, SPAWN_IN_SKYLIGHT);
+
+		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, strayBow, straySword);
 	}
 
 	private static void warpedGardenDrowned(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
@@ -176,18 +180,24 @@ public class DPSpawners
 
 		ItemStack goldAxe = new ItemStack(Items.GOLDEN_AXE);
 		goldAxe.setDamageValue(10);
-		HolderSet<Block> corals = Registry.BLOCK.getOrCreateTag(BlockTags.CORAL_BLOCKS);
-		corals.forEach(holder ->
+		Registry.BLOCK.getTag(BlockTags.CORAL_BLOCKS).ifPresentOrElse(corals ->
+		{
+			corals.forEach(holder ->
+			{
+				CompoundTag entityTag = new CompoundTag();
+				handItems(entityTag, goldAxe, DROP_CHANCE, new ItemStack(holder.value()), 1.0F);
+				spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), 1);
+			});
+
+			CompoundTag entityTag = new CompoundTag();
+			handItems(entityTag, goldAxe, DROP_CHANCE);
+			spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), corals.size() / 2);
+		}, () ->
 		{
 			CompoundTag entityTag = new CompoundTag();
-			handItems(entityTag, goldAxe, DROP_CHANCE, new ItemStack(holder.value()), 1.0F);
+			handItems(entityTag, goldAxe, DROP_CHANCE);
 			spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), 1);
 		});
-
-		CompoundTag entityTag = new CompoundTag();
-		handItems(entityTag, goldAxe, DROP_CHANCE);
-		spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), corals.size() / 2);
-
 		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, spawns.build());
 	}
 
