@@ -9,7 +9,7 @@ import com.legacy.dungeons_plus.structures.leviathan.LeviathanStructure;
 import com.legacy.dungeons_plus.structures.reanimated_ruins.ReanimatedRuinsPools;
 import com.legacy.dungeons_plus.structures.reanimated_ruins.ReanimatedRuinsStructure;
 import com.legacy.dungeons_plus.structures.reanimated_ruins.ReanimatedRuinsType;
-import com.legacy.dungeons_plus.structures.snowy_temple.SnowyTemplePools;
+import com.legacy.dungeons_plus.structures.snowy_temple.SnowyTemplePieces;
 import com.legacy.dungeons_plus.structures.snowy_temple.SnowyTempleStructure;
 import com.legacy.dungeons_plus.structures.soul_prison.SoulPrisonPieces;
 import com.legacy.dungeons_plus.structures.soul_prison.SoulPrisonStructure;
@@ -21,6 +21,7 @@ import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
@@ -40,6 +41,7 @@ public class DPStructures
 				.addPiece(TowerPieces.Piece::new)
 				.pushConfigured(NoneFeatureConfiguration.INSTANCE)
 					.biomes(DPConfig.COMMON.tower.getConfigured())
+					.dimensions(Level.OVERWORLD)
 				.popConfigured()
 				.build();
 
@@ -48,12 +50,15 @@ public class DPStructures
 				.addPiece(ReanimatedRuinsStructure.Piece::new)
 				.pushConfigured("mossy", new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.MOSSY_ROOT, 10, ReanimatedRuinsType.MOSSY))
 					.biomes(Biomes.SWAMP)
+					.dimensions(Level.OVERWORLD)
 				.popConfigured()
 				.pushConfigured("desert", new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.DESERT_ROOT, 10, ReanimatedRuinsType.DESERT))
 					.biomes(Biomes.DESERT)
+					.dimensions(Level.OVERWORLD)
 				.popConfigured()
 				.pushConfigured("frozen", new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.FROZEN_ROOT, 10, ReanimatedRuinsType.FROZEN))
 					.biomes(Biomes.SNOWY_PLAINS)
+					.dimensions(Level.OVERWORLD)
 				.popConfigured()
 				.build();
 
@@ -64,16 +69,17 @@ public class DPStructures
 					.biomes(DPConfig.COMMON.leviathan.getConfigured())
 					.noSpawns(BoundingBoxType.PIECE)
 					.spawns(MobCategory.MONSTER, BoundingBoxType.STRUCTURE, new SpawnerData(EntityType.HUSK, 4, 1, 4), new SpawnerData(EntityType.CREEPER, 1, 1, 2))
+					.dimensions(Level.OVERWORLD)
 				.popConfigured()
 				.build();
 
-	public static final StructureRegistrar<JigsawConfiguration, SnowyTempleStructure> SNOWY_TEMPLE = 
-			StructureRegistrar.builder(DungeonsPlus.locate("snowy_temple"), () -> new SnowyTempleStructure(JigsawConfiguration.CODEC, DPConfig.COMMON.snowyTemple))
-				.addPiece(SnowyTempleStructure.Piece::new)
-				.pushConfigured(new JigsawConfiguration(SnowyTemplePools.ROOT, 7))
+	public static final StructureRegistrar<NoneFeatureConfiguration, SnowyTempleStructure> SNOWY_TEMPLE = 
+			StructureRegistrar.builder(DungeonsPlus.locate("snowy_temple"), () -> new SnowyTempleStructure(NoneFeatureConfiguration.CODEC, DPConfig.COMMON.snowyTemple))
+				.addPiece(SnowyTemplePieces.Piece::new)
+				.pushConfigured(NoneFeatureConfiguration.NONE)
 					.biomes(DPConfig.COMMON.snowyTemple.getConfigured())
-					.adaptNoise()
 					.spawns(MobCategory.MONSTER, BoundingBoxType.STRUCTURE, new SpawnerData(EntityType.STRAY, 1, 1, 4))
+					.dimensions(Level.OVERWORLD)
 				.popConfigured()
 				.build();
 
@@ -82,6 +88,7 @@ public class DPStructures
 				.addPiece(EndRuinsStructure.Piece::new)
 				.pushConfigured(new JigsawConfiguration(EndRuinsPools.ROOT, 7))
 					.biomes(DPConfig.COMMON.endRuins.getConfigured())
+					.dimensions(Level.END)
 				.popConfigured()
 				.build();
 
@@ -90,6 +97,7 @@ public class DPStructures
 				.addPiece(WarpedGardenPieces.Piece::new)
 				.pushConfigured(NoneFeatureConfiguration.NONE)
 					.biomes(DPConfig.COMMON.warpedGarden.getConfigured())
+					.dimensions(Level.OVERWORLD)
 				.popConfigured()
 				.build();
 
@@ -98,6 +106,7 @@ public class DPStructures
 				.addPiece(SoulPrisonPieces.Piece::new)
 				.pushConfigured(NoneFeatureConfiguration.NONE)
 					.biomes(DPConfig.COMMON.soulPrison.getConfigured())
+					.dimensions(Level.NETHER)
 				.popConfigured()
 				.build();
 

@@ -2,60 +2,42 @@ package com.legacy.dungeons_plus.structures.snowy_temple;
 
 import java.util.Random;
 
-import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.config.StructureConfig;
-import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
-import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
+import com.legacy.structure_gel.api.structure.GelConfigStructure;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-public class SnowyTempleStructure extends GelConfigJigsawStructure<JigsawConfiguration>
+public class SnowyTempleStructure extends GelConfigStructure<NoneFeatureConfiguration>
 {
-	public SnowyTempleStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
+	public SnowyTempleStructure(Codec<NoneFeatureConfiguration> codec, StructureConfig config)
 	{
-		super(codec, config, 0, true, true, context -> true, Piece::new);
+		super(codec, config, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG), SnowyTempleStructure::generatePieces));
 	}
 
-	public static class Piece extends AbstractGelStructurePiece
+	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
-		public Piece(StructureManager template, StructurePoolElement piece, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds)
+		ChunkPos chunkPos = context.chunkPos();
+		Random rand = context.random();
+		int samples = 1;
+		int y = context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(8), chunkPos.getBlockZ(8), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor());
+		int width = 25;
+		for (int x = 0; x < 1; x++)
 		{
-			super(template, piece, pos, groundLevelDelta, rotation, bounds);
-		}
-
-		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
-		{
-			super(context, tag);
-		}
-
-		@Override
-		public StructurePieceType getType()
-		{
-			return DPStructures.SNOWY_TEMPLE.getPieceType();
-		}
-
-		@Override
-		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
-		{
-			if (key.contains("chest"))
+			for (int z = 0; z < 1; z++)
 			{
-				String[] data = key.split("-");
-				//DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.SnowyTemple.CHEST_COMMON, this.rotation, data);
-			}
-			if (key.contains("spawner"))
-			{
-				//DPUtil.placeSpawner(level, pos, DPSpawners.SNOWY_TEMPLE_STRAY);
+				y += context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(x * width), chunkPos.getBlockZ(z * width), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor());
+				samples++;
 			}
 		}
+		BlockPos pos = new BlockPos(chunkPos.x << 4, y / samples, chunkPos.z << 4);
+		SnowyTemplePieces.assemble(context.structureManager(), pos, Rotation.getRandom(rand), builder, rand);
 	}
 }

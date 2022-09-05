@@ -36,7 +36,7 @@ public class EndRuinsStructure extends GelConfigJigsawStructure<JigsawConfigurat
 	private static boolean isValidHeight(PieceGeneratorSupplier.Context<JigsawConfiguration> context)
 	{
 		ChunkPos chunkPos = context.chunkPos();
-		int y = context.chunkGenerator().getBaseHeight(chunkPos.x << 4 + 7, chunkPos.z << 4 + 7, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor());
+		int y = context.chunkGenerator().getBaseHeight(chunkPos.x << 4 + 7, chunkPos.z << 4 + 7, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor()); // TODO this is crashing. Make it not crash. Something about the height check
 		return y >= 60;
 	}
 
