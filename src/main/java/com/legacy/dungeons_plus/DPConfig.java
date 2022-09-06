@@ -94,7 +94,7 @@ public class DPConfig
 						.probability(100)
 					.popPlacement()
 					.pushConfigured()
-						.biomes(BiomeDictionary.OCEAN, BiomeDictionary.FROZEN)
+						.biomes(BiomeDictionary.DEEP_OCEAN, BiomeDictionary.FROZEN)
 					.popConfigured()
 					.build();
 			

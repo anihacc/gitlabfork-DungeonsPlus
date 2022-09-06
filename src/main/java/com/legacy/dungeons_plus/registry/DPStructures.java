@@ -15,7 +15,7 @@ import com.legacy.dungeons_plus.structures.soul_prison.SoulPrisonPieces;
 import com.legacy.dungeons_plus.structures.soul_prison.SoulPrisonStructure;
 import com.legacy.dungeons_plus.structures.tower.TowerPieces;
 import com.legacy.dungeons_plus.structures.tower.TowerStructure;
-import com.legacy.dungeons_plus.structures.warped_garden.WarpedGardenPieces;
+import com.legacy.dungeons_plus.structures.warped_garden.WarpedGardenPools;
 import com.legacy.dungeons_plus.structures.warped_garden.WarpedGardenStructure;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
@@ -92,10 +92,10 @@ public class DPStructures
 				.popConfigured()
 				.build();
 
-	public static final StructureRegistrar<NoneFeatureConfiguration, WarpedGardenStructure> WARPED_GARDEN = 
-			StructureRegistrar.builder(DungeonsPlus.locate("warped_garden"), () -> new WarpedGardenStructure(NoneFeatureConfiguration.CODEC, DPConfig.COMMON.warpedGarden))
-				.addPiece(WarpedGardenPieces.Piece::new)
-				.pushConfigured(NoneFeatureConfiguration.NONE)
+	public static final StructureRegistrar<JigsawConfiguration, WarpedGardenStructure> WARPED_GARDEN = 
+			StructureRegistrar.builder(DungeonsPlus.locate("warped_garden"), () -> new WarpedGardenStructure(JigsawConfiguration.CODEC, DPConfig.COMMON.warpedGarden))
+				.addPiece(WarpedGardenStructure.Piece::new)
+				.pushConfigured(new JigsawConfiguration(WarpedGardenPools.ROOT, 4))
 					.biomes(DPConfig.COMMON.warpedGarden.getConfigured())
 					.dimensions(Level.OVERWORLD)
 				.popConfigured()
