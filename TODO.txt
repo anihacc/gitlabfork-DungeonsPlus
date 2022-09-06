@@ -1,0 +1,7 @@
+
+- Cleanup Soul Prison
+- Update structure spawn rates
+- Introduce item rewards
+- Update Gel 1.18
+- Port 1.19
+- Update Gel 1.19
