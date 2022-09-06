@@ -17,6 +17,12 @@ public class EndRuinsPools
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "end_ruins/");
 
+		/**
+		 * This piece is the start for the entire structure. By using a root piece, I'm
+		 * able to control where the center of the structure is.
+		 */
+		ROOT = registry.register("root", registry.builder().names("root").build());
+
 		registry.register("pylon_plate_spacer", registry.builder().names("pylon_plate_spacer").build());
 		/**
 		 * I'm using the terrain matching placement behavior to ensure the structures
@@ -48,11 +54,10 @@ public class EndRuinsPools
 		 * stone bricks with end stone.
 		 */
 		JigsawPoolBuilder towerPieces = towerRegistry.builder().processors(DPProcessors.END_RUINS_TOWER);
-		ROOT = towerRegistry.register("base", towerPieces.clone().names("base_1", "base_2").build());
+		towerRegistry.register("base", towerPieces.clone().names("base_1", "base_2").build());
 		towerRegistry.register("mid", towerPieces.clone().names("mid_1", "mid_2").build());
 		towerRegistry.register("top", towerPieces.clone().names("top_1", "top_2").build());
 
-		towerRegistry.register("spine", towerRegistry.builder().names("spine").build());
 		towerRegistry.register("block_pile", towerRegistry.builder().names(ImmutableMap.of("block_pile_1", 2, "block_pile_2", 2, "block_pile_3", 2, "block_pile_4", 1)).build());
 
 	}

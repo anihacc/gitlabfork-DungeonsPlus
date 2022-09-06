@@ -1,10 +1,12 @@
 package com.legacy.dungeons_plus.structures.end_ruins;
 
+import java.util.List;
 import java.util.Random;
 
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.config.StructureConfig;
 import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
+import com.legacy.structure_gel.api.structure.base.IPieceBuilderModifier;
 import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
 import com.mojang.serialization.Codec;
 
@@ -20,9 +22,11 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 
@@ -33,11 +37,38 @@ public class EndRuinsStructure extends GelConfigJigsawStructure<JigsawConfigurat
 		super(codec, config, 0, true, true, EndRuinsStructure::isValidHeight, Piece::new);
 	}
 
+	@Override
+	public void modifyPieceBuilder(StructurePiecesBuilder pieceBuilder, Context<JigsawConfiguration> context)
+	{
+		List<StructurePiece> pieces = IPieceBuilderModifier.getPieces(pieceBuilder);
+
+		pieces.removeIf(p ->
+		{
+			// Removes pieces that generate in the void
+			var bounds = p.getBoundingBox();
+			if (bounds.minY() < 20)
+				return true;
+
+			// Removes pieces hanging over the void
+			int[] zs = new int[] { bounds.minZ(), bounds.maxZ() };
+			for (int x : new int[] { bounds.minX(), bounds.maxX() })
+				for (int z : zs)
+					if (context.chunkGen().getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, context.level()) < 20)
+						return true;
+
+			return false;
+		});
+	}
+
 	private static boolean isValidHeight(PieceGeneratorSupplier.Context<JigsawConfiguration> context)
 	{
 		ChunkPos chunkPos = context.chunkPos();
-		int y = context.chunkGenerator().getBaseHeight(chunkPos.x << 4 + 7, chunkPos.z << 4 + 7, Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor()); // TODO this is crashing. Make it not crash. Something about the height check
-		return y >= 60;
+		int[] xz = new int[] { -8, 8 };
+		for (int x : xz)
+			for (int z : xz)
+				if (context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(x), chunkPos.getBlockZ(z), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor()) < 56)
+					return false;
+		return true;
 	}
 
 	public static class Piece extends AbstractGelStructurePiece
@@ -79,11 +110,6 @@ public class EndRuinsStructure extends GelConfigJigsawStructure<JigsawConfigurat
 		@Override
 		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
 		{
-			if (key.contains("spawner"))
-			{
-				String[] data = key.split("-");
-				//DPUtil.placeSpawner(level, pos, data[1]);
-			}
 		}
 	}
 }
