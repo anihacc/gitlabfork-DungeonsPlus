@@ -16,7 +16,9 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
@@ -43,10 +45,10 @@ public class SnowyTemplePieces
 		case CLOCKWISE_180 -> Direction.SOUTH;
 		case COUNTERCLOCKWISE_90 -> Direction.WEST;
 		};
-		
+
 		BlockPos floorPos = pos;
 
-		pieces.addPiece(new Piece(structureManager, Util.getRandom(BASES, rand), floorPos, rotation));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(BASES, rand), floorPos, rotation, rand));
 		floorPos = floorPos.above(13);
 		int roomHeight = 11;
 		boolean flipped = true;
@@ -56,35 +58,43 @@ public class SnowyTemplePieces
 		for (int floor = 0; floor < maxFloors && unusedFloors.size() > 0; floor++)
 		{
 			ResourceLocation floorName = Util.getRandom(unusedFloors, rand);
-			pieces.addPiece(new Piece(structureManager, floorName, floorPos, flipped ? flippedRot : rotation));
+			pieces.addPiece(new Piece(structureManager, floorName, floorPos, flipped ? flippedRot : rotation, rand));
 			unusedFloors.remove(floorName);
 			floorPos = floorPos.above(roomHeight);
 			flipped = !flipped;
 		}
 
-		pieces.addPiece(new Piece(structureManager, Util.getRandom(TOP_FLOORS, rand), floorPos, rotation));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(TOP_FLOORS, rand), floorPos, rotation, rand));
 
-		pieces.addPiece(new Piece(structureManager, Util.getRandom(PATHS, rand), pos.offset(11, 0, 2).relative(dir, 22), rotation));
-		
-		pieces.addPiece(new Piece(structureManager, Util.getRandom(ICE, rand), pos.offset(11, 0, 11).relative(dir, 16).relative(Rotation.COUNTERCLOCKWISE_90.rotate(dir), 8), rotation));
-		pieces.addPiece(new Piece(structureManager, Util.getRandom(ICE, rand), pos.offset(11, 0, 11).relative(dir, 16).relative(Rotation.CLOCKWISE_90.rotate(dir), 8), rotation));
-		pieces.addPiece(new Piece(structureManager, Util.getRandom(ICE, rand), pos.offset(11, 0, 11).relative(dir, 30).relative(Rotation.COUNTERCLOCKWISE_90.rotate(dir), 12), rotation));
-		pieces.addPiece(new Piece(structureManager, Util.getRandom(ICE, rand), pos.offset(11, 0, 11).relative(dir, 30).relative(Rotation.CLOCKWISE_90.rotate(dir), 12), rotation));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(PATHS, rand), pos.offset(11, 0, 2).relative(dir, 22), rotation, rand));
+
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(ICE, rand), pos.offset(11, 0, 11).relative(dir, 16).relative(Rotation.COUNTERCLOCKWISE_90.rotate(dir), 8), rotation, rand));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(ICE, rand), pos.offset(11, 0, 11).relative(dir, 16).relative(Rotation.CLOCKWISE_90.rotate(dir), 8), rotation, rand));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(ICE, rand), pos.offset(11, 0, 11).relative(dir, 30).relative(Rotation.COUNTERCLOCKWISE_90.rotate(dir), 12), rotation, rand));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(ICE, rand), pos.offset(11, 0, 11).relative(dir, 30).relative(Rotation.CLOCKWISE_90.rotate(dir), 12), rotation, rand));
 	}
 
 	public static class Piece extends GelTemplateStructurePiece
 	{
+		private static final String DECAY_KEY = "decay";
+		/**
+		 * Represented through binary data. Each bit is used to convert a different type
+		 * of wool. The number will range from 0 to 7.
+		 */
+		private final int decay;
 
-		public Piece(StructureManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation)
+		public Piece(StructureManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, Random rand)
 		{
 			super(DPStructures.SNOWY_TEMPLE.getPieceType(), 0, structureManager, location, pos);
 			this.rotation = rotation;
+			this.decay = rand.nextInt(8); // Produced binary 000 (0) to 111 (7)
 			this.setupPlaceSettings(structureManager);
 		}
 
 		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
 			super(DPStructures.SNOWY_TEMPLE.getPieceType(), tag, context.structureManager());
+			this.decay = tag.getInt(DECAY_KEY);
 			this.setupPlaceSettings(context.structureManager());
 		}
 
@@ -92,6 +102,7 @@ public class SnowyTemplePieces
 		protected void addAdditionalSaveData(StructurePieceSerializationContext level, CompoundTag tag)
 		{
 			super.addAdditionalSaveData(level, tag);
+			tag.putInt(DECAY_KEY, this.decay);
 		}
 
 		@Override
@@ -109,6 +120,25 @@ public class SnowyTemplePieces
 			}
 
 			return settings;
+		}
+
+		@Override
+		public BlockState modifyState(ServerLevelAccessor level, Random rand, BlockPos pos, BlockState originalState)
+		{
+			// TODO Decay packed ice with light blue, white, and light gray
+
+			BlockState air = Blocks.AIR.defaultBlockState();
+			BlockState ice = Blocks.ICE.defaultBlockState();
+			BlockState packedIce = Blocks.PACKED_ICE.defaultBlockState();
+
+			if (originalState.is(Blocks.LIGHT_BLUE_WOOL))
+				return (this.decay & 1) == 1 ? air : ice;
+			if (originalState.is(Blocks.WHITE_WOOL))
+				return (this.decay & 2) == 2 ? air : packedIce;
+			if (originalState.is(Blocks.LIGHT_GRAY_WOOL))
+				return (this.decay & 4) == 4 ? air : packedIce;
+
+			return originalState;
 		}
 
 		@Override

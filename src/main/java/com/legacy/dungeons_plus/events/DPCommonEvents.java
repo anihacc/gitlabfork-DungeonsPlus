@@ -2,6 +2,9 @@ package com.legacy.dungeons_plus.events;
 
 import static com.legacy.dungeons_plus.DungeonsPlus.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.function.Consumer;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
@@ -9,6 +12,7 @@ import com.legacy.dungeons_plus.data.providers.DPAdvancementProv;
 import com.legacy.dungeons_plus.data.providers.DPLangProvider;
 import com.legacy.dungeons_plus.data.providers.DPLootProv;
 import com.legacy.dungeons_plus.data.providers.DPTagProv;
+import com.legacy.dungeons_plus.registry.DPItems;
 import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.entity.EntityAccessHelper;
@@ -19,15 +23,21 @@ import com.legacy.structure_gel.api.structure.StructureAccessHelper;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -59,6 +69,29 @@ public class DPCommonEvents
 		{
 			if (entity.getType().equals(entityTest) && entity.level instanceof ServerLevel serverLevel && StructureAccessHelper.isInStructurePiece(serverLevel, structure.getStructure(), entity.blockPosition()))
 				consumer.accept((T) entity);
+		}
+
+		@SubscribeEvent
+		protected static void onEffectApply(final PotionEvent.PotionApplicableEvent event)
+		{
+			if (event.getPotionEffect().getEffect() == MobEffects.MOVEMENT_SLOWDOWN)
+			{
+				List<ItemStack> strayArmors = new ArrayList<>(1);
+				for (ItemStack stack : event.getEntityLiving().getArmorSlots())
+					if (stack.getItem() instanceof ArmorItem armor && armor.getMaterial() == DPItems.DPArmors.STRAY)
+						strayArmors.add(stack);
+
+				int size = strayArmors.size();
+				if (size > 0)
+				{
+					event.setResult(Result.DENY);
+					if (event.getEntityLiving() instanceof ServerPlayer serverPlayer)
+					{
+						Random rand = serverPlayer.getRandom();
+						strayArmors.get(rand.nextInt(size)).hurt(2, rand, serverPlayer);
+					}
+				}
+			}
 		}
 	}
 
@@ -93,7 +126,7 @@ public class DPCommonEvents
 			event.register(locate("reanimated_ruins/frozen_map"), DPLoot.ReanimatedRuins.CHEST_FROZEN_MAP);
 			event.register(locate("reanimated_ruins/mossy"), DPLoot.ReanimatedRuins.CHEST_MOSSY);
 			event.register(locate("reanimated_ruins/mossy_map"), DPLoot.ReanimatedRuins.CHEST_MOSSY_MAP);
-			
+
 			event.register(locate("reanimated_ruins/skeleton"), DPLoot.ReanimatedRuins.ENTITY_SKELETON);
 			event.register(locate("reanimated_ruins/zombie"), DPLoot.ReanimatedRuins.ENTITY_ZOMBIE);
 
@@ -117,7 +150,7 @@ public class DPCommonEvents
 
 		@SubscribeEvent
 		protected static void gatherData(final GatherDataEvent event)
-		{			
+		{
 			DataGenerator gen = event.getGenerator();
 			ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 

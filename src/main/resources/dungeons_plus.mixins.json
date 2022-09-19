@@ -4,7 +4,7 @@
 	"compatibilityLevel": "JAVA_17",
 	"refmap": "dungeons_plus.refmap.json",
 	"mixins": [
-		"ForgeHooksMixin"
+		"EntityMixin"
 	],
 	"client": [
 	],

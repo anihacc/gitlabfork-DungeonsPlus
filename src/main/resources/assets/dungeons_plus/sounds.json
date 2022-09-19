@@ -1,0 +1,62 @@
+{
+	"item.soul_blaster.shoot": {
+		"category": "player",
+		"subtitle": "subtitles.dungeons_plus.item.soul_blaster.shoot",
+		"sounds": [
+			{
+				"name": "entity.ghast.shoot",
+				"type": "event"
+			}
+		]
+	},
+	"item.warped_axe.throw": {
+		"category": "player",
+		"subtitle": "subtitles.dungeons_plus.item.warped_axe.throw",
+		"sounds": [
+			{
+				"name": "entity.player.attack.sweep",
+				"type": "event"
+			}
+		]
+	},
+	"item.warped_axe.land": {
+		"category": "player",
+		"subtitle": "subtitles.dungeons_plus.item.warped_axe.land",
+		"sounds": [
+			{
+				"name": "item.trident.hit",
+				"type": "event"
+			}
+		]
+	},
+	"item.warped_axe.hit": {
+		"category": "player",
+		"subtitle": "subtitles.dungeons_plus.item.warped_axe.hit",
+		"sounds": [
+			{
+				"name": "entity.player.attack.crit",
+				"type": "event"
+			}
+		]
+	},
+	"item.warped_axe.return": {
+		"category": "player",
+		"subtitle": "subtitles.dungeons_plus.item.warped_axe.return",
+		"sounds": [
+			{
+				"name": "item.trident.return",
+				"type": "event"
+			}
+		]
+	},
+	"item.warped_axe.teleport": {
+		"category": "player",
+		"subtitle": "subtitles.dungeons_plus.item.warped_axe.teleport",
+		"sounds": [
+			{
+				"name": "item.chorus_fruit.teleport",
+				"type": "event"
+			}
+		]
+	}
+}

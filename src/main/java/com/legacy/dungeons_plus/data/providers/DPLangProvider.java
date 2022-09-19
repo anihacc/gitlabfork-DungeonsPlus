@@ -2,8 +2,10 @@ package com.legacy.dungeons_plus.data.providers;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.registry.DPSoundEvents;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
@@ -14,6 +16,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class DPLangProvider extends LanguageProvider
@@ -29,7 +32,9 @@ public class DPLangProvider extends LanguageProvider
 	{
 		this.addAll(Registry.BLOCK, Map.of());
 		this.addAll(Registry.STRUCTURE_FEATURE, Map.of());
-
+		this.addAll(Registry.ITEM, Map.of());
+		this.addAll(Registry.ENTITY_TYPE, Map.of());
+		
 		this.add(mapName(DPStructures.REANIMATED_RUINS), "Reanimated Ruins Map");
 		this.add(mapName(DPStructures.LEVIATHAN), "Leviathan Map");
 		this.add(mapName(DPStructures.SNOWY_TEMPLE), "Snowy Temple Map");
@@ -44,6 +49,13 @@ public class DPLangProvider extends LanguageProvider
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findEndRuins, "A Ruined End", "Find End Ruins");
 
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findSoulPrison, "Caged Tears", "Find the Soul Prison");
+
+		this.add(DPSoundEvents.SOUL_BLASTER_SHOOT, "Soul Blaster shoots");
+		this.add(DPSoundEvents.WARPED_AXE_THROW, "Warped Axe thrown");
+		this.add(DPSoundEvents.WARPED_AXE_LAND, "Warped Axe lands");
+		this.add(DPSoundEvents.WARPED_AXE_HIT, "Warped Axe hits");
+		this.add(DPSoundEvents.WARPED_AXE_RETURN, "Warped Axe returns");
+		this.add(DPSoundEvents.WARPED_AXE_TELEPORT, "Player teleports");
 
 		// TODO include maps, advancements, etc
 	}
@@ -75,6 +87,11 @@ public class DPLangProvider extends LanguageProvider
 	private void add(ResourceKey<?> key, String translation)
 	{
 		this.add(Util.makeDescriptionId(key.registry().getPath().replace('/', '.'), key.location()), translation);
+	}
+	
+	private void add(Supplier<SoundEvent> sound, String translation)
+	{
+		this.add("subtitle." + DungeonsPlus.MODID + "." + sound.get().getLocation().getPath(), translation);
 	}
 
 	// Converts camel case to a proper name. snowy_temple -> Snowy Temple
