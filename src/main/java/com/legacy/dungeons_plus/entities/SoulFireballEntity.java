@@ -67,6 +67,7 @@ public class SoulFireballEntity extends Fireball
 	public boolean hurt(DamageSource damageSource, float damage)
 	{
 		this.fuse = DEFAULT_FUSE;
+		this.explosionPower = Math.min(this.explosionPower + 1, 5);
 		return super.hurt(damageSource, damage);
 	}
 

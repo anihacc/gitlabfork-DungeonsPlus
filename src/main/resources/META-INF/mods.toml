@@ -8,6 +8,7 @@ license="https://www.gnu.org/licenses/gpl-3.0.en.html"
 	displayName="Dungeons Plus"
 	displayURL="https://moddinglegacy.com/"
 	logoFile="logo.png"
+	credits="KingPhygieBoo"
 	authors="Silver_David"
 	description='''Adds a few new dungeons to the world using Structure Gel API'''
 [[dependencies.dungeons_plus]]

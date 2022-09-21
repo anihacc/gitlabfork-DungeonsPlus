@@ -13,20 +13,18 @@
 		"category": "player",
 		"subtitle": "subtitles.dungeons_plus.item.warped_axe.throw",
 		"sounds": [
-			{
-				"name": "entity.player.attack.sweep",
-				"type": "event"
-			}
+			"dungeons_plus:warped_axe/throw_0",
+			"dungeons_plus:warped_axe/throw_1"
 		]
 	},
 	"item.warped_axe.land": {
 		"category": "player",
 		"subtitle": "subtitles.dungeons_plus.item.warped_axe.land",
 		"sounds": [
-			{
-				"name": "item.trident.hit",
-				"type": "event"
-			}
+			"dungeons_plus:warped_axe/land_0",
+			"dungeons_plus:warped_axe/land_1",
+			"dungeons_plus:warped_axe/land_2",
+			"dungeons_plus:warped_axe/land_3"
 		]
 	},
 	"item.warped_axe.hit": {
