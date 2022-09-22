@@ -18,11 +18,11 @@ import net.minecraft.world.item.Tier;
 import net.minecraftforge.common.util.Lazy;
 
 // Weapon that produces a weakness effect on the target, and grants a slight speed buff
-public class LeviathanFangItem extends SwordItem
+public class LeviathanBladeItem extends SwordItem
 {
 	private static final Lazy<Multimap<Attribute, AttributeModifier>> ATTRIBUTES = Lazy.of(() -> ImmutableMultimap.of(Attributes.MOVEMENT_SPEED, new AttributeModifier(UUID.fromString("d1ff2158-37ac-11ed-a261-0242ac120002"), "leviathan_fang_speed", 0.05, AttributeModifier.Operation.MULTIPLY_TOTAL)));
 
-	public LeviathanFangItem(Tier tier, int baseDamage, float baseAttackSpeed, Properties properties)
+	public LeviathanBladeItem(Tier tier, int baseDamage, float baseAttackSpeed, Properties properties)
 	{
 		super(tier, baseDamage, baseAttackSpeed, properties);
 	}

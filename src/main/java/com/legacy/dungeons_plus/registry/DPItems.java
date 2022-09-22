@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.items.FrostedCowlItem;
-import com.legacy.dungeons_plus.items.LeviathanFangItem;
+import com.legacy.dungeons_plus.items.LeviathanBladeItem;
 import com.legacy.dungeons_plus.items.SoulBlasterItem;
 import com.legacy.dungeons_plus.items.WarpedAxeItem;
 import com.legacy.structure_gel.api.util.LazyOptional;
@@ -36,7 +36,7 @@ public class DPItems
 	private static List<Pair<String, LazyOptional<? extends Item>>> objs = new ArrayList<>();
 
 	public static final LazyOptional<Item> FROSTED_COWL = register("frosted_cowl", () -> new FrostedCowlItem(DPArmors.STRAY, EquipmentSlot.HEAD, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
-	public static final LazyOptional<Item> LEVIATHAN_FANG = register("leviathan_fang", () -> new LeviathanFangItem(DPTiers.LEVIATHAN, 3, -2.4F, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
+	public static final LazyOptional<Item> LEVIATHAN_BLADE = register("leviathan_blade", () -> new LeviathanBladeItem(DPTiers.LEVIATHAN, 3, -2.6F, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
 	public static final LazyOptional<Item> WARPED_AXE = register("warped_axe", () -> new WarpedAxeItem(DPTiers.WARPED_GOLD, 7, -3.2F, new Item.Properties().durability(312).tab(CreativeModeTab.TAB_COMBAT)));
 	public static final LazyOptional<Item> SOUL_BLASTER = register("soul_blaster", () -> new SoulBlasterItem(new Item.Properties().durability(250).tab(CreativeModeTab.TAB_COMBAT)));
 
