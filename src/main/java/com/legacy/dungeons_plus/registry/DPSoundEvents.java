@@ -18,7 +18,7 @@ public class DPSoundEvents
 {
 	private static List<Pair<String, LazyOptional<? extends SoundEvent>>> objs = new ArrayList<>();
 
-	public static final LazyOptional<SoundEvent> SOUL_BLASTER_SHOOT = register("item.soul_blaster.shoot");
+	public static final LazyOptional<SoundEvent> SOUL_CANNON_SHOOT = register("item.soul_cannon.shoot");
 	public static final LazyOptional<SoundEvent> WARPED_AXE_THROW = register("item.warped_axe.throw");
 	public static final LazyOptional<SoundEvent> WARPED_AXE_LAND = register("item.warped_axe.land");
 	public static final LazyOptional<SoundEvent> WARPED_AXE_HIT = register("item.warped_axe.hit");

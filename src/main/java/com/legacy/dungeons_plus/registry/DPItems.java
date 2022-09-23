@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.items.FrostedCowlItem;
 import com.legacy.dungeons_plus.items.LeviathanBladeItem;
-import com.legacy.dungeons_plus.items.SoulBlasterItem;
+import com.legacy.dungeons_plus.items.SoulCannonItem;
 import com.legacy.dungeons_plus.items.WarpedAxeItem;
 import com.legacy.structure_gel.api.util.LazyOptional;
 import com.mojang.datafixers.util.Pair;
@@ -37,8 +37,8 @@ public class DPItems
 
 	public static final LazyOptional<Item> FROSTED_COWL = register("frosted_cowl", () -> new FrostedCowlItem(DPArmors.STRAY, EquipmentSlot.HEAD, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
 	public static final LazyOptional<Item> LEVIATHAN_BLADE = register("leviathan_blade", () -> new LeviathanBladeItem(DPTiers.LEVIATHAN, 3, -2.6F, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
-	public static final LazyOptional<Item> WARPED_AXE = register("warped_axe", () -> new WarpedAxeItem(DPTiers.WARPED_GOLD, 7, -3.2F, new Item.Properties().durability(312).tab(CreativeModeTab.TAB_COMBAT)));
-	public static final LazyOptional<Item> SOUL_BLASTER = register("soul_blaster", () -> new SoulBlasterItem(new Item.Properties().durability(250).tab(CreativeModeTab.TAB_COMBAT)));
+	public static final LazyOptional<Item> WARPED_AXE = register("warped_axe", () -> new WarpedAxeItem(DPTiers.WARPED_GOLD, 7, -3.1F, new Item.Properties().durability(312).tab(CreativeModeTab.TAB_COMBAT)));
+	public static final LazyOptional<Item> SOUL_CANNON = register("soul_cannon", () -> new SoulCannonItem(new Item.Properties().durability(250).tab(CreativeModeTab.TAB_COMBAT)));
 
 	@SubscribeEvent
 	protected static void onRegistry(final RegistryEvent.Register<Item> event)
@@ -62,7 +62,7 @@ public class DPItems
 
 	public static interface DPTiers
 	{
-		Tier LEVIATHAN = new ForgeTier(2, 1000, 7.0F, 2.0F, 12, BlockTags.NEEDS_IRON_TOOL, () -> Ingredient.of(Items.BONE_BLOCK));
+		Tier LEVIATHAN = new ForgeTier(2, 1000, 7.0F, 2.5F, 12, BlockTags.NEEDS_IRON_TOOL, () -> Ingredient.of(Items.BONE_BLOCK));
 		Tier WARPED_GOLD = new ForgeTier(1, 275, 10.0F, 1.0F, 18, BlockTags.NEEDS_STONE_TOOL, () -> Ingredient.of(Items.GOLD_INGOT));
 	}
 

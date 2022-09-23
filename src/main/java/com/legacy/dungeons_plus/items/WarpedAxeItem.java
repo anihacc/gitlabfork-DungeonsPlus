@@ -22,6 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.DamageEnchantment;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -83,7 +84,8 @@ public class WarpedAxeItem extends AxeItem
 				stack.hurtAndBreak(1, player, u -> u.broadcastBreakEvent(user.getUsedItemHand()));
 
 				WarpedAxeEntity axe = new WarpedAxeEntity(level, player, stack);
-				axe.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, SHOOT_POWER, 1.0F);;
+				axe.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, SHOOT_POWER, 1.0F);
+				;
 				boolean isCreative = player.isCreative();
 				if (isCreative)
 					axe.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
@@ -91,7 +93,7 @@ public class WarpedAxeItem extends AxeItem
 				level.playSound((Player) null, axe, DPSoundEvents.WARPED_AXE_THROW.get(), SoundSource.PLAYERS, 0.8F, 0.9F);
 				if (!isCreative)
 					player.getInventory().removeItem(stack);
-				
+
 				player.swing(player.getUsedItemHand(), true);
 			}
 		}
@@ -107,12 +109,18 @@ public class WarpedAxeItem extends AxeItem
 		player.startUsingItem(hand);
 		return InteractionResultHolder.consume(handItem);
 	}
-	
+
+	@Override
+	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity user)
+	{
+		// This is a weapon, so taking 2 damage is dumb
+		stack.hurtAndBreak(1, user, u -> u.broadcastBreakEvent(EquipmentSlot.MAINHAND));
+		return true;
+	}
+
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
 	{
-		if (enchantment == Enchantments.LOYALTY)
-			return true;
-		return super.canApplyAtEnchantingTable(stack, enchantment);
+		return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment == Enchantments.LOYALTY || enchantment instanceof DamageEnchantment;
 	}
 }

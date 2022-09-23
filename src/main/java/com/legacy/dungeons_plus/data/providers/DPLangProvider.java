@@ -50,12 +50,18 @@ public class DPLangProvider extends LanguageProvider
 
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.findSoulPrison, "Caged Tears", "Find the Soul Prison");
 
-		this.add(DPSoundEvents.SOUL_BLASTER_SHOOT, "Soul Blaster shoots");
+		this.add(DPSoundEvents.SOUL_CANNON_SHOOT, "Soul Blaster shoots");
 		this.add(DPSoundEvents.WARPED_AXE_THROW, "Warped Axe thrown");
 		this.add(DPSoundEvents.WARPED_AXE_LAND, "Warped Axe lands");
 		this.add(DPSoundEvents.WARPED_AXE_HIT, "Warped Axe hits");
 		this.add(DPSoundEvents.WARPED_AXE_RETURN, "Warped Axe returns");
 		this.add(DPSoundEvents.WARPED_AXE_TELEPORT, "Player teleports");
+
+		this.add("death.attack.dungeons_plus.consume_soul", "%1$s consumed their own soul");
+		this.add("death.attack.dungeons_plus.consume_soul.player", "%1$s consumed their soul whilst fighting %2$s");
+		
+		this.add("death.attack.dungeons_plus.warped_axe", "%1$s was cleaved by %2$s");
+		this.add("death.attack.dungeons_plus.warped_axe.item", "%1$s was cleaved by %2$s with %3$s");
 
 		// TODO include maps, advancements, etc
 	}

@@ -2,6 +2,7 @@ package com.legacy.dungeons_plus.entities;
 
 import com.legacy.dungeons_plus.registry.DPEntityTypes;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.network.NetworkHooks;
@@ -24,6 +26,8 @@ public class SoulFireballEntity extends Fireball
 {
 	private static final int DEFAULT_FUSE = 20;
 	private int explosionPower = 1;
+	private boolean hasFlame = false;
+	private boolean isMulti = false;
 	private int fuse = DEFAULT_FUSE;
 
 	public SoulFireballEntity(EntityType<? extends SoulFireballEntity> type, Level level)
@@ -31,10 +35,12 @@ public class SoulFireballEntity extends Fireball
 		super(type, level);
 	}
 
-	public SoulFireballEntity(Level level, LivingEntity owner, double dx, double dy, double dz, int power)
+	public SoulFireballEntity(Level level, LivingEntity owner, double dx, double dy, double dz, int power, boolean hasFlame, boolean isMulti)
 	{
 		super(DPEntityTypes.SOUL_FIREBALL.get(), owner, dx, dy, dz, level);
-		this.explosionPower = power;
+		this.explosionPower = isMulti ? 0 : power;
+		this.hasFlame = hasFlame;
+		this.isMulti = isMulti;
 	}
 
 	public SoulFireballEntity(PlayMessages.SpawnEntity spawnEntity, Level level)
@@ -45,6 +51,12 @@ public class SoulFireballEntity extends Fireball
 	@Override
 	protected void onHit(HitResult hitResult)
 	{
+		if (hitResult instanceof EntityHitResult entityHitResult)
+		{
+			var hitEntity = entityHitResult.getEntity();
+			if ((hitEntity instanceof SoulFireballEntity || hitEntity == this.getOwner()) && this.tickCount < 5)
+				return;
+		}
 		super.onHit(hitResult);
 		this.explode();
 	}
@@ -57,12 +69,14 @@ public class SoulFireballEntity extends Fireball
 		{
 			Entity target = hitResult.getEntity();
 			Entity owner = this.getOwner();
-			target.hurt(DamageSource.fireball(this, owner), 4.0F);
+			target.hurt(DamageSource.fireball(this, owner), this.isMulti ? 7.0F : 4.5F);
+			if (this.hasFlame)
+				target.setSecondsOnFire(3);
 			if (owner instanceof LivingEntity livingOwner)
 				this.doEnchantDamageEffects(livingOwner, target);
 		}
 	}
-	
+
 	@Override
 	public boolean hurt(DamageSource damageSource, float damage)
 	{
@@ -90,13 +104,23 @@ public class SoulFireballEntity extends Fireball
 	{
 		if (this.level instanceof ServerLevel serverLevel)
 		{
-			serverLevel.explode(this, this.getX(), this.getY() + 0.2, this.getZ(), (float) this.explosionPower, false, Explosion.BlockInteraction.NONE);
-			serverLevel.sendParticles(ParticleTypes.SOUL, this.getX(), this.getY() + 0.2, this.getZ(), 15, 0, 0, 0, 0.2);
+			serverLevel.explode(this, this.getX(), this.getY() + 0.2, this.getZ(), this.explosionPower, false, Explosion.BlockInteraction.NONE);
+			if (this.hasFlame)
+			{
+				BlockPos p = this.blockPosition();
+				if (this.level.getBlockState(p).isAir() && this.level.getBlockState(p.below()).isSolidRender(this.level, p.below()))
+					this.level.setBlockAndUpdate(p, BaseFireBlock.getState(this.level, p));
+				int fireRange = this.isMulti ? 1 : 2;
+				for (BlockPos pos : BlockPos.withinManhattan(p, fireRange, fireRange, fireRange))
+					if (this.random.nextInt(10) == 0 && this.level.getBlockState(pos).isAir() && this.level.getBlockState(pos.below()).isSolidRender(this.level, pos.below()))
+						this.level.setBlockAndUpdate(pos, BaseFireBlock.getState(this.level, pos));
+			}
+			serverLevel.sendParticles(ParticleTypes.SOUL, this.getX(), this.getY() + 0.5, this.getZ(), this.isMulti ? 5 : 15, 0, 0, 0, this.isMulti ? 0.07 : 0.2);
 			this.discard();
 		}
 	}
 
-	private static final String POWER_KEY = "power", FUSE_KEY = "fuse";
+	private static final String POWER_KEY = "power", FUSE_KEY = "fuse", HAS_FLAME_KEY = "has_flame", IS_MULTI = "is_multi";;
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag)
@@ -104,6 +128,9 @@ public class SoulFireballEntity extends Fireball
 		super.addAdditionalSaveData(tag);
 		tag.putByte(POWER_KEY, (byte) this.explosionPower);
 		tag.putInt(FUSE_KEY, this.fuse);
+		tag.putBoolean(HAS_FLAME_KEY, this.hasFlame);
+		tag.putBoolean(IS_MULTI, this.isMulti);
+
 	}
 
 	@Override
@@ -114,6 +141,10 @@ public class SoulFireballEntity extends Fireball
 			this.explosionPower = tag.getByte(POWER_KEY);
 		if (tag.contains(FUSE_KEY, Tag.TAG_INT))
 			this.fuse = tag.getInt(FUSE_KEY);
+		if (tag.contains(HAS_FLAME_KEY, Tag.TAG_BYTE))
+			this.hasFlame = tag.getBoolean(HAS_FLAME_KEY);
+		if (tag.contains(IS_MULTI, Tag.TAG_BYTE))
+			this.isMulti = tag.getBoolean(IS_MULTI);
 	}
 
 	@Override

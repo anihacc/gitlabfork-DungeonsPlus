@@ -1,6 +1,6 @@
 package com.legacy.dungeons_plus.client.renderers;
 
-import com.legacy.dungeons_plus.items.SoulBlasterItem;
+import com.legacy.dungeons_plus.items.SoulCannonItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 
@@ -33,15 +33,17 @@ public interface CustomHandRenderer
 		float y = 0.2F * Mth.sin(Mth.sqrt(swingProgress) * ((float) Math.PI * 2F));
 		float z = -0.2F * Mth.sin(swingProgress * (float) Math.PI);
 
-
 		float useTime = (float) stack.getUseDuration() - ((float) mc.player.getUseItemRemainingTicks() - event.getPartialTicks() + 1.0F);
-		float maxTime = SoulBlasterItem.MAX_USE_TIME;
+		float maxTime = SoulCannonItem.MAX_USE_TIME;
 		float useProgress = Math.min(useTime, maxTime) / maxTime;
 		float bob = Mth.sin(useTime * (useProgress + 1)) * 0.015F * useProgress;
 
 		int handOffset = isMainHand ? 1 : -1;
-		poseStack.translate(handOffset * x + (bob / 2.0F), y + bob + useProgress / 5.0, z + (useProgress / 10.0));
-		poseStack.mulPose(Vector3f.XP.rotationDegrees(-10.935F * useProgress));
+		poseStack.translate(handOffset * x + (handOffset * bob / 2.0F), handOffset * y + bob + (handOffset * useProgress / 5.0), handOffset * z + (handOffset * useProgress / 10.0));
+
+		float windUpRot = 10.935F * handOffset;
+		poseStack.mulPose(Vector3f.ZP.rotationDegrees(windUpRot * useProgress));
+		poseStack.mulPose(Vector3f.XN.rotationDegrees(windUpRot * useProgress));
 
 		applyItemArmTransform(poseStack, humanoidArm, equipProgress);
 		applyItemArmAttackTransform(poseStack, humanoidArm, swingProgress);

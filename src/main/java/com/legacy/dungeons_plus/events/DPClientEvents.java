@@ -5,7 +5,7 @@ import com.legacy.dungeons_plus.client.DPBlockLayers;
 import com.legacy.dungeons_plus.client.renderers.SoulFireballRenderer;
 import com.legacy.dungeons_plus.client.renderers.WarpedAxeRenderer;
 import com.legacy.dungeons_plus.items.CustomHandRendererSupplier;
-import com.legacy.dungeons_plus.items.SoulBlasterItem;
+import com.legacy.dungeons_plus.items.SoulCannonItem;
 import com.legacy.dungeons_plus.registry.DPEntityTypes;
 import com.legacy.dungeons_plus.registry.DPItems;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -59,10 +59,10 @@ public class DPClientEvents
 			ItemStack useStack = player.getUseItem();
 			if (player.isUsingItem())
 			{
-				if (useStack.is(DPItems.SOUL_BLASTER.get()))
+				if (useStack.is(DPItems.SOUL_CANNON.get()))
 				{
 					float f = event.getNewfov();
-					float progress = (float) player.getTicksUsingItem() / SoulBlasterItem.MAX_USE_TIME;
+					float progress = (float) player.getTicksUsingItem() / SoulCannonItem.MAX_USE_TIME;
 					if (progress > 1.0F)
 						progress = 1.0F;
 					else

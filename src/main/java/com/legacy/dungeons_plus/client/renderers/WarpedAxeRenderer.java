@@ -36,6 +36,24 @@ public class WarpedAxeRenderer extends EntityRenderer<WarpedAxeEntity>
 			poseStack.pushPose();
 			float spinRot = Mth.lerp(partialTicks, entity.oldSpinRot, entity.spinRot);
 			poseStack.translate(0, 0.126, 0);
+
+			if (entity.isInBlock())
+			{
+				double blockY = entity.blockPosition().getY() + 0.5;
+				double y = entity.position().y;
+				if (y > blockY + 0.45)
+				{
+					spinRot = -20;
+				}
+				else if (y < blockY - 0.45)
+				{
+					spinRot = 120;
+				}
+				else
+				{
+					spinRot = 60;
+				}
+			}
 			poseStack.mulPose(Vector3f.YP.rotationDegrees(90 - entity.getRenderRotation()));
 			poseStack.mulPose(Vector3f.ZP.rotationDegrees(spinRot));
 			poseStack.mulPose(Vector3f.XN.rotationDegrees((float) Math.sin(spinRot) * 7));

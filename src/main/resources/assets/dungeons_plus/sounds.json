@@ -1,7 +1,7 @@
 {
-	"item.soul_blaster.shoot": {
+	"item.soul_cannon.shoot": {
 		"category": "player",
-		"subtitle": "subtitles.dungeons_plus.item.soul_blaster.shoot",
+		"subtitle": "subtitles.dungeons_plus.item.soul_cannon.shoot",
 		"sounds": [
 			{
 				"name": "entity.ghast.shoot",

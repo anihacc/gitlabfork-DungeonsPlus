@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "dungeons_plus:item/soul_blaster",
-		"particle": "dungeons_plus:item/soul_blaster_inventory"
+		"0": "dungeons_plus:item/soul_cannon",
+		"particle": "dungeons_plus:item/soul_cannon_inventory"
 	},
 	"elements": [
 		{
@@ -28,12 +28,12 @@
 			"translation": [0, -2, -2.75]
 		},
 		"firstperson_righthand": {
-			"rotation": [-71, 2, -8],
-			"translation": [-0.5, 2.5, 0]
+			"rotation": [-69, -171, 14],
+			"translation": [0.75, 2.5, -2]
 		},
 		"firstperson_lefthand": {
-			"rotation": [-71, 2, -8],
-			"translation": [-0.5, 2.5, 0]
+			"rotation": [-69, -171, 14],
+			"translation": [0.75, 2.5, -2]
 		},
 		"ground": {
 			"rotation": [0, 0, -90],

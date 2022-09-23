@@ -3,6 +3,7 @@ package com.legacy.dungeons_plus.entities;
 import javax.annotation.Nullable;
 
 import com.legacy.dungeons_plus.items.WarpedAxeItem;
+import com.legacy.dungeons_plus.registry.DPDamageSource;
 import com.legacy.dungeons_plus.registry.DPEntityTypes;
 import com.legacy.dungeons_plus.registry.DPItems;
 import com.legacy.dungeons_plus.registry.DPSoundEvents;
@@ -36,6 +37,8 @@ public class WarpedAxeEntity extends AbstractArrow
 {
 	private static final EntityDataAccessor<ItemStack> ID_AXE_STACK = SynchedEntityData.defineId(WarpedAxeEntity.class, EntityDataSerializers.ITEM_STACK);
 	private static final EntityDataAccessor<Float> ID_ROTATION = SynchedEntityData.defineId(WarpedAxeEntity.class, EntityDataSerializers.FLOAT);
+	private static final EntityDataAccessor<Boolean> ID_IN_BLOCK = SynchedEntityData.defineId(WarpedAxeEntity.class, EntityDataSerializers.BOOLEAN);
+
 	private boolean dealtDamage;
 	public int clientSideReturnAxeTickCount;
 
@@ -64,6 +67,7 @@ public class WarpedAxeEntity extends AbstractArrow
 		super.defineSynchedData();
 		this.entityData.define(ID_AXE_STACK, DPItems.WARPED_AXE.get().getDefaultInstance());
 		this.entityData.define(ID_ROTATION, 0.0F);
+		this.entityData.define(ID_IN_BLOCK, false);
 	}
 
 	public ItemStack getAxe()
@@ -76,20 +80,28 @@ public class WarpedAxeEntity extends AbstractArrow
 		return this.entityData.get(ID_ROTATION);
 	}
 
+	public boolean isInBlock()
+	{
+		return this.entityData.get(ID_IN_BLOCK);
+	}
+
 	@Nullable
 	private Vec3 oldPos = null;
 
 	@Override
 	public void tick()
 	{
+		if (this.inGround != this.isInBlock())
+			this.entityData.set(ID_IN_BLOCK, this.inGround);
+
 		if (this.inGroundTime > 4)
 			this.dealtDamage = true;
-		
+
 		this.oldSpinRot = this.spinRot;
 		if (!this.inGround)
 		{
 			this.spinRot += 45;
-			
+
 			if (this.oldPos != null)
 			{
 				var pos = this.position();
@@ -163,7 +175,8 @@ public class WarpedAxeEntity extends AbstractArrow
 	protected void onHitEntity(EntityHitResult hitResult)
 	{
 		Entity hitEntity = hitResult.getEntity();
-		Item item = this.getAxe().getItem();
+		ItemStack stack = this.getAxe();
+		Item item = stack.getItem();
 		float damage;
 		if (item == DPItems.WARPED_AXE.get())
 			damage = WarpedAxeItem.BASE_DAMAGE;
@@ -180,9 +193,8 @@ public class WarpedAxeEntity extends AbstractArrow
 		}
 
 		Entity owner = this.getOwner();
-		DamageSource damageSource = owner instanceof Player player ? DamageSource.playerAttack(player).setProjectile() : (owner instanceof LivingEntity living ? DamageSource.mobAttack(living) : DamageSource.GENERIC);
 		this.dealtDamage = true;
-		if (hitEntity.hurt(damageSource, damage))
+		if (hitEntity.hurt(DPDamageSource.warpedAxe(this, owner, stack), damage))
 		{
 			if (hitEntity.getType() == EntityType.ENDERMAN)
 				return;
@@ -193,7 +205,11 @@ public class WarpedAxeEntity extends AbstractArrow
 				{
 					var pos = this.position();
 					livingOwner.teleportTo(pos.x, pos.y, pos.z);
+					livingOwner.resetFallDistance();
+					livingOwner.hurt(DamageSource.FALL, 5.0F);
 					level.broadcastEntityEvent(this, (byte) 46);
+					if (livingOwner instanceof Player player)
+						player.getCooldowns().addCooldown(this.getAxe().getItem(), 60);
 					// TODO 1.19 UNCOMMENT livingOwner.gameEvent(GameEvent.TELEPORT, livingOwner.position());
 					this.playSound(DPSoundEvents.WARPED_AXE_TELEPORT.get(), 1.0F, 1.0F);
 					EnchantmentHelper.doPostHurtEffects(livingHit, owner);
@@ -255,6 +271,12 @@ public class WarpedAxeEntity extends AbstractArrow
 	public boolean shouldRender(double x, double y, double z)
 	{
 		return true;
+	}
+
+	@Override // Can't go as fast as a trident in water, but it can still be used
+	protected float getWaterInertia()
+	{
+		return 0.90F;
 	}
 
 	@Override
