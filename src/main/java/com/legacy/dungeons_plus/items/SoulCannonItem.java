@@ -60,25 +60,45 @@ public class SoulCannonItem extends Item implements Vanishable, CustomHandRender
 		if (useTime >= MAX_USE_TIME && entity instanceof Player player)
 		{
 			ItemStack heldStack = player.getItemInHand(player.getUsedItemHand());
-			boolean hasFlame = EnchantmentHelper.getEnchantments(stack).containsKey(Enchantments.FLAMING_ARROWS);
-			boolean hasMultishot = EnchantmentHelper.getEnchantments(stack).containsKey(Enchantments.MULTISHOT);
-
+			var enchants = EnchantmentHelper.getEnchantments(stack);
+			boolean hasFlame = enchants.containsKey(Enchantments.FLAMING_ARROWS);
+			boolean isMultishot = enchants.containsKey(Enchantments.MULTISHOT);
+			int knockback = enchants.getOrDefault(Enchantments.KNOCKBACK, 0);
 			level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), DPSoundEvents.SOUL_CANNON_SHOOT.get(), SoundSource.PLAYERS, 0.4F, (level.random.nextFloat() - level.random.nextFloat()) * 0.1F + 1.5F);
 			level.playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.SOUL_ESCAPE, SoundSource.PLAYERS, 10.0F, (level.random.nextFloat() - level.random.nextFloat()) * 0.1F + 1.5F);
 
 			if (!level.isClientSide)
 			{
 				heldStack.hurtAndBreak(1, player, e -> e.broadcastBreakEvent(player.getUsedItemHand()));
+
 				float multiAngle = 15.0F;
-				for (float r : hasMultishot ? new float[] { -multiAngle, 0, multiAngle } : new float[] { 0 })
+				int multishotLevel = enchants.getOrDefault(Enchantments.MULTISHOT, 0);
+				float[] angles;
+
+				if (multishotLevel < 1)
 				{
-					SoulFireballEntity fireball = new SoulFireballEntity(level, player, 0, 0, 0, 2, hasFlame, hasMultishot);
+					angles = new float[] { 0 };
+				}
+				else
+				{
+					angles = new float[multishotLevel * 2 + 1];
+					float separation = multiAngle / multishotLevel;
+					for (int i = 0; i < angles.length; i++)
+						angles[i] = separation * i - multiAngle;
+				}
+
+				for (float r : angles)
+				{
+					SoulFireballEntity fireball = new SoulFireballEntity(level, player, 0, 0, 0, 2);
+					fireball.setKnockback(knockback);
+					fireball.setHasFlame(hasFlame);
+					fireball.setIsMultishot(isMultishot);
 					fireball.shootFromRotation(player, player.getXRot(), player.getYHeadRot() + r, 0.0F, 2.5F, 1.0F);
 					fireball.setPos(player.getEyePosition());
 					level.addFreshEntity(fireball);
 				}
 			}
-			player.causeFoodExhaustion(hasFlame || hasMultishot ? 2.5F : 2.0F);
+			player.causeFoodExhaustion(hasFlame || isMultishot ? 2.5F : 2.0F);
 			if (player.getFoodData().getFoodLevel() <= 6)
 				player.hurt(DPDamageSource.CONSUME_SOUL, 2);
 			player.getCooldowns().addCooldown(this, 40);
@@ -89,7 +109,7 @@ public class SoulCannonItem extends Item implements Vanishable, CustomHandRender
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchant)
 	{
-		return super.canApplyAtEnchantingTable(stack, enchant) || enchant == Enchantments.FLAMING_ARROWS || enchant == Enchantments.MULTISHOT;
+		return super.canApplyAtEnchantingTable(stack, enchant) || enchant == Enchantments.FLAMING_ARROWS || enchant == Enchantments.MULTISHOT || enchant == Enchantments.KNOCKBACK;
 	}
 
 	@Override
@@ -97,7 +117,7 @@ public class SoulCannonItem extends Item implements Vanishable, CustomHandRender
 	{
 		return 1;
 	}
-	
+
 	@Override
 	public boolean isValidRepairItem(ItemStack stack, ItemStack repairIngredient)
 	{

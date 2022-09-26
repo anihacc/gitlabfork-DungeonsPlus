@@ -17,10 +17,10 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraftforge.common.util.Lazy;
 
-// Weapon that produces a weakness effect on the target, and grants a slight speed buff
+// Weapon that produces a weakness effect on the target, and grants a knockback resistance buff
 public class LeviathanBladeItem extends SwordItem
 {
-	private static final Lazy<Multimap<Attribute, AttributeModifier>> ATTRIBUTES = Lazy.of(() -> ImmutableMultimap.of(Attributes.MOVEMENT_SPEED, new AttributeModifier(UUID.fromString("d1ff2158-37ac-11ed-a261-0242ac120002"), "leviathan_fang_speed", 0.05, AttributeModifier.Operation.MULTIPLY_TOTAL)));
+	private static final Lazy<Multimap<Attribute, AttributeModifier>> ATTRIBUTES = Lazy.of(() -> ImmutableMultimap.of(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(UUID.fromString("d1ff2158-37ac-11ed-a261-0242ac120002"), "Knockback Resistance", 0.10, AttributeModifier.Operation.MULTIPLY_TOTAL)));
 
 	public LeviathanBladeItem(Tier tier, int baseDamage, float baseAttackSpeed, Properties properties)
 	{

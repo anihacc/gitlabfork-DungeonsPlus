@@ -17,13 +17,6 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.monster.Ghast;
-import net.minecraft.world.entity.monster.WitherSkeleton;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -117,35 +110,6 @@ public class SoulPrisonPieces
 		@Override
 		protected void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
 		{
-			ServerLevel serverLevel = level.getLevel();
-			if (key.equals("guard"))
-			{
-				level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-				WitherSkeleton wither = EntityType.WITHER_SKELETON.create(serverLevel);
-				wither.setPos(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
-				wither.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET));
-				wither.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE));
-				wither.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
-				wither.setPersistenceRequired();
-				level.addFreshEntity(wither);
-			}
-			else if (key.equals("ghast"))
-			{
-				level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-				Ghast ghast = EntityType.GHAST.create(serverLevel);
-				ghast.setPos(pos.getX() + 0.5, pos.getY() + 0.1, pos.getZ() + 0.5);
-				ghast.setPersistenceRequired();
-				level.addFreshEntity(ghast);
-			}
-			else if (key.equals("spawner"))
-			{
-				//DPUtil.placeSpawner(level, pos, DPSpawners.SOUL_PRISON_GHAST);
-			}
-			else if (key.contains("chest"))
-			{
-				String[] data = key.split("-");
-				//DPUtil.createChest(this::createChest, level, bounds, rand, pos, DPLoot.SoulPrison.CHEST_COMMON, this.rotation, data);
-			}
 		}
 	}
 }

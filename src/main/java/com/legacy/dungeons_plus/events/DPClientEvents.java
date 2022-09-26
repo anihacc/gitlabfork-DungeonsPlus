@@ -12,8 +12,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColors;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -36,18 +34,11 @@ public class DPClientEvents
 			ItemStack stack = event.getItemStack();
 			if (stack.getItem() instanceof CustomHandRendererSupplier handRenderer)
 			{
-				Minecraft mc = Minecraft.getInstance();
-				InteractionHand hand = event.getHand();
-				if (mc.player.isUsingItem() && mc.player.getUsedItemHand() == hand)
-				{
-					PoseStack poseStack = event.getPoseStack();
-					poseStack.pushPose();
-					boolean isMainHand = hand == InteractionHand.MAIN_HAND;
-					handRenderer.getHandRenderer().renderItem(event, stack, hand);
-					mc.getItemInHandRenderer().renderItem(mc.player, stack, isMainHand ? ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND, !isMainHand, poseStack, event.getMultiBufferSource(), event.getPackedLight());
-					poseStack.popPose();
+				PoseStack poseStack = event.getPoseStack();
+				poseStack.pushPose();
+				if (handRenderer.getHandRenderer().renderItem(event, stack, event.getHand()))
 					event.setCanceled(true);
-				}
+				poseStack.popPose();
 			}
 		}
 

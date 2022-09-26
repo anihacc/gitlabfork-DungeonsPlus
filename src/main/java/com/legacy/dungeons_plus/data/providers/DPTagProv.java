@@ -37,7 +37,6 @@ public class DPTagProv
 		public void vanilla()
 		{
 
-			//this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add();
 		}
 
 		@Override
@@ -57,10 +56,16 @@ public class DPTagProv
 		@Override
 		protected void addTags()
 		{
+			this.forge();
 			this.dungeonsPlus();
 			this.vanilla();
 		}
 
+		public void forge()
+		{
+			// TODO 1.19 Add forge tags for armor/tools/weapons
+		}
+		
 		public void dungeonsPlus()
 		{
 

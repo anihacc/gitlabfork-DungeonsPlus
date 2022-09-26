@@ -15,10 +15,10 @@
 			"parent": "dungeons_plus:item/soul_cannon_held"
 		},
 		"first_person_left_hand": {
-			"parent": "dungeons_plus:item/soul_cannon_held"
+			"parent": "dungeons_plus:item/soul_cannon_first_person"
 		},
 		"first_person_right_hand": {
-			"parent": "dungeons_plus:item/soul_cannon_held"
+			"parent": "dungeons_plus:item/soul_cannon_first_person"
 		},
 		"head": {
 			"parent": "dungeons_plus:item/soul_cannon_held"
