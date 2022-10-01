@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
+import com.legacy.dungeons_plus.DPConfig;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.data.providers.DPAdvancementProv;
 import com.legacy.dungeons_plus.data.providers.DPLangProvider;
@@ -20,16 +21,17 @@ import com.legacy.structure_gel.api.events.RegisterLootTableAliasEvent;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 import com.legacy.structure_gel.api.structure.StructureAccessHelper;
 
+import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.monster.EnderMan;
-import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -57,10 +59,71 @@ public class DPCommonEvents
 			{
 				Entity entity = event.getEntity();
 
-				ifInStructure(entity, EntityType.HUSK, DPStructures.LEVIATHAN, e -> EntityAccessHelper.setDeathLootTable(e, DPLoot.Leviathan.ENTITY_HUSK));
-				ifInStructure(entity, EntityType.STRAY, DPStructures.SNOWY_TEMPLE, e -> EntityAccessHelper.setDeathLootTable(e, DPLoot.SnowyTemple.ENTITY_STRAY));
-				ifInStructure(entity, EntityType.ENDERMAN, DPStructures.END_RUINS, e -> e.targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>((EnderMan) e, Player.class, true, false)));
-				ifInStructure(entity, EntityType.GHAST, DPStructures.SOUL_PRISON, e -> e.targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>((Ghast) e, Player.class, true, false)));
+				ifInStructure(entity, EntityType.HUSK, DPStructures.LEVIATHAN, e ->
+				{
+					if (DPConfig.COMMON.husksDropSand.get())
+						EntityAccessHelper.setDeathLootTable(e, DPLoot.Leviathan.ENTITY_HUSK);
+					Random rand = e.getRandom();
+					if (rand.nextFloat() < DPConfig.COMMON.huskLeviathanBladeChance.get() / 100.0F)
+					{
+						var stack = DPItems.LEVIATHAN_BLADE.get().getDefaultInstance();
+						stack.setDamageValue(rand.nextInt(stack.getItem().getMaxDamage(stack)));
+						e.setItemSlot(EquipmentSlot.MAINHAND, stack);
+						e.setDropChance(EquipmentSlot.MAINHAND, 0.12F);
+					}
+				});
+				ifInStructure(entity, EntityType.STRAY, DPStructures.SNOWY_TEMPLE, e ->
+				{
+					if (DPConfig.COMMON.straysDropIce.get())
+						EntityAccessHelper.setDeathLootTable(e, DPLoot.SnowyTemple.ENTITY_STRAY);
+					Random rand = e.getRandom();
+					if (rand.nextFloat() < DPConfig.COMMON.strayFrostedCowlChance.get() / 100.0F)
+					{
+						var stack = DPItems.FROSTED_COWL.get().getDefaultInstance();
+						stack.setDamageValue(rand.nextInt(stack.getItem().getMaxDamage(stack)));
+						e.setItemSlot(EquipmentSlot.HEAD, stack);
+						e.setDropChance(EquipmentSlot.HEAD, 0.12F);
+					}
+				});
+				ifInStructure(entity, EntityType.DROWNED, DPStructures.WARPED_GARDEN, e ->
+				{
+					Random rand = e.getRandom();
+					if (rand.nextFloat() < DPConfig.COMMON.drownedWarpedAxeChance.get() / 100.0F)
+					{
+						var stack = DPItems.WARPED_AXE.get().getDefaultInstance();
+						stack.setDamageValue(rand.nextInt(stack.getItem().getMaxDamage(stack)));
+						e.setItemSlot(EquipmentSlot.MAINHAND, stack);
+						e.setDropChance(EquipmentSlot.MAINHAND, 0.12F);
+					}
+					if (rand.nextFloat() < DPConfig.COMMON.drownedCoralChance.get() / 100.0F)
+					{
+						var opTag = level.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY).getTag(BlockTags.CORAL_BLOCKS);
+						if (opTag.isPresent() && opTag.get().size() > 0)
+						{
+							e.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(opTag.get().getRandomElement(rand).get().value()));
+							e.setDropChance(EquipmentSlot.OFFHAND, 1.0F);
+						}
+					}
+				});
+				ifInStructure(entity, EntityType.SKELETON, DPStructures.SOUL_PRISON, e ->
+				{
+					Random rand = e.getRandom();
+					if (rand.nextFloat() < DPConfig.COMMON.skeletonSoulCannonChance.get() / 100.0F)
+					{
+						var stack = DPItems.SOUL_CANNON.get().getDefaultInstance();
+						stack.setDamageValue(rand.nextInt(stack.getItem().getMaxDamage(stack)));
+						e.setItemSlot(EquipmentSlot.OFFHAND, stack);
+						e.setDropChance(EquipmentSlot.OFFHAND, 0.30F);
+					}
+				});
+				ifInStructure(entity, EntityType.GHAST, DPStructures.SOUL_PRISON, e ->
+				{
+					e.targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>(e, Player.class, true, false));
+				});
+				ifInStructure(entity, EntityType.ENDERMAN, DPStructures.END_RUINS, e ->
+				{
+					e.targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>(e, Player.class, true, false));
+				});
 			}
 		}
 
@@ -132,19 +195,23 @@ public class DPCommonEvents
 
 			// Leviathan
 			event.register(locate("leviathan/common"), DPLoot.Leviathan.CHEST_COMMON);
+			event.register(locate("leviathan/rare"), DPLoot.Leviathan.CHEST_RARE);
 
 			event.register(locate("leviathan/husk"), DPLoot.Leviathan.ENTITY_HUSK);
 
 			// Snowy Temple
 			event.register(locate("snowy_temple/common"), DPLoot.SnowyTemple.CHEST_COMMON);
+			event.register(locate("snowy_temple/rare"), DPLoot.SnowyTemple.CHEST_RARE);
 
 			event.register(locate("snowy_temple/stray"), DPLoot.SnowyTemple.ENTITY_STRAY);
 
 			// Warped Garden
 			event.register(locate("warped_garden/common"), DPLoot.WarpedGarden.CHEST_COMMON);
+			event.register(locate("warped_garden/rare"), DPLoot.WarpedGarden.CHEST_RARE);
 
 			// Soul Prison
 			event.register(locate("soul_prison/common"), DPLoot.SoulPrison.CHEST_COMMON);
+			event.register(locate("soul_prison/rare"), DPLoot.SoulPrison.CHEST_RARE);
 			event.register(locate("soul_prison/golden_armor"), DPLoot.SoulPrison.CHEST_GOLDEN_ARMOR);
 		}
 

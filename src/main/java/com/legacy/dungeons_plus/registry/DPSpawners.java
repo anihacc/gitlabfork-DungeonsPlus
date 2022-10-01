@@ -13,12 +13,10 @@ import com.legacy.structure_gel.api.dynamic_spawner.DynamicSpawnerType;
 import com.legacy.structure_gel.api.events.RegisterDynamicSpawnerEvent;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.FloatTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.InclusiveRange;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.entity.EntityType;
@@ -180,24 +178,9 @@ public class DPSpawners
 
 		ItemStack goldAxe = new ItemStack(Items.GOLDEN_AXE);
 		goldAxe.setDamageValue(10);
-		Registry.BLOCK.getTag(BlockTags.CORAL_BLOCKS).ifPresentOrElse(corals ->
-		{
-			corals.forEach(holder ->
-			{
-				CompoundTag entityTag = new CompoundTag();
-				handItems(entityTag, goldAxe, DROP_CHANCE, new ItemStack(holder.value()), 1.0F);
-				spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), 1);
-			});
-
-			CompoundTag entityTag = new CompoundTag();
-			handItems(entityTag, goldAxe, DROP_CHANCE);
-			spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), corals.size() / 2);
-		}, () ->
-		{
-			CompoundTag entityTag = new CompoundTag();
-			handItems(entityTag, goldAxe, DROP_CHANCE);
-			spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), 1);
-		});
+		CompoundTag entityTag = new CompoundTag();
+		handItems(entityTag, goldAxe, DROP_CHANCE);
+		spawns.add(SpawnerAccessHelper.createSpawnerEntity(EntityType.DROWNED, entityTag, Optional.empty()), 1);
 		SpawnerAccessHelper.setSpawnPotentials(s, level, pos, spawns.build());
 	}
 

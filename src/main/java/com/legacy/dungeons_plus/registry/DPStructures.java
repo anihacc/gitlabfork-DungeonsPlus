@@ -32,6 +32,9 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+// TODO Future: Sculk
+// TODO Future: Copper
+// TODO Future: Slime
 @Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DPStructures
 {	
@@ -68,7 +71,7 @@ public class DPStructures
 				.pushConfigured(new JigsawConfiguration(LeviathanPools.ROOT, 7))
 					.biomes(DPConfig.COMMON.leviathan.getConfigured())
 					.noSpawns(BoundingBoxType.PIECE)
-					.spawns(MobCategory.MONSTER, BoundingBoxType.STRUCTURE, new SpawnerData(EntityType.HUSK, 4, 1, 4), new SpawnerData(EntityType.CREEPER, 1, 1, 2))
+					.spawns(MobCategory.MONSTER, BoundingBoxType.STRUCTURE, new SpawnerData(EntityType.HUSK, 1, 1, 4))
 					.dimensions(Level.OVERWORLD)
 				.popConfigured()
 				.build();
@@ -83,6 +86,16 @@ public class DPStructures
 				.popConfigured()
 				.build();
 
+	public static final StructureRegistrar<JigsawConfiguration, WarpedGardenStructure> WARPED_GARDEN = 
+			StructureRegistrar.builder(DungeonsPlus.locate("warped_garden"), () -> new WarpedGardenStructure(JigsawConfiguration.CODEC, DPConfig.COMMON.warpedGarden))
+				.addPiece(WarpedGardenStructure.Piece::new)
+				.pushConfigured(new JigsawConfiguration(WarpedGardenPools.ROOT, 4))
+					.biomes(DPConfig.COMMON.warpedGarden.getConfigured())
+					.spawns(MobCategory.MONSTER, BoundingBoxType.PIECE, new SpawnerData(EntityType.DROWNED, 1, 1, 4))
+					.dimensions(Level.OVERWORLD)
+				.popConfigured()
+				.build();
+
 	public static final StructureRegistrar<JigsawConfiguration, EndRuinsStructure> END_RUINS = 
 			StructureRegistrar.builder(DungeonsPlus.locate("end_ruins"), () -> new EndRuinsStructure(JigsawConfiguration.CODEC, DPConfig.COMMON.endRuins))
 				.addPiece(EndRuinsStructure.Piece::new)
@@ -91,21 +104,13 @@ public class DPStructures
 					.dimensions(Level.END)
 				.popConfigured()
 				.build();
-
-	public static final StructureRegistrar<JigsawConfiguration, WarpedGardenStructure> WARPED_GARDEN = 
-			StructureRegistrar.builder(DungeonsPlus.locate("warped_garden"), () -> new WarpedGardenStructure(JigsawConfiguration.CODEC, DPConfig.COMMON.warpedGarden))
-				.addPiece(WarpedGardenStructure.Piece::new)
-				.pushConfigured(new JigsawConfiguration(WarpedGardenPools.ROOT, 4))
-					.biomes(DPConfig.COMMON.warpedGarden.getConfigured())
-					.dimensions(Level.OVERWORLD)
-				.popConfigured()
-				.build();
-
+	
 	public static final StructureRegistrar<NoneFeatureConfiguration, SoulPrisonStructure> SOUL_PRISON = 
 			StructureRegistrar.builder(DungeonsPlus.locate("soul_prison"), () -> new SoulPrisonStructure(NoneFeatureConfiguration.CODEC, DPConfig.COMMON.soulPrison))
 				.addPiece(SoulPrisonPieces.Piece::new)
 				.pushConfigured(NoneFeatureConfiguration.NONE)
 					.biomes(DPConfig.COMMON.soulPrison.getConfigured())
+					.spawns(MobCategory.MONSTER, BoundingBoxType.PIECE, new SpawnerData(EntityType.SKELETON, 5, 1, 4), new SpawnerData(EntityType.GHAST, 1, 1, 2))
 					.dimensions(Level.NETHER)
 				.popConfigured()
 				.build();

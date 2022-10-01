@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 import com.google.common.collect.ImmutableList;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.data.DPTags;
+import com.legacy.dungeons_plus.registry.DPItems;
 import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
@@ -332,6 +333,13 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.BOOK).setWeight(3).apply(enchant())
 						)).setRolls(UniformGenerator.between(2, 3)))));
 			
+			consumer.accept(DPLoot.Leviathan.CHEST_RARE, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(DPItems.LEVIATHAN_BLADE.get()).setWeight(1)
+						)),
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(DPLoot.Leviathan.CHEST_COMMON)
+						)))));
 			//@formatter:on
 		}
 
@@ -362,7 +370,14 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.BOOK).setWeight(3).apply(enchant()),
 							basicEntry(Items.LEATHER_BOOTS).setWeight(1).apply(enchant(Enchantments.FROST_WALKER, Enchantments.UNBREAKING, Enchantments.VANISHING_CURSE))
 						)).setRolls(UniformGenerator.between(2, 3)))));
-			
+
+			consumer.accept(DPLoot.SnowyTemple.CHEST_RARE, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(DPItems.FROSTED_COWL.get()).setWeight(1)
+						)),
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(DPLoot.SnowyTemple.CHEST_COMMON)
+						)))));
 			//@formatter:on
 		}
 
@@ -392,6 +407,13 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.ENCHANTED_GOLDEN_APPLE).setWeight(1)
 						)).setRolls(UniformGenerator.between(2, 3)))));
 			
+			consumer.accept(DPLoot.WarpedGarden.CHEST_RARE, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(DPItems.WARPED_AXE.get()).setWeight(1)
+						)),
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(DPLoot.WarpedGarden.CHEST_COMMON)
+						)))));
 			//@formatter:on
 		}
 
@@ -430,6 +452,13 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.GOLDEN_CHESTPLATE).setWeight(1).apply(enchant())
 						)).setRolls(UniformGenerator.between(1, 2)))));
 			
+			consumer.accept(DPLoot.SoulPrison.CHEST_RARE, tableOf(ImmutableList.of(
+					poolOf(ImmutableList.of(
+							basicEntry(DPItems.SOUL_CANNON.get()).setWeight(1)
+						)),
+					poolOf(ImmutableList.of(
+							LootTableReference.lootTableReference(DPLoot.SoulPrison.CHEST_COMMON)
+						)))));
 			//@formatter:on
 		}
 

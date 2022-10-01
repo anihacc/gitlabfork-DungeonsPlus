@@ -63,7 +63,6 @@ public class DPLangProvider extends LanguageProvider
 		this.add("death.attack.dungeons_plus.warped_axe", "%1$s was cleaved by %2$s");
 		this.add("death.attack.dungeons_plus.warped_axe.item", "%1$s was cleaved by %2$s with %3$s");
 
-		// TODO include maps, advancements, etc
 	}
 
 	public static String mapName(StructureRegistrar<?, ?> structure)

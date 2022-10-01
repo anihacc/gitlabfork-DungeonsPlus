@@ -26,11 +26,17 @@ public class DPConfig
 		public final StructureConfig leviathan;
 		public final StructureConfig snowyTemple;
 		public final StructureConfig reanimatedRuins;
-		public final StructureConfig endRuins;
 		public final StructureConfig warpedGarden;
 		public final StructureConfig soulPrison;
+		public final StructureConfig endRuins;
 
-		public final ForgeConfigSpec.IntValue biggerDungeonMonsterBoxChance;
+		public final ForgeConfigSpec.IntValue huskLeviathanBladeChance;
+		public final ForgeConfigSpec.BooleanValue husksDropSand;
+		public final ForgeConfigSpec.IntValue strayFrostedCowlChance;
+		public final ForgeConfigSpec.BooleanValue straysDropIce;
+		public final ForgeConfigSpec.IntValue drownedWarpedAxeChance;
+		public final ForgeConfigSpec.IntValue drownedCoralChance;
+		public final ForgeConfigSpec.IntValue skeletonSoulCannonChance;
 
 		public final ForgeConfigSpec.IntValue towerWaystoneChance;
 
@@ -78,16 +84,6 @@ public class DPConfig
 					.popConfigured()
 					.build();
 			
-			this.endRuins = StructureConfig.builder(builder, "end_ruins")
-					.pushPlacement()
-						.spacing(24)
-						.probability(80)
-					.popPlacement()
-					.pushConfigured()
-						.biomes(BiomeDictionary.OUTER_END_ISLAND)
-					.popConfigured()
-					.build();
-			
 			this.warpedGarden = StructureConfig.builder(builder, "warped_garden")
 					.pushPlacement()
 						.spacing(36)
@@ -108,13 +104,34 @@ public class DPConfig
 					.popConfigured()
 					.build();
 			
+			this.endRuins = StructureConfig.builder(builder, "end_ruins")
+					.pushPlacement()
+						.spacing(24)
+						.probability(80)
+					.popPlacement()
+					.pushConfigured()
+						.biomes(BiomeDictionary.OUTER_END_ISLAND)
+					.popConfigured()
+					.build();
+			
 			builder.pop();
 			// @formatter:on
 
-			builder.push("Mod Compat");
-			builder.push("Quark");
-			this.biggerDungeonMonsterBoxChance = builder.comment("Percent chance for monster boxes from Quark to generate in the buried dungeon").defineInRange("bigger_dungeon_monster_box_chance", 35, 0, 100);
+			builder.push("Mobs");
+			this.huskLeviathanBladeChance = builder.comment("Percent chance that a Husk will wield a Leviathan Blade in the Leviathan.").defineInRange("husk_leviathan_blade_chance", 5, 0, 100);
+			this.husksDropSand = builder.comment("Determines if Husks will drop sand when spawned in the Leviathan").define("husks_drop_sand", true);
+
+			this.strayFrostedCowlChance = builder.comment("Percent chance that a Stray will wear a Frosted Cowl in the Snowy Temple.").defineInRange("stray_frosted_cowl_chance", 5, 0, 100);
+			this.straysDropIce = builder.comment("Determines if Strays will drop ice when spawned in the Snowy Temple").define("strays_drop_ice", true);
+
+			this.drownedWarpedAxeChance = builder.comment("Percent chance that a Drowned will wear a Warped Axe in the Warped Garden.").defineInRange("drowned_warped_axe_chance", 5, 0, 100);
+			this.drownedCoralChance = builder.comment("Determines if Drowned can hold coral when spawned in the Warped Garden").defineInRange("drowned_drop_coral", 30, 0, 100);
+			
+			this.skeletonSoulCannonChance = builder.comment("Percent chance that a Skeleton will wield a Soul Cannon in the Soul Prison.").defineInRange("skeleton_soul_cannon_chance", 5, 0, 100);
+			
 			builder.pop();
+			
+			builder.push("Mod Compat");
 			builder.push("Waystones");
 			this.towerWaystoneChance = builder.comment("Percent chance for a waystone from Waystones to generate on top of the tower").defineInRange("tower_waystone_chance", 100, 0, 100);
 			builder.pop();

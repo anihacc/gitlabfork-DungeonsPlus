@@ -46,6 +46,7 @@ public class DPLoot
 	public static final class Leviathan
 	{
 		public static final ResourceLocation CHEST_COMMON = chest("leviathan/common");
+		public static final ResourceLocation CHEST_RARE = chest("leviathan/rare");
 
 		public static final ResourceLocation ENTITY_HUSK = entity("leviathan/husk");
 	}
@@ -53,6 +54,7 @@ public class DPLoot
 	public static final class SnowyTemple
 	{
 		public static final ResourceLocation CHEST_COMMON = chest("snowy_temple/common");
+		public static final ResourceLocation CHEST_RARE = chest("snowy_temple/rare");
 
 		public static final ResourceLocation ENTITY_STRAY = entity("snowy_temple/stray");
 	}
@@ -60,11 +62,14 @@ public class DPLoot
 	public static final class WarpedGarden
 	{
 		public static final ResourceLocation CHEST_COMMON = chest("warped_garden/common");
+		public static final ResourceLocation CHEST_RARE = chest("warped_garden/rare");
+
 	}
 
 	public static final class SoulPrison
 	{
 		public static final ResourceLocation CHEST_COMMON = chest("soul_prison/common");
+		public static final ResourceLocation CHEST_RARE = chest("soul_prison/rare");
 		public static final ResourceLocation CHEST_GOLDEN_ARMOR = chest("soul_prison/golden_armor");
 
 	}

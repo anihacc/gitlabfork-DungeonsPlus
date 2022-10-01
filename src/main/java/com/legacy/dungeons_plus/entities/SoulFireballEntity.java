@@ -100,7 +100,7 @@ public class SoulFireballEntity extends Fireball
 	public boolean hurt(DamageSource damageSource, float damage)
 	{
 		this.fuse = DEFAULT_FUSE;
-		this.explosionPower = Math.min(this.explosionPower + 1, 5);
+		this.explosionPower = Math.min(this.explosionPower + 1, 8);
 		return super.hurt(damageSource, damage);
 	}
 
@@ -128,7 +128,7 @@ public class SoulFireballEntity extends Fireball
 			if (this.knockbackPower > 0)
 			{
 				double k = this.knockbackPower * 0.2 + 1.0;
-				double r = this.isMulti ? 1.3 : 4;
+				double r = this.isMulti ? 2 : 4;
 				Vec3 range = new Vec3(r, r, r);
 				Vec3 pos = this.position();
 				for (Entity e : this.level.getEntitiesOfClass(Entity.class, new AABB(pos.subtract(range), pos.add(range))))
