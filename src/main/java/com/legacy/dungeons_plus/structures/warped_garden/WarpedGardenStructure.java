@@ -28,6 +28,12 @@ public class WarpedGardenStructure extends GelConfigJigsawStructure<JigsawConfig
 		super(codec, config, 36, true, false, context -> true, Piece::new);
 	}
 
+	@Override
+	public int getSpacing()
+	{
+		return 36;
+	}
+	
 	public static class Piece extends AbstractGelStructurePiece
 	{
 		public Piece(StructureManager template, StructurePoolElement piece, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds)

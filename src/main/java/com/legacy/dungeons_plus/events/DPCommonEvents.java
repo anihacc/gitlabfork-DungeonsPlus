@@ -226,6 +226,7 @@ public class DPCommonEvents
 			gen.addProvider(blockTagProv);
 			gen.addProvider(new DPTagProv.ItemProv(gen, blockTagProv, existingFileHelper));
 			gen.addProvider(new DPTagProv.ConfiguredStructureFeatureProv(gen, existingFileHelper));
+			gen.addProvider(new DPTagProv.BiomeProv(gen, existingFileHelper));
 			gen.addProvider(new DPAdvancementProv(gen));
 			gen.addProvider(new DPLootProv(gen));
 

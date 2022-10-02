@@ -29,6 +29,12 @@ public class TowerStructure extends GelConfigStructure<NoneFeatureConfiguration>
 		super(codec, config, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG), TowerStructure::generatePieces), TowerStructure::afterPlace);
 	}
 
+	@Override
+	public int getSpacing()
+	{
+		return 31;
+	}
+	
 	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
 		ChunkPos chunkPos = context.chunkPos();

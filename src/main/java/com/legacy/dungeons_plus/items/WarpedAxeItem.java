@@ -1,5 +1,7 @@
 package com.legacy.dungeons_plus.items;
 
+import java.util.List;
+
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
@@ -7,6 +9,7 @@ import com.legacy.dungeons_plus.entities.WarpedAxeEntity;
 import com.legacy.dungeons_plus.registry.DPSoundEvents;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -21,6 +24,7 @@ import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.DamageEnchantment;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -30,8 +34,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.Lazy;
 
 // Throwable axe that teleports you to the entity it hits
-public class WarpedAxeItem extends AxeItem
+public class WarpedAxeItem extends AxeItem implements DPItem
 {
+	public static final String TELEPORT_KEY = "teleport";
 	public static final int THROW_THRESHOLD_TIME = 10;
 	public static final float BASE_DAMAGE = 8.0F;
 	public static final float ATTACK_SPEED = -3.2F;
@@ -122,5 +127,12 @@ public class WarpedAxeItem extends AxeItem
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
 	{
 		return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment == Enchantments.LOYALTY || enchantment instanceof DamageEnchantment;
+	}
+	
+	@Override
+	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag showAdvanced)
+	{
+		super.appendHoverText(stack, level, tooltip, showAdvanced);
+		tooltip.addAll(this.getDescription(stack, TELEPORT_KEY));
 	}
 }

@@ -25,6 +25,12 @@ public class LeviathanStructure extends GelConfigJigsawStructure<JigsawConfigura
 	{
 		super(codec, config, -1, true, true, context -> true, Piece::new);
 	}
+	
+	@Override
+	public int getSpacing()
+	{
+		return 36;
+	}
 
 	public static class Piece extends AbstractGelStructurePiece
 	{

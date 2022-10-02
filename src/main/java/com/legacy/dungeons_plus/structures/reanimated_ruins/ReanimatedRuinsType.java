@@ -36,7 +36,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 public enum ReanimatedRuinsType implements StringRepresentable
 {
 	MOSSY("mossy", DPLoot.ReanimatedRuins.CHEST_MOSSY, DPSpawners.REANIMATED_RUINS_MOSSY, mossyBlockModifier(), ReanimatedRuinsType::mossyFeatures),
-	DESERT("desert", DPLoot.ReanimatedRuins.CHEST_DESERT, DPSpawners.REANIMATED_RUINS_DESERT, desertBlockModifier(), ReanimatedRuinsType::desertFeatures),
+	MESA("mesa", DPLoot.ReanimatedRuins.CHEST_DESERT, DPSpawners.REANIMATED_RUINS_DESERT, desertBlockModifier(), ReanimatedRuinsType::desertFeatures),
 	FROZEN("frozen", DPLoot.ReanimatedRuins.CHEST_FROZEN, DPSpawners.REANIMATED_RUINS_FROZEN, frozenBlockModifier(), ReanimatedRuinsType::frozenFeatures);
 
 	private final String name;
@@ -62,6 +62,12 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		return this.name;
 	}
 
+	@Override
+	public String toString()
+	{
+		return this.getSerializedName();
+	}
+	
 	public static ReanimatedRuinsType byName(@Nullable String name)
 	{
 		for (ReanimatedRuinsType type : ReanimatedRuinsType.values())

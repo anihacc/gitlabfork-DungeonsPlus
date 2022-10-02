@@ -1,0 +1,56 @@
+{
+  "parent": "dungeons_plus:adventure/find_warped_garden",
+  "display": {
+    "icon": {
+      "item": "dungeons_plus:warped_axe",
+      "nbt": "{Damage:0}"
+    },
+    "title": {
+      "translate": "dungeons_plus:advancements.adventure.axe_a_phantom.title"
+    },
+    "description": {
+      "translate": "dungeons_plus:advancements.adventure.axe_a_phantom.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 50
+  },
+  "criteria": {
+    "hit_phantom": {
+      "trigger": "minecraft:player_hurt_entity",
+      "conditions": {
+        "damage": {
+          "type": {
+            "is_projectile": true,
+            "direct_entity": {
+              "type": "dungeons_plus:warped_axe"
+            }
+          }
+        },
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "predicate": {
+              "type": "minecraft:phantom",
+              "distance": {
+                "absolute": {
+                  "min": 25.0
+                }
+              }
+            },
+            "entity": "this"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hit_phantom"
+    ]
+  ]
+}

@@ -59,6 +59,12 @@ public class EndRuinsStructure extends GelConfigJigsawStructure<JigsawConfigurat
 			return false;
 		});
 	}
+	
+	@Override
+	public int getSpacing()
+	{
+		return 27;
+	}
 
 	private static boolean isValidHeight(PieceGeneratorSupplier.Context<JigsawConfiguration> context)
 	{
@@ -102,8 +108,6 @@ public class EndRuinsStructure extends GelConfigJigsawStructure<JigsawConfigurat
 				String name = this.getLocation().toString();
 				if (name.contains("end_ruins/tower/base_"))
 					this.extendDown(level, Blocks.END_STONE.defaultBlockState(), bounds, this.rotation, rand);
-				if (name.contains("end_ruins/pylon/"))
-					this.extendDown(level, Blocks.OBSIDIAN.defaultBlockState(), bounds, this.rotation, rand);
 			}
 		}
 

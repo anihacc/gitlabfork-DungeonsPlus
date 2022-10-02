@@ -1,9 +1,12 @@
 package com.legacy.dungeons_plus.items;
 
+import java.util.List;
+
 import com.legacy.dungeons_plus.entities.SoulFireballEntity;
 import com.legacy.dungeons_plus.registry.DPDamageSource;
 import com.legacy.dungeons_plus.registry.DPSoundEvents;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -14,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.Vanishable;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -24,8 +28,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 // Projectile weapon that shoots a soul-themed ghast fireball (no block breaking). Consumes fire charges.
-public class SoulCannonItem extends Item implements Vanishable, CustomHandRendererSupplier
+public class SoulCannonItem extends Item implements DPItem, Vanishable, CustomHandRendererSupplier
 {
+	public static final String SHOOT_KEY = "shoot";
 	public static final int MAX_USE_TIME = 20;
 
 	public SoulCannonItem(Properties properties)
@@ -124,6 +129,13 @@ public class SoulCannonItem extends Item implements Vanishable, CustomHandRender
 		return repairIngredient.is(Items.GHAST_TEAR) || super.isValidRepairItem(stack, repairIngredient);
 	}
 
+	@Override
+	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag showAdvanced)
+	{
+		super.appendHoverText(stack, level, tooltip, showAdvanced);
+		tooltip.addAll(this.getDescription(stack, SHOOT_KEY));
+	}
+	
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public com.legacy.dungeons_plus.client.renderers.CustomHandRenderer getHandRenderer()

@@ -4,3 +4,7 @@
 # 8-23-2022
 - Finished Tower, Leviathan, and Reanimated Ruins
 - Started Snowy Temple
+
+# 10-1-2022
+- Added loot to all dungeons
+- Final polishing for 2.0 release

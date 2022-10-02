@@ -6,10 +6,13 @@ import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ConfiguredStructureTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -103,7 +106,6 @@ public class DPTagProv
 			this.allConfigured(DPTags.StructureTags.ON_LEVIATHAN_MAPS, DPStructures.LEVIATHAN);
 			this.allConfigured(DPTags.StructureTags.ON_SNOWY_TEMPLE_MAPS, DPStructures.SNOWY_TEMPLE);
 			this.allConfigured(DPTags.StructureTags.ON_WARPED_GARDEN_MAPS, DPStructures.WARPED_GARDEN);
-
 		}
 
 		public void vanilla()
@@ -120,7 +122,47 @@ public class DPTagProv
 		@Override
 		public String getName()
 		{
-			return "Dungeons Plus configured structure feature tag provider";
+			return "Dungeons Plus structure tag provider";
+		}
+	}
+	
+	public static class BiomeProv extends BiomeTagsProvider
+	{
+		public BiomeProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
+		{
+			super(dataGen, DungeonsPlus.MODID, existingFileHelper);
+		}
+
+		@Override
+		protected void addTags()
+		{
+			this.dungeonsPlus();
+		}
+
+		@SuppressWarnings("unchecked")
+		public void dungeonsPlus()
+		{
+			// TODO Revise with forge tags. Also mangrove
+			this.tag(DPTags.BiomeTags.HAS_TOWER).addTags(BiomeTags.IS_MOUNTAIN, BiomeTags.IS_FOREST);
+			this.tag(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MOSSY).addTags(BiomeTags.HAS_SWAMP_HUT);
+			this.tag(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MESA).addTags(BiomeTags.IS_BADLANDS);
+			this.tag(DPTags.BiomeTags.HAS_REANIMATED_RUINS_FROZEN).addTags(BiomeTags.HAS_VILLAGE_SNOWY);
+			this.tag(DPTags.BiomeTags.HAS_LEVIATHAN).addTags(BiomeTags.HAS_VILLAGE_DESERT);
+			this.tag(DPTags.BiomeTags.HAS_SNOWY_TEMPLE).add(Biomes.SNOWY_TAIGA, Biomes.FROZEN_PEAKS, Biomes.SNOWY_SLOPES);
+			this.tag(DPTags.BiomeTags.HAS_WARPED_GARDEN).addTags(BiomeTags.IS_DEEP_OCEAN);
+			this.tag(DPTags.BiomeTags.HAS_SOUL_PRISON).add(Biomes.SOUL_SAND_VALLEY);
+			this.tag(DPTags.BiomeTags.HAS_END_RUINS).addTag(BiomeTags.HAS_END_CITY);
+		}
+
+		public void vanilla()
+		{
+
+		}
+
+		@Override
+		public String getName()
+		{
+			return "Dungeons Plus biome tag provider";
 		}
 	}
 }

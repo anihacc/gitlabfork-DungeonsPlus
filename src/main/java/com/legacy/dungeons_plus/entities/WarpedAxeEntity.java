@@ -194,11 +194,10 @@ public class WarpedAxeEntity extends AbstractArrow
 
 		Entity owner = this.getOwner();
 		this.dealtDamage = true;
+		if (hitEntity.getType() == EntityType.ENDERMAN)
+			return;
 		if (hitEntity.hurt(DPDamageSource.warpedAxe(this, owner, stack), damage))
 		{
-			if (hitEntity.getType() == EntityType.ENDERMAN)
-				return;
-
 			if (hitEntity instanceof LivingEntity livingHit)
 			{
 				if (owner instanceof LivingEntity livingOwner)

@@ -10,7 +10,7 @@
     "description": {
       "translate": "dungeons_plus:advancements.adventure.find_warped_garden.description"
     },
-    "frame": "task",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false

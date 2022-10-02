@@ -22,7 +22,6 @@ import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
@@ -51,16 +50,16 @@ public class DPStructures
 	public static final StructureRegistrar<ReanimatedRuinsStructure.Configuration, ReanimatedRuinsStructure> REANIMATED_RUINS = 
 			StructureRegistrar.builder(DungeonsPlus.locate("reanimated_ruins"), () -> new ReanimatedRuinsStructure(ReanimatedRuinsStructure.Configuration.CODEC, DPConfig.COMMON.reanimatedRuins))
 				.addPiece(ReanimatedRuinsStructure.Piece::new)
-				.pushConfigured("mossy", new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.MOSSY_ROOT, 10, ReanimatedRuinsType.MOSSY))
-					.biomes(Biomes.SWAMP)
+				.pushConfigured(ReanimatedRuinsType.MOSSY.toString(), new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.MOSSY_ROOT, 10, ReanimatedRuinsType.MOSSY))
+					.biomes(DPConfig.COMMON.reanimatedRuins.getConfigured(ReanimatedRuinsType.MOSSY.toString()))
 					.dimensions(Level.OVERWORLD)
 				.popConfigured()
-				.pushConfigured("desert", new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.DESERT_ROOT, 10, ReanimatedRuinsType.DESERT))
-					.biomes(Biomes.DESERT)
+				.pushConfigured(ReanimatedRuinsType.MESA.toString(), new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.DESERT_ROOT, 10, ReanimatedRuinsType.MESA))
+					.biomes(DPConfig.COMMON.reanimatedRuins.getConfigured(ReanimatedRuinsType.MESA.toString()))
 					.dimensions(Level.OVERWORLD)
 				.popConfigured()
-				.pushConfigured("frozen", new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.FROZEN_ROOT, 10, ReanimatedRuinsType.FROZEN))
-					.biomes(Biomes.SNOWY_PLAINS)
+				.pushConfigured(ReanimatedRuinsType.FROZEN.toString(), new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.FROZEN_ROOT, 10, ReanimatedRuinsType.FROZEN))
+					.biomes(DPConfig.COMMON.reanimatedRuins.getConfigured(ReanimatedRuinsType.FROZEN.toString()))
 					.dimensions(Level.OVERWORLD)
 				.popConfigured()
 				.build();

@@ -2,11 +2,10 @@ package com.legacy.dungeons_plus;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.legacy.structure_gel.api.biome_dictionary.BiomeDictionary;
-import com.legacy.structure_gel.api.biome_dictionary.BiomeType;
+import com.legacy.dungeons_plus.data.DPTags;
+import com.legacy.dungeons_plus.structures.reanimated_ruins.ReanimatedRuinsType;
 import com.legacy.structure_gel.api.config.StructureConfig;
 
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class DPConfig
@@ -46,71 +45,70 @@ public class DPConfig
 			// @formatter:off
 			this.tower = StructureConfig.builder(builder, "tower")
 					.pushPlacement()
-						.spacing(25)
 						.probability(75)
 					.popPlacement()
 					.pushConfigured()
-						.biomes(BiomeType.builder().parents(BiomeDictionary.PLAINS, BiomeDictionary.OAK_FOREST, BiomeDictionary.DARK_FOREST, BiomeDictionary.BIRCH_FOREST, BiomeDictionary.MOUNTAIN).build())
+						.biomes(DPTags.BiomeTags.HAS_TOWER)
 					.popConfigured()
 					.build();
 			
 			this.leviathan = StructureConfig.builder(builder, "leviathan")
 					.pushPlacement()
-						.spacing(36)
-						.probability(100)
+						.probability(75)
 					.popPlacement()
 					.pushConfigured()
-						.biomes(BiomeDictionary.DESERT)
+						.biomes(DPTags.BiomeTags.HAS_LEVIATHAN)
 					.popConfigured()
 					.build();
 			
 			this.snowyTemple = StructureConfig.builder(builder, "snowy_temple")
 					.pushPlacement()
-						.spacing(36)
-						.probability(100)
+						.probability(75)
 					.popPlacement()
 					.pushConfigured()
-						.biomes(BiomeType.builder().parents(BiomeDictionary.SNOWY_PLAINS, BiomeDictionary.SNOWY_SPRUCE_FOREST).build())
+						.biomes(DPTags.BiomeTags.HAS_SNOWY_TEMPLE)
 					.popConfigured()
 					.build();
 			
 			this.reanimatedRuins = StructureConfig.builder(builder, "reanimated_ruins")
 					.pushPlacement()
-						.spacing(12)
-						.probability(40)
+						.probability(75)
 					.popPlacement()
-					.pushConfigured()
-						.biomes(BiomeDictionary.OVERWORLD, BiomeType.builder().biomes(Biomes.MUSHROOM_FIELDS).build())
+					.pushConfigured(ReanimatedRuinsType.MOSSY.toString())
+						.biomes(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MOSSY)
+					.popConfigured()
+					.pushConfigured(ReanimatedRuinsType.MESA.toString())
+						.biomes(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MESA)
+					.popConfigured()
+					.pushConfigured(ReanimatedRuinsType.FROZEN.toString())
+						.biomes(DPTags.BiomeTags.HAS_REANIMATED_RUINS_FROZEN)
 					.popConfigured()
 					.build();
 			
 			this.warpedGarden = StructureConfig.builder(builder, "warped_garden")
 					.pushPlacement()
-						.spacing(36)
-						.probability(100)
+						.probability(75)
 					.popPlacement()
 					.pushConfigured()
-						.biomes(BiomeDictionary.DEEP_OCEAN, BiomeDictionary.FROZEN)
+						.biomes(DPTags.BiomeTags.HAS_WARPED_GARDEN)
 					.popConfigured()
 					.build();
 			
 			this.soulPrison = StructureConfig.builder(builder, "soul_prison")
 					.pushPlacement()
-						.spacing(25)
-						.probability(100)
+						.probability(75)
 					.popPlacement()
 					.pushConfigured()
-						.biomes(BiomeType.builder().biomes(Biomes.SOUL_SAND_VALLEY).build())
+						.biomes(DPTags.BiomeTags.HAS_SOUL_PRISON)
 					.popConfigured()
 					.build();
 			
 			this.endRuins = StructureConfig.builder(builder, "end_ruins")
 					.pushPlacement()
-						.spacing(24)
-						.probability(80)
+						.probability(75)
 					.popPlacement()
 					.pushConfigured()
-						.biomes(BiomeDictionary.OUTER_END_ISLAND)
+						.biomes(DPTags.BiomeTags.HAS_END_RUINS)
 					.popConfigured()
 					.build();
 			
@@ -119,13 +117,13 @@ public class DPConfig
 
 			builder.push("Mobs");
 			this.huskLeviathanBladeChance = builder.comment("Percent chance that a Husk will wield a Leviathan Blade in the Leviathan.").defineInRange("husk_leviathan_blade_chance", 5, 0, 100);
-			this.husksDropSand = builder.comment("Determines if Husks will drop sand when spawned in the Leviathan").define("husks_drop_sand", true);
+			this.husksDropSand = builder.comment("Determines if Husks will drop sand when spawned in the Leviathan.").define("husks_drop_sand", true);
 
 			this.strayFrostedCowlChance = builder.comment("Percent chance that a Stray will wear a Frosted Cowl in the Snowy Temple.").defineInRange("stray_frosted_cowl_chance", 5, 0, 100);
-			this.straysDropIce = builder.comment("Determines if Strays will drop ice when spawned in the Snowy Temple").define("strays_drop_ice", true);
+			this.straysDropIce = builder.comment("Determines if Strays will drop ice when spawned in the Snowy Temple.").define("strays_drop_ice", true);
 
 			this.drownedWarpedAxeChance = builder.comment("Percent chance that a Drowned will wear a Warped Axe in the Warped Garden.").defineInRange("drowned_warped_axe_chance", 5, 0, 100);
-			this.drownedCoralChance = builder.comment("Determines if Drowned can hold coral when spawned in the Warped Garden").defineInRange("drowned_drop_coral", 30, 0, 100);
+			this.drownedCoralChance = builder.comment("Percent chance that a Drowned will hold coral in the Warped Garden.").defineInRange("drowned_coral_chance", 30, 0, 100);
 			
 			this.skeletonSoulCannonChance = builder.comment("Percent chance that a Skeleton will wield a Soul Cannon in the Soul Prison.").defineInRange("skeleton_soul_cannon_chance", 5, 0, 100);
 			

@@ -24,6 +24,14 @@
         }
       }
     },
+    "in_mesa": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "location": {
+          "feature": "dungeons_plus:reanimated_ruins_mesa"
+        }
+      }
+    },
     "in_frozen": {
       "trigger": "minecraft:location",
       "conditions": {
@@ -31,21 +39,13 @@
           "feature": "dungeons_plus:reanimated_ruins_frozen"
         }
       }
-    },
-    "in_desert": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "location": {
-          "feature": "dungeons_plus:reanimated_ruins_desert"
-        }
-      }
     }
   },
   "requirements": [
     [
       "in_mossy",
-      "in_frozen",
-      "in_desert"
+      "in_mesa",
+      "in_frozen"
     ]
   ]
 }

@@ -25,6 +25,12 @@ public class SoulPrisonStructure extends GelConfigStructure<NoneFeatureConfigura
 		super(codec, config, PieceGeneratorSupplier.simple(context -> context.validBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG) && isValidPos(context), SoulPrisonStructure::generatePieces));
 	}
 
+	@Override
+	public int getSpacing()
+	{
+		return 20;
+	}
+	
 	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
 		ChunkPos chunkPos = context.chunkPos();
