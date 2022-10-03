@@ -31,13 +31,13 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -51,14 +51,11 @@ public class DPCommonEvents
 	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 	public static class ForgeBus
 	{
-		@SubscribeEvent
-		protected static void onEntitySpawn(final EntityJoinWorldEvent event)
+		public static void onEntitySpawn(Mob entity)
 		{
-			Level level = event.getWorld();
+			Level level = entity.getLevel();
 			if (!level.isClientSide)
 			{
-				Entity entity = event.getEntity();
-
 				ifInStructure(entity, EntityType.HUSK, DPStructures.LEVIATHAN, e ->
 				{
 					if (DPConfig.COMMON.husksDropSand.get())
