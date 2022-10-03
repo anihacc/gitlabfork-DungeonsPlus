@@ -33,7 +33,13 @@ public class WarpedGardenStructure extends GelConfigJigsawStructure<JigsawConfig
 	{
 		return 36;
 	}
-	
+
+	@Override
+	public int getOffset()
+	{
+		return this.getSpacing();
+	}
+
 	public static class Piece extends AbstractGelStructurePiece
 	{
 		public Piece(StructureManager template, StructurePoolElement piece, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds)

@@ -30,7 +30,13 @@ public class SoulPrisonStructure extends GelConfigStructure<NoneFeatureConfigura
 	{
 		return 20;
 	}
-	
+
+	@Override
+	public int getOffset()
+	{
+		return this.getSpacing();
+	}
+
 	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
 		ChunkPos chunkPos = context.chunkPos();

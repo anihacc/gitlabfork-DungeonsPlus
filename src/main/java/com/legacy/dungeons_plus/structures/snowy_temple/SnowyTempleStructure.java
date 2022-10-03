@@ -27,7 +27,13 @@ public class SnowyTempleStructure extends GelConfigStructure<NoneFeatureConfigur
 	{
 		return 36;
 	}
-	
+
+	@Override
+	public int getOffset()
+	{
+		return this.getSpacing();
+	}
+
 	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
 		ChunkPos chunkPos = context.chunkPos();

@@ -59,11 +59,17 @@ public class EndRuinsStructure extends GelConfigJigsawStructure<JigsawConfigurat
 			return false;
 		});
 	}
-	
+
 	@Override
 	public int getSpacing()
 	{
 		return 27;
+	}
+
+	@Override
+	public int getOffset()
+	{
+		return this.getSpacing();
 	}
 
 	private static boolean isValidHeight(PieceGeneratorSupplier.Context<JigsawConfiguration> context)

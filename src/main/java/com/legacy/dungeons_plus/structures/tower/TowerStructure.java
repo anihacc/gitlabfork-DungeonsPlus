@@ -35,6 +35,12 @@ public class TowerStructure extends GelConfigStructure<NoneFeatureConfiguration>
 		return 31;
 	}
 	
+	@Override
+	public int getOffset()
+	{
+		return this.getSpacing();
+	}
+	
 	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
 		ChunkPos chunkPos = context.chunkPos();

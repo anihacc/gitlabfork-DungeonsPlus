@@ -46,7 +46,13 @@ public class ReanimatedRuinsStructure extends GelConfigJigsawStructure<Reanimate
 	{
 		return 36;
 	}
-	
+
+	@Override
+	public int getOffset()
+	{
+		return this.getSpacing();
+	}
+
 	@Override
 	public void modifyPieceBuilder(StructurePiecesBuilder pieceBuilder, IPieceBuilderModifier.Context<Configuration> context)
 	{
