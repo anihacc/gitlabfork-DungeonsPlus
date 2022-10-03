@@ -88,7 +88,7 @@ public class SoulFireballEntity extends Fireball
 		{
 			Entity target = hitResult.getEntity();
 			Entity owner = this.getOwner();
-			target.hurt(DamageSource.fireball(this, owner), this.isMulti ? 7.0F : 4.5F);
+			target.hurt(DamageSource.indirectMobAttack(this, owner instanceof LivingEntity living ? living : null).setExplosion(), this.isMulti ? 7.0F : 4.5F);
 			if (this.hasFlame)
 				target.setSecondsOnFire(3);
 			if (owner instanceof LivingEntity livingOwner)
