@@ -1,48 +1,49 @@
 package com.legacy.dungeons_plus.structures.warped_garden;
 
-import java.util.Random;
-
+import com.legacy.dungeons_plus.registry.DPJigsawTypes;
 import com.legacy.dungeons_plus.registry.DPStructures;
-import com.legacy.structure_gel.api.config.StructureConfig;
-import com.legacy.structure_gel.api.structure.GelConfigJigsawStructure;
+import com.legacy.structure_gel.api.structure.ExtendedJigsawStructure.IPieceFactory;
 import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
+import com.legacy.structure_gel.api.structure.jigsaw.JigsawCapability.IJigsawCapability;
+import com.legacy.structure_gel.api.structure.jigsaw.JigsawCapability.JigsawType;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
-public class WarpedGardenStructure extends GelConfigJigsawStructure<JigsawConfiguration>
+public class WarpedGardenStructure
 {
-	public WarpedGardenStructure(Codec<JigsawConfiguration> codec, StructureConfig config)
+	public static class Capability implements IJigsawCapability
 	{
-		super(codec, config, 36, true, false, context -> true, Piece::new);
-	}
+		public static final Capability INSTANCE = new Capability();
+		public static final Codec<Capability> CODEC = Codec.unit(INSTANCE);
 
-	@Override
-	public int getSpacing()
-	{
-		return 36;
-	}
-
-	@Override
-	public int getOffset()
-	{
-		return this.getSpacing();
+		@Override
+		public JigsawType<?> getType()
+		{
+			return DPJigsawTypes.WARPED_GARDEN;
+		}
+		
+		@Override
+		public IPieceFactory getPieceFactory()
+		{
+			return Piece::new;
+		}
 	}
 
 	public static class Piece extends AbstractGelStructurePiece
 	{
-		public Piece(StructureManager template, StructurePoolElement piece, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds)
+		public Piece(StructureTemplateManager template, StructurePoolElement piece, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds)
 		{
 			super(template, piece, pos, groundLevelDelta, rotation, bounds);
 		}
@@ -55,11 +56,11 @@ public class WarpedGardenStructure extends GelConfigJigsawStructure<JigsawConfig
 		@Override
 		public StructurePieceType getType()
 		{
-			return DPStructures.WARPED_GARDEN.getPieceType();
+			return DPStructures.WARPED_GARDEN.getPieceType().get();
 		}
 
 		@Override
-		public BlockState modifyState(ServerLevelAccessor level, Random rand, BlockPos pos, BlockState originalState)
+		public BlockState modifyState(ServerLevelAccessor level, RandomSource rand, BlockPos pos, BlockState originalState)
 		{
 			if (originalState.is(Blocks.BLUE_WOOL))
 				return Blocks.WATER.defaultBlockState();
@@ -69,7 +70,7 @@ public class WarpedGardenStructure extends GelConfigJigsawStructure<JigsawConfig
 		}
 
 		@Override
-		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
+		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, RandomSource rand, BoundingBox bounds)
 		{
 		}
 	}

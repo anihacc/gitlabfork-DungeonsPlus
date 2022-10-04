@@ -2,24 +2,19 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": {
-        "type": "minecraft:uniform",
-        "min": 4.0,
-        "max": 7.0
-      },
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:rotten_flesh"
@@ -28,13 +23,13 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:warped_roots"
@@ -43,13 +38,13 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:warped_fungus"
@@ -58,13 +53,13 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:gold_nugget"
@@ -73,38 +68,38 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:quartz"
         }
-      ]
-    },
-    {
+      ],
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 3.0,
-        "max": 4.0
-      },
+        "max": 7.0,
+        "min": 4.0
+      }
+    },
+    {
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:netherrack"
@@ -113,13 +108,13 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             },
             {
               "function": "minecraft:set_potion",
@@ -132,13 +127,13 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:scute"
@@ -149,71 +144,76 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:gold_ingot"
+          "name": "minecraft:gold_ingot",
+          "weight": 3
         }
-      ]
-    },
-    {
+      ],
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 2.0,
-        "max": 3.0
-      },
+        "max": 4.0,
+        "min": 3.0
+      }
+    },
+    {
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 3,
-          "name": "minecraft:nautilus_shell"
+          "name": "minecraft:nautilus_shell",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 5.0,
-                "max": 11.0
+                "max": 11.0,
+                "min": 5.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:nether_gold_ore"
+          "name": "minecraft:nether_gold_ore",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 7,
-          "name": "minecraft:pufferfish"
+          "name": "minecraft:pufferfish",
+          "weight": 7
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:book"
+          "name": "minecraft:book",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:enchanted_golden_apple"
         }
-      ]
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 3.0,
+        "min": 2.0
+      }
     }
   ]
 }

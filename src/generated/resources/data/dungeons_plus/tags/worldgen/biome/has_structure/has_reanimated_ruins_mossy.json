@@ -1,6 +1,5 @@
 {
-  "replace": false,
   "values": [
-    "#minecraft:has_structure/swamp_hut"
+    "#forge:is_swamp"
   ]
 }

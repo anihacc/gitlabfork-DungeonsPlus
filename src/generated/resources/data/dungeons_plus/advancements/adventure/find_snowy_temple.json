@@ -1,28 +1,36 @@
 {
   "parent": "dungeons_plus:adventure/find_reanimated_ruins",
+  "criteria": {
+    "in_structure": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structure": "dungeons_plus:snowy_temple"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:packed_ice"
-    },
-    "title": {
-      "translate": "dungeons_plus:advancements.adventure.find_snowy_temple.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "dungeons_plus:advancements.adventure.find_snowy_temple.description"
     },
     "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:packed_ice"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "in_structure": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "location": {
-          "feature": "dungeons_plus:snowy_temple"
-        }
-      }
+    "title": {
+      "translate": "dungeons_plus:advancements.adventure.find_snowy_temple.title"
     }
   },
   "requirements": [

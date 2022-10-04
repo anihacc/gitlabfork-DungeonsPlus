@@ -2,24 +2,19 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": {
-        "type": "minecraft:uniform",
-        "min": 4.0,
-        "max": 7.0
-      },
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:ice"
@@ -28,13 +23,13 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:snowball"
@@ -43,13 +38,13 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:arrow"
@@ -58,13 +53,13 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:bone"
@@ -73,13 +68,13 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:flint"
@@ -88,93 +83,93 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:feather"
         }
-      ]
-    },
-    {
+      ],
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 3.0,
-        "max": 4.0
-      },
+        "max": 7.0,
+        "min": 4.0
+      }
+    },
+    {
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:packed_ice"
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 2.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             },
             {
               "function": "minecraft:set_potion",
               "id": "minecraft:slowness"
             }
           ],
-          "name": "minecraft:tipped_arrow"
+          "name": "minecraft:tipped_arrow",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:iron_ingot"
+          "name": "minecraft:iron_ingot",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:lapis_lazuli"
+          "name": "minecraft:lapis_lazuli",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
@@ -189,42 +184,42 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:powder_snow_bucket"
         }
-      ]
-    },
-    {
+      ],
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 2.0,
-        "max": 3.0
-      },
+        "max": 4.0,
+        "min": 3.0
+      }
+    },
+    {
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 3,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:experience_bottle"
+          "name": "minecraft:experience_bottle",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -236,29 +231,34 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:book"
+          "name": "minecraft:book",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:enchant_randomly",
               "enchantments": [
-                "minecraft:unbreaking",
                 "minecraft:frost_walker",
-                "minecraft:vanishing_curse"
-              ]
+                "minecraft:vanishing_curse",
+                "minecraft:unbreaking"
+              ],
+              "function": "minecraft:enchant_randomly"
             }
           ],
           "name": "minecraft:leather_boots"
         }
-      ]
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 3.0,
+        "min": 2.0
+      }
     }
   ]
 }

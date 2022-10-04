@@ -2,7 +2,6 @@ package com.legacy.dungeons_plus.structures.reanimated_ruins;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -16,6 +15,7 @@ import com.legacy.dungeons_plus.structures.PsuedoFeature;
 import com.legacy.dungeons_plus.structures.PsuedoFeature.IPlacement;
 import com.legacy.structure_gel.api.dynamic_spawner.DynamicSpawnerType;
 import com.legacy.structure_gel.api.structure.base.IModifyState;
+import com.mojang.serialization.Codec;
 
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -24,6 +24,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.features.CaveFeatures;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
@@ -39,6 +40,7 @@ public enum ReanimatedRuinsType implements StringRepresentable
 	MESA("mesa", DPLoot.ReanimatedRuins.CHEST_DESERT, DPSpawners.REANIMATED_RUINS_DESERT, desertBlockModifier(), ReanimatedRuinsType::desertFeatures),
 	FROZEN("frozen", DPLoot.ReanimatedRuins.CHEST_FROZEN, DPSpawners.REANIMATED_RUINS_FROZEN, frozenBlockModifier(), ReanimatedRuinsType::frozenFeatures);
 
+	public static final Codec<ReanimatedRuinsType> CODEC = StringRepresentable.fromEnum(ReanimatedRuinsType::values);
 	private final String name;
 	public final ResourceLocation loot;
 	public final DynamicSpawnerType spawner;
@@ -67,7 +69,7 @@ public enum ReanimatedRuinsType implements StringRepresentable
 	{
 		return this.getSerializedName();
 	}
-	
+
 	public static ReanimatedRuinsType byName(@Nullable String name)
 	{
 		for (ReanimatedRuinsType type : ReanimatedRuinsType.values())
@@ -76,7 +78,7 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		return MOSSY;
 	}
 
-	public void decorate(ServerLevelAccessor level, BlockPos pos, Random rand)
+	public void decorate(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		for (var f : this.features)
 			f.place(level, pos, rand);
@@ -107,7 +109,7 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		list.add(new PsuedoFeature(2, 6, IPlacement.NOOP, ReanimatedRuinsType::glowLichen));
 	}
 
-	private static void puddle(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void puddle(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		pos = pos.below();
 		placeWater(level, pos);
@@ -125,7 +127,7 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		}
 	}
 
-	private static void mossyStone(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void mossyStone(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		DPUtil.fillBlob(level, pos, 4, (l, p, r) ->
 		{
@@ -144,12 +146,12 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		}, rand, 0.20F);
 	}
 
-	private static void grassFloor(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void grassFloor(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		DPUtil.fillBlob(level, pos, 4, Blocks.GRASS_BLOCK.defaultBlockState(), (l, p, s) -> s.is(Blocks.STONE) && l.getBlockState(p.above()).isAir(), rand, 0.60F);
 	}
 
-	private static void dripleaf(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void dripleaf(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		BlockState ground = level.getBlockState(pos.below());
 		if (ground.is(BlockTags.BIG_DRIPLEAF_PLACEABLE) || ground.is(BlockTags.SMALL_DRIPLEAF_PLACEABLE))
@@ -158,13 +160,13 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		}
 	}
 
-	private static void tallGrass(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void tallGrass(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		BlockState grass = Blocks.GRASS.defaultBlockState();
 		DPUtil.fillBlob(level, pos, 3, grass, (l, p, s) -> s.isAir() && grass.canSurvive(l, p), rand, 0.5F);
 	}
 
-	private static void caveVines(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void caveVines(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		if (Blocks.CAVE_VINES.defaultBlockState().canSurvive(level, pos))
 		{
@@ -172,18 +174,18 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		}
 	}
 
-	private static void deadBush(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void deadBush(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		BlockState deadBush = Blocks.DEAD_BUSH.defaultBlockState();
 		DPUtil.fillBlob(level, pos, 3, deadBush, (l, p, s) -> s.isAir() && deadBush.canSurvive(l, p), rand, 0.2F);
 	}
 
-	private static void dripstone(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void dripstone(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		placeFeature(level, pos, rand, CaveFeatures.DRIPSTONE_CLUSTER);
 	}
 
-	private static void diorite(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void diorite(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		DPUtil.fillBlob(level, pos, 4, (l, p, r) ->
 		{
@@ -194,28 +196,28 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		}, rand, 0.85F);
 	}
 
-	private static void calciteFloor(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void calciteFloor(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		DPUtil.fillBlob(level, pos, 4, Blocks.CALCITE.defaultBlockState(), (l, p, s) -> s.is(Blocks.STONE) && l.getBlockState(p.above()).isAir(), rand, 0.60F);
 	}
 
-	private static void ice(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void ice(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		DPUtil.fillBlob(level, pos, 4, Blocks.PACKED_ICE.defaultBlockState(), (l, p, s) -> s.is(Blocks.COBBLESTONE) && l.getBlockState(p.below()).isAir(), rand, 0.75F);
 	}
 
-	private static void snowPatch(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void snowPatch(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		BlockState snow = Blocks.SNOW.defaultBlockState();
 		DPUtil.fillBlob(level, pos, 3, snow, (l, p, s) -> s.isAir() && snow.canSurvive(l, p), rand, 0.75F);
 	}
 
-	private static void glowLichen(ServerLevelAccessor level, BlockPos pos, Random rand)
+	private static void glowLichen(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		placeFeature(level, pos, rand, CaveFeatures.GLOW_LICHEN);
 	}
 
-	private static void placeFeature(ServerLevelAccessor level, BlockPos pos, Random rand, Holder<? extends ConfiguredFeature<?, ?>> feature)
+	private static void placeFeature(ServerLevelAccessor level, BlockPos pos, RandomSource rand, Holder<? extends ConfiguredFeature<?, ?>> feature)
 	{
 		if (level instanceof WorldGenLevel wgLevel)
 			feature.value().place(wgLevel, wgLevel.getLevel().getChunkSource().getGenerator(), rand, pos);
@@ -267,7 +269,7 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		});
 	}
 
-	private static BiFunction<BlockState, Random, BlockState> candleFunc(Block candle, boolean lit)
+	private static BiFunction<BlockState, RandomSource, BlockState> candleFunc(Block candle, boolean lit)
 	{
 		return (s, r) -> r.nextFloat() < 0.65F ? IModifyState.mergeStates(candle.defaultBlockState(), s).setValue(CandleBlock.LIT, lit) : Blocks.AIR.defaultBlockState();
 	}

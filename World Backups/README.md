@@ -1,10 +1,2 @@
-# 1-30-2022
-- Port to 1.18.1
-
-# 8-23-2022
-- Finished Tower, Leviathan, and Reanimated Ruins
-- Started Snowy Temple
-
-# 10-1-2022
-- Added loot to all dungeons
-- Final polishing for 2.0 release
+# 10-4-2022
+- Port to 1.19.2

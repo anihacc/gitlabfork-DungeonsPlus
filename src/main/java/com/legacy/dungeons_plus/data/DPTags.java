@@ -5,25 +5,25 @@ import com.legacy.dungeons_plus.DungeonsPlus;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class DPTags
 {
 	public static interface StructureTags
 	{
-		TagKey<ConfiguredStructureFeature<?, ?>> ON_REANIMATED_RUINS_MAPS = map("reanimated_ruins");
-		TagKey<ConfiguredStructureFeature<?, ?>> ON_LEVIATHAN_MAPS = map("leviathan");
-		TagKey<ConfiguredStructureFeature<?, ?>> ON_SNOWY_TEMPLE_MAPS = map("snowy_temple");
-		TagKey<ConfiguredStructureFeature<?, ?>> ON_WARPED_GARDEN_MAPS = map("warped_garden");
+		TagKey<Structure> ON_REANIMATED_RUINS_MAPS = map("reanimated_ruins");
+		TagKey<Structure> ON_LEVIATHAN_MAPS = map("leviathan");
+		TagKey<Structure> ON_SNOWY_TEMPLE_MAPS = map("snowy_temple");
+		TagKey<Structure> ON_WARPED_GARDEN_MAPS = map("warped_garden");
 
-		private static TagKey<ConfiguredStructureFeature<?, ?>> map(String name)
+		private static TagKey<Structure> map(String name)
 		{
 			return create("on_" + name + "_maps");
 		}
 
-		private static TagKey<ConfiguredStructureFeature<?, ?>> create(String name)
+		private static TagKey<Structure> create(String name)
 		{
-			return TagKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, DungeonsPlus.locate(name));
+			return TagKey.create(Registry.STRUCTURE_REGISTRY, DungeonsPlus.locate(name));
 		}
 	}
 

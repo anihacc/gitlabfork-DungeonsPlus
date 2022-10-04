@@ -4,7 +4,6 @@ import static com.legacy.dungeons_plus.DungeonsPlus.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Consumer;
 
 import com.legacy.dungeons_plus.DPConfig;
@@ -27,44 +26,43 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 public class DPCommonEvents
 {
 	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 	public static class ForgeBus
 	{
-		@SubscribeEvent
-		protected static void onEntitySpawn(final EntityJoinWorldEvent event)
+		public static void onEntitySpawn(Mob entity)
 		{
-			Level level = event.getWorld();
+			Level level = entity.getLevel();
 			if (!level.isClientSide)
 			{
-				Entity entity = event.getEntity();
-
 				ifInStructure(entity, EntityType.HUSK, DPStructures.LEVIATHAN, e ->
 				{
 					if (DPConfig.COMMON.husksDropSand.get())
 						EntityAccessHelper.setDeathLootTable(e, DPLoot.Leviathan.ENTITY_HUSK);
-					Random rand = e.getRandom();
-					if (rand.nextFloat() < DPConfig.COMMON.huskLeviathanBladeChance.get() / 100.0F)
+					RandomSource rand = e.getRandom();
+					if (rand.nextFloat() < DPConfig.COMMON.huskLeviathanBladeChance.get())
 					{
 						var stack = DPItems.LEVIATHAN_BLADE.get().getDefaultInstance();
 						stack.setDamageValue(rand.nextInt(stack.getItem().getMaxDamage(stack)));
@@ -76,8 +74,8 @@ public class DPCommonEvents
 				{
 					if (DPConfig.COMMON.straysDropIce.get())
 						EntityAccessHelper.setDeathLootTable(e, DPLoot.SnowyTemple.ENTITY_STRAY);
-					Random rand = e.getRandom();
-					if (rand.nextFloat() < DPConfig.COMMON.strayFrostedCowlChance.get() / 100.0F)
+					RandomSource rand = e.getRandom();
+					if (rand.nextFloat() < DPConfig.COMMON.strayFrostedCowlChance.get())
 					{
 						var stack = DPItems.FROSTED_COWL.get().getDefaultInstance();
 						stack.setDamageValue(rand.nextInt(stack.getItem().getMaxDamage(stack)));
@@ -87,15 +85,15 @@ public class DPCommonEvents
 				});
 				ifInStructure(entity, EntityType.DROWNED, DPStructures.WARPED_GARDEN, e ->
 				{
-					Random rand = e.getRandom();
-					if (rand.nextFloat() < DPConfig.COMMON.drownedWarpedAxeChance.get() / 100.0F)
+					RandomSource rand = e.getRandom();
+					if (rand.nextFloat() < DPConfig.COMMON.drownedWarpedAxeChance.get())
 					{
 						var stack = DPItems.WARPED_AXE.get().getDefaultInstance();
 						stack.setDamageValue(rand.nextInt(stack.getItem().getMaxDamage(stack)));
 						e.setItemSlot(EquipmentSlot.MAINHAND, stack);
 						e.setDropChance(EquipmentSlot.MAINHAND, 0.12F);
 					}
-					if (rand.nextFloat() < DPConfig.COMMON.drownedCoralChance.get() / 100.0F)
+					if (rand.nextFloat() < DPConfig.COMMON.drownedCoralChance.get())
 					{
 						var opTag = level.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY).getTag(BlockTags.CORAL_BLOCKS);
 						if (opTag.isPresent() && opTag.get().size() > 0)
@@ -107,8 +105,8 @@ public class DPCommonEvents
 				});
 				ifInStructure(entity, EntityType.SKELETON, DPStructures.SOUL_PRISON, e ->
 				{
-					Random rand = e.getRandom();
-					if (rand.nextFloat() < DPConfig.COMMON.skeletonSoulCannonChance.get() / 100.0F)
+					RandomSource rand = e.getRandom();
+					if (rand.nextFloat() < DPConfig.COMMON.skeletonSoulCannonChance.get())
 					{
 						var stack = DPItems.SOUL_CANNON.get().getDefaultInstance();
 						stack.setDamageValue(rand.nextInt(stack.getItem().getMaxDamage(stack)));
@@ -128,19 +126,20 @@ public class DPCommonEvents
 		}
 
 		@SuppressWarnings("unchecked")
-		private static <T extends Entity> void ifInStructure(Entity entity, EntityType<T> entityTest, StructureRegistrar<?, ?> structure, Consumer<T> consumer)
+		private static <T extends Entity> void ifInStructure(Entity entity, EntityType<T> entityTest, StructureRegistrar<?> structure, Consumer<T> consumer)
 		{
-			if (entity.getType().equals(entityTest) && entity.level instanceof ServerLevel serverLevel && StructureAccessHelper.isInStructurePiece(serverLevel, structure.getStructure(), entity.blockPosition()))
+			if (entity.getType().equals(entityTest) && entity.level instanceof ServerLevel serverLevel && StructureAccessHelper.isInStructurePiece(serverLevel, structure.getType(), entity.blockPosition()))
 				consumer.accept((T) entity);
 		}
 
 		@SubscribeEvent
-		protected static void onEffectApply(final PotionEvent.PotionApplicableEvent event)
+		protected static void onEffectApply(final MobEffectEvent.Applicable event)
 		{
-			if (event.getPotionEffect().getEffect() == MobEffects.MOVEMENT_SLOWDOWN)
+			if (event.getEffectInstance().getEffect() == MobEffects.MOVEMENT_SLOWDOWN)
 			{
 				List<ItemStack> strayArmors = new ArrayList<>(1);
-				for (ItemStack stack : event.getEntityLiving().getArmorSlots())
+				LivingEntity entity = event.getEntity();
+				for (ItemStack stack : entity.getArmorSlots())
 					if (stack.getItem() instanceof ArmorItem armor && armor.getMaterial() == DPItems.DPArmors.STRAY)
 						strayArmors.add(stack);
 
@@ -148,9 +147,9 @@ public class DPCommonEvents
 				if (size > 0)
 				{
 					event.setResult(Result.DENY);
-					if (event.getEntityLiving() instanceof ServerPlayer serverPlayer)
+					if (entity instanceof ServerPlayer serverPlayer)
 					{
-						Random rand = serverPlayer.getRandom();
+						RandomSource rand = serverPlayer.getRandom();
 						strayArmors.get(rand.nextInt(size)).hurt(2, rand, serverPlayer);
 					}
 				}
@@ -223,15 +222,15 @@ public class DPCommonEvents
 
 			// data
 			BlockTagsProvider blockTagProv = new DPTagProv.BlockProv(gen, event.getExistingFileHelper());
-			gen.addProvider(blockTagProv);
-			gen.addProvider(new DPTagProv.ItemProv(gen, blockTagProv, existingFileHelper));
-			gen.addProvider(new DPTagProv.ConfiguredStructureFeatureProv(gen, existingFileHelper));
-			gen.addProvider(new DPTagProv.BiomeProv(gen, existingFileHelper));
-			gen.addProvider(new DPAdvancementProv(gen));
-			gen.addProvider(new DPLootProv(gen));
+			gen.addProvider(true, blockTagProv);
+			gen.addProvider(true, new DPTagProv.ItemProv(gen, blockTagProv, existingFileHelper));
+			gen.addProvider(true, new DPTagProv.StructureProv(gen, existingFileHelper));
+			gen.addProvider(true, new DPTagProv.BiomeProv(gen, existingFileHelper));
+			gen.addProvider(true, new DPAdvancementProv(gen));
+			gen.addProvider(true, new DPLootProv(gen));
 
 			// assets
-			gen.addProvider(new DPLangProvider(gen));
+			gen.addProvider(true, new DPLangProvider(gen));
 		}
 	}
 }

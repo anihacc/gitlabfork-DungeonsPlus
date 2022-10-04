@@ -1,11 +1,10 @@
 package com.legacy.dungeons_plus.structures;
 
-import java.util.Random;
-
 import com.legacy.dungeons_plus.DPUtil;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
 
 public class PsuedoFeature
@@ -27,7 +26,7 @@ public class PsuedoFeature
 			throw new IllegalArgumentException("SuedoFeature maxPlacements is less than minPlacements. " + maxPlacements + " < " + minPlacements);
 	}
 
-	public void place(ServerLevelAccessor level, BlockPos pos, Random rand)
+	public void place(ServerLevelAccessor level, BlockPos pos, RandomSource rand)
 	{
 		for (int i = rand.nextInt(this.maxPlacements + 1 - this.minPlacements) + this.minPlacements; i > -1; i--)
 		{
@@ -57,12 +56,12 @@ public class PsuedoFeature
 			return mutPos.move(Direction.DOWN).immutable();
 		};
 
-		abstract BlockPos mutatePos(BlockPos pos, ServerLevelAccessor level, Random rand);
+		abstract BlockPos mutatePos(BlockPos pos, ServerLevelAccessor level, RandomSource rand);
 	}
 
 	@FunctionalInterface
 	public static interface IPlacer
 	{
-		void place(ServerLevelAccessor level, BlockPos pos, Random rand);
+		void place(ServerLevelAccessor level, BlockPos pos, RandomSource rand);
 	}
 }

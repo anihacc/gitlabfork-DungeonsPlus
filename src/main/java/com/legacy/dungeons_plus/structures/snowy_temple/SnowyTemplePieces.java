@@ -3,7 +3,6 @@ package com.legacy.dungeons_plus.structures.snowy_temple;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.registry.DPStructures;
@@ -15,6 +14,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
@@ -24,8 +24,8 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.GravityProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 public class SnowyTemplePieces
 {
@@ -36,7 +36,7 @@ public class SnowyTemplePieces
 	private static final ResourceLocation[] PATHS = DungeonsPlus.locateAllPrefix("snowy_temple/", "path");
 	private static final ResourceLocation[] ICE = DungeonsPlus.locateAllPrefix("snowy_temple/", "ice_0", "ice_1", "ice_2");
 
-	public static void assemble(StructureManager structureManager, BlockPos pos, Rotation rotation, StructurePiecesBuilder pieces, Random rand)
+	public static void assemble(StructureTemplateManager structureManager, BlockPos pos, Rotation rotation, StructurePiecesBuilder pieces, RandomSource rand)
 	{
 		Direction dir = switch (rotation)
 		{
@@ -83,9 +83,9 @@ public class SnowyTemplePieces
 		 */
 		private final int decay;
 
-		public Piece(StructureManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, Random rand)
+		public Piece(StructureTemplateManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, RandomSource rand)
 		{
-			super(DPStructures.SNOWY_TEMPLE.getPieceType(), 0, structureManager, location, pos);
+			super(DPStructures.SNOWY_TEMPLE.getPieceType().get(), 0, structureManager, location, pos);
 			this.rotation = rotation;
 			this.decay = rand.nextInt(8); // Produced binary 000 (0) to 111 (7)
 			this.setupPlaceSettings(structureManager);
@@ -93,9 +93,9 @@ public class SnowyTemplePieces
 
 		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
-			super(DPStructures.SNOWY_TEMPLE.getPieceType(), tag, context.structureManager());
+			super(DPStructures.SNOWY_TEMPLE.getPieceType().get(), tag, context.structureTemplateManager());
 			this.decay = tag.getInt(DECAY_KEY);
-			this.setupPlaceSettings(context.structureManager());
+			this.setupPlaceSettings(context.structureTemplateManager());
 		}
 
 		@Override
@@ -106,7 +106,7 @@ public class SnowyTemplePieces
 		}
 
 		@Override
-		protected StructurePlaceSettings getPlaceSettings(StructureManager structureManager)
+		protected StructurePlaceSettings getPlaceSettings(StructureTemplateManager structureManager)
 		{
 			StructurePlaceSettings settings = new StructurePlaceSettings();
 			settings.setKeepLiquids(false);
@@ -123,10 +123,9 @@ public class SnowyTemplePieces
 		}
 
 		@Override
-		public BlockState modifyState(ServerLevelAccessor level, Random rand, BlockPos pos, BlockState originalState)
+		public BlockState modifyState(ServerLevelAccessor level, RandomSource rand, BlockPos pos, BlockState originalState)
 		{
-			// TODO Decay packed ice with light blue, white, and light gray
-
+			// Decay packed ice with light blue, white, and light gray
 			BlockState air = Blocks.AIR.defaultBlockState();
 			BlockState ice = Blocks.ICE.defaultBlockState();
 			BlockState packedIce = Blocks.PACKED_ICE.defaultBlockState();
@@ -142,7 +141,7 @@ public class SnowyTemplePieces
 		}
 
 		@Override
-		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
+		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, RandomSource rand, BoundingBox bounds)
 		{
 		}
 	}

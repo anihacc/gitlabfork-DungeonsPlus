@@ -2,18 +2,17 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:exploration_map",
-              "destination": "dungeons_plus:on_leviathan_maps",
               "decoration": "red_x",
-              "zoom": 1,
-              "skip_existing_chunks": false
+              "destination": "dungeons_plus:on_leviathan_maps",
+              "function": "minecraft:exploration_map",
+              "skip_existing_chunks": false,
+              "zoom": 1
             },
             {
               "function": "minecraft:set_name",
@@ -24,17 +23,18 @@
           ],
           "name": "minecraft:map"
         }
-      ]
+      ],
+      "rolls": 1.0
     },
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:loot_table",
           "name": "dungeons_plus:chests/reanimated_ruins/desert"
         }
-      ]
+      ],
+      "rolls": 1.0
     }
   ]
 }

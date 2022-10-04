@@ -1,48 +1,48 @@
 {
   "parent": "dungeons_plus:adventure/find_snowy_temple",
-  "display": {
-    "icon": {
-      "item": "dungeons_plus:frosted_cowl",
-      "nbt": "{Damage:0}"
-    },
-    "title": {
-      "translate": "dungeons_plus:advancements.adventure.hide_in_snow.title"
-    },
-    "description": {
-      "translate": "dungeons_plus:advancements.adventure.hide_in_snow.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
     "stand_in_snow": {
-      "trigger": "minecraft:location",
       "conditions": {
         "player": [
           {
             "condition": "minecraft:entity_properties",
+            "entity": "this",
             "predicate": {
-              "location": {
-                "block": {
-                  "blocks": [
-                    "minecraft:powder_snow"
-                  ]
-                }
-              },
               "equipment": {
                 "head": {
                   "items": [
                     "dungeons_plus:frosted_cowl"
                   ]
                 }
+              },
+              "location": {
+                "block": {
+                  "blocks": [
+                    "minecraft:powder_snow"
+                  ]
+                }
               }
-            },
-            "entity": "this"
+            }
           }
         ]
-      }
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "dungeons_plus:advancements.adventure.hide_in_snow.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "dungeons_plus:frosted_cowl",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "dungeons_plus:advancements.adventure.hide_in_snow.title"
     }
   },
   "requirements": [

@@ -12,13 +12,13 @@ import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
 public class ReanimatedRuinsPools
 {
-	public static final Holder<StructureTemplatePool> DESERT_ROOT, FROZEN_ROOT, MOSSY_ROOT;
+	public static final Holder<StructureTemplatePool> MESA_ROOT, FROZEN_ROOT, MOSSY_ROOT;
 
 	static
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "reanimated_ruins/");
 
-		DESERT_ROOT = registry.register("center_desert", registry.builder().names("center/desert_0").maintainWater(false).build());
+		MESA_ROOT = registry.register("center_mesa", registry.builder().names("center/mesa_0").maintainWater(false).build());
 		FROZEN_ROOT = registry.register("center_frozen", registry.builder().names("center/frozen_0").maintainWater(false).build());
 		MOSSY_ROOT = registry.register("center_mossy", registry.builder().names("center/mossy_0").maintainWater(false).build());
 		

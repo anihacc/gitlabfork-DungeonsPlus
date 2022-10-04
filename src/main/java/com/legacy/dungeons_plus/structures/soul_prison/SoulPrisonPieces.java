@@ -1,7 +1,5 @@
 package com.legacy.dungeons_plus.structures.soul_prison;
 
-import java.util.Random;
-
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
@@ -17,6 +15,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -28,8 +27,8 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilde
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 public class SoulPrisonPieces
 {
@@ -39,7 +38,7 @@ public class SoulPrisonPieces
 	private static final ResourceLocation UNDER_MAIN = locate("main/under");
 	private static final ResourceLocation[] TURRETS = new ResourceLocation[] { locate("turrets/turret_0"), locate("turrets/turret_1") };
 
-	public static void assemble(StructureManager structureManager, BlockPos pos, Rotation rotation, StructurePiecesBuilder pieces, Random rand)
+	public static void assemble(StructureTemplateManager structureManager, BlockPos pos, Rotation rotation, StructurePiecesBuilder pieces, RandomSource rand)
 	{
 		pos = pos.offset(-12, 0, -12);
 		pieces.addPiece(new Piece(structureManager, Util.getRandom(BOTTOM, rand), pos, rotation));
@@ -63,26 +62,26 @@ public class SoulPrisonPieces
 
 	public static class Piece extends GelTemplateStructurePiece
 	{
-		public Piece(StructureManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, int componentType)
+		public Piece(StructureTemplateManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, int componentType)
 		{
-			super(DPStructures.SOUL_PRISON.getPieceType(), componentType, structureManager, location, pos);
+			super(DPStructures.SOUL_PRISON.getPieceType().get(), componentType, structureManager, location, pos);
 			this.rotation = rotation;
 			this.setupPlaceSettings(structureManager);
 		}
 
-		public Piece(StructureManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation)
+		public Piece(StructureTemplateManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation)
 		{
 			this(structureManager, location, pos, rotation, 0);
 		}
 
 		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
-			super(DPStructures.SOUL_PRISON.getPieceType(), tag, context.structureManager());
-			this.setupPlaceSettings(context.structureManager());
+			super(DPStructures.SOUL_PRISON.getPieceType().get(), tag, context.structureTemplateManager());
+			this.setupPlaceSettings(context.structureTemplateManager());
 		}
 
 		@Override
-		protected StructurePlaceSettings getPlaceSettings(StructureManager structureManager)
+		protected StructurePlaceSettings getPlaceSettings(StructureTemplateManager structureManager)
 		{
 			StructurePlaceSettings settings = new StructurePlaceSettings();
 			Vec3i size = structureManager.get(this.makeTemplateLocation()).get().getSize();
@@ -99,7 +98,7 @@ public class SoulPrisonPieces
 
 		@Override
 		@Nullable
-		public BlockState modifyState(ServerLevelAccessor world, Random rand, BlockPos pos, BlockState originalState)
+		public BlockState modifyState(ServerLevelAccessor world, RandomSource rand, BlockPos pos, BlockState originalState)
 		{
 			BlockState worldState = world.getBlockState(pos);
 			if (this.genDepth == 1 && !(worldState.getBlock() == Blocks.LAVA || worldState.isAir()))
@@ -108,7 +107,7 @@ public class SoulPrisonPieces
 		}
 
 		@Override
-		protected void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
+		protected void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, RandomSource rand, BoundingBox bounds)
 		{
 		}
 	}

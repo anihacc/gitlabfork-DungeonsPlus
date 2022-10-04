@@ -44,7 +44,7 @@ public interface CustomHandRenderer
 			float y = 0.2F * Mth.sin(Mth.sqrt(swingProgress) * (Mth.PI * 2F));
 			float z = -0.2F * Mth.sin(swingProgress * Mth.PI);
 
-			float useTime = (float) stack.getUseDuration() - ((float) player.getUseItemRemainingTicks() - event.getPartialTicks() + 1.0F);
+			float useTime = (float) stack.getUseDuration() - ((float) player.getUseItemRemainingTicks() - event.getPartialTick() + 1.0F);
 			float maxTime = SoulCannonItem.MAX_USE_TIME;
 			float useProgress = Math.min(useTime, maxTime) / maxTime;
 			float bob = Mth.sin(useTime * (useProgress + 1)) * 0.015F * useProgress;
@@ -59,7 +59,7 @@ public interface CustomHandRenderer
 			poseStack.mulPose(Vector3f.XP.rotationDegrees(-handOffset * windUpRot * useProgress));
 			applyItemArmTransform(poseStack, arm, equipProgress);
 			applyItemArmAttackTransform(poseStack, arm, swingProgress);
-			mc.getItemInHandRenderer().renderItem(player, stack, isMainHand ? ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND, !isMainHand, poseStack, event.getMultiBufferSource(), event.getPackedLight());
+			mc.getEntityRenderDispatcher().getItemInHandRenderer().renderItem(player, stack, isMainHand ? ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND, !isMainHand, poseStack, event.getMultiBufferSource(), event.getPackedLight());
 			poseStack.popPose();
 			return true;
 		}

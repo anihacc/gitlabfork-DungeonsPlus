@@ -28,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
@@ -209,7 +210,7 @@ public class WarpedAxeEntity extends AbstractArrow
 					level.broadcastEntityEvent(this, (byte) 46);
 					if (livingOwner instanceof Player player)
 						player.getCooldowns().addCooldown(this.getAxe().getItem(), 60);
-					// TODO 1.19 UNCOMMENT livingOwner.gameEvent(GameEvent.TELEPORT, livingOwner.position());
+					livingOwner.gameEvent(GameEvent.TELEPORT);
 					this.playSound(DPSoundEvents.WARPED_AXE_TELEPORT.get(), 1.0F, 1.0F);
 					EnchantmentHelper.doPostHurtEffects(livingHit, owner);
 					EnchantmentHelper.doPostDamageEffects(livingOwner, livingHit);

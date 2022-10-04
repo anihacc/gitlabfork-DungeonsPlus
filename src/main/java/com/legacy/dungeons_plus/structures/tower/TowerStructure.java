@@ -1,67 +1,69 @@
 package com.legacy.dungeons_plus.structures.tower;
 
-import java.util.Random;
+import java.util.Optional;
 
-import com.legacy.structure_gel.api.config.StructureConfig;
-import com.legacy.structure_gel.api.structure.GelConfigStructure;
-import com.legacy.structure_gel.api.structure.GelStructure;
+import com.legacy.dungeons_plus.DPUtil;
+import com.legacy.dungeons_plus.registry.DPStructures;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-public class TowerStructure extends GelConfigStructure<NoneFeatureConfiguration>
+public class TowerStructure extends Structure
 {
-	public TowerStructure(Codec<NoneFeatureConfiguration> codec, StructureConfig config)
+	public static final Codec<TowerStructure> CODEC = simpleCodec(TowerStructure::new);
+
+	public TowerStructure(StructureSettings settings)
 	{
-		super(codec, config, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG), TowerStructure::generatePieces), TowerStructure::afterPlace);
+		super(settings);
 	}
 
 	@Override
-	public int getSpacing()
+	public Optional<GenerationStub> findGenerationPoint(GenerationContext context)
 	{
-		return 31;
+		return onTopOfChunkCenter(context, Heightmap.Types.WORLD_SURFACE_WG, pieceBuilder -> this.generatePieces(pieceBuilder, context));
 	}
-	
-	@Override
-	public int getOffset()
-	{
-		return this.getSpacing();
-	}
-	
-	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
+
+	private void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
 	{
 		ChunkPos chunkPos = context.chunkPos();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		int samples = 1;
-		int y = context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(8), chunkPos.getBlockZ(8), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor());
+		int y = context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(8), chunkPos.getBlockZ(8), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
 		int width = 13;
 		for (int x = 0; x < 1; x++)
 		{
 			for (int z = 0; z < 1; z++)
 			{
-				y += context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(x * width), chunkPos.getBlockZ(z * width), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor());
+				y += context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(x * width), chunkPos.getBlockZ(z * width), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
 				samples++;
 			}
 		}
 		BlockPos pos = new BlockPos(chunkPos.x << 4, y / samples, chunkPos.z << 4);
-		TowerPieces.assemble(context.structureManager(), pos, Rotation.getRandom(rand), builder, rand);
+		TowerPieces.assemble(context.structureTemplateManager(), pos, Rotation.getRandom(rand), builder, rand);
 	}
 
-	private static void afterPlace(WorldGenLevel level, StructureFeatureManager structureManager, ChunkGenerator chunkGen, Random rand, BoundingBox bounds, ChunkPos chunkPos, PiecesContainer pieces)
+	@Override
+	public void afterPlace(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGen, RandomSource rand, BoundingBox bounds, ChunkPos chunkPos, PiecesContainer pieces)
 	{
-		GelStructure.fillBelow(level, rand, bounds, pieces, r -> (r.nextFloat() < 0.2 ? Blocks.MOSSY_COBBLESTONE : Blocks.COBBLESTONE).defaultBlockState());
+		DPUtil.fillBelow(level, rand, bounds, pieces, r -> (r.nextFloat() < 0.2 ? Blocks.MOSSY_COBBLESTONE : Blocks.COBBLESTONE).defaultBlockState());
+	}
+
+	@Override
+	public StructureType<?> type()
+	{
+		return DPStructures.TOWER.getType();
 	}
 }

@@ -4,9 +4,13 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.legacy.dungeons_plus.data.DPTags;
 import com.legacy.dungeons_plus.structures.reanimated_ruins.ReanimatedRuinsType;
+import com.legacy.structure_gel.api.config.ConfigBuilder;
+import com.legacy.structure_gel.api.config.ConfigValueWrapper;
 import com.legacy.structure_gel.api.config.StructureConfig;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class DPConfig
 {
@@ -29,15 +33,15 @@ public class DPConfig
 		public final StructureConfig soulPrison;
 		public final StructureConfig endRuins;
 
-		public final ForgeConfigSpec.IntValue huskLeviathanBladeChance;
+		public final ConfigValueWrapper<Integer, Double> huskLeviathanBladeChance;
 		public final ForgeConfigSpec.BooleanValue husksDropSand;
-		public final ForgeConfigSpec.IntValue strayFrostedCowlChance;
+		public final ConfigValueWrapper<Integer, Double> strayFrostedCowlChance;
 		public final ForgeConfigSpec.BooleanValue straysDropIce;
-		public final ForgeConfigSpec.IntValue drownedWarpedAxeChance;
-		public final ForgeConfigSpec.IntValue drownedCoralChance;
-		public final ForgeConfigSpec.IntValue skeletonSoulCannonChance;
+		public final ConfigValueWrapper<Integer, Double> drownedWarpedAxeChance;
+		public final ConfigValueWrapper<Integer, Double> drownedCoralChance;
+		public final ConfigValueWrapper<Integer, Double> skeletonSoulCannonChance;
 
-		public final ForgeConfigSpec.IntValue towerWaystoneChance;
+		public final ConfigValueWrapper<Integer, Double> towerWaystoneChance;
 
 		protected Common(ForgeConfigSpec.Builder builder)
 		{
@@ -47,93 +51,100 @@ public class DPConfig
 					.pushPlacement()
 						.probability(75)
 					.popPlacement()
-					.pushConfigured()
+					.pushStructure()
 						.biomes(DPTags.BiomeTags.HAS_TOWER)
-					.popConfigured()
+					.popStructure()
 					.build();
 			
 			this.leviathan = StructureConfig.builder(builder, "leviathan")
 					.pushPlacement()
 						.probability(75)
 					.popPlacement()
-					.pushConfigured()
+					.pushStructure()
 						.biomes(DPTags.BiomeTags.HAS_LEVIATHAN)
-					.popConfigured()
+					.popStructure()
 					.build();
 			
 			this.snowyTemple = StructureConfig.builder(builder, "snowy_temple")
 					.pushPlacement()
 						.probability(75)
 					.popPlacement()
-					.pushConfigured()
+					.pushStructure()
 						.biomes(DPTags.BiomeTags.HAS_SNOWY_TEMPLE)
-					.popConfigured()
+					.popStructure()
 					.build();
 			
 			this.reanimatedRuins = StructureConfig.builder(builder, "reanimated_ruins")
 					.pushPlacement()
 						.probability(75)
 					.popPlacement()
-					.pushConfigured(ReanimatedRuinsType.MOSSY.toString())
+					.pushStructure(ReanimatedRuinsType.MOSSY.toString())
 						.biomes(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MOSSY)
-					.popConfigured()
-					.pushConfigured(ReanimatedRuinsType.MESA.toString())
+					.popStructure()
+					.pushStructure(ReanimatedRuinsType.MESA.toString())
 						.biomes(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MESA)
-					.popConfigured()
-					.pushConfigured(ReanimatedRuinsType.FROZEN.toString())
+					.popStructure()
+					.pushStructure(ReanimatedRuinsType.FROZEN.toString())
 						.biomes(DPTags.BiomeTags.HAS_REANIMATED_RUINS_FROZEN)
-					.popConfigured()
+					.popStructure()
 					.build();
 			
 			this.warpedGarden = StructureConfig.builder(builder, "warped_garden")
 					.pushPlacement()
 						.probability(75)
 					.popPlacement()
-					.pushConfigured()
+					.pushStructure()
 						.biomes(DPTags.BiomeTags.HAS_WARPED_GARDEN)
-					.popConfigured()
+					.popStructure()
 					.build();
 			
 			this.soulPrison = StructureConfig.builder(builder, "soul_prison")
 					.pushPlacement()
 						.probability(75)
 					.popPlacement()
-					.pushConfigured()
+					.pushStructure()
 						.biomes(DPTags.BiomeTags.HAS_SOUL_PRISON)
-					.popConfigured()
+					.popStructure()
 					.build();
 			
 			this.endRuins = StructureConfig.builder(builder, "end_ruins")
 					.pushPlacement()
 						.probability(75)
 					.popPlacement()
-					.pushConfigured()
+					.pushStructure()
 						.biomes(DPTags.BiomeTags.HAS_END_RUINS)
-					.popConfigured()
+					.popStructure()
 					.build();
 			
 			builder.pop();
 			// @formatter:on
 
+			IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
 			builder.push("Mobs");
-			this.huskLeviathanBladeChance = builder.comment("Percent chance that a Husk will wield a Leviathan Blade in the Leviathan.").defineInRange("husk_leviathan_blade_chance", 5, 0, 100);
-			this.husksDropSand = builder.comment("Determines if Husks will drop sand when spawned in the Leviathan.").define("husks_drop_sand", true);
+			this.huskLeviathanBladeChance = ConfigValueWrapper.create(ConfigBuilder.makeInt(builder, "husk_leviathan_blade_chance", "Percent chance that a Husk will wield a Leviathan Blade in the Leviathan.", 5, 0, 100), DPConfig::toPercent, bus, DungeonsPlus.MODID);
+			this.husksDropSand = ConfigBuilder.makeBoolean(builder, "husks_drop_sand", "Determines if Husks will drop sand when spawned in the Leviathan.", true);
 
-			this.strayFrostedCowlChance = builder.comment("Percent chance that a Stray will wear a Frosted Cowl in the Snowy Temple.").defineInRange("stray_frosted_cowl_chance", 5, 0, 100);
-			this.straysDropIce = builder.comment("Determines if Strays will drop ice when spawned in the Snowy Temple.").define("strays_drop_ice", true);
+			this.strayFrostedCowlChance = ConfigValueWrapper.create(ConfigBuilder.makeInt(builder, "stray_frosted_cowl_chance", "Percent chance that a Stray will wear a Frosted Cowl in the Snowy Temple.", 5, 0, 100), DPConfig::toPercent, bus, DungeonsPlus.MODID);
+			this.straysDropIce = ConfigBuilder.makeBoolean(builder, "strays_drop_ice", "Determines if Strays will drop ice when spawned in the Snowy Temple.", true);
 
-			this.drownedWarpedAxeChance = builder.comment("Percent chance that a Drowned will wear a Warped Axe in the Warped Garden.").defineInRange("drowned_warped_axe_chance", 5, 0, 100);
-			this.drownedCoralChance = builder.comment("Percent chance that a Drowned will hold coral in the Warped Garden.").defineInRange("drowned_coral_chance", 30, 0, 100);
-			
-			this.skeletonSoulCannonChance = builder.comment("Percent chance that a Skeleton will wield a Soul Cannon in the Soul Prison.").defineInRange("skeleton_soul_cannon_chance", 5, 0, 100);
-			
+			this.drownedWarpedAxeChance = ConfigValueWrapper.create(ConfigBuilder.makeInt(builder, "drowned_warped_axe_chance", "Percent chance that a Drowned will wear a Warped Axe in the Warped Garden.", 5, 0, 100), DPConfig::toPercent, bus, DungeonsPlus.MODID);
+			this.drownedCoralChance = ConfigValueWrapper.create(ConfigBuilder.makeInt(builder, "drowned_coral_chance",  "Percent chance that a Drowned will hold coral in the Warped Garden.", 30, 0, 100), DPConfig::toPercent, bus, DungeonsPlus.MODID);
+
+			this.skeletonSoulCannonChance = ConfigValueWrapper.create(ConfigBuilder.makeInt(builder, "skeleton_soul_cannon_chance", "Percent chance that a Skeleton will wield a Soul Cannon in the Soul Prison.", 5, 0, 100), DPConfig::toPercent, bus, DungeonsPlus.MODID);
+
 			builder.pop();
-			
+
 			builder.push("Mod Compat");
 			builder.push("Waystones");
-			this.towerWaystoneChance = builder.comment("Percent chance for a waystone from Waystones to generate on top of the tower").defineInRange("tower_waystone_chance", 100, 0, 100);
+			this.towerWaystoneChance = ConfigValueWrapper.create(ConfigBuilder.makeInt(builder, "tower_waystone_chance", "Percent chance for a waystone from Waystones to generate on top of the tower", 100, 0, 100), DPConfig::toPercent, bus, DungeonsPlus.MODID);
 			builder.pop();
 			builder.pop();
 		}
+	}
+
+	private static double toPercent(int i)
+	{
+		return i / 100.0D;
 	}
 }

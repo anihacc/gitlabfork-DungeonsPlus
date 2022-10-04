@@ -2,42 +2,37 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": {
-        "type": "minecraft:uniform",
-        "min": 1.0,
-        "max": 2.0
-      },
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
-              "function": "minecraft:enchant_randomly",
               "enchantments": [
-                "minecraft:unbreaking",
+                "minecraft:fire_protection",
                 "minecraft:blast_protection",
-                "minecraft:fire_protection"
-              ]
+                "minecraft:unbreaking"
+              ],
+              "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:golden_helmet"
+          "name": "minecraft:golden_helmet",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
-              "function": "minecraft:enchant_randomly",
               "enchantments": [
-                "minecraft:unbreaking",
+                "minecraft:fire_protection",
                 "minecraft:blast_protection",
-                "minecraft:fire_protection"
-              ]
+                "minecraft:unbreaking"
+              ],
+              "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:golden_chestplate"
+          "name": "minecraft:golden_chestplate",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -57,7 +52,12 @@
           ],
           "name": "minecraft:golden_chestplate"
         }
-      ]
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2.0,
+        "min": 1.0
+      }
     }
   ]
 }

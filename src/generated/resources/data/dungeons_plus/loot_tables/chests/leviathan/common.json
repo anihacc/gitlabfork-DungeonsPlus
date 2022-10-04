@@ -2,177 +2,172 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": {
-        "type": "minecraft:uniform",
-        "min": 4.0,
-        "max": 7.0
-      },
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:bone"
+          "name": "minecraft:bone",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:rabbit_hide"
+          "name": "minecraft:rabbit_hide",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:rotten_flesh"
+          "name": "minecraft:rotten_flesh",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:gold_nugget"
+          "name": "minecraft:gold_nugget",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:sand"
+          "name": "minecraft:sand",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:dead_bush"
         }
-      ]
-    },
-    {
+      ],
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 3.0,
-        "max": 4.0
-      },
+        "max": 7.0,
+        "min": 4.0
+      }
+    },
+    {
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:quartz"
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:lapis_lazuli"
+          "name": "minecraft:lapis_lazuli",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 2.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:gold_ingot"
+          "name": "minecraft:gold_ingot",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:emerald"
+          "name": "minecraft:emerald",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:golden_shovel"
+          "name": "minecraft:golden_shovel",
+          "weight": 3
         }
-      ]
-    },
-    {
+      ],
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 2.0,
-        "max": 3.0
-      },
+        "max": 4.0,
+        "min": 3.0
+      }
+    },
+    {
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -181,19 +176,19 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:experience_bottle"
+          "name": "minecraft:experience_bottle",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -205,15 +200,20 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:book"
+          "name": "minecraft:book",
+          "weight": 3
         }
-      ]
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 3.0,
+        "min": 2.0
+      }
     }
   ]
 }

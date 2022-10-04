@@ -1,28 +1,36 @@
 {
   "parent": "dungeons_plus:adventure/find_reanimated_ruins",
+  "criteria": {
+    "in_structure": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structure": "dungeons_plus:warped_garden"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:warped_fungus"
-    },
-    "title": {
-      "translate": "dungeons_plus:advancements.adventure.find_warped_garden.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "dungeons_plus:advancements.adventure.find_warped_garden.description"
     },
     "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:warped_fungus"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "in_structure": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "location": {
-          "feature": "dungeons_plus:warped_garden"
-        }
-      }
+    "title": {
+      "translate": "dungeons_plus:advancements.adventure.find_warped_garden.title"
     }
   },
   "requirements": [

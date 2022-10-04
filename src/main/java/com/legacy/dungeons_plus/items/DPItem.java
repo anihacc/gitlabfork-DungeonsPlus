@@ -10,8 +10,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,11 +25,11 @@ public interface DPItem
 		{
 			var resourceKey = opKey.get();
 			ResourceLocation location = resourceKey.location();
-			return new TranslatableComponent(Util.makeDescriptionId(resourceKey.registry().getPath().replace('/', '.'), new ResourceLocation(location.getNamespace(), location.getPath() + "." + s))).withStyle(ChatFormatting.GRAY);
+			return Component.translatable(Util.makeDescriptionId(resourceKey.registry().getPath().replace('/', '.'), new ResourceLocation(location.getNamespace(), location.getPath() + "." + s))).withStyle(ChatFormatting.GRAY);
 		}
 		else
 		{
-			return new TextComponent("Unknown item registry name").withStyle(ChatFormatting.GRAY);
+			return Component.literal("Unknown item registry name").withStyle(ChatFormatting.GRAY);
 		}
 	});
 
@@ -45,12 +43,12 @@ public interface DPItem
 		List<Component> tooltip = new ArrayList<>(2);
 		if (!net.minecraft.client.gui.screens.Screen.hasShiftDown())
 		{
-			tooltip.add(new TranslatableComponent(HOLD_SHIFT_KEY).withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.translatable(HOLD_SHIFT_KEY).withStyle(ChatFormatting.GRAY));
 		}
 		else
 		{
 			for (var k : descriptionKeys)
-				tooltip.add(new TextComponent("• ").withStyle(ChatFormatting.GRAY).append(COMPONENTS.apply(this.getThis(), k)));
+				tooltip.add(Component.literal("• ").withStyle(ChatFormatting.GRAY).append(COMPONENTS.apply(this.getThis(), k)));
 		}
 		return tooltip;
 	}

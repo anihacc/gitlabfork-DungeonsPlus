@@ -39,8 +39,7 @@ public class DPLangProvider extends LanguageProvider
 	protected void addTranslations()
 	{
 		this.addAll(Registry.BLOCK, Map.of());
-		this.addAll(Registry.STRUCTURE_FEATURE, Map.of());
-		this.addAll(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, Map.of());
+		this.addAll(BuiltinRegistries.STRUCTURES, Map.of());
 		this.addAll(Registry.ITEM, Map.of());
 		this.addAll(Registry.ENTITY_TYPE, Map.of());
 
@@ -90,7 +89,7 @@ public class DPLangProvider extends LanguageProvider
 		this.addItemInfo(DPItems.SOUL_CANNON, SoulCannonItem.SHOOT_KEY, "Launches a fireball in the direction the user is facing.");
 	}
 
-	public static String mapName(StructureRegistrar<?, ?> structure)
+	public static String mapName(StructureRegistrar<?> structure)
 	{
 		return "filled_map." + structure.getRegistryName();
 	}

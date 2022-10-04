@@ -1,55 +1,56 @@
 package com.legacy.dungeons_plus.structures.snowy_temple;
 
-import java.util.Random;
+import java.util.Optional;
 
-import com.legacy.structure_gel.api.config.StructureConfig;
-import com.legacy.structure_gel.api.structure.GelConfigStructure;
+import com.legacy.dungeons_plus.registry.DPStructures;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-public class SnowyTempleStructure extends GelConfigStructure<NoneFeatureConfiguration>
+public class SnowyTempleStructure extends Structure
 {
-	public SnowyTempleStructure(Codec<NoneFeatureConfiguration> codec, StructureConfig config)
+	public static final Codec<SnowyTempleStructure> CODEC = simpleCodec(SnowyTempleStructure::new);
+	
+	public SnowyTempleStructure(StructureSettings settings)
 	{
-		super(codec, config, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG), SnowyTempleStructure::generatePieces));
+		super(settings);
 	}
-
+	
 	@Override
-	public int getSpacing()
+	public Optional<GenerationStub> findGenerationPoint(GenerationContext context)
 	{
-		return 36;
+		return onTopOfChunkCenter(context, Heightmap.Types.WORLD_SURFACE_WG, pieces -> generatePieces(pieces, context));
 	}
 
-	@Override
-	public int getOffset()
-	{
-		return this.getSpacing();
-	}
-
-	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
+	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
 	{
 		ChunkPos chunkPos = context.chunkPos();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		int samples = 1;
-		int y = context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(8), chunkPos.getBlockZ(8), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor());
+		int y = context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(8), chunkPos.getBlockZ(8), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
 		int width = 25;
 		for (int x = 0; x < 1; x++)
 		{
 			for (int z = 0; z < 1; z++)
 			{
-				y += context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(x * width), chunkPos.getBlockZ(z * width), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor());
+				y += context.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(x * width), chunkPos.getBlockZ(z * width), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
 				samples++;
 			}
 		}
 		BlockPos pos = new BlockPos(chunkPos.x << 4, y / samples, chunkPos.z << 4);
-		SnowyTemplePieces.assemble(context.structureManager(), pos, Rotation.getRandom(rand), builder, rand);
+		SnowyTemplePieces.assemble(context.structureTemplateManager(), pos, Rotation.getRandom(rand), builder, rand);
+	}
+	
+	@Override
+	public StructureType<?> type()
+	{
+		return DPStructures.SNOWY_TEMPLE.getType();
 	}
 }

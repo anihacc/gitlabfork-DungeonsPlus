@@ -2,24 +2,24 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "name": "dungeons_plus:frosted_cowl"
         }
-      ]
+      ],
+      "rolls": 1.0
     },
     {
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:loot_table",
           "name": "dungeons_plus:chests/snowy_temple/common"
         }
-      ]
+      ],
+      "rolls": 1.0
     }
   ]
 }

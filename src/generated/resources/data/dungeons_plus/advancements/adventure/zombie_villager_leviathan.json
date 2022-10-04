@@ -1,24 +1,7 @@
 {
   "parent": "dungeons_plus:adventure/find_leviathan",
-  "display": {
-    "icon": {
-      "item": "dungeons_plus:leviathan_blade",
-      "nbt": "{Damage:0}"
-    },
-    "title": {
-      "translate": "dungeons_plus:advancements.adventure.zombie_villager_leviathan.title"
-    },
-    "description": {
-      "translate": "dungeons_plus:advancements.adventure.zombie_villager_leviathan.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
     "hit_zombie_villager": {
-      "trigger": "minecraft:player_hurt_entity",
       "conditions": {
         "damage": {
           "source_entity": {
@@ -34,13 +17,30 @@
         "entity": [
           {
             "condition": "minecraft:entity_properties",
+            "entity": "this",
             "predicate": {
               "type": "minecraft:zombie_villager"
-            },
-            "entity": "this"
+            }
           }
         ]
-      }
+      },
+      "trigger": "minecraft:player_hurt_entity"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "dungeons_plus:advancements.adventure.zombie_villager_leviathan.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "dungeons_plus:leviathan_blade",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "dungeons_plus:advancements.adventure.zombie_villager_leviathan.title"
     }
   },
   "requirements": [

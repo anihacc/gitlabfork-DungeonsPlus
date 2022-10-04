@@ -1,7 +1,5 @@
 package com.legacy.dungeons_plus.registry;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
@@ -9,9 +7,10 @@ import com.legacy.dungeons_plus.items.FrostedCowlItem;
 import com.legacy.dungeons_plus.items.LeviathanBladeItem;
 import com.legacy.dungeons_plus.items.SoulCannonItem;
 import com.legacy.dungeons_plus.items.WarpedAxeItem;
-import com.legacy.structure_gel.api.util.LazyOptional;
-import com.mojang.datafixers.util.Pair;
+import com.legacy.structure_gel.api.registry.registrar.Registrar;
+import com.legacy.structure_gel.api.registry.registrar.RegistrarHandler;
 
+import net.minecraft.core.Registry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
@@ -25,40 +24,15 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.ForgeTier;
 import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.IForgeRegistry;
 
-@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DPItems
 {
-	private static List<Pair<String, LazyOptional<? extends Item>>> objs = new ArrayList<>();
+	public static final RegistrarHandler<Item> HANDLER = RegistrarHandler.getOrCreate(Registry.ITEM_REGISTRY, DungeonsPlus.MODID);
 
-	public static final LazyOptional<Item> FROSTED_COWL = register("frosted_cowl", () -> new FrostedCowlItem(DPArmors.STRAY, EquipmentSlot.HEAD, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
-	public static final LazyOptional<Item> LEVIATHAN_BLADE = register("leviathan_blade", () -> new LeviathanBladeItem(DPTiers.LEVIATHAN, 3, -2.6F, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
-	public static final LazyOptional<Item> WARPED_AXE = register("warped_axe", () -> new WarpedAxeItem(DPTiers.WARPED_GOLD, 7, -3.1F, new Item.Properties().durability(312).tab(CreativeModeTab.TAB_COMBAT)));
-	public static final LazyOptional<Item> SOUL_CANNON = register("soul_cannon", () -> new SoulCannonItem(new Item.Properties().durability(250).tab(CreativeModeTab.TAB_COMBAT)));
-
-	@SubscribeEvent
-	protected static void onRegistry(final RegistryEvent.Register<Item> event)
-	{
-		IForgeRegistry<Item> registry = event.getRegistry();
-		objs.forEach(p ->
-		{
-			Item item = p.getSecond().get();
-			item.setRegistryName(DungeonsPlus.locate(p.getFirst()));
-			registry.register(item);
-		});
-		objs = null;
-	}
-
-	private static <T extends Item> LazyOptional<T> register(String key, Supplier<T> obj)
-	{
-		LazyOptional<T> laz = LazyOptional.of(obj);
-		objs.add(Pair.of(key, laz));
-		return laz;
-	}
+	public static final Registrar.Static<Item> FROSTED_COWL = HANDLER.createStatic("frosted_cowl", () -> new FrostedCowlItem(DPArmors.STRAY, EquipmentSlot.HEAD, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
+	public static final Registrar.Static<Item> LEVIATHAN_BLADE = HANDLER.createStatic("leviathan_blade", () -> new LeviathanBladeItem(DPTiers.LEVIATHAN, 3, -2.6F, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
+	public static final Registrar.Static<Item> WARPED_AXE = HANDLER.createStatic("warped_axe", () -> new WarpedAxeItem(DPTiers.WARPED_GOLD, 7, -3.1F, new Item.Properties().durability(312).tab(CreativeModeTab.TAB_COMBAT)));
+	public static final Registrar.Static<Item> SOUL_CANNON = HANDLER.createStatic("soul_cannon", () -> new SoulCannonItem(new Item.Properties().durability(250).tab(CreativeModeTab.TAB_COMBAT)));
 
 	public static interface DPTiers
 	{

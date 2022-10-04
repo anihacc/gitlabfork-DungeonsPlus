@@ -19,12 +19,13 @@ import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.data.loot.EntityLoot;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -34,7 +35,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -61,7 +62,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class DPLootProv extends LootTableProvider
 {
@@ -524,10 +524,15 @@ public class DPLootProv extends LootTableProvider
 			return basicPool(item, min, max).apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(minLooting, maxLooting)));
 		}*/
 
+		@SuppressWarnings("deprecation")
 		@Override
 		protected Iterable<EntityType<?>> getKnownEntities()
 		{
-			return ForgeRegistries.ENTITIES.getValues().stream().filter(e -> e.getRegistryName().getNamespace().contains(DungeonsPlus.MODID))::iterator;
+			return Registry.ENTITY_TYPE.stream().filter(e ->
+			{
+				var name = Registry.ENTITY_TYPE.getKey(e);
+				return name != null && name.getNamespace().equals(DungeonsPlus.MODID);
+			})::iterator;
 		}
 	}
 
@@ -551,9 +556,14 @@ public class DPLootProv extends LootTableProvider
 			return blocks()::iterator;
 		}
 
+		@SuppressWarnings("deprecation")
 		private Stream<Block> blocks()
 		{
-			return ForgeRegistries.BLOCKS.getValues().stream().filter(b -> b.getRegistryName().getNamespace().equals(DungeonsPlus.MODID) && !b.getLootTable().equals(BuiltInLootTables.EMPTY));
+			return Registry.BLOCK.stream().filter(b ->
+			{
+				var name = Registry.BLOCK.getKey(b);
+				return name != null && name.getNamespace().equals(DungeonsPlus.MODID) && !b.getLootTable().equals(BuiltInLootTables.EMPTY);
+			});
 		}
 	}
 
@@ -715,14 +725,14 @@ public class DPLootProv extends LootTableProvider
 			return builder;
 		}
 
-		default LootItemConditionalFunction.Builder<?> map(TagKey<ConfiguredStructureFeature<?, ?>> structure)
+		default LootItemConditionalFunction.Builder<?> map(TagKey<Structure> structure)
 		{
 			return ExplorationMapFunction.makeExplorationMap().setDestination(structure).setMapDecoration(MapDecoration.Type.RED_X).setZoom((byte) 1).setSkipKnownStructures(false);
 		}
 
-		default LootItemConditionalFunction.Builder<?> mapName(StructureRegistrar<?, ?> structure)
+		default LootItemConditionalFunction.Builder<?> mapName(StructureRegistrar<?> structure)
 		{
-			return SetNameFunction.setName(new TranslatableComponent(DPLangProvider.mapName(structure)));
+			return SetNameFunction.setName(Component.translatable(DPLangProvider.mapName(structure)));
 		}
 
 		/**

@@ -3,7 +3,6 @@ package com.legacy.dungeons_plus.structures.tower;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
@@ -19,6 +18,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
@@ -34,8 +34,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class TowerPieces
@@ -45,7 +45,7 @@ public class TowerPieces
 	private static final ResourceLocation[] TOP_FLOORS = DungeonsPlus.locateAllPrefix("tower/top_floor/", "vex_0", "vex_1", "vex_2");
 	private static final ResourceLocation[] TOPS = DungeonsPlus.locateAllPrefix("tower/top/", "full", "decayed");
 
-	public static void assemble(StructureManager structureManager, BlockPos pos, Rotation rotation, StructurePiecesBuilder pieces, Random rand)
+	public static void assemble(StructureTemplateManager structureManager, BlockPos pos, Rotation rotation, StructurePiecesBuilder pieces, RandomSource rand)
 	{
 		boolean infested = rand.nextFloat() < 0.3;
 
@@ -76,9 +76,9 @@ public class TowerPieces
 
 		private final boolean infested;
 
-		public Piece(StructureManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, boolean infested)
+		public Piece(StructureTemplateManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, boolean infested)
 		{
-			super(DPStructures.TOWER.getPieceType(), 0, structureManager, location, pos);
+			super(DPStructures.TOWER.getPieceType().get(), 0, structureManager, location, pos);
 			this.rotation = rotation;
 			this.infested = infested;
 			this.setupPlaceSettings(structureManager);
@@ -86,9 +86,9 @@ public class TowerPieces
 
 		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
-			super(DPStructures.TOWER.getPieceType(), tag, context.structureManager());
+			super(DPStructures.TOWER.getPieceType().get(), tag, context.structureTemplateManager());
 			this.infested = tag.getBoolean(INFESTED_KEY);
-			this.setupPlaceSettings(context.structureManager());
+			this.setupPlaceSettings(context.structureTemplateManager());
 		}
 
 		@Override
@@ -99,7 +99,7 @@ public class TowerPieces
 		}
 
 		@Override
-		protected StructurePlaceSettings getPlaceSettings(StructureManager structureManager)
+		protected StructurePlaceSettings getPlaceSettings(StructureTemplateManager structureManager)
 		{
 			StructurePlaceSettings settings = new StructurePlaceSettings();
 			settings.setKeepLiquids(false);
@@ -116,7 +116,7 @@ public class TowerPieces
 		}
 
 		@Override
-		public BlockState modifyState(ServerLevelAccessor level, Random rand, BlockPos pos, BlockState originalState)
+		public BlockState modifyState(ServerLevelAccessor level, RandomSource rand, BlockPos pos, BlockState originalState)
 		{
 			BlockState newState = this.modifyStateFirstPass(rand, originalState);
 			if (this.infested)
@@ -124,7 +124,7 @@ public class TowerPieces
 			return newState;
 		}
 
-		private BlockState modifyStateFirstPass(Random rand, BlockState originalState)
+		private BlockState modifyStateFirstPass(RandomSource rand, BlockState originalState)
 		{
 			Block originalBlock = originalState.getBlock();
 
@@ -168,7 +168,7 @@ public class TowerPieces
 			return originalState;
 		}
 
-		private BlockState modifyStateInfest(Random rand, BlockState originalState)
+		private BlockState modifyStateInfest(RandomSource rand, BlockState originalState)
 		{
 			if (originalState.is(BlockTags.STONE_BRICKS) && rand.nextFloat() < 0.06)
 			{
@@ -183,7 +183,7 @@ public class TowerPieces
 		}
 
 		@Override
-		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, Random rand, BoundingBox bounds)
+		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, RandomSource rand, BoundingBox bounds)
 		{
 			if (key.equals("armor_stand"))
 			{

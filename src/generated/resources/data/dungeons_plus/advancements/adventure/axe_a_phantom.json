@@ -1,39 +1,20 @@
 {
   "parent": "dungeons_plus:adventure/find_warped_garden",
-  "display": {
-    "icon": {
-      "item": "dungeons_plus:warped_axe",
-      "nbt": "{Damage:0}"
-    },
-    "title": {
-      "translate": "dungeons_plus:advancements.adventure.axe_a_phantom.title"
-    },
-    "description": {
-      "translate": "dungeons_plus:advancements.adventure.axe_a_phantom.description"
-    },
-    "frame": "challenge",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "rewards": {
-    "experience": 50
-  },
   "criteria": {
     "hit_phantom": {
-      "trigger": "minecraft:player_hurt_entity",
       "conditions": {
         "damage": {
           "type": {
-            "is_projectile": true,
             "direct_entity": {
               "type": "dungeons_plus:warped_axe"
-            }
+            },
+            "is_projectile": true
           }
         },
         "entity": [
           {
             "condition": "minecraft:entity_properties",
+            "entity": "this",
             "predicate": {
               "type": "minecraft:phantom",
               "distance": {
@@ -41,16 +22,35 @@
                   "min": 25.0
                 }
               }
-            },
-            "entity": "this"
+            }
           }
         ]
-      }
+      },
+      "trigger": "minecraft:player_hurt_entity"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "dungeons_plus:advancements.adventure.axe_a_phantom.description"
+    },
+    "frame": "challenge",
+    "hidden": false,
+    "icon": {
+      "item": "dungeons_plus:warped_axe",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "dungeons_plus:advancements.adventure.axe_a_phantom.title"
     }
   },
   "requirements": [
     [
       "hit_phantom"
     ]
-  ]
+  ],
+  "rewards": {
+    "experience": 50
+  }
 }

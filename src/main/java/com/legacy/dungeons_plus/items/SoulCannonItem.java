@@ -5,6 +5,8 @@ import java.util.List;
 import com.legacy.dungeons_plus.entities.SoulFireballEntity;
 import com.legacy.dungeons_plus.registry.DPDamageSource;
 import com.legacy.dungeons_plus.registry.DPSoundEvents;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -24,6 +26,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -94,11 +97,18 @@ public class SoulCannonItem extends Item implements DPItem, Vanishable, CustomHa
 
 				for (float r : angles)
 				{
+					// Logic from crossbow
+					Vec3 upVec = entity.getUpVector(1.0F);
+		            Quaternion quat = new Quaternion(new Vector3f(upVec), r, true);
+		            Vec3 viewVec = entity.getViewVector(1.0F);
+		            Vector3f shootAngle = new Vector3f(viewVec);
+		            shootAngle.transform(quat);
+		            
 					SoulFireballEntity fireball = new SoulFireballEntity(level, player, 0, 0, 0, 2);
 					fireball.setKnockback(knockback);
 					fireball.setHasFlame(hasFlame);
 					fireball.setIsMultishot(isMultishot);
-					fireball.shootFromRotation(player, player.getXRot(), player.getYHeadRot() + r, 0.0F, 2.5F, 1.0F);
+		            fireball.shoot(shootAngle.x(), shootAngle.y(), shootAngle.z(), 2.5F, 1.0F);
 					fireball.setPos(player.getEyePosition());
 					level.addFreshEntity(fireball);
 				}

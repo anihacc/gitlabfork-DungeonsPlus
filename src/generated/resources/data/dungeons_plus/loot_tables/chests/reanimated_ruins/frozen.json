@@ -2,72 +2,67 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": {
-        "type": "minecraft:uniform",
-        "min": 3.0,
-        "max": 5.0
-      },
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 3,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:arrow"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 5.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:bone"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:snowball"
+          "name": "minecraft:arrow",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 5.0,
+                "min": 2.0
               },
-              "add": false
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:bone",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:snowball",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:flint"
@@ -76,13 +71,13 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:feather"
@@ -91,155 +86,160 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minecraft:string"
         }
-      ]
-    },
-    {
+      ],
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 2.0,
-        "max": 4.0
-      },
+        "max": 5.0,
+        "min": 3.0
+      }
+    },
+    {
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 2.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:ice"
+          "name": "minecraft:ice",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 2.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             },
             {
               "function": "minecraft:set_potion",
               "id": "minecraft:slowness"
             }
           ],
-          "name": "minecraft:tipped_arrow"
+          "name": "minecraft:tipped_arrow",
+          "weight": 4
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 2.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:iron_ingot"
+          "name": "minecraft:iron_ingot",
+          "weight": 4
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:redstone"
+          "name": "minecraft:redstone",
+          "weight": 4
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:coal"
+          "name": "minecraft:coal",
+          "weight": 4
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:bow"
         }
-      ]
-    },
-    {
+      ],
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 1.0,
-        "max": 3.0
-      },
+        "max": 4.0,
+        "min": 2.0
+      }
+    },
+    {
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:bow"
+          "name": "minecraft:bow",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minecraft:chainmail_chestplate"
+          "name": "minecraft:chainmail_chestplate",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:book"
+          "name": "minecraft:book",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:music_disc_wait"
         }
-      ]
+      ],
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 3.0,
+        "min": 1.0
+      }
     }
   ]
 }

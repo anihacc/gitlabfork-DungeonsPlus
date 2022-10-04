@@ -1,8 +1,8 @@
 {
-  "replace": false,
   "values": [
     "minecraft:snowy_taiga",
     "minecraft:frozen_peaks",
-    "minecraft:snowy_slopes"
+    "minecraft:snowy_slopes",
+    "minecraft:grove"
   ]
 }

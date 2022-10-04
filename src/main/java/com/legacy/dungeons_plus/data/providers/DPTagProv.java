@@ -2,18 +2,21 @@ package com.legacy.dungeons_plus.data.providers;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.data.DPTags;
+import com.legacy.dungeons_plus.registry.DPItems;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.data.tags.BlockTagsProvider;
-import net.minecraft.data.tags.ConfiguredStructureTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.StructureTagsProvider;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class DPTagProv
@@ -66,9 +69,11 @@ public class DPTagProv
 
 		public void forge()
 		{
-			// TODO 1.19 Add forge tags for armor/tools/weapons
+			this.tag(Tags.Items.ARMORS_HELMETS).add(DPItems.FROSTED_COWL.get());
+			this.tag(Tags.Items.TOOLS_SWORDS).add(DPItems.LEVIATHAN_BLADE.get());
+			this.tag(Tags.Items.TOOLS_AXES).add(DPItems.WARPED_AXE.get());
 		}
-		
+
 		public void dungeonsPlus()
 		{
 
@@ -85,10 +90,10 @@ public class DPTagProv
 			return "Dungeons Plus item tag provider";
 		}
 	}
-	
-	public static class ConfiguredStructureFeatureProv extends ConfiguredStructureTagsProvider
+
+	public static class StructureProv extends StructureTagsProvider
 	{
-		public ConfiguredStructureFeatureProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
+		public StructureProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
 		{
 			super(dataGen, DungeonsPlus.MODID, existingFileHelper);
 		}
@@ -102,10 +107,10 @@ public class DPTagProv
 
 		public void dungeonsPlus()
 		{
-			this.allConfigured(DPTags.StructureTags.ON_REANIMATED_RUINS_MAPS, DPStructures.REANIMATED_RUINS);
-			this.allConfigured(DPTags.StructureTags.ON_LEVIATHAN_MAPS, DPStructures.LEVIATHAN);
-			this.allConfigured(DPTags.StructureTags.ON_SNOWY_TEMPLE_MAPS, DPStructures.SNOWY_TEMPLE);
-			this.allConfigured(DPTags.StructureTags.ON_WARPED_GARDEN_MAPS, DPStructures.WARPED_GARDEN);
+			this.allStructures(DPTags.StructureTags.ON_REANIMATED_RUINS_MAPS, DPStructures.REANIMATED_RUINS);
+			this.allStructures(DPTags.StructureTags.ON_LEVIATHAN_MAPS, DPStructures.LEVIATHAN);
+			this.allStructures(DPTags.StructureTags.ON_SNOWY_TEMPLE_MAPS, DPStructures.SNOWY_TEMPLE);
+			this.allStructures(DPTags.StructureTags.ON_WARPED_GARDEN_MAPS, DPStructures.WARPED_GARDEN);
 		}
 
 		public void vanilla()
@@ -113,19 +118,19 @@ public class DPTagProv
 
 		}
 
-		private void allConfigured(TagKey<ConfiguredStructureFeature<?, ?>> tagKey, StructureRegistrar<?, ?> registrar)
+		private void allStructures(TagKey<Structure> tagKey, StructureRegistrar<?> registrar)
 		{
 			var appender = this.tag(tagKey);
-			registrar.getConfiguredStructures().values().forEach(holder -> appender.add(holder.value()));
+			registrar.getStructures().values().forEach(holder -> appender.add(holder.get(BuiltinRegistries.STRUCTURES)));
 		}
-		
+
 		@Override
 		public String getName()
 		{
 			return "Dungeons Plus structure tag provider";
 		}
 	}
-	
+
 	public static class BiomeProv extends BiomeTagsProvider
 	{
 		public BiomeProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
@@ -142,13 +147,12 @@ public class DPTagProv
 		@SuppressWarnings("unchecked")
 		public void dungeonsPlus()
 		{
-			// TODO Revise with forge tags. Also mangrove
-			this.tag(DPTags.BiomeTags.HAS_TOWER).addTags(BiomeTags.IS_MOUNTAIN, BiomeTags.IS_FOREST);
-			this.tag(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MOSSY).addTags(BiomeTags.HAS_SWAMP_HUT);
+			this.tag(DPTags.BiomeTags.HAS_TOWER).addTags(BiomeTags.IS_MOUNTAIN, BiomeTags.IS_FOREST, Tags.Biomes.IS_MOUNTAIN);
+			this.tag(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MOSSY).addTags(Tags.Biomes.IS_SWAMP);
 			this.tag(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MESA).addTags(BiomeTags.IS_BADLANDS);
 			this.tag(DPTags.BiomeTags.HAS_REANIMATED_RUINS_FROZEN).addTags(BiomeTags.HAS_VILLAGE_SNOWY);
-			this.tag(DPTags.BiomeTags.HAS_LEVIATHAN).addTags(BiomeTags.HAS_VILLAGE_DESERT);
-			this.tag(DPTags.BiomeTags.HAS_SNOWY_TEMPLE).add(Biomes.SNOWY_TAIGA, Biomes.FROZEN_PEAKS, Biomes.SNOWY_SLOPES);
+			this.tag(DPTags.BiomeTags.HAS_LEVIATHAN).addTags(Tags.Biomes.IS_DESERT);
+			this.tag(DPTags.BiomeTags.HAS_SNOWY_TEMPLE).add(Biomes.SNOWY_TAIGA, Biomes.FROZEN_PEAKS, Biomes.SNOWY_SLOPES, Biomes.GROVE);
 			this.tag(DPTags.BiomeTags.HAS_WARPED_GARDEN).addTags(BiomeTags.IS_DEEP_OCEAN);
 			this.tag(DPTags.BiomeTags.HAS_SOUL_PRISON).add(Biomes.SOUL_SAND_VALLEY);
 			this.tag(DPTags.BiomeTags.HAS_END_RUINS).addTag(BiomeTags.HAS_END_CITY);

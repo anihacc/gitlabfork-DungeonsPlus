@@ -1,44 +1,68 @@
 {
   "parent": "dungeons_plus:adventure/find_tower",
+  "criteria": {
+    "in_frozen": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structure": "dungeons_plus:reanimated_ruins_frozen"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "in_mesa": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structure": "dungeons_plus:reanimated_ruins_mesa"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    },
+    "in_mossy": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structure": "dungeons_plus:reanimated_ruins_mossy"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:mossy_cobblestone"
-    },
-    "title": {
-      "translate": "dungeons_plus:advancements.adventure.find_reanimated_ruins.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "dungeons_plus:advancements.adventure.find_reanimated_ruins.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:mossy_cobblestone"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "in_mossy": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "location": {
-          "feature": "dungeons_plus:reanimated_ruins_mossy"
-        }
-      }
-    },
-    "in_mesa": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "location": {
-          "feature": "dungeons_plus:reanimated_ruins_mesa"
-        }
-      }
-    },
-    "in_frozen": {
-      "trigger": "minecraft:location",
-      "conditions": {
-        "location": {
-          "feature": "dungeons_plus:reanimated_ruins_frozen"
-        }
-      }
+    "title": {
+      "translate": "dungeons_plus:advancements.adventure.find_reanimated_ruins.title"
     }
   },
   "requirements": [

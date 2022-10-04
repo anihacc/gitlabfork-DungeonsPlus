@@ -11,13 +11,12 @@ import com.legacy.dungeons_plus.registry.DPItems;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.ComputeFovModifierEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.FOVModifierEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -43,7 +42,7 @@ public class DPClientEvents
 		}
 
 		@SubscribeEvent
-		protected static void modifyFov(final FOVModifierEvent event)
+		protected static void modifyFov(final ComputeFovModifierEvent event)
 		{
 			Minecraft mc = Minecraft.getInstance();
 			var player = mc.player;
@@ -52,7 +51,7 @@ public class DPClientEvents
 			{
 				if (useStack.is(DPItems.SOUL_CANNON.get()))
 				{
-					float f = event.getNewfov();
+					float f = event.getNewFovModifier();
 					float progress = (float) player.getTicksUsingItem() / SoulCannonItem.MAX_USE_TIME;
 					if (progress > 1.0F)
 						progress = 1.0F;
@@ -60,7 +59,7 @@ public class DPClientEvents
 						progress *= progress;
 
 					f *= 1.0F - progress * 0.15F;
-					event.setNewfov(f);
+					event.setNewFovModifier(f);
 				}
 			}
 		}
@@ -83,10 +82,9 @@ public class DPClientEvents
 		}
 
 		@SubscribeEvent
-		protected static void initColors(final ColorHandlerEvent.Item event)
+		protected static void initColors(final RegisterColorHandlersEvent.Item event)
 		{
-			ItemColors itemcolors = event.getItemColors();
-			itemcolors.register((stack, layer) ->
+			event.register((stack, layer) ->
 			{
 				return layer > 0 ? -1 : ((DyeableLeatherItem) stack.getItem()).getColor(stack);
 			}, DPItems.FROSTED_COWL.get());

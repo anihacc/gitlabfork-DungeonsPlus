@@ -1,6 +1,6 @@
 {
 	"parent": "forge:item/default",
-	"loader": "forge:separate-perspective",
+	"loader": "forge:separate_transforms",
 	"textures": {
 		"particle": "dungeons_plus:item/soul_cannon_inventory"
 	},
@@ -8,16 +8,16 @@
 		"parent": "dungeons_plus:item/soul_cannon_inventory"
 	},
 	"perspectives": {
-		"third_person_left_hand": {
+		"thirdperson_lefthand": {
 			"parent": "dungeons_plus:item/soul_cannon_held"
 		},
-		"third_person_right_hand": {
+		"thirdperson_righthand": {
 			"parent": "dungeons_plus:item/soul_cannon_held"
 		},
-		"first_person_left_hand": {
+		"firstperson_lefthand": {
 			"parent": "dungeons_plus:item/soul_cannon_first_person"
 		},
-		"first_person_right_hand": {
+		"firstperson_righthand": {
 			"parent": "dungeons_plus:item/soul_cannon_first_person"
 		},
 		"head": {
