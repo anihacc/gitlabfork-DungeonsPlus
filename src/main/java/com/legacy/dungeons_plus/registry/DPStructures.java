@@ -54,7 +54,7 @@ public class DPStructures
 					.biomes(DPConfig.COMMON.reanimatedRuins.getConfigured(ReanimatedRuinsType.MOSSY.toString()))
 					.dimensions(Level.OVERWORLD)
 				.popConfigured()
-				.pushConfigured(ReanimatedRuinsType.MESA.toString(), new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.DESERT_ROOT, 10, ReanimatedRuinsType.MESA))
+				.pushConfigured(ReanimatedRuinsType.MESA.toString(), new ReanimatedRuinsStructure.Configuration(ReanimatedRuinsPools.MESA_ROOT, 10, ReanimatedRuinsType.MESA))
 					.biomes(DPConfig.COMMON.reanimatedRuins.getConfigured(ReanimatedRuinsType.MESA.toString()))
 					.dimensions(Level.OVERWORLD)
 				.popConfigured()
