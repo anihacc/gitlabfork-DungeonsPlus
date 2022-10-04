@@ -10,6 +10,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.IndirectEntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.item.ItemStack;
 
 public interface DPDamageSource
@@ -19,6 +20,11 @@ public interface DPDamageSource
 	public static DamageSource warpedAxe(Entity damageCauser, @Nullable Entity thrower, @Nullable ItemStack axe)
 	{
 		return new ThrownItemDamageSource(name("warped_axe"), damageCauser, thrower, axe).setProjectile();
+	}
+
+	public static DamageSource fireballExplosion(Fireball fireball, @Nullable Entity shooter)
+	{
+		return shooter == null ? (new IndirectEntityDamageSource("explosion.player", fireball, fireball)).setExplosion().setProjectile() : (new IndirectEntityDamageSource("explosion", fireball, shooter)).setExplosion().setProjectile();
 	}
 
 	private static String name(String key)

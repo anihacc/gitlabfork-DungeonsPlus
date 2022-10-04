@@ -1,5 +1,6 @@
 package com.legacy.dungeons_plus.entities;
 
+import com.legacy.dungeons_plus.registry.DPDamageSource;
 import com.legacy.dungeons_plus.registry.DPEntityTypes;
 
 import net.minecraft.core.BlockPos;
@@ -88,7 +89,8 @@ public class SoulFireballEntity extends Fireball
 		{
 			Entity target = hitResult.getEntity();
 			Entity owner = this.getOwner();
-			target.hurt(DamageSource.indirectMobAttack(this, owner instanceof LivingEntity living ? living : null).setExplosion(), this.isMulti ? 7.0F : 4.5F);
+			float damage = this.isMulti ? 6.0F + (this.random.nextFloat() * 2.0F) : 2.0F;
+			target.hurt(DPDamageSource.fireballExplosion(this, owner), damage);
 			if (this.hasFlame)
 				target.setSecondsOnFire(3);
 			if (owner instanceof LivingEntity livingOwner)
@@ -99,9 +101,16 @@ public class SoulFireballEntity extends Fireball
 	@Override
 	public boolean hurt(DamageSource damageSource, float damage)
 	{
-		this.fuse = DEFAULT_FUSE;
-		this.explosionPower = Math.min(this.explosionPower + 1, 8);
-		return super.hurt(damageSource, damage);
+		Entity owner = this.getOwner();
+		Entity damager = damageSource.getEntity();
+		if (damager != owner || (owner == null && damager == null))
+		{
+			this.fuse = DEFAULT_FUSE;
+			this.explosionPower = Math.min(this.explosionPower + 1, 8);
+			// Setting owner is done in super
+			return super.hurt(damageSource, damage);
+		}
+		return false;
 	}
 
 	@Override
@@ -123,7 +132,7 @@ public class SoulFireballEntity extends Fireball
 	{
 		if (this.level instanceof ServerLevel serverLevel)
 		{
-			serverLevel.explode(this, this.getX(), this.getY() + 0.2, this.getZ(), this.explosionPower, false, Explosion.BlockInteraction.NONE);
+			serverLevel.explode(this, this.getX(), this.getY(), this.getZ(), this.explosionPower, false, Explosion.BlockInteraction.NONE);
 
 			if (this.knockbackPower > 0)
 			{
