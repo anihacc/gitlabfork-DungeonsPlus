@@ -120,7 +120,7 @@ public class DPLangProvider extends LanguageProvider
 
 	private void add(Supplier<SoundEvent> sound, String translation)
 	{
-		this.add("subtitle." + DungeonsPlus.MODID + "." + sound.get().getLocation().getPath(), translation);
+		this.add("subtitles." + DungeonsPlus.MODID + "." + sound.get().getLocation().getPath(), translation);
 	}
 
 	@SuppressWarnings("deprecation")
