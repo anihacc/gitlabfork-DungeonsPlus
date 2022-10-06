@@ -78,6 +78,22 @@
             }
           ],
           "name": "minecraft:quartz"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/warped_garden/common"
         }
       ],
       "rolls": {
@@ -157,6 +173,22 @@
           ],
           "name": "minecraft:gold_ingot",
           "weight": 3
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/warped_garden/uncommon"
         }
       ],
       "rolls": {
@@ -207,6 +239,18 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:enchanted_golden_apple"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/warped_garden/rare"
         }
       ],
       "rolls": {

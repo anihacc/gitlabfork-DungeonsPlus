@@ -10,8 +10,8 @@
             {
               "enchantments": [
                 "minecraft:blast_protection",
-                "minecraft:unbreaking",
-                "minecraft:fire_protection"
+                "minecraft:fire_protection",
+                "minecraft:unbreaking"
               ],
               "function": "minecraft:enchant_randomly"
             }
@@ -25,8 +25,8 @@
             {
               "enchantments": [
                 "minecraft:blast_protection",
-                "minecraft:unbreaking",
-                "minecraft:fire_protection"
+                "minecraft:fire_protection",
+                "minecraft:unbreaking"
               ],
               "function": "minecraft:enchant_randomly"
             }
@@ -51,6 +51,18 @@
             }
           ],
           "name": "minecraft:golden_chestplate"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/soul_prison/rare"
         }
       ],
       "rolls": {

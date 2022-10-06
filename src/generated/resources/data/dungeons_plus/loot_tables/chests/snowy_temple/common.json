@@ -93,6 +93,22 @@
             }
           ],
           "name": "minecraft:feather"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/snowy_temple/common"
         }
       ],
       "rolls": {
@@ -194,6 +210,22 @@
             }
           ],
           "name": "minecraft:powder_snow_bucket"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/snowy_temple/uncommon"
         }
       ],
       "rolls": {
@@ -252,6 +284,18 @@
             }
           ],
           "name": "minecraft:leather_boots"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/snowy_temple/rare"
         }
       ],
       "rolls": {

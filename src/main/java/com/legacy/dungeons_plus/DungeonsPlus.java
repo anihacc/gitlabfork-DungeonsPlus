@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.reflect.Reflection;
 import com.legacy.dungeons_plus.registry.DPEntityTypes;
 import com.legacy.dungeons_plus.registry.DPItems;
-import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPSoundEvents;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.registry.registrar.RegistrarHandler;
@@ -33,7 +32,6 @@ public class DungeonsPlus
 	{
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DPConfig.COMMON_SPEC);
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-		DPLoot.LOOT_POOLS_TYPES.register(modBus);
 		
 		Reflection.initialize(DPStructures.class);
 		RegistrarHandler.registerHandlers(MODID, modBus, DPEntityTypes.HANDLER, DPItems.HANDLER, DPSoundEvents.HANDLER);

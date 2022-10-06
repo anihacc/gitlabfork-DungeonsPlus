@@ -1,22 +1,11 @@
 package com.legacy.dungeons_plus.registry;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
-import com.legacy.dungeons_plus.loot.NamedLootItem;
-import com.legacy.dungeons_plus.loot.OptionalLootEntry;
 
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 
 public class DPLoot
 {
-	public static final DeferredRegister<LootPoolEntryType> LOOT_POOLS_TYPES = DeferredRegister.create(Registry.LOOT_POOL_ENTRY_TYPE.key(), DungeonsPlus.MODID);
-
-	public static final RegistryObject<LootPoolEntryType> NAMED_ITEM = LOOT_POOLS_TYPES.register("named_item", () -> new LootPoolEntryType(new NamedLootItem.Serializer()));
-	public static final RegistryObject<LootPoolEntryType> OPTIONAL_ENTRY = LOOT_POOLS_TYPES.register("optional_entry", () -> new LootPoolEntryType(new OptionalLootEntry.Serializer()));
-
 	public static final class Tower
 	{
 		public static final ResourceLocation CHEST_COMMON = chest("tower/common");

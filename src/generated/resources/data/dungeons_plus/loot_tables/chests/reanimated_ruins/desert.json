@@ -82,6 +82,22 @@
             }
           ],
           "name": "minecraft:iron_ingot"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/reanimated_ruins/common"
         }
       ],
       "rolls": {
@@ -164,6 +180,22 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:iron_shovel"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/reanimated_ruins/uncommon"
         }
       ],
       "rolls": {
@@ -198,6 +230,18 @@
           "type": "minecraft:item",
           "name": "minecraft:gold_nugget",
           "weight": 5
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/reanimated_ruins/rare"
         }
       ],
       "rolls": {

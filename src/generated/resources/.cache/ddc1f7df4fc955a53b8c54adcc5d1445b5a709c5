@@ -1,4 +1,25 @@
-// 1.19.2	2022-10-04T02:20:02.6931797	Dungeons Plus item tag provider
+// 1.19.2	2022-10-06T04:35:07.2671731	Dungeons Plus item tag provider
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/dungeons_plus/tags/items/loot/common.json
+dc66cd94a49a76249508ba9894440adcebd5d912 data/dungeons_plus/tags/items/loot/leviathan/common.json
+37f905466d7c368406fb1acebf2248b9325fdf78 data/dungeons_plus/tags/items/loot/leviathan/rare.json
+ff2f7a64c0f904d36b1c57b4986d6ec68f1d0a3a data/dungeons_plus/tags/items/loot/leviathan/uncommon.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/dungeons_plus/tags/items/loot/rare.json
+dc66cd94a49a76249508ba9894440adcebd5d912 data/dungeons_plus/tags/items/loot/reanimated_ruins/common.json
+37f905466d7c368406fb1acebf2248b9325fdf78 data/dungeons_plus/tags/items/loot/reanimated_ruins/rare.json
+ff2f7a64c0f904d36b1c57b4986d6ec68f1d0a3a data/dungeons_plus/tags/items/loot/reanimated_ruins/uncommon.json
+dc66cd94a49a76249508ba9894440adcebd5d912 data/dungeons_plus/tags/items/loot/snowy_temple/common.json
+37f905466d7c368406fb1acebf2248b9325fdf78 data/dungeons_plus/tags/items/loot/snowy_temple/rare.json
+ff2f7a64c0f904d36b1c57b4986d6ec68f1d0a3a data/dungeons_plus/tags/items/loot/snowy_temple/uncommon.json
+dc66cd94a49a76249508ba9894440adcebd5d912 data/dungeons_plus/tags/items/loot/soul_prison/common.json
+37f905466d7c368406fb1acebf2248b9325fdf78 data/dungeons_plus/tags/items/loot/soul_prison/rare.json
+ff2f7a64c0f904d36b1c57b4986d6ec68f1d0a3a data/dungeons_plus/tags/items/loot/soul_prison/uncommon.json
+dc66cd94a49a76249508ba9894440adcebd5d912 data/dungeons_plus/tags/items/loot/tower/common.json
+37f905466d7c368406fb1acebf2248b9325fdf78 data/dungeons_plus/tags/items/loot/tower/rare.json
+ff2f7a64c0f904d36b1c57b4986d6ec68f1d0a3a data/dungeons_plus/tags/items/loot/tower/uncommon.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/dungeons_plus/tags/items/loot/uncommon.json
+dc66cd94a49a76249508ba9894440adcebd5d912 data/dungeons_plus/tags/items/loot/warped_garden/common.json
+37f905466d7c368406fb1acebf2248b9325fdf78 data/dungeons_plus/tags/items/loot/warped_garden/rare.json
+ff2f7a64c0f904d36b1c57b4986d6ec68f1d0a3a data/dungeons_plus/tags/items/loot/warped_garden/uncommon.json
 6efbc57ecd782aa7b10eab30e78a5607b7027d0b data/forge/tags/items/armors/helmets.json
 da1d1572f8814045b992ece9a3aebabdb0076911 data/forge/tags/items/tools/axes.json
 3c53331e1f30b4dfe0b4dd9ce16ae8853429af3b data/forge/tags/items/tools/swords.json

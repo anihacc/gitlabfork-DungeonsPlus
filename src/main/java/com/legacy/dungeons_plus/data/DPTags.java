@@ -4,12 +4,56 @@ import com.legacy.dungeons_plus.DungeonsPlus;
 
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class DPTags
 {
-	public static interface StructureTags
+	public static interface Items
+	{
+		// Tags for mod easy loot table mod compat.
+		// The loot/common, loot/uncommon, and loot/rare tags are applied to every dungeon, while the more structure specific ones only apply to the structure in its name
+		// 
+		// Common loot can generate between 1-3 in a chest
+		// Uncommon loot can generate between 1-2 in a chest
+		// Rare loot will only generate 1
+		
+		TagKey<Item> LOOT_COMMON = create("loot/common");
+		TagKey<Item> LOOT_UNCOMMON = create("loot/uncommon");
+		TagKey<Item> LOOT_RARE = create("loot/rare");
+
+		TagKey<Item> LOOT_TOWER_COMMON = create("loot/tower/common");
+		TagKey<Item> LOOT_TOWER_UNCOMMON = create("loot/tower/uncommon");
+		TagKey<Item> LOOT_TOWER_RARE = create("loot/tower/rare");
+
+		TagKey<Item> LOOT_REANIMATED_RUINS_COMMON = create("loot/reanimated_ruins/common");
+		TagKey<Item> LOOT_REANIMATED_RUINS_UNCOMMON = create("loot/reanimated_ruins/uncommon");
+		TagKey<Item> LOOT_REANIMATED_RUINS_RARE = create("loot/reanimated_ruins/rare");
+
+		TagKey<Item> LOOT_SNOWY_TEMPLE_COMMON = create("loot/snowy_temple/common");
+		TagKey<Item> LOOT_SNOWY_TEMPLE_UNCOMMON = create("loot/snowy_temple/uncommon");
+		TagKey<Item> LOOT_SNOWY_TEMPLE_RARE = create("loot/snowy_temple/rare");
+
+		TagKey<Item> LOOT_LEVIATHAN_COMMON = create("loot/leviathan/common");
+		TagKey<Item> LOOT_LEVIATHAN_UNCOMMON = create("loot/leviathan/uncommon");
+		TagKey<Item> LOOT_LEVIATHAN_RARE = create("loot/leviathan/rare");
+
+		TagKey<Item> LOOT_WARPED_GARDEN_COMMON = create("loot/warped_garden/common");
+		TagKey<Item> LOOT_WARPED_GARDEN_UNCOMMON = create("loot/warped_garden/uncommon");
+		TagKey<Item> LOOT_WARPED_GARDEN_RARE = create("loot/warped_garden/rare");
+
+		TagKey<Item> LOOT_SOUL_PRISON_COMMON = create("loot/soul_prison/common");
+		TagKey<Item> LOOT_SOUL_PRISON_UNCOMMON = create("loot/soul_prison/uncommon");
+		TagKey<Item> LOOT_SOUL_PRISON_RARE = create("loot/soul_prison/rare");
+
+		private static TagKey<Item> create(String name)
+		{
+			return TagKey.create(Registry.ITEM_REGISTRY, DungeonsPlus.locate(name));
+		}
+	}
+
+	public static interface Structures
 	{
 		TagKey<Structure> ON_REANIMATED_RUINS_MAPS = map("reanimated_ruins");
 		TagKey<Structure> ON_LEVIATHAN_MAPS = map("leviathan");
@@ -27,7 +71,7 @@ public class DPTags
 		}
 	}
 
-	public static interface BiomeTags
+	public static interface Biomes
 	{
 		TagKey<Biome> HAS_TOWER = structure("tower");
 		TagKey<Biome> HAS_REANIMATED_RUINS_MOSSY = structure("reanimated_ruins_mossy");

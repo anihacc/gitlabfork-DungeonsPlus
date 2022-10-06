@@ -29,6 +29,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -46,6 +47,7 @@ import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction;
 import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction;
@@ -61,6 +63,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 public class DPLootProv extends LootTableProvider
@@ -114,14 +117,16 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.ROTTEN_FLESH, 2, 4).setWeight(1),
 							basicEntry(Items.STRING, 1, 3).setWeight(1),
 							basicEntry(Items.FEATHER, 1, 2).setWeight(1),
-							basicEntry(Items.FLINT, 1, 2).setWeight(1)
+							basicEntry(Items.FLINT, 1, 2).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_TOWER_COMMON, 1, 3)
 						)).setRolls(UniformGenerator.between(3, 6)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.IRON_NUGGET, 1, 3).setWeight(3),
 							basicEntry(Items.REDSTONE, 1, 3).setWeight(2),
 							basicEntry(Items.LAPIS_LAZULI, 2, 4).setWeight(1),
 							basicEntry(Items.BOOK, 1, 3).setWeight(2),
-							basicEntry(Items.GOLD_INGOT, 1, 2).setWeight(1)
+							basicEntry(Items.GOLD_INGOT, 1, 2).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_TOWER_UNCOMMON, 1, 2)
 						)).setRolls(UniformGenerator.between(2, 3)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.INFESTED_STONE_BRICKS, 1, 3).setWeight(3),
@@ -129,7 +134,8 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.ENDER_PEARL, 1, 2).setWeight(1),
 							basicEntry(Items.SADDLE).setWeight(2),
 							basicEntry(Items.NAME_TAG).setWeight(1),
-							basicEntry(Items.BOOK).setWeight(1).apply(enchant())
+							basicEntry(Items.BOOK).setWeight(1).apply(enchant()),
+							tagEntry(DPTags.Items.LOOT_TOWER_RARE)
 						)).setRolls(UniformGenerator.between(0, 2)))));
 			
 			consumer.accept(DPLoot.Tower.CHEST_BARREL, tableOf(ImmutableList.of(
@@ -154,7 +160,8 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.IRON_NUGGET, 4, 9).setWeight(1),
 							basicEntry(Items.IRON_INGOT, 1, 5).setWeight(1),
 							basicEntry(Items.DARK_OAK_SAPLING, 1, 3).setWeight(1),
-							basicEntry(Items.LEATHER, 1, 3).setWeight(1)
+							basicEntry(Items.LEATHER, 1, 3).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_TOWER_UNCOMMON, 1, 2)
 						)).setRolls(UniformGenerator.between(3, 5)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.LEATHER_HORSE_ARMOR).setWeight(2),
@@ -167,12 +174,13 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.IRON_PICKAXE).setWeight(1),
 							basicEntry(Items.IRON_SWORD).setWeight(1),
 							basicEntry(Items.SPYGLASS).setWeight(2),
-							basicEntry(Items.SOUL_SAND, 2, 3).setWeight(4)
+							basicEntry(Items.SOUL_SAND, 2, 3).setWeight(4),
+							tagEntry(DPTags.Items.LOOT_TOWER_RARE)
 						)).setRolls(UniformGenerator.between(2, 4)))));
 
 			consumer.accept(DPLoot.Tower.CHEST_VEX_MAP, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
-							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.StructureTags.ON_REANIMATED_RUINS_MAPS)).apply(mapName(DPStructures.REANIMATED_RUINS))
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.Structures.ON_REANIMATED_RUINS_MAPS)).apply(mapName(DPStructures.REANIMATED_RUINS))
 						)),
 					poolOf(ImmutableList.of(
 							LootTableReference.lootTableReference(DPLoot.Tower.CHEST_VEX)
@@ -190,21 +198,24 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.ROTTEN_FLESH, 2, 4).setWeight(1),
 							basicEntry(Items.STRING, 1, 3).setWeight(1),
 							basicEntry(Items.FEATHER, 1, 2).setWeight(1),
-							basicEntry(Items.STONE_BRICKS, 3, 5).setWeight(1)
+							basicEntry(Items.STONE_BRICKS, 3, 5).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_COMMON, 1, 3)
 						)).setRolls(UniformGenerator.between(3, 6)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.IRON_NUGGET, 1, 3).setWeight(3),
 							basicEntry(Items.REDSTONE, 1, 3).setWeight(2),
 							basicEntry(Items.HONEYCOMB, 1, 2).setWeight(1),
 							basicEntry(Items.BOOK, 1, 3).setWeight(2),
-							basicEntry(Items.GOLD_NUGGET, 2, 4).setWeight(1)
+							basicEntry(Items.GOLD_NUGGET, 2, 4).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_UNCOMMON, 1, 2)
 						)).setRolls(UniformGenerator.between(2, 3)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.BREAD, 1, 3).setWeight(4),
 							basicEntry(Items.ENDER_PEARL, 0, 1).setWeight(2),
 							basicEntry(Items.SADDLE).setWeight(2),
 							basicEntry(Items.NAME_TAG).setWeight(1),
-							basicEntry(Items.BOOK).setWeight(1).apply(enchant())
+							basicEntry(Items.BOOK).setWeight(1).apply(enchant()),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_RARE)
 						)).setRolls(UniformGenerator.between(0, 2)))));
 			
 			consumer.accept(DPLoot.ReanimatedRuins.CHEST_DESERT, tableOf(ImmutableList.of(
@@ -214,7 +225,8 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.ROTTEN_FLESH, 1, 5).setWeight(1),
 							basicEntry(Items.DEAD_BUSH).setWeight(1),
 							basicEntry(Items.GOLD_NUGGET, 2, 5).setWeight(1),
-							basicEntry(Items.IRON_INGOT, 1, 3).setWeight(1)
+							basicEntry(Items.IRON_INGOT, 1, 3).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_COMMON, 1, 3)
 						)).setRolls(UniformGenerator.between(3, 5)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.RED_SAND, 2, 3).setWeight(2),
@@ -222,18 +234,20 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.GOLD_INGOT, 2, 4).setWeight(4),
 							basicEntry(Items.REDSTONE, 1, 3).setWeight(4),
 							basicEntry(Items.COAL, 1, 3).setWeight(4),
-							basicEntry(Items.IRON_SHOVEL).setWeight(1)
+							basicEntry(Items.IRON_SHOVEL).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_UNCOMMON, 1, 2)
 						)).setRolls(UniformGenerator.between(2, 4)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.GOLDEN_APPLE).setWeight(1),
 							basicEntry(Items.BUCKET).setWeight(2),
 							basicEntry(Items.BOOK).setWeight(5).apply(enchant()),
-							basicEntry(Items.GOLD_NUGGET).setWeight(5)
+							basicEntry(Items.GOLD_NUGGET).setWeight(5),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_RARE)
 						)).setRolls(UniformGenerator.between(1, 3)))));
 			
 			consumer.accept(DPLoot.ReanimatedRuins.CHEST_DESERT_MAP, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
-							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.StructureTags.ON_LEVIATHAN_MAPS)).apply(mapName(DPStructures.LEVIATHAN))
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.Structures.ON_LEVIATHAN_MAPS)).apply(mapName(DPStructures.LEVIATHAN))
 						)),
 					poolOf(ImmutableList.of(
 							LootTableReference.lootTableReference(DPLoot.ReanimatedRuins.CHEST_DESERT)
@@ -246,7 +260,8 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.SNOWBALL, 1, 3).setWeight(2),
 							basicEntry(Items.FLINT, 1, 2).setWeight(1),
 							basicEntry(Items.FEATHER, 1, 2).setWeight(1),
-							basicEntry(Items.STRING, 1, 2).setWeight(1)
+							basicEntry(Items.STRING, 1, 2).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_COMMON, 1, 3)
 						)).setRolls(UniformGenerator.between(3, 5)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.ICE, 2, 3).setWeight(2),
@@ -254,18 +269,20 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.IRON_INGOT, 2, 4).setWeight(4),
 							basicEntry(Items.REDSTONE, 1, 3).setWeight(4),
 							basicEntry(Items.COAL, 1, 3).setWeight(4),
-							basicEntry(Items.BOW).setWeight(1)
+							basicEntry(Items.BOW).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_UNCOMMON, 1, 2)
 						)).setRolls(UniformGenerator.between(2, 4)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.BOW).setWeight(2).apply(enchant()),
 							basicEntry(Items.CHAINMAIL_CHESTPLATE).setWeight(2),
 							basicEntry(Items.BOOK).setWeight(5).apply(enchant()),
-							basicEntry(Items.MUSIC_DISC_WAIT).setWeight(1)
+							basicEntry(Items.MUSIC_DISC_WAIT).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_RARE)
 						)).setRolls(UniformGenerator.between(1, 3)))));
 			
 			consumer.accept(DPLoot.ReanimatedRuins.CHEST_FROZEN_MAP, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
-							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.StructureTags.ON_SNOWY_TEMPLE_MAPS)).apply(mapName(DPStructures.SNOWY_TEMPLE))
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.Structures.ON_SNOWY_TEMPLE_MAPS)).apply(mapName(DPStructures.SNOWY_TEMPLE))
 						)),
 					poolOf(ImmutableList.of(
 							LootTableReference.lootTableReference(DPLoot.ReanimatedRuins.CHEST_FROZEN)
@@ -278,7 +295,8 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.SMALL_DRIPLEAF, 1, 3).setWeight(2),
 							basicEntry(Items.RAW_COPPER, 1, 2).setWeight(1),
 							basicEntry(Items.CLAY_BALL, 1, 2).setWeight(1),
-							basicEntry(Items.STRING, 1, 2).setWeight(1)
+							basicEntry(Items.STRING, 1, 2).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_COMMON, 1, 3)
 						)).setRolls(UniformGenerator.between(3, 5)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.MOSS_BLOCK, 2, 3).setWeight(2),
@@ -286,18 +304,20 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.GOLD_NUGGET, 1, 4).setWeight(3),
 							basicEntry(Items.RAW_COPPER, 1, 2).setWeight(3),
 							basicEntry(Items.COAL, 1, 3).setWeight(4),
-							basicEntry(Items.MINECART).setWeight(1)
+							basicEntry(Items.MINECART).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_UNCOMMON, 1, 2)
 						)).setRolls(UniformGenerator.between(2, 4)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.RAW_COPPER_BLOCK, 0, 2).setWeight(5),
 							basicEntry(Items.WATER_BUCKET).setWeight(1),
 							basicEntry(Items.BOOK).setWeight(2).apply(enchant()),
-							basicEntry(Items.IRON_PICKAXE).setWeight(1).apply(enchant(Enchantments.BLOCK_EFFICIENCY, Enchantments.UNBREAKING, Enchantments.SILK_TOUCH, Enchantments.VANISHING_CURSE)).apply(setDamage(10, 60))
+							basicEntry(Items.IRON_PICKAXE).setWeight(1).apply(enchant(Enchantments.BLOCK_EFFICIENCY, Enchantments.UNBREAKING, Enchantments.SILK_TOUCH, Enchantments.VANISHING_CURSE)).apply(setDamage(10, 60)),
+							tagEntry(DPTags.Items.LOOT_REANIMATED_RUINS_RARE)
 						)).setRolls(UniformGenerator.between(1, 3)))));
 			
 			consumer.accept(DPLoot.ReanimatedRuins.CHEST_MOSSY_MAP, tableOf(ImmutableList.of(
 					poolOf(ImmutableList.of(
-							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.StructureTags.ON_WARPED_GARDEN_MAPS)).apply(mapName(DPStructures.WARPED_GARDEN))
+							basicEntry(Items.MAP).setWeight(1).apply(map(DPTags.Structures.ON_WARPED_GARDEN_MAPS)).apply(mapName(DPStructures.WARPED_GARDEN))
 						)),
 					poolOf(ImmutableList.of(
 							LootTableReference.lootTableReference(DPLoot.ReanimatedRuins.CHEST_MOSSY)
@@ -316,21 +336,24 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.ROTTEN_FLESH, 1, 5).setWeight(10),
 							basicEntry(Items.GOLD_NUGGET).setWeight(10),
 							basicEntry(Items.SAND, 1, 2).setWeight(10),
-							basicEntry(Items.DEAD_BUSH).setWeight(1)
+							basicEntry(Items.DEAD_BUSH).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_LEVIATHAN_COMMON, 1, 3)
 						)).setRolls(UniformGenerator.between(4, 7)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.QUARTZ, 1, 5).setWeight(1),
 							basicEntry(Items.LAPIS_LAZULI, 1, 5).setWeight(2),
 							basicEntry(Items.GOLD_INGOT, 2, 4).setWeight(5),
 							basicEntry(Items.EMERALD, 1, 3).setWeight(5),
-							basicEntry(Items.GOLDEN_SHOVEL).setWeight(3).apply(enchant())
+							basicEntry(Items.GOLDEN_SHOVEL).setWeight(3).apply(enchant()),
+							tagEntry(DPTags.Items.LOOT_LEVIATHAN_UNCOMMON, 1, 2)
 						)).setRolls(UniformGenerator.between(3, 4)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.GOLDEN_APPLE).setWeight(1),
 							basicEntry(Items.EXPERIENCE_BOTTLE, 1, 2).setWeight(3),
 							basicEntry(Items.GOLDEN_HORSE_ARMOR).setWeight(1),
 							basicEntry(Items.NAME_TAG).setWeight(1),
-							basicEntry(Items.BOOK).setWeight(3).apply(enchant())
+							basicEntry(Items.BOOK).setWeight(3).apply(enchant()),
+							tagEntry(DPTags.Items.LOOT_LEVIATHAN_RARE)
 						)).setRolls(UniformGenerator.between(2, 3)))));
 			
 			consumer.accept(DPLoot.Leviathan.CHEST_RARE, tableOf(ImmutableList.of(
@@ -353,7 +376,8 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.ARROW, 1, 4).setWeight(1),
 							basicEntry(Items.BONE, 1, 4).setWeight(1),
 							basicEntry(Items.FLINT, 1, 2).setWeight(1),
-							basicEntry(Items.FEATHER, 1, 2).setWeight(1)
+							basicEntry(Items.FEATHER, 1, 2).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_SNOWY_TEMPLE_COMMON, 1, 3)
 						)).setRolls(UniformGenerator.between(4, 7)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.PACKED_ICE, 1, 5).setWeight(1),
@@ -361,14 +385,16 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.IRON_INGOT, 1, 3).setWeight(5),
 							basicEntry(Items.LAPIS_LAZULI, 1, 3).setWeight(5),
 							basicEntry(Items.BOW).setWeight(1).apply(enchant()),
-							basicEntry(Items.POWDER_SNOW_BUCKET, 1, 2).setWeight(1)
+							basicEntry(Items.POWDER_SNOW_BUCKET, 1, 2).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_SNOWY_TEMPLE_UNCOMMON, 1, 2)
 						)).setRolls(UniformGenerator.between(3, 4)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.EXPERIENCE_BOTTLE, 1, 2).setWeight(3),
 							basicEntry(Items.CHAINMAIL_CHESTPLATE).setWeight(1),
 							basicEntry(Items.CHAINMAIL_LEGGINGS).setWeight(1),
 							basicEntry(Items.BOOK).setWeight(3).apply(enchant()),
-							basicEntry(Items.LEATHER_BOOTS).setWeight(1).apply(enchant(Enchantments.FROST_WALKER, Enchantments.UNBREAKING, Enchantments.VANISHING_CURSE))
+							basicEntry(Items.LEATHER_BOOTS).setWeight(1).apply(enchant(Enchantments.FROST_WALKER, Enchantments.UNBREAKING, Enchantments.VANISHING_CURSE)),
+							tagEntry(DPTags.Items.LOOT_SNOWY_TEMPLE_RARE)
 						)).setRolls(UniformGenerator.between(2, 3)))));
 
 			consumer.accept(DPLoot.SnowyTemple.CHEST_RARE, tableOf(ImmutableList.of(
@@ -390,21 +416,24 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.WARPED_ROOTS, 1, 2).setWeight(1),
 							basicEntry(Items.WARPED_FUNGUS, 1, 2).setWeight(1),
 							basicEntry(Items.GOLD_NUGGET, 1, 3).setWeight(1),
-							basicEntry(Items.QUARTZ, 1, 3).setWeight(1)
+							basicEntry(Items.QUARTZ, 1, 3).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_WARPED_GARDEN_COMMON, 1, 3)
 						)).setRolls(UniformGenerator.between(4, 7)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.NETHERRACK, 1, 2).setWeight(1),
 							basicEntry(Items.POTION, 1, 3).setWeight(1).apply(SetPotionFunction.setPotion(Potions.WATER)),
 							basicEntry(Items.SCUTE, 1, 3).setWeight(1),
 							basicEntry(Items.WATER_BUCKET).setWeight(1),
-							basicEntry(Items.GOLD_INGOT, 1, 3).setWeight(3)
+							basicEntry(Items.GOLD_INGOT, 1, 3).setWeight(3),
+							tagEntry(DPTags.Items.LOOT_WARPED_GARDEN_UNCOMMON, 1, 2)
 						)).setRolls(UniformGenerator.between(3, 4)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.NAUTILUS_SHELL).setWeight(3),
 							basicEntry(Items.NETHER_GOLD_ORE, 5, 11).setWeight(10),
 							basicEntry(Items.PUFFERFISH).setWeight(7),
 							basicEntry(Items.BOOK).setWeight(5).apply(enchant()),
-							basicEntry(Items.ENCHANTED_GOLDEN_APPLE).setWeight(1)
+							basicEntry(Items.ENCHANTED_GOLDEN_APPLE).setWeight(1),
+							tagEntry(DPTags.Items.LOOT_WARPED_GARDEN_RARE)
 						)).setRolls(UniformGenerator.between(2, 3)))));
 			
 			consumer.accept(DPLoot.WarpedGarden.CHEST_RARE, tableOf(ImmutableList.of(
@@ -426,7 +455,8 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.ARROW, 1, 2).setWeight(1),
 							basicEntry(Items.FIRE_CHARGE, 1, 2).setWeight(1),
 							basicEntry(Items.GOLD_INGOT, 1, 3).setWeight(2),
-							basicEntry(Items.GUNPOWDER, 1, 2).setWeight(2)
+							basicEntry(Items.GUNPOWDER, 1, 2).setWeight(2),
+							tagEntry(DPTags.Items.LOOT_SOUL_PRISON_COMMON, 1, 3)
 						)).setRolls(UniformGenerator.between(4, 7)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.GOLDEN_PICKAXE).setWeight(1),
@@ -434,7 +464,8 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.SOUL_SOIL, 1, 3).setWeight(2),
 							basicEntry(Items.GLOWSTONE, 1, 2).setWeight(2),
 							basicEntry(Items.BONE_BLOCK, 1, 2).setWeight(3),
-							basicEntry(Items.GHAST_TEAR, 1, 2).setWeight(3)
+							basicEntry(Items.GHAST_TEAR, 1, 2).setWeight(3),
+							tagEntry(DPTags.Items.LOOT_SOUL_PRISON_UNCOMMON, 1, 2)
 						)).setRolls(UniformGenerator.between(3, 4)),
 					poolOf(ImmutableList.of(
 							basicEntry(Items.DIAMOND, 1, 2).setWeight(3),
@@ -449,7 +480,8 @@ public class DPLootProv extends LootTableProvider
 							basicEntry(Items.GOLDEN_HELMET).setWeight(2).apply(enchant(Enchantments.BLAST_PROTECTION, Enchantments.FIRE_PROTECTION, Enchantments.UNBREAKING)),
 							basicEntry(Items.GOLDEN_CHESTPLATE).setWeight(2).apply(enchant(Enchantments.BLAST_PROTECTION, Enchantments.FIRE_PROTECTION, Enchantments.UNBREAKING)),
 							basicEntry(Items.GOLDEN_HELMET).setWeight(1).apply(enchant()),
-							basicEntry(Items.GOLDEN_CHESTPLATE).setWeight(1).apply(enchant())
+							basicEntry(Items.GOLDEN_CHESTPLATE).setWeight(1).apply(enchant()),
+							tagEntry(DPTags.Items.LOOT_SOUL_PRISON_RARE)
 						)).setRolls(UniformGenerator.between(1, 2)))));
 			
 			consumer.accept(DPLoot.SoulPrison.CHEST_RARE, tableOf(ImmutableList.of(
@@ -672,6 +704,21 @@ public class DPLootProv extends LootTableProvider
 		default LootItem.Builder<?> basicEntry(ItemLike item)
 		{
 			return LootItem.lootTableItem(item);
+		}
+
+		default LootItem.Builder<?> tagEntry(TagKey<Item> tag, int min, int max)
+		{
+			return TagEntry.expandTag(tag).apply(SetItemCountFunction.setCount(UniformGenerator.between(min, max)));
+		}
+
+		default LootItem.Builder<?> tagEntry(TagKey<Item> tag, int count)
+		{
+			return TagEntry.expandTag(tag).apply(SetItemCountFunction.setCount(ConstantValue.exactly(count)));
+		}
+
+		default LootItem.Builder<?> tagEntry(TagKey<Item> tag)
+		{
+			return tagEntry(tag, 1);
 		}
 
 		/**

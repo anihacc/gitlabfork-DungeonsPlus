@@ -52,7 +52,7 @@ public class DPConfig
 						.probability(75)
 					.popPlacement()
 					.pushStructure()
-						.biomes(DPTags.BiomeTags.HAS_TOWER)
+						.biomes(DPTags.Biomes.HAS_TOWER)
 					.popStructure()
 					.build();
 			
@@ -61,7 +61,7 @@ public class DPConfig
 						.probability(75)
 					.popPlacement()
 					.pushStructure()
-						.biomes(DPTags.BiomeTags.HAS_LEVIATHAN)
+						.biomes(DPTags.Biomes.HAS_LEVIATHAN)
 					.popStructure()
 					.build();
 			
@@ -70,7 +70,7 @@ public class DPConfig
 						.probability(75)
 					.popPlacement()
 					.pushStructure()
-						.biomes(DPTags.BiomeTags.HAS_SNOWY_TEMPLE)
+						.biomes(DPTags.Biomes.HAS_SNOWY_TEMPLE)
 					.popStructure()
 					.build();
 			
@@ -79,13 +79,13 @@ public class DPConfig
 						.probability(75)
 					.popPlacement()
 					.pushStructure(ReanimatedRuinsType.MOSSY.toString())
-						.biomes(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MOSSY)
+						.biomes(DPTags.Biomes.HAS_REANIMATED_RUINS_MOSSY)
 					.popStructure()
 					.pushStructure(ReanimatedRuinsType.MESA.toString())
-						.biomes(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MESA)
+						.biomes(DPTags.Biomes.HAS_REANIMATED_RUINS_MESA)
 					.popStructure()
 					.pushStructure(ReanimatedRuinsType.FROZEN.toString())
-						.biomes(DPTags.BiomeTags.HAS_REANIMATED_RUINS_FROZEN)
+						.biomes(DPTags.Biomes.HAS_REANIMATED_RUINS_FROZEN)
 					.popStructure()
 					.build();
 			
@@ -94,7 +94,7 @@ public class DPConfig
 						.probability(75)
 					.popPlacement()
 					.pushStructure()
-						.biomes(DPTags.BiomeTags.HAS_WARPED_GARDEN)
+						.biomes(DPTags.Biomes.HAS_WARPED_GARDEN)
 					.popStructure()
 					.build();
 			
@@ -103,7 +103,7 @@ public class DPConfig
 						.probability(75)
 					.popPlacement()
 					.pushStructure()
-						.biomes(DPTags.BiomeTags.HAS_SOUL_PRISON)
+						.biomes(DPTags.Biomes.HAS_SOUL_PRISON)
 					.popStructure()
 					.build();
 			
@@ -112,7 +112,7 @@ public class DPConfig
 						.probability(75)
 					.popPlacement()
 					.pushStructure()
-						.biomes(DPTags.BiomeTags.HAS_END_RUINS)
+						.biomes(DPTags.Biomes.HAS_END_RUINS)
 					.popStructure()
 					.build();
 			

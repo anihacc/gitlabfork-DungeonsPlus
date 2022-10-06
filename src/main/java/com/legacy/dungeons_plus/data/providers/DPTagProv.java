@@ -14,6 +14,7 @@ import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.StructureTagsProvider;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.common.Tags;
@@ -76,7 +77,15 @@ public class DPTagProv
 
 		public void dungeonsPlus()
 		{
-
+			this.tag(DPTags.Items.LOOT_COMMON);
+			this.tag(DPTags.Items.LOOT_UNCOMMON);
+			this.tag(DPTags.Items.LOOT_RARE);
+			this.lootTags(DPTags.Items.LOOT_TOWER_COMMON, DPTags.Items.LOOT_TOWER_UNCOMMON, DPTags.Items.LOOT_TOWER_RARE);
+			this.lootTags(DPTags.Items.LOOT_REANIMATED_RUINS_COMMON, DPTags.Items.LOOT_REANIMATED_RUINS_UNCOMMON, DPTags.Items.LOOT_REANIMATED_RUINS_RARE);
+			this.lootTags(DPTags.Items.LOOT_SNOWY_TEMPLE_COMMON, DPTags.Items.LOOT_SNOWY_TEMPLE_UNCOMMON, DPTags.Items.LOOT_SNOWY_TEMPLE_RARE);
+			this.lootTags(DPTags.Items.LOOT_LEVIATHAN_COMMON, DPTags.Items.LOOT_LEVIATHAN_UNCOMMON, DPTags.Items.LOOT_LEVIATHAN_RARE);
+			this.lootTags(DPTags.Items.LOOT_WARPED_GARDEN_COMMON, DPTags.Items.LOOT_WARPED_GARDEN_UNCOMMON, DPTags.Items.LOOT_WARPED_GARDEN_RARE);
+			this.lootTags(DPTags.Items.LOOT_SOUL_PRISON_COMMON, DPTags.Items.LOOT_SOUL_PRISON_UNCOMMON, DPTags.Items.LOOT_SOUL_PRISON_RARE);
 		}
 
 		public void vanilla()
@@ -84,6 +93,13 @@ public class DPTagProv
 
 		}
 
+		private void lootTags(TagKey<Item> common, TagKey<Item> uncommon, TagKey<Item> rare)
+		{
+			this.tag(common).addTag(DPTags.Items.LOOT_COMMON);
+			this.tag(uncommon).addTag(DPTags.Items.LOOT_UNCOMMON);
+			this.tag(rare).addTag(DPTags.Items.LOOT_RARE);
+		}
+		
 		@Override
 		public String getName()
 		{
@@ -107,10 +123,10 @@ public class DPTagProv
 
 		public void dungeonsPlus()
 		{
-			this.allStructures(DPTags.StructureTags.ON_REANIMATED_RUINS_MAPS, DPStructures.REANIMATED_RUINS);
-			this.allStructures(DPTags.StructureTags.ON_LEVIATHAN_MAPS, DPStructures.LEVIATHAN);
-			this.allStructures(DPTags.StructureTags.ON_SNOWY_TEMPLE_MAPS, DPStructures.SNOWY_TEMPLE);
-			this.allStructures(DPTags.StructureTags.ON_WARPED_GARDEN_MAPS, DPStructures.WARPED_GARDEN);
+			this.allStructures(DPTags.Structures.ON_REANIMATED_RUINS_MAPS, DPStructures.REANIMATED_RUINS);
+			this.allStructures(DPTags.Structures.ON_LEVIATHAN_MAPS, DPStructures.LEVIATHAN);
+			this.allStructures(DPTags.Structures.ON_SNOWY_TEMPLE_MAPS, DPStructures.SNOWY_TEMPLE);
+			this.allStructures(DPTags.Structures.ON_WARPED_GARDEN_MAPS, DPStructures.WARPED_GARDEN);
 		}
 
 		public void vanilla()
@@ -147,15 +163,15 @@ public class DPTagProv
 		@SuppressWarnings("unchecked")
 		public void dungeonsPlus()
 		{
-			this.tag(DPTags.BiomeTags.HAS_TOWER).addTags(BiomeTags.IS_MOUNTAIN, BiomeTags.IS_FOREST, Tags.Biomes.IS_MOUNTAIN);
-			this.tag(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MOSSY).addTags(Tags.Biomes.IS_SWAMP);
-			this.tag(DPTags.BiomeTags.HAS_REANIMATED_RUINS_MESA).addTags(BiomeTags.IS_BADLANDS);
-			this.tag(DPTags.BiomeTags.HAS_REANIMATED_RUINS_FROZEN).addTags(BiomeTags.HAS_VILLAGE_SNOWY);
-			this.tag(DPTags.BiomeTags.HAS_LEVIATHAN).addTags(Tags.Biomes.IS_DESERT);
-			this.tag(DPTags.BiomeTags.HAS_SNOWY_TEMPLE).add(Biomes.SNOWY_TAIGA, Biomes.FROZEN_PEAKS, Biomes.SNOWY_SLOPES, Biomes.GROVE);
-			this.tag(DPTags.BiomeTags.HAS_WARPED_GARDEN).addTags(BiomeTags.IS_DEEP_OCEAN);
-			this.tag(DPTags.BiomeTags.HAS_SOUL_PRISON).add(Biomes.SOUL_SAND_VALLEY);
-			this.tag(DPTags.BiomeTags.HAS_END_RUINS).addTag(BiomeTags.HAS_END_CITY);
+			this.tag(DPTags.Biomes.HAS_TOWER).addTags(BiomeTags.IS_MOUNTAIN, BiomeTags.IS_FOREST, Tags.Biomes.IS_MOUNTAIN);
+			this.tag(DPTags.Biomes.HAS_REANIMATED_RUINS_MOSSY).addTags(Tags.Biomes.IS_SWAMP);
+			this.tag(DPTags.Biomes.HAS_REANIMATED_RUINS_MESA).addTags(BiomeTags.IS_BADLANDS);
+			this.tag(DPTags.Biomes.HAS_REANIMATED_RUINS_FROZEN).addTags(BiomeTags.HAS_VILLAGE_SNOWY);
+			this.tag(DPTags.Biomes.HAS_LEVIATHAN).addTags(Tags.Biomes.IS_DESERT);
+			this.tag(DPTags.Biomes.HAS_SNOWY_TEMPLE).add(Biomes.SNOWY_TAIGA, Biomes.FROZEN_PEAKS, Biomes.SNOWY_SLOPES, Biomes.GROVE);
+			this.tag(DPTags.Biomes.HAS_WARPED_GARDEN).addTags(BiomeTags.IS_DEEP_OCEAN);
+			this.tag(DPTags.Biomes.HAS_SOUL_PRISON).add(Biomes.SOUL_SAND_VALLEY);
+			this.tag(DPTags.Biomes.HAS_END_RUINS).addTag(BiomeTags.HAS_END_CITY);
 		}
 
 		public void vanilla()

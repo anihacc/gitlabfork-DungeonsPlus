@@ -96,6 +96,22 @@
             }
           ],
           "name": "minecraft:string"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/reanimated_ruins/common"
         }
       ],
       "rolls": {
@@ -190,6 +206,22 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:minecart"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/reanimated_ruins/uncommon"
         }
       ],
       "rolls": {
@@ -237,9 +269,9 @@
             {
               "enchantments": [
                 "minecraft:efficiency",
+                "minecraft:silk_touch",
                 "minecraft:vanishing_curse",
-                "minecraft:unbreaking",
-                "minecraft:silk_touch"
+                "minecraft:unbreaking"
               ],
               "function": "minecraft:enchant_randomly"
             },
@@ -254,6 +286,18 @@
             }
           ],
           "name": "minecraft:iron_pickaxe"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/reanimated_ruins/rare"
         }
       ],
       "rolls": {

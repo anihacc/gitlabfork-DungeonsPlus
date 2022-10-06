@@ -76,6 +76,22 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:dead_bush"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/leviathan/common"
         }
       ],
       "rolls": {
@@ -159,6 +175,22 @@
           ],
           "name": "minecraft:golden_shovel",
           "weight": 3
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/leviathan/uncommon"
         }
       ],
       "rolls": {
@@ -207,6 +239,18 @@
           ],
           "name": "minecraft:book",
           "weight": 3
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/leviathan/rare"
         }
       ],
       "rolls": {

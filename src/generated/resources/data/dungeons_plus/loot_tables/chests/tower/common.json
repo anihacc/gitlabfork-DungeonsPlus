@@ -93,6 +93,22 @@
             }
           ],
           "name": "minecraft:flint"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/tower/common"
         }
       ],
       "rolls": {
@@ -181,6 +197,22 @@
             }
           ],
           "name": "minecraft:gold_ingot"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/tower/uncommon"
         }
       ],
       "rolls": {
@@ -256,6 +288,18 @@
             }
           ],
           "name": "minecraft:book"
+        },
+        {
+          "type": "minecraft:tag",
+          "expand": true,
+          "functions": [
+            {
+              "add": false,
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "dungeons_plus:loot/tower/rare"
         }
       ],
       "rolls": {
