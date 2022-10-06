@@ -2,7 +2,7 @@ package com.legacy.dungeons_plus;
 
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import javax.annotation.Nullable;
 
@@ -62,7 +62,7 @@ public class DPUtil
 		fillBlob(level, pos, range, (l, p, r) -> canPlace.test(l, p, l.getBlockState(p)) ? state : null, rand, chance);
 	}
 
-	public static void fillBelow(WorldGenLevel level, RandomSource rand, BoundingBox bounds, PiecesContainer pieces, Function<RandomSource, BlockState> blockStateFunc)
+	public static void fillBelow(WorldGenLevel level, RandomSource rand, BoundingBox bounds, PiecesContainer pieces, BiFunction<BlockState, RandomSource, BlockState> blockStateFunc)
 	{
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		int minHeight = level.getMinBuildHeight();
@@ -74,15 +74,16 @@ public class DPUtil
 			for (int z = bounds.minZ(); z <= bounds.maxZ(); ++z)
 			{
 				pos.set(x, maxHeight, z);
+				BlockState bottomState = level.getBlockState(pos);
 				if (!level.isEmptyBlock(pos) && pieceBounds.isInside(pos) && pieces.isInsidePiece(pos))
 				{
 					for (int y = maxHeight - 1; y > minHeight; --y)
 					{
 						pos.setY(y);
-						if (!level.isEmptyBlock(pos) && !level.getBlockState(pos).getMaterial().isLiquid())
+						if (!level.getBlockState(pos).getMaterial().isReplaceable())
 							break;
 
-						level.setBlock(pos, blockStateFunc.apply(rand), 2);
+						level.setBlock(pos, blockStateFunc.apply(bottomState, rand), 2);
 					}
 				}
 			}

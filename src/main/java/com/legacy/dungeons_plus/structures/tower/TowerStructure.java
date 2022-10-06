@@ -58,7 +58,7 @@ public class TowerStructure extends Structure
 	@Override
 	public void afterPlace(WorldGenLevel level, StructureManager structureManager, ChunkGenerator chunkGen, RandomSource rand, BoundingBox bounds, ChunkPos chunkPos, PiecesContainer pieces)
 	{
-		DPUtil.fillBelow(level, rand, bounds, pieces, r -> (r.nextFloat() < 0.2 ? Blocks.MOSSY_COBBLESTONE : Blocks.COBBLESTONE).defaultBlockState());
+		DPUtil.fillBelow(level, rand, bounds, pieces, (b, r) -> (r.nextFloat() < 0.2 ? Blocks.MOSSY_COBBLESTONE : Blocks.COBBLESTONE).defaultBlockState());
 	}
 
 	@Override
