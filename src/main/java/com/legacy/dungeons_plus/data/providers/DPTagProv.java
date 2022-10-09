@@ -2,6 +2,7 @@ package com.legacy.dungeons_plus.data.providers;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.data.DPTags;
+import com.legacy.dungeons_plus.registry.DPEntityTypes;
 import com.legacy.dungeons_plus.registry.DPItems;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
@@ -10,9 +11,11 @@ import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.StructureTagsProvider;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biomes;
@@ -32,18 +35,7 @@ public class DPTagProv
 		@Override
 		protected void addTags()
 		{
-			this.dungeonsPlus();
-			this.vanilla();
-		}
-
-		public void dungeonsPlus()
-		{
-
-		}
-
-		public void vanilla()
-		{
-
+			
 		}
 
 		@Override
@@ -63,20 +55,10 @@ public class DPTagProv
 		@Override
 		protected void addTags()
 		{
-			this.forge();
-			this.dungeonsPlus();
-			this.vanilla();
-		}
-
-		public void forge()
-		{
 			this.tag(Tags.Items.ARMORS_HELMETS).add(DPItems.FROSTED_COWL.get());
 			this.tag(Tags.Items.TOOLS_SWORDS).add(DPItems.LEVIATHAN_BLADE.get());
 			this.tag(Tags.Items.TOOLS_AXES).add(DPItems.WARPED_AXE.get());
-		}
 
-		public void dungeonsPlus()
-		{
 			this.tag(DPTags.Items.LOOT_COMMON);
 			this.tag(DPTags.Items.LOOT_UNCOMMON);
 			this.tag(DPTags.Items.LOOT_RARE);
@@ -86,11 +68,6 @@ public class DPTagProv
 			this.lootTags(DPTags.Items.LOOT_LEVIATHAN_COMMON, DPTags.Items.LOOT_LEVIATHAN_UNCOMMON, DPTags.Items.LOOT_LEVIATHAN_RARE);
 			this.lootTags(DPTags.Items.LOOT_WARPED_GARDEN_COMMON, DPTags.Items.LOOT_WARPED_GARDEN_UNCOMMON, DPTags.Items.LOOT_WARPED_GARDEN_RARE);
 			this.lootTags(DPTags.Items.LOOT_SOUL_PRISON_COMMON, DPTags.Items.LOOT_SOUL_PRISON_UNCOMMON, DPTags.Items.LOOT_SOUL_PRISON_RARE);
-		}
-
-		public void vanilla()
-		{
-
 		}
 
 		private void lootTags(TagKey<Item> common, TagKey<Item> uncommon, TagKey<Item> rare)
@@ -117,23 +94,12 @@ public class DPTagProv
 		@Override
 		protected void addTags()
 		{
-			this.dungeonsPlus();
-			this.vanilla();
-		}
-
-		public void dungeonsPlus()
-		{
 			this.allStructures(DPTags.Structures.ON_REANIMATED_RUINS_MAPS, DPStructures.REANIMATED_RUINS);
 			this.allStructures(DPTags.Structures.ON_LEVIATHAN_MAPS, DPStructures.LEVIATHAN);
 			this.allStructures(DPTags.Structures.ON_SNOWY_TEMPLE_MAPS, DPStructures.SNOWY_TEMPLE);
 			this.allStructures(DPTags.Structures.ON_WARPED_GARDEN_MAPS, DPStructures.WARPED_GARDEN);
 		}
-
-		public void vanilla()
-		{
-
-		}
-
+		
 		private void allStructures(TagKey<Structure> tagKey, StructureRegistrar<?> registrar)
 		{
 			var appender = this.tag(tagKey);
@@ -146,6 +112,26 @@ public class DPTagProv
 			return "Dungeons Plus structure tag provider";
 		}
 	}
+	
+	public static class EntityTypeProv extends EntityTypeTagsProvider
+	{
+		public EntityTypeProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
+		{
+			super(dataGen, DungeonsPlus.MODID, existingFileHelper);
+		}
+
+		@Override
+		protected void addTags()
+		{
+			this.tag(EntityTypeTags.IMPACT_PROJECTILES).add(DPEntityTypes.WARPED_AXE.get(), DPEntityTypes.SOUL_FIREBALL.get());
+		}
+
+		@Override
+		public String getName()
+		{
+			return "Dungeons Plus entity tag provider";
+		}
+	}
 
 	public static class BiomeProv extends BiomeTagsProvider
 	{
@@ -154,14 +140,9 @@ public class DPTagProv
 			super(dataGen, DungeonsPlus.MODID, existingFileHelper);
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		protected void addTags()
-		{
-			this.dungeonsPlus();
-		}
-
-		@SuppressWarnings("unchecked")
-		public void dungeonsPlus()
 		{
 			this.tag(DPTags.Biomes.HAS_TOWER).addTags(BiomeTags.IS_MOUNTAIN, BiomeTags.IS_FOREST, Tags.Biomes.IS_MOUNTAIN);
 			this.tag(DPTags.Biomes.HAS_REANIMATED_RUINS_MOSSY).addTags(Tags.Biomes.IS_SWAMP);
@@ -172,11 +153,6 @@ public class DPTagProv
 			this.tag(DPTags.Biomes.HAS_WARPED_GARDEN).addTags(BiomeTags.IS_DEEP_OCEAN);
 			this.tag(DPTags.Biomes.HAS_SOUL_PRISON).add(Biomes.SOUL_SAND_VALLEY);
 			this.tag(DPTags.Biomes.HAS_END_RUINS).addTag(BiomeTags.HAS_END_CITY);
-		}
-
-		public void vanilla()
-		{
-
 		}
 
 		@Override

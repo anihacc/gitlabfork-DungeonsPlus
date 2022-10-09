@@ -269,9 +269,9 @@
             {
               "enchantments": [
                 "minecraft:efficiency",
+                "minecraft:unbreaking",
                 "minecraft:silk_touch",
-                "minecraft:vanishing_curse",
-                "minecraft:unbreaking"
+                "minecraft:vanishing_curse"
               ],
               "function": "minecraft:enchant_randomly"
             },
