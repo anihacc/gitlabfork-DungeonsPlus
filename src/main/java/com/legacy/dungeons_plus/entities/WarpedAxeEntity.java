@@ -2,6 +2,7 @@ package com.legacy.dungeons_plus.entities;
 
 import javax.annotation.Nullable;
 
+import com.legacy.dungeons_plus.DPConfig;
 import com.legacy.dungeons_plus.items.WarpedAxeItem;
 import com.legacy.dungeons_plus.registry.DPDamageSource;
 import com.legacy.dungeons_plus.registry.DPEntityTypes;
@@ -116,7 +117,8 @@ public class WarpedAxeEntity extends AbstractArrow
 		this.oldPos = this.position();
 		Entity owner = this.getOwner();
 		int loyaltyLevel = EnchantmentHelper.getLoyalty(this.getAxe());
-		if (loyaltyLevel > 0 && (this.dealtDamage || this.isNoPhysics()) && owner != null)
+		boolean voidReturn = this.position().y < this.level.dimensionType().minY() && DPConfig.COMMON.loyaltyReturnsFromVoid.get();
+		if (loyaltyLevel > 0 && (this.dealtDamage || this.isNoPhysics() || voidReturn) && owner != null)
 		{
 			if (!this.isAcceptibleReturnOwner())
 			{

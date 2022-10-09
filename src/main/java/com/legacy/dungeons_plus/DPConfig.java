@@ -41,6 +41,8 @@ public class DPConfig
 		public final ConfigValueWrapper<Integer, Double> drownedCoralChance;
 		public final ConfigValueWrapper<Integer, Double> skeletonSoulCannonChance;
 
+		public final ForgeConfigSpec.BooleanValue loyaltyReturnsFromVoid;
+		
 		public final ConfigValueWrapper<Integer, Double> towerWaystoneChance;
 
 		protected Common(ForgeConfigSpec.Builder builder)
@@ -134,7 +136,11 @@ public class DPConfig
 			this.skeletonSoulCannonChance = ConfigValueWrapper.create(ConfigBuilder.makeInt(builder, "skeleton_soul_cannon_chance", "Percent chance that a Skeleton will wield a Soul Cannon in the Soul Prison.", 5, 0, 100), DPConfig::toPercent, bus, DungeonsPlus.MODID);
 
 			builder.pop();
-
+			
+			builder.push("Items");
+			this.loyaltyReturnsFromVoid = ConfigBuilder.makeBoolean(builder, "loyalty_returns_from_void", "When true, throwable items with loyalty will return if they enter the void.", true);
+			builder.pop();
+			
 			builder.push("Mod Compat");
 			builder.push("Waystones");
 			this.towerWaystoneChance = ConfigValueWrapper.create(ConfigBuilder.makeInt(builder, "tower_waystone_chance", "Percent chance for a waystone from Waystones to generate on top of the tower", 100, 0, 100), DPConfig::toPercent, bus, DungeonsPlus.MODID);
