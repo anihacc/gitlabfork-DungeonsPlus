@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.legacy.dungeons_plus.DPUtil;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.structure.GelTemplateStructurePiece;
@@ -21,11 +22,13 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.GravityProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.minecraftforge.common.world.PieceBeardifierModifier;
 
 public class SnowyTemplePieces
 {
@@ -48,7 +51,7 @@ public class SnowyTemplePieces
 
 		BlockPos floorPos = pos;
 
-		pieces.addPiece(new Piece(structureManager, Util.getRandom(BASES, rand), floorPos, rotation, rand));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(BASES, rand), floorPos, rotation, rand, TerrainAdjustment.BEARD_THIN));
 		floorPos = floorPos.above(13);
 		int roomHeight = 11;
 		boolean flipped = true;
@@ -74,27 +77,35 @@ public class SnowyTemplePieces
 		pieces.addPiece(new Piece(structureManager, Util.getRandom(ICE, rand), pos.offset(11, 0, 11).relative(dir, 30).relative(Rotation.CLOCKWISE_90.rotate(dir), 12), rotation, rand));
 	}
 
-	public static class Piece extends GelTemplateStructurePiece
+	public static class Piece extends GelTemplateStructurePiece implements PieceBeardifierModifier
 	{
-		private static final String DECAY_KEY = "decay";
+		private static final String DECAY_KEY = "decay", TERRAIN_ADJUSTMENT = "terrain_adjustment";
 		/**
 		 * Represented through binary data. Each bit is used to convert a different type
 		 * of wool. The number will range from 0 to 7.
 		 */
 		private final int decay;
+		private final TerrainAdjustment terrainAdjustment;
 
-		public Piece(StructureTemplateManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, RandomSource rand)
+		public Piece(StructureTemplateManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, RandomSource rand, TerrainAdjustment terrainAdjustment)
 		{
 			super(DPStructures.SNOWY_TEMPLE.getPieceType().get(), 0, structureManager, location, pos);
 			this.rotation = rotation;
 			this.decay = rand.nextInt(8); // Produced binary 000 (0) to 111 (7)
+			this.terrainAdjustment = terrainAdjustment;
 			this.setupPlaceSettings(structureManager);
+		}
+		
+		public Piece(StructureTemplateManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, RandomSource rand)
+		{
+			this(structureManager, location, pos, rotation, rand, TerrainAdjustment.NONE);
 		}
 
 		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
 			super(DPStructures.SNOWY_TEMPLE.getPieceType().get(), tag, context.structureTemplateManager());
 			this.decay = tag.getInt(DECAY_KEY);
+			this.terrainAdjustment = DPUtil.readTerrainAdjustment(tag.getString(TERRAIN_ADJUSTMENT));
 			this.setupPlaceSettings(context.structureTemplateManager());
 		}
 
@@ -103,6 +114,7 @@ public class SnowyTemplePieces
 		{
 			super.addAdditionalSaveData(level, tag);
 			tag.putInt(DECAY_KEY, this.decay);
+			tag.putString(TERRAIN_ADJUSTMENT, this.terrainAdjustment.getSerializedName());
 		}
 
 		@Override
@@ -143,6 +155,24 @@ public class SnowyTemplePieces
 		@Override
 		public void handleDataMarker(String key, BlockPos pos, ServerLevelAccessor level, RandomSource rand, BoundingBox bounds)
 		{
+		}
+		
+		@Override
+		public BoundingBox getBeardifierBox()
+		{
+			return this.getBoundingBox();
+		}
+		
+		@Override
+		public int getGroundLevelDelta()
+		{
+			return 0;
+		}
+		
+		@Override
+		public TerrainAdjustment getTerrainAdjustment()
+		{
+			return this.terrainAdjustment;
 		}
 	}
 }

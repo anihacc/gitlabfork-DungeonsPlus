@@ -27,6 +27,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType;
 
 // TODO Future: Sculk
@@ -41,6 +42,7 @@ public class DPStructures
 				.addPiece(() -> TowerPieces.Piece::new)
 				.pushStructure(TowerStructure::new)
 					.config(() -> DPConfig.COMMON.tower.getStructure())
+					.terrainAdjustment(TerrainAdjustment.BEARD_THIN)
 					.dimensions(Level.OVERWORLD)
 				.popStructure()
 				.build();
@@ -51,14 +53,17 @@ public class DPStructures
 				.addPiece(() -> ReanimatedRuinsStructure.Piece::new)
 				.pushStructure(ReanimatedRuinsType.MOSSY.toString(), s -> ExtendedJigsawStructure.builder(s, ReanimatedRuinsPools.MOSSY_ROOT).maxDepth(10).startHeight(-15, 15).capability(new ReanimatedRuinsStructure.Capability(ReanimatedRuinsType.MOSSY)).build())
 					.config(() -> DPConfig.COMMON.reanimatedRuins.getStructure(ReanimatedRuinsType.MOSSY.toString()))
+					.terrainAdjustment(TerrainAdjustment.BURY)
 					.dimensions(Level.OVERWORLD)
 				.popStructure()
 				.pushStructure(ReanimatedRuinsType.MESA.toString(), s -> ExtendedJigsawStructure.builder(s, ReanimatedRuinsPools.MESA_ROOT).maxDepth(10).startHeight(-15, 15).capability(new ReanimatedRuinsStructure.Capability(ReanimatedRuinsType.MESA)).build())
 					.config(() -> DPConfig.COMMON.reanimatedRuins.getStructure(ReanimatedRuinsType.MESA.toString()))
+					.terrainAdjustment(TerrainAdjustment.BURY)
 					.dimensions(Level.OVERWORLD)
 				.popStructure()
 				.pushStructure(ReanimatedRuinsType.FROZEN.toString(), s -> ExtendedJigsawStructure.builder(s, ReanimatedRuinsPools.FROZEN_ROOT).maxDepth(10).startHeight(-15, 15).capability(new ReanimatedRuinsStructure.Capability(ReanimatedRuinsType.FROZEN)).build())
 					.config(() -> DPConfig.COMMON.reanimatedRuins.getStructure(ReanimatedRuinsType.FROZEN.toString()))
+					.terrainAdjustment(TerrainAdjustment.BURY)
 					.dimensions(Level.OVERWORLD)
 				.popStructure()
 				.build();
@@ -67,7 +72,7 @@ public class DPStructures
 			StructureRegistrar.jigsawBuilder(DungeonsPlus.locate("leviathan"))
 				.placement(() -> GridStructurePlacement.builder().spacing(36).config(() -> DPConfig.COMMON.leviathan).build(DPStructures.LEVIATHAN))
 				.addPiece(() -> LeviathanStructure.Piece::new)
-				.pushStructure(s -> ExtendedJigsawStructure.builder(s, LeviathanPools.ROOT).onSurface().capability(LeviathanStructure.Capability.INSTANCE).build())
+				.pushStructure(s -> ExtendedJigsawStructure.builder(s, LeviathanPools.ROOT).onSurface().startHeight(-3, 0).capability(LeviathanStructure.Capability.INSTANCE).build())
 					.config(() -> DPConfig.COMMON.leviathan.getStructure())
 					.noSpawns(BoundingBoxType.PIECE)
 					.spawns(MobCategory.MONSTER, BoundingBoxType.STRUCTURE, () -> List.of(new SpawnerData(EntityType.HUSK, 1, 1, 4)))
@@ -82,6 +87,7 @@ public class DPStructures
 				.pushStructure(SnowyTempleStructure::new)
 					.config(() -> DPConfig.COMMON.snowyTemple.getStructure())
 					.spawns(MobCategory.MONSTER, BoundingBoxType.STRUCTURE, () -> List.of(new SpawnerData(EntityType.STRAY, 1, 1, 4)))
+					.terrainAdjustment(TerrainAdjustment.BEARD_THIN)
 					.dimensions(Level.OVERWORLD)
 				.popStructure()
 				.build();

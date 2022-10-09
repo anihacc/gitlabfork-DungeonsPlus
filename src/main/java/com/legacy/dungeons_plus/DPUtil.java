@@ -22,6 +22,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraftforge.common.util.TriPredicate;
 
@@ -125,5 +126,13 @@ public class DPUtil
 		}
 
 		level.setBlock(pos, (defaultBlock != null ? defaultBlock : Blocks.AIR).defaultBlockState(), 2);
+	}
+
+	public static TerrainAdjustment readTerrainAdjustment(String id)
+	{
+		for (var t : TerrainAdjustment.values())
+			if (id.equals(t.getSerializedName()))
+				return t;
+		return TerrainAdjustment.NONE;
 	}
 }

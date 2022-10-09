@@ -42,7 +42,8 @@ public class DPConfig
 		public final ConfigValueWrapper<Integer, Double> skeletonSoulCannonChance;
 
 		public final ForgeConfigSpec.BooleanValue loyaltyReturnsFromVoid;
-		
+		public final ForgeConfigSpec.BooleanValue soulCannonProducesFire;
+
 		public final ConfigValueWrapper<Integer, Double> towerWaystoneChance;
 
 		protected Common(ForgeConfigSpec.Builder builder)
@@ -139,6 +140,7 @@ public class DPConfig
 			
 			builder.push("Items");
 			this.loyaltyReturnsFromVoid = ConfigBuilder.makeBoolean(builder, "loyalty_returns_from_void", "When true, throwable items with loyalty will return if they enter the void.", true);
+			this.soulCannonProducesFire = ConfigBuilder.makeBoolean(builder, "soul_cannon_produces_fire", "When true, the fireball from a Soul Cannon enchanted with flame will place fire.", true);
 			builder.pop();
 			
 			builder.push("Mod Compat");

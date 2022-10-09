@@ -56,7 +56,7 @@ public class EndRuinsStructure
 		public boolean canPlace(GenerationContext generationContext, BlockPos placementPos, JigsawContext jigsawContext)
 		{
 			ChunkPos chunkPos = generationContext.chunkPos();
-			int[] xz = new int[] { -8, 8 };
+			int[] xz = new int[] { -8, 0, 8 };
 			for (int x : xz)
 				for (int z : xz)
 					if (generationContext.chunkGenerator().getFirstOccupiedHeight(chunkPos.getBlockX(x), chunkPos.getBlockZ(z), Heightmap.Types.WORLD_SURFACE_WG, generationContext.heightAccessor(), generationContext.randomState()) < 56)

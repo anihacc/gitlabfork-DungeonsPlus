@@ -32,10 +32,13 @@ import net.minecraft.world.level.block.InfestedBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.minecraftforge.common.util.Lazy;
+import net.minecraftforge.common.world.PieceBeardifierModifier;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class TowerPieces
@@ -49,7 +52,7 @@ public class TowerPieces
 	{
 		boolean infested = rand.nextFloat() < 0.3;
 
-		pieces.addPiece(new Piece(structureManager, Util.getRandom(BASES, rand), pos, rotation, infested));
+		pieces.addPiece(new Piece(structureManager, Util.getRandom(BASES, rand), pos, rotation, infested, TerrainAdjustment.BEARD_THIN));
 
 		int maxFloors = rand.nextInt(3) + 3;
 		List<ResourceLocation> unusedFloors = new ArrayList<>(Arrays.asList(FLOORS));
@@ -64,30 +67,38 @@ public class TowerPieces
 		pieces.addPiece(new Piece(structureManager, Util.getRandom(TOPS, rand), pos = pos.above(6), rotation, infested));
 	}
 
-	public static class Piece extends GelTemplateStructurePiece
+	public static class Piece extends GelTemplateStructurePiece implements PieceBeardifierModifier
 	{
-		private static final String INFESTED_KEY = "infested";
+		private static final String INFESTED_KEY = "infested", TERRAIN_ADJUSTMENT = "terrain_adjustment";
 		
-		private static final ItemStack[] ARMOR_STAND_ITEMS = List.of(Items.CHAINMAIL_HELMET, Items.GOLDEN_HELMET, Items.CHAINMAIL_BOOTS, Items.GOLDEN_LEGGINGS, Items.IRON_BOOTS, Items.GOLDEN_BOOTS).stream().map(ItemStack::new).toArray(ItemStack[]::new);
+		private static final Lazy<ItemStack[]> ARMOR_STAND_ITEMS = Lazy.of(() -> List.of(Items.CHAINMAIL_HELMET, Items.GOLDEN_HELMET, Items.CHAINMAIL_BOOTS, Items.GOLDEN_LEGGINGS, Items.IRON_BOOTS, Items.GOLDEN_BOOTS).stream().map(ItemStack::new).toArray(ItemStack[]::new));
 		private static final float MOSS_CHANCE = 0.2F;
 		private static final float MOSS_BRICK_CHANCE = 0.15F;
 		private static final float CRACK_BRICK_CHANCE = 0.15F;
 		private static final float INFEST_CHANCE = 0.07F;
 
 		private final boolean infested;
-
-		public Piece(StructureTemplateManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, boolean infested)
+		private final TerrainAdjustment terrainAdjustment;
+		
+		public Piece(StructureTemplateManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, boolean infested, TerrainAdjustment terrainAdjustment)
 		{
 			super(DPStructures.TOWER.getPieceType().get(), 0, structureManager, location, pos);
 			this.rotation = rotation;
 			this.infested = infested;
+			this.terrainAdjustment = terrainAdjustment;
 			this.setupPlaceSettings(structureManager);
 		}
 
+		public Piece(StructureTemplateManager structureManager, ResourceLocation location, BlockPos pos, Rotation rotation, boolean infested)
+		{
+			this(structureManager, location, pos, rotation, infested, TerrainAdjustment.NONE);
+		}
+		
 		public Piece(StructurePieceSerializationContext context, CompoundTag tag)
 		{
 			super(DPStructures.TOWER.getPieceType().get(), tag, context.structureTemplateManager());
 			this.infested = tag.getBoolean(INFESTED_KEY);
+			this.terrainAdjustment = DPUtil.readTerrainAdjustment(tag.getString(TERRAIN_ADJUSTMENT));
 			this.setupPlaceSettings(context.structureTemplateManager());
 		}
 
@@ -96,6 +107,7 @@ public class TowerPieces
 		{
 			super.addAdditionalSaveData(level, tag);
 			tag.putBoolean(INFESTED_KEY, this.infested);
+			tag.putString(TERRAIN_ADJUSTMENT, this.terrainAdjustment.getSerializedName());
 		}
 
 		@Override
@@ -194,7 +206,7 @@ public class TowerPieces
 
 				entity.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.GOLDEN_CHESTPLATE));
 
-				for (ItemStack item : ARMOR_STAND_ITEMS)
+				for (ItemStack item : ARMOR_STAND_ITEMS.get())
 					if (rand.nextFloat() < 0.25)
 						entity.setItemSlot(Mob.getEquipmentSlotForItem(item), item);
 
@@ -204,6 +216,24 @@ public class TowerPieces
 			{
 				DPUtil.placeWaystone(level, pos, rand, ForgeRegistries.BLOCKS.getValue(new ResourceLocation(key.split("-")[1])));
 			}
+		}
+		
+		@Override
+		public BoundingBox getBeardifierBox()
+		{
+			return this.getBoundingBox();
+		}
+		
+		@Override
+		public int getGroundLevelDelta()
+		{
+			return 0;
+		}
+		
+		@Override
+		public TerrainAdjustment getTerrainAdjustment()
+		{
+			return this.terrainAdjustment;
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package com.legacy.dungeons_plus.entities;
 
+import com.legacy.dungeons_plus.DPConfig;
 import com.legacy.dungeons_plus.registry.DPDamageSource;
 import com.legacy.dungeons_plus.registry.DPEntityTypes;
 
@@ -153,7 +154,7 @@ public class SoulFireballEntity extends Fireball
 				}
 			}
 
-			if (this.hasFlame)
+			if (this.hasFlame && DPConfig.COMMON.soulCannonProducesFire.get())
 			{
 				BlockPos p = this.blockPosition();
 				if (this.level.getBlockState(p).isAir() && this.level.getBlockState(p.below()).isSolidRender(this.level, p.below()))
