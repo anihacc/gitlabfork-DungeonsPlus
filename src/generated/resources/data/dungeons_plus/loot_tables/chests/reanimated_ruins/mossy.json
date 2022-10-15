@@ -268,8 +268,8 @@
           "functions": [
             {
               "enchantments": [
-                "minecraft:efficiency",
                 "minecraft:unbreaking",
+                "minecraft:efficiency",
                 "minecraft:silk_touch",
                 "minecraft:vanishing_curse"
               ],

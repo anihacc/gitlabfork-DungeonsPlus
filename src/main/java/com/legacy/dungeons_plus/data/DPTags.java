@@ -5,6 +5,7 @@ import com.legacy.dungeons_plus.DungeonsPlus;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
@@ -91,6 +92,16 @@ public class DPTags
 		private static TagKey<Biome> create(String name)
 		{
 			return TagKey.create(Registry.BIOME_REGISTRY, DungeonsPlus.locate(name));
+		}
+	}
+	
+	public static interface Enchantments
+	{
+		TagKey<Enchantment> WARPED_AXE_APPLICABLE = create("warped_axe_applicable");
+		
+		private static TagKey<Enchantment> create(String name)
+		{
+			return TagKey.create(Registry.ENCHANTMENT_REGISTRY, DungeonsPlus.locate(name));
 		}
 	}
 }

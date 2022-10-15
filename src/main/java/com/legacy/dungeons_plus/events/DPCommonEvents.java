@@ -227,6 +227,8 @@ public class DPCommonEvents
 			gen.addProvider(true, new DPTagProv.StructureProv(gen, existingFileHelper));
 			gen.addProvider(true, new DPTagProv.EntityTypeProv(gen, existingFileHelper));
 			gen.addProvider(true, new DPTagProv.BiomeProv(gen, existingFileHelper));
+			gen.addProvider(true, new DPTagProv.EnchantmentProv(gen, existingFileHelper));
+
 			gen.addProvider(true, new DPAdvancementProv(gen));
 			gen.addProvider(true, new DPLootProv(gen));
 

@@ -5,10 +5,13 @@ import java.util.List;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableMultimap.Builder;
 import com.google.common.collect.Multimap;
+import com.legacy.dungeons_plus.data.DPTags;
 import com.legacy.dungeons_plus.entities.WarpedAxeEntity;
 import com.legacy.dungeons_plus.registry.DPSoundEvents;
+import com.legacy.structure_gel.api.registry.RegistryHelper;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -36,7 +39,7 @@ import net.minecraftforge.common.util.Lazy;
 // Throwable axe that teleports you to the entity it hits
 public class WarpedAxeItem extends AxeItem implements DPItem
 {
-	public static final String TELEPORT_KEY = "teleport";
+	public static final String TELEPORT_KEY = "teleport", CROUCH_KEY = "crouch";
 	public static final int THROW_THRESHOLD_TIME = 10;
 	public static final float BASE_DAMAGE = 8.0F;
 	public static final float ATTACK_SPEED = -3.2F;
@@ -89,8 +92,9 @@ public class WarpedAxeItem extends AxeItem implements DPItem
 				stack.hurtAndBreak(1, player, u -> u.broadcastBreakEvent(user.getUsedItemHand()));
 
 				WarpedAxeEntity axe = new WarpedAxeEntity(level, player, stack);
+				if (player.isCrouching())
+					axe.setTeleportsOwner(false);
 				axe.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, SHOOT_POWER, 1.0F);
-				;
 				boolean isCreative = player.isCreative();
 				if (isCreative)
 					axe.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
@@ -123,16 +127,17 @@ public class WarpedAxeItem extends AxeItem implements DPItem
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
 	{
-		return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment == Enchantments.LOYALTY || enchantment instanceof DamageEnchantment;
+		return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment == Enchantments.LOYALTY || enchantment == Enchantments.FIRE_ASPECT || enchantment instanceof DamageEnchantment || RegistryHelper.isInTag(Registry.ENCHANTMENT, DPTags.Enchantments.WARPED_AXE_APPLICABLE, enchantment);
 	}
-	
+
 	@Override
 	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag showAdvanced)
 	{
 		super.appendHoverText(stack, level, tooltip, showAdvanced);
-		tooltip.addAll(this.getDescription(stack, TELEPORT_KEY));
+		tooltip.addAll(this.getDescription(stack, TELEPORT_KEY, CROUCH_KEY));
 	}
 }

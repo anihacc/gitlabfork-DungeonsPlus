@@ -7,6 +7,7 @@ import com.legacy.dungeons_plus.registry.DPItems;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
+import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BiomeTagsProvider;
@@ -14,10 +15,13 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.StructureTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.common.Tags;
@@ -159,6 +163,27 @@ public class DPTagProv
 		public String getName()
 		{
 			return "Dungeons Plus biome tag provider";
+		}
+	}
+	
+	public static class EnchantmentProv extends TagsProvider<Enchantment>
+	{
+		@SuppressWarnings("deprecation")
+		public EnchantmentProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
+		{
+			super(dataGen, Registry.ENCHANTMENT, DungeonsPlus.MODID, existingFileHelper);
+		}
+
+		@Override
+		protected void addTags()
+		{
+			this.tag(DPTags.Enchantments.WARPED_AXE_APPLICABLE).addOptional(new ResourceLocation("soulfired", "soul_fire_aspect"));
+		}
+
+		@Override
+		public String getName()
+		{
+			return "Dungeons Plus entity tag provider";
 		}
 	}
 }

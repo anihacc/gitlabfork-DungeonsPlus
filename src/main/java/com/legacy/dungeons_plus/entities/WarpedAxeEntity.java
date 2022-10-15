@@ -28,8 +28,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
@@ -40,6 +43,7 @@ public class WarpedAxeEntity extends AbstractArrow
 	private static final EntityDataAccessor<ItemStack> ID_AXE_STACK = SynchedEntityData.defineId(WarpedAxeEntity.class, EntityDataSerializers.ITEM_STACK);
 	private static final EntityDataAccessor<Float> ID_ROTATION = SynchedEntityData.defineId(WarpedAxeEntity.class, EntityDataSerializers.FLOAT);
 	private static final EntityDataAccessor<Boolean> ID_IN_BLOCK = SynchedEntityData.defineId(WarpedAxeEntity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<Boolean> ID_TELEPORT_PLAYER = SynchedEntityData.defineId(WarpedAxeEntity.class, EntityDataSerializers.BOOLEAN);
 
 	private boolean dealtDamage;
 	public int clientSideReturnAxeTickCount;
@@ -70,11 +74,17 @@ public class WarpedAxeEntity extends AbstractArrow
 		this.entityData.define(ID_AXE_STACK, DPItems.WARPED_AXE.get().getDefaultInstance());
 		this.entityData.define(ID_ROTATION, 0.0F);
 		this.entityData.define(ID_IN_BLOCK, false);
+		this.entityData.define(ID_TELEPORT_PLAYER, true);
 	}
 
 	public ItemStack getAxe()
 	{
 		return this.entityData.get(ID_AXE_STACK);
+	}
+
+	public void setAxe(ItemStack stack)
+	{
+		this.entityData.set(ID_AXE_STACK, stack.copy());
 	}
 
 	public float getRenderRotation()
@@ -85,6 +95,16 @@ public class WarpedAxeEntity extends AbstractArrow
 	public boolean isInBlock()
 	{
 		return this.entityData.get(ID_IN_BLOCK);
+	}
+
+	public boolean getTeleportsOwner()
+	{
+		return this.entityData.get(ID_TELEPORT_PLAYER);
+	}
+
+	public void setTeleportsOwner(boolean shouldTeleportOwner)
+	{
+		this.entityData.set(ID_TELEPORT_PLAYER, shouldTeleportOwner);
 	}
 
 	@Nullable
@@ -106,12 +126,15 @@ public class WarpedAxeEntity extends AbstractArrow
 
 			if (this.oldPos != null)
 			{
-				var pos = this.position();
-				double distScale = 1.0;
-				Vec3 motionVec = this.position().subtract(this.oldPos).normalize().scale(3);
-				int amount = this.random.nextInt(3) + 2;
-				for (int i = 0; i < amount; i++)
-					this.level.addParticle(ParticleTypes.REVERSE_PORTAL, pos.x + (this.random.nextDouble() - 0.5) * distScale, pos.y + (this.random.nextDouble() - 0.5) * distScale, pos.z + (this.random.nextDouble() - 0.5) * distScale, motionVec.x, motionVec.y, motionVec.z);
+				if (this.getTeleportsOwner())
+				{
+					var pos = this.position();
+					double distScale = 1.0;
+					Vec3 motionVec = this.position().subtract(this.oldPos).normalize().scale(3);
+					int amount = this.random.nextInt(3) + 2;
+					for (int i = 0; i < amount; i++)
+						this.level.addParticle(ParticleTypes.REVERSE_PORTAL, pos.x + (this.random.nextDouble() - 0.5) * distScale, pos.y + (this.random.nextDouble() - 0.5) * distScale, pos.z + (this.random.nextDouble() - 0.5) * distScale, motionVec.x, motionVec.y, motionVec.z);
+				}
 			}
 		}
 		this.oldPos = this.position();
@@ -175,6 +198,16 @@ public class WarpedAxeEntity extends AbstractArrow
 	}
 
 	@Override
+	protected void onHitBlock(BlockHitResult hitResult)
+	{
+		super.onHitBlock(hitResult);
+		if (this.level.getBlockState(hitResult.getBlockPos()).is(Blocks.TARGET))
+		{
+			this.teleportOwner(this.getOwner());
+		}
+	}
+
+	@Override
 	protected void onHitEntity(EntityHitResult hitResult)
 	{
 		Entity hitEntity = hitResult.getEntity();
@@ -191,39 +224,51 @@ public class WarpedAxeEntity extends AbstractArrow
 			damage = 6.0F;
 
 		if (hitEntity instanceof LivingEntity livingEntity)
-		{
-			damage += EnchantmentHelper.getDamageBonus(this.getAxe(), livingEntity.getMobType());
-		}
+			damage += EnchantmentHelper.getDamageBonus(this.getAxe(), livingEntity.getMobType()) / 2;
+
+		if (!this.getTeleportsOwner())
+			damage /= 2;
 
 		Entity owner = this.getOwner();
 		this.dealtDamage = true;
-		if (hitEntity.getType() == EntityType.ENDERMAN)
-			return;
 		if (hitEntity.hurt(DPDamageSource.warpedAxe(this, owner, stack), damage))
 		{
+			if (hitEntity.getType() == EntityType.ENDERMAN)
+				return;
+
+			this.teleportOwner(owner);
+
 			if (hitEntity instanceof LivingEntity livingHit)
 			{
-				if (owner instanceof LivingEntity livingOwner)
-				{
-					var pos = this.position();
-					livingOwner.teleportTo(pos.x, pos.y, pos.z);
-					livingOwner.resetFallDistance();
-					livingOwner.hurt(DamageSource.FALL, 5.0F);
-					level.broadcastEntityEvent(this, (byte) 46);
-					if (livingOwner instanceof Player player)
-						player.getCooldowns().addCooldown(this.getAxe().getItem(), 60);
-					livingOwner.gameEvent(GameEvent.TELEPORT);
-					this.playSound(DPSoundEvents.WARPED_AXE_TELEPORT.get(), 1.0F, 1.0F);
-					EnchantmentHelper.doPostHurtEffects(livingHit, owner);
-					EnchantmentHelper.doPostDamageEffects(livingOwner, livingHit);
-				}
+				var enchantments = EnchantmentHelper.getEnchantments(stack);
+				int fireAspect = enchantments.getOrDefault(Enchantments.FIRE_ASPECT, 0);
+				if (fireAspect > 0)
+					livingHit.setSecondsOnFire(fireAspect * 4);
 
+				EnchantmentHelper.doPostHurtEffects(livingHit, owner);
+				if (owner instanceof LivingEntity livingOwner)
+					EnchantmentHelper.doPostDamageEffects(livingOwner, livingHit);
 				this.doPostHurtEffects(livingHit);
 			}
 		}
 
 		this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01D, -0.1D, -0.01D));
 		this.playSound(DPSoundEvents.WARPED_AXE_HIT.get(), 1.0F, 1.0F);
+	}
+
+	private void teleportOwner(@Nullable Entity owner)
+	{
+		if (owner == null || !this.getTeleportsOwner())
+			return;
+		var pos = this.position();
+		owner.teleportTo(pos.x, pos.y, pos.z);
+		owner.resetFallDistance();
+		owner.hurt(DamageSource.FALL, 5.0F);
+		level.broadcastEntityEvent(this, (byte) 46);
+		if (owner instanceof Player player)
+			player.getCooldowns().addCooldown(this.getAxe().getItem(), 60);
+		owner.gameEvent(GameEvent.TELEPORT);
+		this.playSound(DPSoundEvents.WARPED_AXE_TELEPORT.get(), 1.0F, 1.0F);
 	}
 
 	@Override
@@ -245,13 +290,18 @@ public class WarpedAxeEntity extends AbstractArrow
 			super.playerTouch(player);
 	}
 
-	private static final String DEALT_DAMAGE_KEY = "DealtDamage";
+	private static final String DEALT_DAMAGE_KEY = "dealt_damage", STACK_KEY = "stack",
+			SHOULD_TELEPORT = "can_teleport";
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag)
 	{
 		super.readAdditionalSaveData(tag);
 		this.dealtDamage = tag.getBoolean(DEALT_DAMAGE_KEY);
+		ItemStack stack = ItemStack.of(tag.getCompound(STACK_KEY));
+		if (!stack.isEmpty())
+			this.setAxe(stack);
+		this.setTeleportsOwner(tag.getBoolean(SHOULD_TELEPORT));
 	}
 
 	@Override
@@ -259,6 +309,10 @@ public class WarpedAxeEntity extends AbstractArrow
 	{
 		super.addAdditionalSaveData(tag);
 		tag.putBoolean(DEALT_DAMAGE_KEY, this.dealtDamage);
+		ItemStack stack = this.getAxe();
+		if (!stack.isEmpty())
+			tag.put(STACK_KEY, stack.save(new CompoundTag()));
+		tag.putBoolean(SHOULD_TELEPORT, this.getTeleportsOwner());
 	}
 
 	@Override
@@ -279,6 +333,12 @@ public class WarpedAxeEntity extends AbstractArrow
 	protected float getWaterInertia()
 	{
 		return 0.90F;
+	}
+
+	@Override
+	public boolean canChangeDimensions()
+	{
+		return false;
 	}
 
 	@Override

@@ -85,7 +85,8 @@ public class DPLangProvider extends LanguageProvider
 		this.addItemInfo(DPItems.FROSTED_COWL, FrostedCowlItem.SLOWNESS_KEY, "Prevents the slowness potions from taking effect.");
 
 		this.addItemInfo(DPItems.WARPED_AXE, WarpedAxeItem.TELEPORT_KEY, "Teleports the user to who the axe was thrown at.");
-
+		this.addItemInfo(DPItems.WARPED_AXE, WarpedAxeItem.CROUCH_KEY, "Crouch to prevent teleporting.");
+		
 		this.addItemInfo(DPItems.SOUL_CANNON, SoulCannonItem.SHOOT_KEY, "Launches a fireball in the direction the user is facing.");
 	}
 
