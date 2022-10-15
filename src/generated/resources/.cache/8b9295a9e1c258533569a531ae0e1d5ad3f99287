@@ -1,4 +1,4 @@
-// 1.19.2	2022-10-15T04:14:43.4442804	Dungeons Plus Loot Tables
+// 1.19.2	2022-10-15T04:52:56.9922081	Dungeons Plus Loot Tables
 30de1831fcd8a7b2c2e8fdf7670f1a815aa95913 data/dungeons_plus/loot_tables/chests/leviathan/common.json
 d760c056953587d9083203f478d9c9a26fd84be7 data/dungeons_plus/loot_tables/chests/leviathan/rare.json
 376f210f77606383046f568ddac9da3af9455f01 data/dungeons_plus/loot_tables/chests/reanimated_ruins/common.json
@@ -6,7 +6,7 @@ d760c056953587d9083203f478d9c9a26fd84be7 data/dungeons_plus/loot_tables/chests/l
 3ce7d7e542a8bf231552bea6659f35ab3522e3d9 data/dungeons_plus/loot_tables/chests/reanimated_ruins/desert_map.json
 ca4113fffacd2640212a70fbe2ec7c42cd7869ca data/dungeons_plus/loot_tables/chests/reanimated_ruins/frozen.json
 54116edf83a44fb42df135400ece4481f1fc9586 data/dungeons_plus/loot_tables/chests/reanimated_ruins/frozen_map.json
-82d296f213978732595ba29184a9a8002bc30e53 data/dungeons_plus/loot_tables/chests/reanimated_ruins/mossy.json
+3e01bd0d81c3b82bd88c8e89dc59dfe90805b30c data/dungeons_plus/loot_tables/chests/reanimated_ruins/mossy.json
 5f3d6cda92f8fc76763457a3aa8a4d6e9d1639ee data/dungeons_plus/loot_tables/chests/reanimated_ruins/mossy_map.json
 2ed988e51972178b888f7fe2dd358421f19fba35 data/dungeons_plus/loot_tables/chests/snowy_temple/common.json
 324a8bd0c482cf21b0f2ff6f4cad39575962c4e3 data/dungeons_plus/loot_tables/chests/snowy_temple/rare.json

@@ -1,0 +1,36 @@
+{
+  "parent": "dungeons_plus:adventure/find_warped_garden",
+  "criteria": {
+    "hit_target": {
+      "conditions": {
+        "block": "minecraft:target",
+        "item": {
+          "items": [
+            "dungeons_plus:warped_axe"
+          ]
+        }
+      },
+      "trigger": "dungeons_plus:thrown_item_hit_block"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "dungeons_plus:advancements.adventure.axe_a_target.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:target"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "dungeons_plus:advancements.adventure.axe_a_target.title"
+    }
+  },
+  "requirements": [
+    [
+      "hit_target"
+    ]
+  ]
+}

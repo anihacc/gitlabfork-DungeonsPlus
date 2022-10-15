@@ -1,5 +1,4 @@
 {
-  "parent": "dungeons_plus:adventure/find_warped_garden",
   "criteria": {
     "hit_phantom": {
       "conditions": {

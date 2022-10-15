@@ -3,6 +3,7 @@ package com.legacy.dungeons_plus.entities;
 import javax.annotation.Nullable;
 
 import com.legacy.dungeons_plus.DPConfig;
+import com.legacy.dungeons_plus.data.advancement.ThrownItemHitBlockTrigger;
 import com.legacy.dungeons_plus.items.WarpedAxeItem;
 import com.legacy.dungeons_plus.registry.DPDamageSource;
 import com.legacy.dungeons_plus.registry.DPEntityTypes;
@@ -31,6 +32,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -200,8 +202,11 @@ public class WarpedAxeEntity extends AbstractArrow
 	@Override
 	protected void onHitBlock(BlockHitResult hitResult)
 	{
+		BlockState state = this.level.getBlockState(hitResult.getBlockPos());
+		if (this.getOwner() instanceof ServerPlayer player)
+			ThrownItemHitBlockTrigger.TRIGGER.trigger(player, this.getAxe(), state);
 		super.onHitBlock(hitResult);
-		if (this.level.getBlockState(hitResult.getBlockPos()).is(Blocks.TARGET))
+		if (state.is(Blocks.TARGET))
 		{
 			this.teleportOwner(this.getOwner());
 		}

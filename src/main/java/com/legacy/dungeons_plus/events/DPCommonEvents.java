@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 
 import com.legacy.dungeons_plus.DPConfig;
 import com.legacy.dungeons_plus.DungeonsPlus;
+import com.legacy.dungeons_plus.data.advancement.ThrownItemHitBlockTrigger;
 import com.legacy.dungeons_plus.data.providers.DPAdvancementProv;
 import com.legacy.dungeons_plus.data.providers.DPLangProvider;
 import com.legacy.dungeons_plus.data.providers.DPLootProv;
@@ -20,6 +21,7 @@ import com.legacy.structure_gel.api.events.RegisterLootTableAliasEvent;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 import com.legacy.structure_gel.api.structure.StructureAccessHelper;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -165,6 +167,11 @@ public class DPCommonEvents
 		{
 			ModList modList = ModList.get();
 			DungeonsPlus.isWaystonesLoaded = modList.isLoaded("waystones");
+
+			event.enqueueWork(() ->
+			{
+				CriteriaTriggers.register(ThrownItemHitBlockTrigger.TRIGGER);
+			});
 		}
 
 		@SubscribeEvent

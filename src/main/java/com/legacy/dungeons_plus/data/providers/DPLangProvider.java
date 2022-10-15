@@ -61,6 +61,7 @@ public class DPLangProvider extends LanguageProvider
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.killGhast, "Special Delivery", "Kill a ghast with a soul fireball");
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.zombieVillagerWeakness, "Hurtful Healing", "Give a zombie villager weakness with the Leviathan Blade");
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.hideInSnow, "Cold Campout", "Hide in powder snow with a Frosted Cowl");
+		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.axeTarget, "Here I am", "Throw a Warped Axe at a target block to teleport to it");
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.axePhantom, "What could go wrong?", "Throw a Warped Axe at a phantom from at least 25 meters away");
 		
 		
