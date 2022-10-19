@@ -162,6 +162,7 @@ public class DPSpawners
 	{
 		CompoundTag bowTag = new CompoundTag();
 		lootTable(bowTag, DPLoot.SnowyTemple.ENTITY_STRAY);
+		handItems(bowTag, Items.BOW.getDefaultInstance(), DROP_CHANCE);
 		SpawnData strayBow = SpawnerAccessHelper.createSpawnerEntity(EntityType.STRAY, bowTag, SPAWN_IN_SKYLIGHT);
 
 		CompoundTag swordTag = new CompoundTag();
