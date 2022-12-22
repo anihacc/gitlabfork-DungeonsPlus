@@ -276,8 +276,8 @@
           "functions": [
             {
               "enchantments": [
-                "minecraft:unbreaking",
                 "minecraft:vanishing_curse",
+                "minecraft:unbreaking",
                 "minecraft:frost_walker"
               ],
               "function": "minecraft:enchant_randomly"

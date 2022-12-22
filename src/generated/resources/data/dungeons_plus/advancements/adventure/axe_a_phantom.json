@@ -1,4 +1,5 @@
 {
+  "parent": "dungeons_plus:adventure/axe_a_target",
   "criteria": {
     "hit_phantom": {
       "conditions": {

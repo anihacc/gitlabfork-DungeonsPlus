@@ -53,7 +53,7 @@ public class DPSpawners
 	public static final DynamicSpawnerType TOWER_VEX = create("tower_vex", DPSpawners::towerVex);
 
 	public static final DynamicSpawnerType REANIMATED_RUINS_MOSSY = create("reanimated_ruins_mossy", DPSpawners::reanRuinsMossy);
-	public static final DynamicSpawnerType REANIMATED_RUINS_DESERT = create("reanimated_ruins_desert", DPSpawners::reanRuinsDesert);
+	public static final DynamicSpawnerType REANIMATED_RUINS_DESERT = create("reanimated_ruins_desert", DPSpawners::reanRuinsMesa);
 	public static final DynamicSpawnerType REANIMATED_RUINS_FROZEN = create("reanimated_ruins_frozen", DPSpawners::reanRuinsFrozen);
 
 	public static final DynamicSpawnerType LEVIATHAN_HUSK = create("leviathan_husk", DPSpawners::leviathanHusk);
@@ -124,7 +124,7 @@ public class DPSpawners
 		SpawnerAccessHelper.setSpawnCount(s, level, pos, 3);
 	}
 
-	private static void reanRuinsDesert(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
+	private static void reanRuinsMesa(SpawnerBlockEntity s, @Nullable Level level, BlockPos pos)
 	{
 		SimpleWeightedRandomList.Builder<SpawnData> builder = SimpleWeightedRandomList.builder();
 		builder.add(basicMob(s, level, pos, EntityType.ZOMBIE, DPLoot.ReanimatedRuins.ENTITY_ZOMBIE, Optional.empty()), 2);

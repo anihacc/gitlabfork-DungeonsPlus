@@ -10,8 +10,8 @@
             {
               "enchantments": [
                 "minecraft:fire_protection",
-                "minecraft:unbreaking",
-                "minecraft:blast_protection"
+                "minecraft:blast_protection",
+                "minecraft:unbreaking"
               ],
               "function": "minecraft:enchant_randomly"
             }
@@ -25,8 +25,8 @@
             {
               "enchantments": [
                 "minecraft:fire_protection",
-                "minecraft:unbreaking",
-                "minecraft:blast_protection"
+                "minecraft:blast_protection",
+                "minecraft:unbreaking"
               ],
               "function": "minecraft:enchant_randomly"
             }

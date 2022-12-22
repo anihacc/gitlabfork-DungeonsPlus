@@ -3,6 +3,7 @@ package com.legacy.dungeons_plus.entities;
 import javax.annotation.Nullable;
 
 import com.legacy.dungeons_plus.DPConfig;
+import com.legacy.dungeons_plus.data.DPTags;
 import com.legacy.dungeons_plus.data.advancement.ThrownItemHitBlockTrigger;
 import com.legacy.dungeons_plus.items.WarpedAxeItem;
 import com.legacy.dungeons_plus.registry.DPDamageSource;
@@ -31,7 +32,6 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
@@ -99,7 +99,7 @@ public class WarpedAxeEntity extends AbstractArrow
 		return this.entityData.get(ID_IN_BLOCK);
 	}
 
-	public boolean getTeleportsOwner()
+	public boolean shouldTeleportOwner()
 	{
 		return this.entityData.get(ID_TELEPORT_PLAYER);
 	}
@@ -128,7 +128,7 @@ public class WarpedAxeEntity extends AbstractArrow
 
 			if (this.oldPos != null)
 			{
-				if (this.getTeleportsOwner())
+				if (this.shouldTeleportOwner())
 				{
 					var pos = this.position();
 					double distScale = 1.0;
@@ -206,7 +206,7 @@ public class WarpedAxeEntity extends AbstractArrow
 		if (this.getOwner() instanceof ServerPlayer player)
 			ThrownItemHitBlockTrigger.TRIGGER.trigger(player, this.getAxe(), state);
 		super.onHitBlock(hitResult);
-		if (state.is(Blocks.TARGET))
+		if (state.is(DPTags.Blocks.WARPED_AXE_TELEPORTS_TO))
 		{
 			this.teleportOwner(this.getOwner());
 		}
@@ -231,14 +231,14 @@ public class WarpedAxeEntity extends AbstractArrow
 		if (hitEntity instanceof LivingEntity livingEntity)
 			damage += EnchantmentHelper.getDamageBonus(this.getAxe(), livingEntity.getMobType()) / 2;
 
-		if (!this.getTeleportsOwner())
+		if (!this.shouldTeleportOwner())
 			damage /= 2;
 
 		Entity owner = this.getOwner();
 		this.dealtDamage = true;
 		if (hitEntity.hurt(DPDamageSource.warpedAxe(this, owner, stack), damage))
 		{
-			if (hitEntity.getType() == EntityType.ENDERMAN)
+			if (hitEntity.getType().is(DPTags.EntityTypes.WARPED_AXE_IMMUNE))
 				return;
 
 			this.teleportOwner(owner);
@@ -263,7 +263,7 @@ public class WarpedAxeEntity extends AbstractArrow
 
 	private void teleportOwner(@Nullable Entity owner)
 	{
-		if (owner == null || !this.getTeleportsOwner())
+		if (owner == null || !this.shouldTeleportOwner())
 			return;
 		var pos = this.position();
 		owner.teleportTo(pos.x, pos.y, pos.z);
@@ -317,7 +317,7 @@ public class WarpedAxeEntity extends AbstractArrow
 		ItemStack stack = this.getAxe();
 		if (!stack.isEmpty())
 			tag.put(STACK_KEY, stack.save(new CompoundTag()));
-		tag.putBoolean(SHOULD_TELEPORT, this.getTeleportsOwner());
+		tag.putBoolean(SHOULD_TELEPORT, this.shouldTeleportOwner());
 	}
 
 	@Override

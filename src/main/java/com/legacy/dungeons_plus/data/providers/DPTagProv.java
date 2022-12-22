@@ -20,9 +20,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -39,7 +41,7 @@ public class DPTagProv
 		@Override
 		protected void addTags()
 		{
-			
+			this.tag(DPTags.Blocks.WARPED_AXE_TELEPORTS_TO).add(Blocks.TARGET);
 		}
 
 		@Override
@@ -80,11 +82,20 @@ public class DPTagProv
 			this.tag(uncommon).addTag(DPTags.Items.LOOT_UNCOMMON);
 			this.tag(rare).addTag(DPTags.Items.LOOT_RARE);
 		}
-		
-		@Override
-		public String getName()
+	}
+
+	public static class EntityTypeProv extends EntityTypeTagsProvider
+	{
+		public EntityTypeProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
 		{
-			return "Dungeons Plus item tag provider";
+			super(dataGen, DungeonsPlus.MODID, existingFileHelper);
+		}
+
+		@Override
+		protected void addTags()
+		{
+			this.tag(EntityTypeTags.IMPACT_PROJECTILES).add(DPEntityTypes.WARPED_AXE.get(), DPEntityTypes.SOUL_FIREBALL.get());
+			this.tag(DPTags.EntityTypes.WARPED_AXE_IMMUNE).add(EntityType.ENDERMAN);
 		}
 	}
 
@@ -103,37 +114,11 @@ public class DPTagProv
 			this.allStructures(DPTags.Structures.ON_SNOWY_TEMPLE_MAPS, DPStructures.SNOWY_TEMPLE);
 			this.allStructures(DPTags.Structures.ON_WARPED_GARDEN_MAPS, DPStructures.WARPED_GARDEN);
 		}
-		
+
 		private void allStructures(TagKey<Structure> tagKey, StructureRegistrar<?> registrar)
 		{
 			var appender = this.tag(tagKey);
 			registrar.getStructures().values().forEach(holder -> appender.add(holder.get(BuiltinRegistries.STRUCTURES)));
-		}
-
-		@Override
-		public String getName()
-		{
-			return "Dungeons Plus structure tag provider";
-		}
-	}
-	
-	public static class EntityTypeProv extends EntityTypeTagsProvider
-	{
-		public EntityTypeProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
-		{
-			super(dataGen, DungeonsPlus.MODID, existingFileHelper);
-		}
-
-		@Override
-		protected void addTags()
-		{
-			this.tag(EntityTypeTags.IMPACT_PROJECTILES).add(DPEntityTypes.WARPED_AXE.get(), DPEntityTypes.SOUL_FIREBALL.get());
-		}
-
-		@Override
-		public String getName()
-		{
-			return "Dungeons Plus entity tag provider";
 		}
 	}
 
@@ -158,14 +143,8 @@ public class DPTagProv
 			this.tag(DPTags.Biomes.HAS_SOUL_PRISON).add(Biomes.SOUL_SAND_VALLEY);
 			this.tag(DPTags.Biomes.HAS_END_RUINS).addTag(BiomeTags.HAS_END_CITY);
 		}
-
-		@Override
-		public String getName()
-		{
-			return "Dungeons Plus biome tag provider";
-		}
 	}
-	
+
 	public static class EnchantmentProv extends TagsProvider<Enchantment>
 	{
 		@SuppressWarnings("deprecation")
@@ -178,12 +157,6 @@ public class DPTagProv
 		protected void addTags()
 		{
 			this.tag(DPTags.Enchantments.WARPED_AXE_APPLICABLE).addOptional(new ResourceLocation("soulfired", "soul_fire_aspect"));
-		}
-
-		@Override
-		public String getName()
-		{
-			return "Dungeons Plus entity tag provider";
 		}
 	}
 }

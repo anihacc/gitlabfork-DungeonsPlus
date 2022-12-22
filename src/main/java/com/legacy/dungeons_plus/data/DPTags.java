@@ -4,13 +4,32 @@ import com.legacy.dungeons_plus.DungeonsPlus;
 
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class DPTags
 {
+	public static interface Blocks
+	{
+		// Tags for mod easy loot table mod compat.
+		// The loot/common, loot/uncommon, and loot/rare tags are applied to every dungeon, while the more structure specific ones only apply to the structure in its name
+		// 
+		// Common loot can generate between 1-3 in a chest
+		// Uncommon loot can generate between 1-2 in a chest
+		// Rare loot will only generate 1
+
+		TagKey<Block> WARPED_AXE_TELEPORTS_TO = create("warped_axe_teleports_to");
+
+		private static TagKey<Block> create(String name)
+		{
+			return TagKey.create(Registry.BLOCK_REGISTRY, DungeonsPlus.locate(name));
+		}
+	}
+
 	public static interface Items
 	{
 		// Tags for mod easy loot table mod compat.
@@ -19,7 +38,7 @@ public class DPTags
 		// Common loot can generate between 1-3 in a chest
 		// Uncommon loot can generate between 1-2 in a chest
 		// Rare loot will only generate 1
-		
+
 		TagKey<Item> LOOT_COMMON = create("loot/common");
 		TagKey<Item> LOOT_UNCOMMON = create("loot/uncommon");
 		TagKey<Item> LOOT_RARE = create("loot/rare");
@@ -51,6 +70,16 @@ public class DPTags
 		private static TagKey<Item> create(String name)
 		{
 			return TagKey.create(Registry.ITEM_REGISTRY, DungeonsPlus.locate(name));
+		}
+	}
+
+	public static interface EntityTypes
+	{
+		TagKey<EntityType<?>> WARPED_AXE_IMMUNE = create("warped_axe_immune");
+
+		private static TagKey<EntityType<?>> create(String name)
+		{
+			return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, DungeonsPlus.locate(name));
 		}
 	}
 
@@ -94,11 +123,11 @@ public class DPTags
 			return TagKey.create(Registry.BIOME_REGISTRY, DungeonsPlus.locate(name));
 		}
 	}
-	
+
 	public static interface Enchantments
 	{
 		TagKey<Enchantment> WARPED_AXE_APPLICABLE = create("warped_axe_applicable");
-		
+
 		private static TagKey<Enchantment> create(String name)
 		{
 			return TagKey.create(Registry.ENCHANTMENT_REGISTRY, DungeonsPlus.locate(name));

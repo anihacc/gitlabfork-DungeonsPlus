@@ -63,8 +63,7 @@ public class DPLangProvider extends LanguageProvider
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.hideInSnow, "Cold Campout", "Hide in powder snow with a Frosted Cowl");
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.axeTarget, "Here I am", "Throw a Warped Axe at a target block to teleport to it");
 		this.addAdvancement(DPAdvancementProv.DungeonsPlusAdvancements.axePhantom, "What could go wrong?", "Throw a Warped Axe at a phantom from at least 25 meters away");
-		
-		
+
 		this.add(DPSoundEvents.SOUL_CANNON_SHOOT, "Soul Blaster shoots");
 		this.add(DPSoundEvents.WARPED_AXE_THROW, "Warped Axe thrown");
 		this.add(DPSoundEvents.WARPED_AXE_LAND, "Warped Axe lands");
@@ -84,10 +83,11 @@ public class DPLangProvider extends LanguageProvider
 
 		this.addItemInfo(DPItems.FROSTED_COWL, FrostedCowlItem.FREEZE_KEY, "Grants immunity to freezing.");
 		this.addItemInfo(DPItems.FROSTED_COWL, FrostedCowlItem.SLOWNESS_KEY, "Prevents the slowness potions from taking effect.");
+		this.addItemInfo(DPItems.FROSTED_COWL, FrostedCowlItem.SNOW_VISION_KEY, "Improves vision when snowing.");
 
 		this.addItemInfo(DPItems.WARPED_AXE, WarpedAxeItem.TELEPORT_KEY, "Teleports the user to who the axe was thrown at.");
 		this.addItemInfo(DPItems.WARPED_AXE, WarpedAxeItem.CROUCH_KEY, "Crouch to prevent teleporting.");
-		
+
 		this.addItemInfo(DPItems.SOUL_CANNON, SoulCannonItem.SHOOT_KEY, "Launches a fireball in the direction the user is facing.");
 	}
 

@@ -1,4 +1,4 @@
-// 1.19.2	2022-10-03T03:08:40.4557947	Dungeons Plus structure tag provider
+// 1.19.2	2022-12-21T21:06:57.0282942	Tags for minecraft:worldgen/structure
 fd753fa9e9be621e84b30ea80820df3b5d1d0e5b data/dungeons_plus/tags/worldgen/structure/on_leviathan_maps.json
 bfa1e214fbc0182158bf54d5fe074d8484a1d7cb data/dungeons_plus/tags/worldgen/structure/on_reanimated_ruins_maps.json
 c5c3b3e9ae012988250f89e1df69672e2a1be842 data/dungeons_plus/tags/worldgen/structure/on_snowy_temple_maps.json

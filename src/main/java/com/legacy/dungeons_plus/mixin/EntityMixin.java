@@ -5,12 +5,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.legacy.dungeons_plus.registry.DPItems;
+import com.legacy.dungeons_plus.items.FrostedCowlItem;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ItemStack;
 
 @Mixin(Entity.class)
 public class EntityMixin
@@ -18,16 +16,9 @@ public class EntityMixin
 	@Inject(at = @At("HEAD"), method = "canFreeze", cancellable = true)
 	private void canFreezeHook(CallbackInfoReturnable<Boolean> callback)
 	{
-		if (DPItems.FROSTED_COWL.isPresent() && (Object) this instanceof LivingEntity living)
+		if ((Object) this instanceof LivingEntity living && FrostedCowlItem.isWearing(living))
 		{
-			for (ItemStack stack : living.getArmorSlots())
-			{
-				if (stack.getItem() instanceof ArmorItem armor && armor.getMaterial() == DPItems.DPArmors.STRAY)
-				{
-					callback.setReturnValue(false);
-					break;
-				}
-			}
+			callback.setReturnValue(false);
 		}
 	}
 }

@@ -226,21 +226,23 @@ public class DPCommonEvents
 		{
 			DataGenerator gen = event.getGenerator();
 			ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-
+			boolean server = event.includeServer();
+			boolean client = event.includeClient();
+			
 			// data
 			BlockTagsProvider blockTagProv = new DPTagProv.BlockProv(gen, event.getExistingFileHelper());
-			gen.addProvider(true, blockTagProv);
-			gen.addProvider(true, new DPTagProv.ItemProv(gen, blockTagProv, existingFileHelper));
-			gen.addProvider(true, new DPTagProv.StructureProv(gen, existingFileHelper));
-			gen.addProvider(true, new DPTagProv.EntityTypeProv(gen, existingFileHelper));
-			gen.addProvider(true, new DPTagProv.BiomeProv(gen, existingFileHelper));
-			gen.addProvider(true, new DPTagProv.EnchantmentProv(gen, existingFileHelper));
+			gen.addProvider(server, blockTagProv);
+			gen.addProvider(server, new DPTagProv.ItemProv(gen, blockTagProv, existingFileHelper));
+			gen.addProvider(server, new DPTagProv.EntityTypeProv(gen, existingFileHelper));
+			gen.addProvider(server, new DPTagProv.StructureProv(gen, existingFileHelper));
+			gen.addProvider(server, new DPTagProv.BiomeProv(gen, existingFileHelper));
+			gen.addProvider(server, new DPTagProv.EnchantmentProv(gen, existingFileHelper));
 
-			gen.addProvider(true, new DPAdvancementProv(gen));
-			gen.addProvider(true, new DPLootProv(gen));
+			gen.addProvider(server, new DPAdvancementProv(gen));
+			gen.addProvider(server, new DPLootProv(gen));
 
 			// assets
-			gen.addProvider(true, new DPLangProvider(gen));
+			gen.addProvider(client, new DPLangProvider(gen));
 		}
 	}
 }
