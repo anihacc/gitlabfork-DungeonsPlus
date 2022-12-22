@@ -13,7 +13,7 @@ import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.SerializationContext;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
@@ -60,7 +60,7 @@ public class ThrownItemHitBlockTrigger extends SimpleCriterionTrigger<ThrownItem
 		if (json.has(BLOCK_KEY))
 		{
 			ResourceLocation blockID = new ResourceLocation(GsonHelper.getAsString(json, BLOCK_KEY));
-			return Registry.BLOCK.getOptional(blockID).orElseThrow(() ->
+			return BuiltInRegistries.BLOCK.getOptional(blockID).orElseThrow(() ->
 			{
 				return new JsonSyntaxException("Unknown block type '" + blockID + "'");
 			});
@@ -119,7 +119,7 @@ public class ThrownItemHitBlockTrigger extends SimpleCriterionTrigger<ThrownItem
 			}
 			if (this.block != null)
 			{
-				json.addProperty(BLOCK_KEY, Registry.BLOCK.getKey(this.block).toString());
+				json.addProperty(BLOCK_KEY, BuiltInRegistries.BLOCK.getKey(this.block).toString());
 			}
 
 			json.add(STATE_KEY, this.state.serializeToJson());

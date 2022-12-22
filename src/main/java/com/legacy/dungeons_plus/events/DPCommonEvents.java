@@ -4,6 +4,7 @@ import static com.legacy.dungeons_plus.DungeonsPlus.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import com.legacy.dungeons_plus.DPConfig;
@@ -16,15 +17,18 @@ import com.legacy.dungeons_plus.data.providers.DPTagProv;
 import com.legacy.dungeons_plus.registry.DPItems;
 import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
+import com.legacy.structure_gel.api.data.providers.RegistrarDatapackEntriesProvider;
 import com.legacy.structure_gel.api.entity.EntityAccessHelper;
 import com.legacy.structure_gel.api.events.RegisterLootTableAliasEvent;
+import com.legacy.structure_gel.api.registry.registrar.RegistrarHandler;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 import com.legacy.structure_gel.api.structure.StructureAccessHelper;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
@@ -38,10 +42,14 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -54,12 +62,12 @@ public class DPCommonEvents
 	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 	public static class ForgeBus
 	{
-		public static void onEntitySpawn(Mob entity)
+		public static void onInitialEntitySpawn(Mob entity)
 		{
 			Level level = entity.getLevel();
 			if (!level.isClientSide)
 			{
-				ifInStructure(entity, EntityType.HUSK, DPStructures.LEVIATHAN, e ->
+				ifInStructurePiece(entity, EntityType.HUSK, DPStructures.LEVIATHAN, e ->
 				{
 					if (DPConfig.COMMON.husksDropSand.get())
 						EntityAccessHelper.setDeathLootTable(e, DPLoot.Leviathan.ENTITY_HUSK);
@@ -72,7 +80,7 @@ public class DPCommonEvents
 						e.setDropChance(EquipmentSlot.MAINHAND, 0.12F);
 					}
 				});
-				ifInStructure(entity, EntityType.STRAY, DPStructures.SNOWY_TEMPLE, e ->
+				ifInStructurePiece(entity, EntityType.STRAY, DPStructures.SNOWY_TEMPLE, e ->
 				{
 					if (DPConfig.COMMON.straysDropIce.get())
 						EntityAccessHelper.setDeathLootTable(e, DPLoot.SnowyTemple.ENTITY_STRAY);
@@ -85,7 +93,7 @@ public class DPCommonEvents
 						e.setDropChance(EquipmentSlot.HEAD, 0.12F);
 					}
 				});
-				ifInStructure(entity, EntityType.DROWNED, DPStructures.WARPED_GARDEN, e ->
+				ifInStructurePiece(entity, EntityType.DROWNED, DPStructures.WARPED_GARDEN, e ->
 				{
 					RandomSource rand = e.getRandom();
 					if (rand.nextFloat() < DPConfig.COMMON.drownedWarpedAxeChance.get())
@@ -97,7 +105,7 @@ public class DPCommonEvents
 					}
 					if (rand.nextFloat() < DPConfig.COMMON.drownedCoralChance.get())
 					{
-						var opTag = level.registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY).getTag(BlockTags.CORAL_BLOCKS);
+						var opTag = level.registryAccess().registryOrThrow(Registries.BLOCK).getTag(BlockTags.CORAL_BLOCKS);
 						if (opTag.isPresent() && opTag.get().size() > 0)
 						{
 							e.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(opTag.get().getRandomElement(rand).get().value()));
@@ -105,7 +113,7 @@ public class DPCommonEvents
 						}
 					}
 				});
-				ifInStructure(entity, EntityType.SKELETON, DPStructures.SOUL_PRISON, e ->
+				ifInStructurePiece(entity, EntityType.SKELETON, DPStructures.SOUL_PRISON, e ->
 				{
 					RandomSource rand = e.getRandom();
 					if (rand.nextFloat() < DPConfig.COMMON.skeletonSoulCannonChance.get())
@@ -116,11 +124,21 @@ public class DPCommonEvents
 						e.setDropChance(EquipmentSlot.OFFHAND, 0.30F);
 					}
 				});
+			}
+		}
+
+		@SubscribeEvent
+		protected static void onJoinLevel(final EntityJoinLevelEvent event)
+		{
+			Entity entity = event.getEntity();
+			Level level = entity.getLevel();
+			if (!level.isClientSide)
+			{
 				ifInStructure(entity, EntityType.GHAST, DPStructures.SOUL_PRISON, e ->
 				{
 					e.targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>(e, Player.class, true, false));
 				});
-				ifInStructure(entity, EntityType.ENDERMAN, DPStructures.END_RUINS, e ->
+				ifInStructurePiece(entity, EntityType.ENDERMAN, DPStructures.END_RUINS, e ->
 				{
 					e.targetSelector.addGoal(1, new NearestAttackableTargetGoal<Player>(e, Player.class, true, false));
 				});
@@ -128,9 +146,16 @@ public class DPCommonEvents
 		}
 
 		@SuppressWarnings("unchecked")
-		private static <T extends Entity> void ifInStructure(Entity entity, EntityType<T> entityTest, StructureRegistrar<?> structure, Consumer<T> consumer)
+		private static <T extends Entity> void ifInStructurePiece(Entity entity, EntityType<T> entityTest, StructureRegistrar<?> structure, Consumer<T> consumer)
 		{
 			if (entity.getType().equals(entityTest) && entity.level instanceof ServerLevel serverLevel && StructureAccessHelper.isInStructurePiece(serverLevel, structure.getType(), entity.blockPosition()))
+				consumer.accept((T) entity);
+		}
+
+		@SuppressWarnings("unchecked")
+		private static <T extends Entity> void ifInStructure(Entity entity, EntityType<T> entityTest, StructureRegistrar<?> structure, Consumer<T> consumer)
+		{
+			if (entity.getType().equals(entityTest) && entity.level instanceof ServerLevel serverLevel && StructureAccessHelper.isInStructure(serverLevel, structure.getType(), entity.blockPosition()))
 				consumer.accept((T) entity);
 		}
 
@@ -172,6 +197,18 @@ public class DPCommonEvents
 			{
 				CriteriaTriggers.register(ThrownItemHitBlockTrigger.TRIGGER);
 			});
+		}
+
+		@SubscribeEvent
+		protected static void commonInit(final CreativeModeTabEvent.BuildContents event)
+		{
+			if (event.getTab().equals(CreativeModeTabs.COMBAT))
+			{
+				event.accept(DPItems.FROSTED_COWL);
+				event.accept(DPItems.LEVIATHAN_BLADE);
+				event.accept(DPItems.WARPED_AXE);
+				event.accept(DPItems.SOUL_CANNON);
+			}
 		}
 
 		@SubscribeEvent
@@ -225,24 +262,29 @@ public class DPCommonEvents
 		protected static void gatherData(final GatherDataEvent event)
 		{
 			DataGenerator gen = event.getGenerator();
+			PackOutput output = gen.getPackOutput();
 			ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 			boolean server = event.includeServer();
 			boolean client = event.includeClient();
-			
-			// data
-			BlockTagsProvider blockTagProv = new DPTagProv.BlockProv(gen, event.getExistingFileHelper());
-			gen.addProvider(server, blockTagProv);
-			gen.addProvider(server, new DPTagProv.ItemProv(gen, blockTagProv, existingFileHelper));
-			gen.addProvider(server, new DPTagProv.EntityTypeProv(gen, existingFileHelper));
-			gen.addProvider(server, new DPTagProv.StructureProv(gen, existingFileHelper));
-			gen.addProvider(server, new DPTagProv.BiomeProv(gen, existingFileHelper));
-			gen.addProvider(server, new DPTagProv.EnchantmentProv(gen, existingFileHelper));
 
-			gen.addProvider(server, new DPAdvancementProv(gen));
-			gen.addProvider(server, new DPLootProv(gen));
+			// data
+			RegistrarDatapackEntriesProvider registrarProv = RegistrarHandler.createGenerator(output, DungeonsPlus.MODID);
+			gen.addProvider(server, registrarProv);
+			CompletableFuture<HolderLookup.Provider> lookup = registrarProv.getLookupProvider();
+
+			BlockTagsProvider blockTagProv = new DPTagProv.BlockProv(output, lookup, existingFileHelper);
+			gen.addProvider(server, blockTagProv);
+			gen.addProvider(server, new DPTagProv.ItemProv(output, lookup, blockTagProv, existingFileHelper));
+			gen.addProvider(server, new DPTagProv.EntityTypeProv(output, lookup, existingFileHelper));
+			gen.addProvider(server, new DPTagProv.StructureProv(output, lookup, existingFileHelper));
+			gen.addProvider(server, new DPTagProv.BiomeProv(output, lookup, existingFileHelper));
+			gen.addProvider(server, new DPTagProv.EnchantmentProv(output, lookup, existingFileHelper));
+
+			gen.addProvider(server, new DPAdvancementProv(output, lookup, existingFileHelper));
+			gen.addProvider(server, new DPLootProv(output));
 
 			// assets
-			gen.addProvider(client, new DPLangProvider(gen));
+			gen.addProvider(client, new DPLangProvider(output, lookup));
 		}
 	}
 }

@@ -4,12 +4,12 @@ import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.structure_gel.api.registry.registrar.Registrar;
 import com.legacy.structure_gel.api.registry.registrar.RegistrarHandler;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 
 public class DPSoundEvents
 {
-	public static final RegistrarHandler<SoundEvent> HANDLER = RegistrarHandler.getOrCreate(Registry.SOUND_EVENT_REGISTRY, DungeonsPlus.MODID);
+	public static final RegistrarHandler<SoundEvent> HANDLER = RegistrarHandler.getOrCreate(Registries.SOUND_EVENT, DungeonsPlus.MODID);
 
 	public static final Registrar.Static<SoundEvent> SOUL_CANNON_SHOOT = register("item.soul_cannon.shoot");
 	public static final Registrar.Static<SoundEvent> WARPED_AXE_THROW = register("item.warped_axe.throw");
@@ -20,6 +20,6 @@ public class DPSoundEvents
 	
 	private static Registrar.Static<SoundEvent> register(String key)
 	{
-		return HANDLER.createStatic(key, () -> new SoundEvent(DungeonsPlus.locate(key)));
+		return HANDLER.createStatic(key, () -> SoundEvent.createVariableRangeEvent(DungeonsPlus.locate(key)));
 	}
 }

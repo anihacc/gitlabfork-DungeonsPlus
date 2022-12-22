@@ -10,7 +10,7 @@ import org.apache.commons.lang3.function.TriFunction;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -109,7 +109,7 @@ public class DPUtil
 			level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
 			try
 			{
-				Feature<NoneFeatureConfiguration> waystoneFeature = (Feature<NoneFeatureConfiguration>) level.registryAccess().registryOrThrow(Registry.FEATURE_REGISTRY).get(new ResourceLocation("waystones", "waystone"));
+				Feature<NoneFeatureConfiguration> waystoneFeature = (Feature<NoneFeatureConfiguration>) level.registryAccess().registryOrThrow(Registries.FEATURE).get(new ResourceLocation("waystones", "waystone"));
 				if (waystoneFeature != null)
 				{
 					level.setBlock(pos.above(), Blocks.AIR.defaultBlockState(), 2);

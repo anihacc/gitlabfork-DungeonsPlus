@@ -1,14 +1,9 @@
 package com.legacy.dungeons_plus.data.providers;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
-import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-import org.apache.logging.log4j.Logger;
-
-import com.google.common.collect.Sets;
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.data.advancement.ThrownItemHitBlockTrigger;
 import com.legacy.dungeons_plus.registry.DPEntityTypes;
@@ -32,9 +27,8 @@ import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds.Doubles;
 import net.minecraft.advancements.critereon.PlayerHurtEntityTrigger;
 import net.minecraft.advancements.critereon.PlayerTrigger;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
@@ -44,65 +38,17 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.common.data.ForgeAdvancementProvider;
 
-@SuppressWarnings("unused")
-public class DPAdvancementProv implements DataProvider
+public class DPAdvancementProv extends ForgeAdvancementProvider
 {
-	private static final Logger LOGGER = DungeonsPlus.makeLogger(DPAdvancementProv.class);
-	private final DataGenerator generator;
-	private final List<Consumer<Consumer<Advancement>>> advancements = List.of(new DungeonsPlusAdvancements());
-
-	public DPAdvancementProv(DataGenerator generatorIn)
+	public DPAdvancementProv(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookup, ExistingFileHelper existingFileHelper)
 	{
-		this.generator = generatorIn;
+		super(packOutput, lookup, existingFileHelper, List.of(new DungeonsPlusAdvancements()));
 	}
 
-	@Override
-	public void run(CachedOutput cache) throws IOException
-	{
-		DataGenerator.PathProvider path = generator.createPathProvider(DataGenerator.Target.DATA_PACK, "advancements");
-		Set<ResourceLocation> set = Sets.newHashSet();
-		Consumer<Advancement> advancement = a ->
-		{
-			if (!set.add(a.getId()))
-			{
-				throw new IllegalStateException("Duplicate advancement " + a.getId());
-			}
-			else
-			{
-				Path path1 = path.json(a.getId());
-
-				try
-				{
-					DataProvider.saveStable(cache, a.deconstruct().serializeToJson(), path1);
-				}
-				catch (IOException ioexception)
-				{
-					LOGGER.error("Couldn't save advancement {}", path1, ioexception);
-				}
-
-			}
-		};
-
-		for (Consumer<Consumer<Advancement>> adv : this.advancements)
-		{
-			adv.accept(advancement);
-		}
-
-	}
-
-	private static Path getPath(Path path, Advancement advancement)
-	{
-		return path.resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
-	}
-
-	@Override
-	public String getName()
-	{
-		return "Dungeons Plus Advancements";
-	}
-
-	protected class DungeonsPlusAdvancements implements Consumer<Consumer<Advancement>>
+	protected static class DungeonsPlusAdvancements implements AdvancementGenerator
 	{
 		protected static Advancement findTower, findReanimatedRuins, findLeviathan, findSnowyTemple, findWarpedGarden;
 		protected static Advancement findSoulPrison;
@@ -113,31 +59,31 @@ public class DPAdvancementProv implements DataProvider
 		private String section = "";
 
 		@Override
-		public void accept(Consumer<Advancement> con)
+		public void generate(HolderLookup.Provider lookup, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper)
 		{
 			Advancement adventureRoot = this.builder(Items.STONE, "adventure", FrameType.TASK).addCriterion("trigger", KilledTrigger.TriggerInstance.playerKilledEntity()).build(new ResourceLocation("adventure/root"));
 			Advancement netherRoot = this.builder(Items.STONE, "nether", FrameType.TASK).addCriterion("trigger", KilledTrigger.TriggerInstance.playerKilledEntity()).build(new ResourceLocation("nether/root"));
 			Advancement endEnterGateway = this.builder(Items.STONE, "end", FrameType.TASK).addCriterion("trigger", KilledTrigger.TriggerInstance.playerKilledEntity()).build(new ResourceLocation("end/enter_end_gateway"));
 
 			this.setSection("adventure");
-			findTower = this.inAnyStructure(this.builder(Blocks.MOSSY_STONE_BRICKS, "find_tower", FrameType.TASK).parent(adventureRoot), DPStructures.TOWER).save(con, this.locate("find_tower"));
-			findReanimatedRuins = this.inAnyStructure(this.builder(Blocks.MOSSY_COBBLESTONE, "find_reanimated_ruins", FrameType.TASK).parent(findTower), DPStructures.REANIMATED_RUINS).save(con, this.locate("find_reanimated_ruins"));
-			findLeviathan = this.inAnyStructure(this.builder(Blocks.BONE_BLOCK, "find_leviathan", FrameType.GOAL).parent(findReanimatedRuins), DPStructures.LEVIATHAN).save(con, this.locate("find_leviathan"));
-			findSnowyTemple = this.inAnyStructure(this.builder(Blocks.PACKED_ICE, "find_snowy_temple", FrameType.GOAL).parent(findReanimatedRuins), DPStructures.SNOWY_TEMPLE).save(con, this.locate("find_snowy_temple"));
-			findWarpedGarden = this.inAnyStructure(this.builder(Blocks.WARPED_FUNGUS, "find_warped_garden", FrameType.GOAL).parent(findReanimatedRuins), DPStructures.WARPED_GARDEN).save(con, this.locate("find_warped_garden"));
+			findTower = this.inAnyStructure(this.builder(Blocks.MOSSY_STONE_BRICKS, "find_tower", FrameType.TASK).parent(adventureRoot), DPStructures.TOWER).save(saver, this.locate("find_tower"));
+			findReanimatedRuins = this.inAnyStructure(this.builder(Blocks.MOSSY_COBBLESTONE, "find_reanimated_ruins", FrameType.TASK).parent(findTower), DPStructures.REANIMATED_RUINS).save(saver, this.locate("find_reanimated_ruins"));
+			findLeviathan = this.inAnyStructure(this.builder(Blocks.BONE_BLOCK, "find_leviathan", FrameType.GOAL).parent(findReanimatedRuins), DPStructures.LEVIATHAN).save(saver, this.locate("find_leviathan"));
+			findSnowyTemple = this.inAnyStructure(this.builder(Blocks.PACKED_ICE, "find_snowy_temple", FrameType.GOAL).parent(findReanimatedRuins), DPStructures.SNOWY_TEMPLE).save(saver, this.locate("find_snowy_temple"));
+			findWarpedGarden = this.inAnyStructure(this.builder(Blocks.WARPED_FUNGUS, "find_warped_garden", FrameType.GOAL).parent(findReanimatedRuins), DPStructures.WARPED_GARDEN).save(saver, this.locate("find_warped_garden"));
 
-			zombieVillagerWeakness = this.builder(DPItems.LEVIATHAN_BLADE.get(), "zombie_villager_leviathan", FrameType.TASK).parent(findLeviathan).addCriterion("hit_zombie_villager", PlayerHurtEntityTrigger.TriggerInstance.playerHurtEntity(DamagePredicate.Builder.damageInstance().sourceEntity(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().of(DPItems.LEVIATHAN_BLADE.get()).build()).build()).build()), EntityPredicate.Builder.entity().of(EntityType.ZOMBIE_VILLAGER).build())).save(con, this.locate("zombie_villager_leviathan"));
-			hideInSnow = this.builder(DPItems.FROSTED_COWL.get(), "hide_in_snow", FrameType.TASK).parent(findSnowyTemple).addCriterion("stand_in_snow", PlayerTrigger.TriggerInstance.located(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().head(ItemPredicate.Builder.item().of(DPItems.FROSTED_COWL.get()).build()).build()).located(LocationPredicate.Builder.location().setBlock(BlockPredicate.Builder.block().of(Blocks.POWDER_SNOW).build()).build()).build())).save(con, this.locate("hide_in_snow"));
-			axeTarget = this.builder(Items.TARGET, "axe_a_target", FrameType.TASK).parent(findWarpedGarden).addCriterion("hit_target", ThrownItemHitBlockTrigger.TriggerInstance.of(ItemPredicate.Builder.item().of(DPItems.WARPED_AXE.get()).build(), Blocks.TARGET)).save(con, this.locate("axe_a_target"));
-			axePhantom = this.builder(DPItems.WARPED_AXE.get(), "axe_a_phantom", FrameType.CHALLENGE).parent(axeTarget).rewards(AdvancementRewards.Builder.experience(50)).addCriterion("hit_phantom", PlayerHurtEntityTrigger.TriggerInstance.playerHurtEntity(DamagePredicate.Builder.damageInstance().type(DamageSourcePredicate.Builder.damageType().isProjectile(true).direct(EntityPredicate.Builder.entity().of(DPEntityTypes.WARPED_AXE.get()))), EntityPredicate.Builder.entity().of(EntityType.PHANTOM).distance(DistancePredicate.absolute(Doubles.atLeast(25))).build())).save(con, this.locate("axe_a_phantom"));
-					
+			zombieVillagerWeakness = this.builder(DPItems.LEVIATHAN_BLADE.get(), "zombie_villager_leviathan", FrameType.TASK).parent(findLeviathan).addCriterion("hit_zombie_villager", PlayerHurtEntityTrigger.TriggerInstance.playerHurtEntity(DamagePredicate.Builder.damageInstance().sourceEntity(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().mainhand(ItemPredicate.Builder.item().of(DPItems.LEVIATHAN_BLADE.get()).build()).build()).build()), EntityPredicate.Builder.entity().of(EntityType.ZOMBIE_VILLAGER).build())).save(saver, this.locate("zombie_villager_leviathan"));
+			hideInSnow = this.builder(DPItems.FROSTED_COWL.get(), "hide_in_snow", FrameType.TASK).parent(findSnowyTemple).addCriterion("stand_in_snow", PlayerTrigger.TriggerInstance.located(EntityPredicate.Builder.entity().equipment(EntityEquipmentPredicate.Builder.equipment().head(ItemPredicate.Builder.item().of(DPItems.FROSTED_COWL.get()).build()).build()).located(LocationPredicate.Builder.location().setBlock(BlockPredicate.Builder.block().of(Blocks.POWDER_SNOW).build()).build()).build())).save(saver, this.locate("hide_in_snow"));
+			axeTarget = this.builder(Items.TARGET, "axe_a_target", FrameType.TASK).parent(findWarpedGarden).addCriterion("hit_target", ThrownItemHitBlockTrigger.TriggerInstance.of(ItemPredicate.Builder.item().of(DPItems.WARPED_AXE.get()).build(), Blocks.TARGET)).save(saver, this.locate("axe_a_target"));
+			axePhantom = this.builder(DPItems.WARPED_AXE.get(), "axe_a_phantom", FrameType.CHALLENGE).parent(axeTarget).rewards(AdvancementRewards.Builder.experience(50)).addCriterion("hit_phantom", PlayerHurtEntityTrigger.TriggerInstance.playerHurtEntity(DamagePredicate.Builder.damageInstance().type(DamageSourcePredicate.Builder.damageType().isProjectile(true).direct(EntityPredicate.Builder.entity().of(DPEntityTypes.WARPED_AXE.get()))), EntityPredicate.Builder.entity().of(EntityType.PHANTOM).distance(DistancePredicate.absolute(Doubles.atLeast(25))).build())).save(saver, this.locate("axe_a_phantom"));
+
 			this.setSection("nether");
-			findSoulPrison = this.inAnyStructure(this.builder(Blocks.SPAWNER, "find_soul_prison", FrameType.GOAL).parent(netherRoot), DPStructures.SOUL_PRISON).save(con, this.locate("find_soul_prison"));
+			findSoulPrison = this.inAnyStructure(this.builder(Blocks.SPAWNER, "find_soul_prison", FrameType.GOAL).parent(netherRoot), DPStructures.SOUL_PRISON).save(saver, this.locate("find_soul_prison"));
 
-			killGhast = this.builder(DPItems.SOUL_CANNON.get(), "shoot_ghast_with_soul", FrameType.TASK).parent(findSoulPrison).addCriterion("kill_ghast", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(EntityType.GHAST), DamageSourcePredicate.Builder.damageType().isProjectile(true).direct(EntityPredicate.Builder.entity().of(DPEntityTypes.SOUL_FIREBALL.get())))).save(con, this.locate("shoot_ghast_with_soul"));
+			killGhast = this.builder(DPItems.SOUL_CANNON.get(), "shoot_ghast_with_soul", FrameType.TASK).parent(findSoulPrison).addCriterion("kill_ghast", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(EntityType.GHAST), DamageSourcePredicate.Builder.damageType().isProjectile(true).direct(EntityPredicate.Builder.entity().of(DPEntityTypes.SOUL_FIREBALL.get())))).save(saver, this.locate("shoot_ghast_with_soul"));
 
 			this.setSection("end");
-			findEndRuins = this.inAnyStructure(this.builder(Blocks.END_STONE_BRICKS, "find_end_ruins", FrameType.GOAL).parent(endEnterGateway), DPStructures.END_RUINS).save(con, this.locate("find_end_ruins"));
+			findEndRuins = this.inAnyStructure(this.builder(Blocks.END_STONE_BRICKS, "find_end_ruins", FrameType.GOAL).parent(endEnterGateway), DPStructures.END_RUINS).save(saver, this.locate("find_end_ruins"));
 
 		}
 

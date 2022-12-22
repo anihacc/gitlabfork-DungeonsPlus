@@ -1,0 +1,49 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:end_ruins/tower/block_pile_2",
+        "maintainWater": true,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:end_ruins/tower/block_pile_1",
+        "maintainWater": true,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:end_ruins/tower/block_pile_4",
+        "maintainWater": true,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:end_ruins/tower/block_pile_3",
+        "maintainWater": true,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

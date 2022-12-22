@@ -1,0 +1,12 @@
+{
+  "processors": [
+    {
+      "chance": 0.1,
+      "change_to": {
+        "Name": "minecraft:end_stone"
+      },
+      "condition": "minecraft:end_stone_bricks",
+      "processor_type": "structure_gel:replace_block"
+    }
+  ]
+}

@@ -2,7 +2,7 @@ package com.legacy.dungeons_plus.client.renderers;
 
 import com.legacy.dungeons_plus.entities.WarpedAxeEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -54,9 +54,9 @@ public class WarpedAxeRenderer extends EntityRenderer<WarpedAxeEntity>
 					spinRot = 60;
 				}
 			}
-			poseStack.mulPose(Vector3f.YP.rotationDegrees(90 - entity.getRenderRotation()));
-			poseStack.mulPose(Vector3f.ZP.rotationDegrees(spinRot));
-			poseStack.mulPose(Vector3f.XN.rotationDegrees((float) Math.sin(spinRot) * 7));
+			poseStack.mulPose(Axis.YP.rotationDegrees(90 - entity.getRenderRotation()));
+			poseStack.mulPose(Axis.ZP.rotationDegrees(spinRot));
+			poseStack.mulPose(Axis.XN.rotationDegrees((float) Math.sin(spinRot) * 7));
 
 			poseStack.translate(0, -0.35, 0);
 			float s = 2.0F;

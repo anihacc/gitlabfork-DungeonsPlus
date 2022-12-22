@@ -2,8 +2,8 @@ package com.legacy.dungeons_plus.structures.warped_garden;
 
 import com.legacy.dungeons_plus.registry.DPJigsawTypes;
 import com.legacy.dungeons_plus.registry.DPStructures;
-import com.legacy.structure_gel.api.structure.ExtendedJigsawStructure.IPieceFactory;
-import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
+import com.legacy.structure_gel.api.structure.jigsaw.ExtendedJigsawStructurePiece;
+import com.legacy.structure_gel.api.structure.jigsaw.IPieceFactory;
 import com.legacy.structure_gel.api.structure.jigsaw.JigsawCapability.IJigsawCapability;
 import com.legacy.structure_gel.api.structure.jigsaw.JigsawCapability.JigsawType;
 import com.mojang.serialization.Codec;
@@ -13,13 +13,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 public class WarpedGardenStructure
 {
@@ -41,11 +38,11 @@ public class WarpedGardenStructure
 		}
 	}
 
-	public static class Piece extends AbstractGelStructurePiece
+	public static class Piece extends ExtendedJigsawStructurePiece
 	{
-		public Piece(StructureTemplateManager template, StructurePoolElement piece, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds)
+		public Piece(IPieceFactory.Context context)
 		{
-			super(template, piece, pos, groundLevelDelta, rotation, bounds);
+			super(context);
 		}
 
 		public Piece(StructurePieceSerializationContext context, CompoundTag tag)

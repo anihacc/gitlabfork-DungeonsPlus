@@ -1,0 +1,49 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:end_ruins/pylon/debris_1",
+        "maintainWater": true,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:end_ruins/pylon/debris_2",
+        "maintainWater": true,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:end_ruins/pylon/debris_3",
+        "maintainWater": true,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:end_ruins/pylon/debris_4",
+        "maintainWater": true,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

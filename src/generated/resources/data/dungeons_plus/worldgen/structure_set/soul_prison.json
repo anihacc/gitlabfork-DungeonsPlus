@@ -1,0 +1,17 @@
+{
+  "placement": {
+    "type": "structure_gel:grid_placement",
+    "allowed_near_spawn": false,
+    "frequency": 0.75,
+    "offset": 16,
+    "salt": 1438267901,
+    "spacing": 20,
+    "structure": "dungeons_plus:soul_prison"
+  },
+  "structures": [
+    {
+      "structure": "dungeons_plus:soul_prison",
+      "weight": 1
+    }
+  ]
+}

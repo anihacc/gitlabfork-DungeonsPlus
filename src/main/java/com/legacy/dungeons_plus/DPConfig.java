@@ -2,11 +2,8 @@ package com.legacy.dungeons_plus;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.legacy.dungeons_plus.data.DPTags;
-import com.legacy.dungeons_plus.structures.reanimated_ruins.ReanimatedRuinsType;
 import com.legacy.structure_gel.api.config.ConfigBuilder;
 import com.legacy.structure_gel.api.config.ConfigValueWrapper;
-import com.legacy.structure_gel.api.config.StructureConfig;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,14 +22,6 @@ public class DPConfig
 
 	public static class Common
 	{
-		public final StructureConfig tower;
-		public final StructureConfig leviathan;
-		public final StructureConfig snowyTemple;
-		public final StructureConfig reanimatedRuins;
-		public final StructureConfig warpedGarden;
-		public final StructureConfig soulPrison;
-		public final StructureConfig endRuins;
-
 		public final ConfigValueWrapper<Integer, Double> huskLeviathanBladeChance;
 		public final ForgeConfigSpec.BooleanValue husksDropSand;
 		public final ConfigValueWrapper<Integer, Double> strayFrostedCowlChance;
@@ -48,80 +37,6 @@ public class DPConfig
 
 		protected Common(ForgeConfigSpec.Builder builder)
 		{
-			builder.push("Structures");
-			// @formatter:off
-			this.tower = StructureConfig.builder(builder, "tower")
-					.pushPlacement()
-						.probability(75)
-					.popPlacement()
-					.pushStructure()
-						.biomes(DPTags.Biomes.HAS_TOWER)
-					.popStructure()
-					.build();
-			
-			this.leviathan = StructureConfig.builder(builder, "leviathan")
-					.pushPlacement()
-						.probability(75)
-					.popPlacement()
-					.pushStructure()
-						.biomes(DPTags.Biomes.HAS_LEVIATHAN)
-					.popStructure()
-					.build();
-			
-			this.snowyTemple = StructureConfig.builder(builder, "snowy_temple")
-					.pushPlacement()
-						.probability(75)
-					.popPlacement()
-					.pushStructure()
-						.biomes(DPTags.Biomes.HAS_SNOWY_TEMPLE)
-					.popStructure()
-					.build();
-			
-			this.reanimatedRuins = StructureConfig.builder(builder, "reanimated_ruins")
-					.pushPlacement()
-						.probability(75)
-					.popPlacement()
-					.pushStructure(ReanimatedRuinsType.MOSSY.toString())
-						.biomes(DPTags.Biomes.HAS_REANIMATED_RUINS_MOSSY)
-					.popStructure()
-					.pushStructure(ReanimatedRuinsType.MESA.toString())
-						.biomes(DPTags.Biomes.HAS_REANIMATED_RUINS_MESA)
-					.popStructure()
-					.pushStructure(ReanimatedRuinsType.FROZEN.toString())
-						.biomes(DPTags.Biomes.HAS_REANIMATED_RUINS_FROZEN)
-					.popStructure()
-					.build();
-			
-			this.warpedGarden = StructureConfig.builder(builder, "warped_garden")
-					.pushPlacement()
-						.probability(75)
-					.popPlacement()
-					.pushStructure()
-						.biomes(DPTags.Biomes.HAS_WARPED_GARDEN)
-					.popStructure()
-					.build();
-			
-			this.soulPrison = StructureConfig.builder(builder, "soul_prison")
-					.pushPlacement()
-						.probability(75)
-					.popPlacement()
-					.pushStructure()
-						.biomes(DPTags.Biomes.HAS_SOUL_PRISON)
-					.popStructure()
-					.build();
-			
-			this.endRuins = StructureConfig.builder(builder, "end_ruins")
-					.pushPlacement()
-						.probability(75)
-					.popPlacement()
-					.pushStructure()
-						.biomes(DPTags.Biomes.HAS_END_RUINS)
-					.popStructure()
-					.build();
-			
-			builder.pop();
-			// @formatter:on
-
 			IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
 			builder.push("Mobs");

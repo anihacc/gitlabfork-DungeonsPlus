@@ -10,6 +10,8 @@ import com.legacy.dungeons_plus.registry.DPEntityTypes;
 import com.legacy.dungeons_plus.registry.DPItems;
 import com.legacy.dungeons_plus.registry.DPSoundEvents;
 import com.legacy.dungeons_plus.registry.DPStructures;
+import com.legacy.dungeons_plus.registry.DPTemplatePools;
+import com.legacy.dungeons_plus.structures.DPProcessors;
 import com.legacy.structure_gel.api.registry.registrar.RegistrarHandler;
 import com.legacy.structure_gel.core.util.LoggerWrapper;
 
@@ -33,7 +35,7 @@ public class DungeonsPlus
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DPConfig.COMMON_SPEC);
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
-		Reflection.initialize(DPStructures.class);
+		Reflection.initialize(DPStructures.class, DPTemplatePools.class, DPProcessors.class);
 		RegistrarHandler.registerHandlers(MODID, modBus, DPEntityTypes.HANDLER, DPItems.HANDLER, DPSoundEvents.HANDLER);
 	}
 

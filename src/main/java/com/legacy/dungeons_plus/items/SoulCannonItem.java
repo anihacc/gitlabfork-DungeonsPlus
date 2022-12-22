@@ -2,16 +2,18 @@ package com.legacy.dungeons_plus.items;
 
 import java.util.List;
 
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+
 import com.legacy.dungeons_plus.entities.SoulFireballEntity;
 import com.legacy.dungeons_plus.registry.DPDamageSource;
 import com.legacy.dungeons_plus.registry.DPSoundEvents;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -97,18 +99,17 @@ public class SoulCannonItem extends Item implements DPItem, Vanishable, CustomHa
 
 				for (float r : angles)
 				{
-					// Logic from crossbow
+					// TODO Test multishot
 					Vec3 upVec = entity.getUpVector(1.0F);
-		            Quaternion quat = new Quaternion(new Vector3f(upVec), r, true);
-		            Vec3 viewVec = entity.getViewVector(1.0F);
-		            Vector3f shootAngle = new Vector3f(viewVec);
-		            shootAngle.transform(quat);
-		            
+					Quaternionf quat = (new Quaternionf()).setAngleAxis(r * Mth.DEG_TO_RAD, upVec.x, upVec.y, upVec.z);
+					Vec3 viewVec = entity.getViewVector(1.0F);
+					Vector3f shootAngle = viewVec.toVector3f().rotate(quat);
+
 					SoulFireballEntity fireball = new SoulFireballEntity(level, player, 0, 0, 0, 2);
 					fireball.setKnockback(knockback);
 					fireball.setHasFlame(hasFlame);
 					fireball.setIsMultishot(isMultishot);
-		            fireball.shoot(shootAngle.x(), shootAngle.y(), shootAngle.z(), 2.5F, 1.0F);
+					fireball.shoot(shootAngle.x(), shootAngle.y(), shootAngle.z(), 2.5F, 1.0F);
 					fireball.setPos(player.getEyePosition());
 					level.addFreshEntity(fireball);
 				}
@@ -145,7 +146,7 @@ public class SoulCannonItem extends Item implements DPItem, Vanishable, CustomHa
 		super.appendHoverText(stack, level, tooltip, showAdvanced);
 		tooltip.addAll(this.getDescription(stack, SHOOT_KEY));
 	}
-	
+
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public com.legacy.dungeons_plus.client.renderers.CustomHandRenderer getHandRenderer()

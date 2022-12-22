@@ -1,0 +1,368 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/stairs/0",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/stairs/1",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/stairs/2",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_9",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_7",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_8",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_1",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_2",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_0",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_5",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_6",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_3",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_4",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/7",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/6",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/9",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_10",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/8",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/small_11",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/large_0",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/large_2",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/large_1",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/large_4",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/3",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/room/large_3",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 2
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/2",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/5",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/4",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/10",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/12",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/1",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/0",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    },
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/hallway/11",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 3
+    }
+  ],
+  "fallback": "dungeons_plus:reanimated_ruins/terminator"
+}

@@ -1,0 +1,16 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "structure_gel:gel_single_pool_element",
+        "ignoreEntities": false,
+        "location": "dungeons_plus:reanimated_ruins/center/mesa_0",
+        "maintainWater": false,
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

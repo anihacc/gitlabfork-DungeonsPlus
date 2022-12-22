@@ -11,7 +11,7 @@ import com.legacy.dungeons_plus.registry.DPSoundEvents;
 import com.legacy.structure_gel.api.registry.RegistryHelper;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -131,7 +131,7 @@ public class WarpedAxeItem extends AxeItem implements DPItem
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
 	{
-		return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment == Enchantments.LOYALTY || enchantment == Enchantments.FIRE_ASPECT || enchantment instanceof DamageEnchantment || RegistryHelper.isInTag(Registry.ENCHANTMENT, DPTags.Enchantments.WARPED_AXE_APPLICABLE, enchantment);
+		return super.canApplyAtEnchantingTable(stack, enchantment) || enchantment == Enchantments.LOYALTY || enchantment == Enchantments.FIRE_ASPECT || enchantment instanceof DamageEnchantment || RegistryHelper.isInTag(BuiltInRegistries.ENCHANTMENT, DPTags.Enchantments.WARPED_AXE_APPLICABLE, enchantment);
 	}
 
 	@Override

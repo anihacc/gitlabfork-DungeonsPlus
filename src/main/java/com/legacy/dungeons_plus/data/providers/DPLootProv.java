@@ -2,9 +2,9 @@ package com.legacy.dungeons_plus.data.providers;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,20 +15,21 @@ import com.legacy.dungeons_plus.registry.DPItems;
 import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
-import com.mojang.datafixers.util.Pair;
 
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.core.Registry;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.loot.BlockLoot;
-import net.minecraft.data.loot.EntityLoot;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.data.loot.EntityLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
@@ -59,7 +60,6 @@ import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
 import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SetPotionFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
@@ -68,15 +68,9 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 public class DPLootProv extends LootTableProvider
 {
-	public DPLootProv(DataGenerator dataGen)
+	public DPLootProv(PackOutput packOutput)
 	{
-		super(dataGen);
-	}
-
-	@Override
-	protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables()
-	{
-		return ImmutableList.of(Pair.of(DPBlockLoot::new, LootContextParamSets.BLOCK), Pair.of(DPEntityLoot::new, LootContextParamSets.ENTITY), Pair.of(DPChestLoot::new, LootContextParamSets.CHEST));
+		super(packOutput, Set.of(), List.of(new LootTableProvider.SubProviderEntry(DPBlockLoot::new, LootContextParamSets.BLOCK), new LootTableProvider.SubProviderEntry(DPEntityLoot::new, LootContextParamSets.ENTITY), new LootTableProvider.SubProviderEntry(DPChestLoot::new, LootContextParamSets.CHEST)));
 	}
 
 	@Override
@@ -86,16 +80,10 @@ public class DPLootProv extends LootTableProvider
 		//map.forEach((location, table) -> LootTables.validate(context, location, table));
 	}
 
-	@Override
-	public String getName()
-	{
-		return "Dungeons Plus Loot Tables";
-	}
-
-	private class DPChestLoot implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>, LootPoolUtil
+	private static class DPChestLoot implements LootTableSubProvider, LootPoolUtil
 	{
 		@Override
-		public void accept(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
+		public void generate(BiConsumer<ResourceLocation, LootTable.Builder> consumer)
 		{
 			this.tower(consumer);
 			this.reanimatedRuins(consumer);
@@ -500,10 +488,20 @@ public class DPLootProv extends LootTableProvider
 		}
 	}
 
-	private class DPEntityLoot extends EntityLoot implements LootPoolUtil
+	private static class DPEntityLoot extends EntityLootSubProvider implements LootPoolUtil
 	{
+		public DPEntityLoot()
+		{
+			super(FeatureFlags.REGISTRY.allFlags());
+		}
+
 		@Override
-		public void accept(BiConsumer<ResourceLocation, Builder> consumer)
+		public void generate()
+		{
+		}
+
+		@Override
+		public void generate(BiConsumer<ResourceLocation, Builder> consumer)
 		{
 			//@formatter:off
 			consumer.accept(DPLoot.Tower.ENTITY_ZOMBIE, tableOf(ImmutableList.of(
@@ -551,27 +549,27 @@ public class DPLootProv extends LootTableProvider
 			//@formatter:on
 		}
 
-		/*private LootPool.Builder lootingPool(ItemLike item, int min, int max, int minLooting, int maxLooting)
-		{
-			return basicPool(item, min, max).apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(minLooting, maxLooting)));
-		}*/
-
 		@SuppressWarnings("deprecation")
 		@Override
-		protected Iterable<EntityType<?>> getKnownEntities()
+		protected Stream<EntityType<?>> getKnownEntityTypes()
 		{
-			return Registry.ENTITY_TYPE.stream().filter(e ->
+			return BuiltInRegistries.ENTITY_TYPE.stream().filter(e ->
 			{
-				var name = Registry.ENTITY_TYPE.getKey(e);
+				var name = BuiltInRegistries.ENTITY_TYPE.getKey(e);
 				return name != null && name.getNamespace().equals(DungeonsPlus.MODID);
-			})::iterator;
+			});
 		}
 	}
 
-	private class DPBlockLoot extends BlockLoot implements LootPoolUtil
+	private static class DPBlockLoot extends BlockLootSubProvider implements LootPoolUtil
 	{
+		protected DPBlockLoot()
+		{
+			super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+		}
+
 		@Override
-		protected void addTables()
+		protected void generate()
 		{
 			blocks().forEach(block ->
 			{
@@ -591,9 +589,9 @@ public class DPLootProv extends LootTableProvider
 		@SuppressWarnings("deprecation")
 		private Stream<Block> blocks()
 		{
-			return Registry.BLOCK.stream().filter(b ->
+			return BuiltInRegistries.BLOCK.stream().filter(b ->
 			{
-				var name = Registry.BLOCK.getKey(b);
+				var name = BuiltInRegistries.BLOCK.getKey(b);
 				return name != null && name.getNamespace().equals(DungeonsPlus.MODID) && !b.getLootTable().equals(BuiltInLootTables.EMPTY);
 			});
 		}

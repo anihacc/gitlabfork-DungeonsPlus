@@ -1,21 +1,24 @@
 package com.legacy.dungeons_plus.data.providers;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.data.DPTags;
 import com.legacy.dungeons_plus.registry.DPEntityTypes;
 import com.legacy.dungeons_plus.registry.DPItems;
 import com.legacy.dungeons_plus.registry.DPStructures;
+import com.legacy.structure_gel.api.registry.registrar.Registrar;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 
-import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
-import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.StructureTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.EntityTypeTags;
@@ -27,19 +30,20 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class DPTagProv
 {
 	public static class BlockProv extends BlockTagsProvider
 	{
-		public BlockProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
+		public BlockProv(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookup, ExistingFileHelper existingFileHelper)
 		{
-			super(dataGen, DungeonsPlus.MODID, existingFileHelper);
+			super(packOutput, lookup, DungeonsPlus.MODID, existingFileHelper);
 		}
 
 		@Override
-		protected void addTags()
+		protected void addTags(HolderLookup.Provider lookup)
 		{
 			this.tag(DPTags.Blocks.WARPED_AXE_TELEPORTS_TO).add(Blocks.TARGET);
 		}
@@ -53,13 +57,13 @@ public class DPTagProv
 
 	public static class ItemProv extends ItemTagsProvider
 	{
-		public ItemProv(DataGenerator dataGen, BlockTagsProvider blockTagsProvider, ExistingFileHelper existingFileHelper)
+		public ItemProv(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookup, BlockTagsProvider blockTagsProvider, ExistingFileHelper existingFileHelper)
 		{
-			super(dataGen, blockTagsProvider, DungeonsPlus.MODID, existingFileHelper);
+			super(packOutput, lookup, blockTagsProvider, DungeonsPlus.MODID, existingFileHelper);
 		}
 
 		@Override
-		protected void addTags()
+		protected void addTags(HolderLookup.Provider lookup)
 		{
 			this.tag(Tags.Items.ARMORS_HELMETS).add(DPItems.FROSTED_COWL.get());
 			this.tag(Tags.Items.TOOLS_SWORDS).add(DPItems.LEVIATHAN_BLADE.get());
@@ -86,13 +90,13 @@ public class DPTagProv
 
 	public static class EntityTypeProv extends EntityTypeTagsProvider
 	{
-		public EntityTypeProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
+		public EntityTypeProv(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookup, ExistingFileHelper existingFileHelper)
 		{
-			super(dataGen, DungeonsPlus.MODID, existingFileHelper);
+			super(packOutput, lookup, DungeonsPlus.MODID, existingFileHelper);
 		}
 
 		@Override
-		protected void addTags()
+		protected void addTags(HolderLookup.Provider lookup)
 		{
 			this.tag(EntityTypeTags.IMPACT_PROJECTILES).add(DPEntityTypes.WARPED_AXE.get(), DPEntityTypes.SOUL_FIREBALL.get());
 			this.tag(DPTags.EntityTypes.WARPED_AXE_IMMUNE).add(EntityType.ENDERMAN);
@@ -101,13 +105,13 @@ public class DPTagProv
 
 	public static class StructureProv extends StructureTagsProvider
 	{
-		public StructureProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
+		public StructureProv(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookup, ExistingFileHelper existingFileHelper)
 		{
-			super(dataGen, DungeonsPlus.MODID, existingFileHelper);
+			super(packOutput, lookup, DungeonsPlus.MODID, existingFileHelper);
 		}
 
 		@Override
-		protected void addTags()
+		protected void addTags(HolderLookup.Provider lookup)
 		{
 			this.allStructures(DPTags.Structures.ON_REANIMATED_RUINS_MAPS, DPStructures.REANIMATED_RUINS);
 			this.allStructures(DPTags.Structures.ON_LEVIATHAN_MAPS, DPStructures.LEVIATHAN);
@@ -115,23 +119,24 @@ public class DPTagProv
 			this.allStructures(DPTags.Structures.ON_WARPED_GARDEN_MAPS, DPStructures.WARPED_GARDEN);
 		}
 
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		private void allStructures(TagKey<Structure> tagKey, StructureRegistrar<?> registrar)
 		{
-			var appender = this.tag(tagKey);
-			registrar.getStructures().values().forEach(holder -> appender.add(holder.get(BuiltinRegistries.STRUCTURES)));
+			TagAppender<Structure> appender = this.tag(tagKey);
+			registrar.getStructures().values().stream().map(Registrar.Pointer::getKey).forEach(k -> appender.add((ResourceKey) k));
 		}
 	}
 
 	public static class BiomeProv extends BiomeTagsProvider
 	{
-		public BiomeProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
+		public BiomeProv(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookup, ExistingFileHelper existingFileHelper)
 		{
-			super(dataGen, DungeonsPlus.MODID, existingFileHelper);
+			super(packOutput, lookup, DungeonsPlus.MODID, existingFileHelper);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		protected void addTags()
+		protected void addTags(HolderLookup.Provider lookup)
 		{
 			this.tag(DPTags.Biomes.HAS_TOWER).addTags(BiomeTags.IS_MOUNTAIN, BiomeTags.IS_FOREST, Tags.Biomes.IS_MOUNTAIN);
 			this.tag(DPTags.Biomes.HAS_REANIMATED_RUINS_MOSSY).addTags(Tags.Biomes.IS_SWAMP);
@@ -147,14 +152,13 @@ public class DPTagProv
 
 	public static class EnchantmentProv extends TagsProvider<Enchantment>
 	{
-		@SuppressWarnings("deprecation")
-		public EnchantmentProv(DataGenerator dataGen, ExistingFileHelper existingFileHelper)
+		public EnchantmentProv(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookup, ExistingFileHelper existingFileHelper)
 		{
-			super(dataGen, Registry.ENCHANTMENT, DungeonsPlus.MODID, existingFileHelper);
+			super(packOutput, Registries.ENCHANTMENT, lookup, DungeonsPlus.MODID, existingFileHelper);
 		}
 
 		@Override
-		protected void addTags()
+		protected void addTags(HolderLookup.Provider lookup)
 		{
 			this.tag(DPTags.Enchantments.WARPED_AXE_APPLICABLE).addOptional(new ResourceLocation("soulfired", "soul_fire_aspect"));
 		}

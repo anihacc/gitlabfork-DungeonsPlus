@@ -1,0 +1,7 @@
+{
+  "type": "dungeons_plus:tower",
+  "biomes": "#dungeons_plus:has_structure/has_tower",
+  "spawn_overrides": {},
+  "step": "surface_structures",
+  "terrain_adaptation": "beard_thin"
+}

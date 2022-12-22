@@ -3,7 +3,7 @@ package com.legacy.dungeons_plus.client.renderers;
 import com.legacy.dungeons_plus.items.SoulCannonItem;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.AbstractClientPlayer;
@@ -55,8 +55,8 @@ public interface CustomHandRenderer
 			poseStack.pushPose();
 			poseStack.translate(x + xBob, y + yBob, z + zBob);
 			float windUpRot = 10.935F * handOffset;
-			poseStack.mulPose(Vector3f.ZP.rotationDegrees(windUpRot * useProgress));
-			poseStack.mulPose(Vector3f.XP.rotationDegrees(-handOffset * windUpRot * useProgress));
+			poseStack.mulPose(Axis.ZP.rotationDegrees(windUpRot * useProgress));
+			poseStack.mulPose(Axis.XP.rotationDegrees(-handOffset * windUpRot * useProgress));
 			applyItemArmTransform(poseStack, arm, equipProgress);
 			applyItemArmAttackTransform(poseStack, arm, swingProgress);
 			mc.getEntityRenderDispatcher().getItemInHandRenderer().renderItem(player, stack, isMainHand ? ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND, !isMainHand, poseStack, event.getMultiBufferSource(), event.getPackedLight());
@@ -89,11 +89,11 @@ public interface CustomHandRenderer
 	{
 		int i = arm == HumanoidArm.RIGHT ? 1 : -1;
 		float f = Mth.sin(swingProgress * swingProgress * Mth.PI);
-		poseStack.mulPose(Vector3f.YP.rotationDegrees((float) i * (45.0F + f * -20.0F)));
+		poseStack.mulPose(Axis.YP.rotationDegrees((float) i * (45.0F + f * -20.0F)));
 		float f1 = Mth.sin(Mth.sqrt(swingProgress) * Mth.PI);
-		poseStack.mulPose(Vector3f.ZP.rotationDegrees((float) i * f1 * -20.0F));
-		poseStack.mulPose(Vector3f.XP.rotationDegrees(f1 * -80.0F));
-		poseStack.mulPose(Vector3f.YP.rotationDegrees((float) i * -45.0F));
+		poseStack.mulPose(Axis.ZP.rotationDegrees((float) i * f1 * -20.0F));
+		poseStack.mulPose(Axis.XP.rotationDegrees(f1 * -80.0F));
+		poseStack.mulPose(Axis.YP.rotationDegrees((float) i * -45.0F));
 	}
 
 	/// From ItemInHandRenderer
@@ -108,17 +108,17 @@ public interface CustomHandRenderer
 		float f3 = 0.4F * Mth.sin(equip * (Mth.PI * 2F));
 		float f4 = -0.4F * Mth.sin(equipProgress * Mth.PI);
 		poseStack.translate(mainOffset * (f2 + 0.64000005F), f3 + -0.6F + swingProgress * -0.6F, f4 + -0.71999997F);
-		poseStack.mulPose(Vector3f.YP.rotationDegrees(mainOffset * 45.0F));
+		poseStack.mulPose(Axis.YP.rotationDegrees(mainOffset * 45.0F));
 		float f5 = Mth.sin(equipProgress * equipProgress * Mth.PI);
 		float f6 = Mth.sin(equip * Mth.PI);
-		poseStack.mulPose(Vector3f.YP.rotationDegrees(mainOffset * f6 * 70.0F));
-		poseStack.mulPose(Vector3f.ZP.rotationDegrees(mainOffset * f5 * -20.0F));
+		poseStack.mulPose(Axis.YP.rotationDegrees(mainOffset * f6 * 70.0F));
+		poseStack.mulPose(Axis.ZP.rotationDegrees(mainOffset * f5 * -20.0F));
 		AbstractClientPlayer abstractclientplayer = mc.player;
 		RenderSystem.setShaderTexture(0, abstractclientplayer.getSkinTextureLocation());
 		poseStack.translate((double) (mainOffset * -1.0F), (double) 3.6F, 3.5D);
-		poseStack.mulPose(Vector3f.ZP.rotationDegrees(mainOffset * 120.0F));
-		poseStack.mulPose(Vector3f.XP.rotationDegrees(200.0F));
-		poseStack.mulPose(Vector3f.YP.rotationDegrees(mainOffset * -135.0F));
+		poseStack.mulPose(Axis.ZP.rotationDegrees(mainOffset * 120.0F));
+		poseStack.mulPose(Axis.XP.rotationDegrees(200.0F));
+		poseStack.mulPose(Axis.YP.rotationDegrees(mainOffset * -135.0F));
 		poseStack.translate((double) (mainOffset * 5.6F), 0.0D, 0.0D);
 		PlayerRenderer playerRenderer = (PlayerRenderer) mc.getEntityRenderDispatcher().getRenderer(abstractclientplayer);
 		if (isMain)

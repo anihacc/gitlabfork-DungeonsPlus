@@ -6,9 +6,9 @@ import com.legacy.dungeons_plus.registry.DPJigsawTypes;
 import com.legacy.dungeons_plus.registry.DPLoot;
 import com.legacy.dungeons_plus.registry.DPStructures;
 import com.legacy.structure_gel.api.block_entity.BlockEntityAccessHelper;
-import com.legacy.structure_gel.api.structure.ExtendedJigsawStructure.IPieceFactory;
 import com.legacy.structure_gel.api.structure.base.IPieceBuilderModifier;
-import com.legacy.structure_gel.api.structure.jigsaw.AbstractGelStructurePiece;
+import com.legacy.structure_gel.api.structure.jigsaw.ExtendedJigsawStructurePiece;
+import com.legacy.structure_gel.api.structure.jigsaw.IPieceFactory;
 import com.legacy.structure_gel.api.structure.jigsaw.JigsawCapability.IJigsawCapability;
 import com.legacy.structure_gel.api.structure.jigsaw.JigsawCapability.JigsawType;
 import com.mojang.serialization.Codec;
@@ -19,7 +19,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -29,18 +28,16 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
-import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 public class ReanimatedRuinsStructure
 {
-	public static record Capability(ReanimatedRuinsType type) implements IJigsawCapability
+	public static record Capability(ReanimatedRuinsType ruinsType) implements IJigsawCapability
 	{
 		public static final Codec<Capability> CODEC = RecordCodecBuilder.create(instance ->
 		{
 			return instance.group(ReanimatedRuinsType.CODEC.fieldOf("ruins_type").forGetter(cap ->
 			{
-				return cap.type;
+				return cap.ruinsType;
 			})).apply(instance, Capability::new);
 		});
 
@@ -53,7 +50,7 @@ public class ReanimatedRuinsStructure
 		@Override
 		public IPieceFactory getPieceFactory()
 		{
-			return (structureManager, poolElement, pos, ground, rotation, bounds) -> new Piece(structureManager, poolElement, pos, ground, rotation, bounds, this.type);
+			return Piece::new;
 		}
 
 		@Override
@@ -77,15 +74,15 @@ public class ReanimatedRuinsStructure
 		}
 	}
 
-	public static final class Piece extends AbstractGelStructurePiece
+	public static final class Piece extends ExtendedJigsawStructurePiece
 	{
 		private static final String TYPE_KEY = "type";
 		private final ReanimatedRuinsType type;
 
-		public Piece(StructureTemplateManager structureManager, StructurePoolElement poolElement, BlockPos pos, int groundLevelDelta, Rotation rotation, BoundingBox bounds, ReanimatedRuinsType type)
+		public Piece(IPieceFactory.Context context)
 		{
-			super(structureManager, poolElement, pos, groundLevelDelta, rotation, bounds);
-			this.type = type;
+			super(context);
+			this.type = context.jigsawCapability(Capability.class).map(Capability::ruinsType).orElse(ReanimatedRuinsType.MOSSY);
 		}
 
 		public Piece(StructurePieceSerializationContext context, CompoundTag tag)

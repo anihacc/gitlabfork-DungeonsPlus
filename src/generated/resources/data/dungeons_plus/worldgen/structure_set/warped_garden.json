@@ -1,0 +1,17 @@
+{
+  "placement": {
+    "type": "structure_gel:grid_placement",
+    "allowed_near_spawn": false,
+    "frequency": 0.75,
+    "offset": 16,
+    "salt": 630165645,
+    "spacing": 36,
+    "structure": "dungeons_plus:warped_garden"
+  },
+  "structures": [
+    {
+      "structure": "dungeons_plus:warped_garden",
+      "weight": 1
+    }
+  ]
+}

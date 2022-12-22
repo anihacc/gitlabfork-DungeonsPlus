@@ -1,12 +1,13 @@
 package com.legacy.dungeons_plus.client.renderers;
 
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+
 import com.legacy.dungeons_plus.DungeonsPlus;
 import com.legacy.dungeons_plus.entities.SoulFireballEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -42,7 +43,7 @@ public class SoulFireballRenderer extends EntityRenderer<SoulFireballEntity>
 		float scale = 1.0F;
 		poseStack.scale(scale, scale, scale);
 		poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-		poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 		PoseStack.Pose lastPose = poseStack.last();
 		Matrix4f matrix4f = lastPose.pose();
 		Matrix3f matrix3f = lastPose.normal();

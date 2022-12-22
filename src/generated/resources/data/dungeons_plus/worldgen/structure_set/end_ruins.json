@@ -1,0 +1,17 @@
+{
+  "placement": {
+    "type": "structure_gel:grid_placement",
+    "allowed_near_spawn": false,
+    "frequency": 0.75,
+    "offset": 16,
+    "salt": 1810387085,
+    "spacing": 27,
+    "structure": "dungeons_plus:end_ruins"
+  },
+  "structures": [
+    {
+      "structure": "dungeons_plus:end_ruins",
+      "weight": 1
+    }
+  ]
+}

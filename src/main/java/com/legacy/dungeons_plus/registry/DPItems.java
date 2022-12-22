@@ -10,14 +10,13 @@ import com.legacy.dungeons_plus.items.WarpedAxeItem;
 import com.legacy.structure_gel.api.registry.registrar.Registrar;
 import com.legacy.structure_gel.api.registry.registrar.RegistrarHandler;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
@@ -27,12 +26,12 @@ import net.minecraftforge.common.util.Lazy;
 
 public class DPItems
 {
-	public static final RegistrarHandler<Item> HANDLER = RegistrarHandler.getOrCreate(Registry.ITEM_REGISTRY, DungeonsPlus.MODID);
+	public static final RegistrarHandler<Item> HANDLER = RegistrarHandler.getOrCreate(Registries.ITEM, DungeonsPlus.MODID);
 
-	public static final Registrar.Static<Item> FROSTED_COWL = HANDLER.createStatic("frosted_cowl", () -> new FrostedCowlItem(DPArmors.STRAY, EquipmentSlot.HEAD, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
-	public static final Registrar.Static<Item> LEVIATHAN_BLADE = HANDLER.createStatic("leviathan_blade", () -> new LeviathanBladeItem(DPTiers.LEVIATHAN, 3, -2.6F, new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
-	public static final Registrar.Static<Item> WARPED_AXE = HANDLER.createStatic("warped_axe", () -> new WarpedAxeItem(DPTiers.WARPED_GOLD, 7, -3.1F, new Item.Properties().durability(312).tab(CreativeModeTab.TAB_COMBAT)));
-	public static final Registrar.Static<Item> SOUL_CANNON = HANDLER.createStatic("soul_cannon", () -> new SoulCannonItem(new Item.Properties().durability(250).tab(CreativeModeTab.TAB_COMBAT)));
+	public static final Registrar.Static<Item> FROSTED_COWL = HANDLER.createStatic("frosted_cowl", () -> new FrostedCowlItem(DPArmors.STRAY, EquipmentSlot.HEAD, new Item.Properties()));
+	public static final Registrar.Static<Item> LEVIATHAN_BLADE = HANDLER.createStatic("leviathan_blade", () -> new LeviathanBladeItem(DPTiers.LEVIATHAN, 3, -2.6F, new Item.Properties()));
+	public static final Registrar.Static<Item> WARPED_AXE = HANDLER.createStatic("warped_axe", () -> new WarpedAxeItem(DPTiers.WARPED_GOLD, 7, -3.1F, new Item.Properties().durability(312)));
+	public static final Registrar.Static<Item> SOUL_CANNON = HANDLER.createStatic("soul_cannon", () -> new SoulCannonItem(new Item.Properties().durability(250)));
 
 	public static interface DPTiers
 	{

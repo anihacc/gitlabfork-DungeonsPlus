@@ -8,7 +8,7 @@ import com.legacy.dungeons_plus.DungeonsPlus;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -20,7 +20,7 @@ public interface DPItem
 	@SuppressWarnings("deprecation")
 	BiFunction<Item, String, Component> COMPONENTS = Util.memoize((i, s) ->
 	{
-		var opKey = Registry.ITEM.getResourceKey(i);
+		var opKey = BuiltInRegistries.ITEM.getResourceKey(i);
 		if (opKey.isPresent())
 		{
 			var resourceKey = opKey.get();

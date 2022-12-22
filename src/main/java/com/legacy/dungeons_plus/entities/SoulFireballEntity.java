@@ -10,6 +10,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.item.enchantment.ProtectionEnchantment;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.phys.AABB;
@@ -75,10 +75,15 @@ public class SoulFireballEntity extends Fireball
 		if (hitResult instanceof EntityHitResult entityHitResult)
 		{
 			var hitEntity = entityHitResult.getEntity();
-			if ((hitEntity instanceof SoulFireballEntity || hitEntity == this.getOwner()) && this.tickCount < 5)
+			// Don't hit your owner
+			if (hitEntity == this.getOwner() && this.tickCount < 5)
+				return;
+			// TODO Test this rework with high multishot
+			// Don't blow up on another fireball if this is a multi shot fireball
+			if (hitEntity instanceof SoulFireballEntity && this.isMulti)
 				return;
 		}
-		super.onHit(hitResult); // onHitEntity runs during this
+		super.onHit(hitResult); // onHitEntity runs during this.
 		this.explode();
 	}
 
@@ -104,6 +109,8 @@ public class SoulFireballEntity extends Fireball
 	{
 		Entity owner = this.getOwner();
 		Entity damager = damageSource.getEntity();
+		
+		// When someone (not the owner) hits the fireball, send it the other way with a reset fuse and more power
 		if (damager != owner || (owner == null && damager == null))
 		{
 			this.fuse = DEFAULT_FUSE;
@@ -133,7 +140,7 @@ public class SoulFireballEntity extends Fireball
 	{
 		if (this.level instanceof ServerLevel serverLevel)
 		{
-			serverLevel.explode(this, this.getX(), this.getY(), this.getZ(), this.explosionPower, false, Explosion.BlockInteraction.NONE);
+			serverLevel.explode(this, this.getX(), this.getY(), this.getZ(), this.explosionPower, false, Level.ExplosionInteraction.NONE);
 
 			if (this.knockbackPower > 0)
 			{
@@ -201,7 +208,7 @@ public class SoulFireballEntity extends Fireball
 	}
 
 	@Override
-	public Packet<?> getAddEntityPacket()
+	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

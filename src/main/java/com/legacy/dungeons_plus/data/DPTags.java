@@ -2,7 +2,7 @@ package com.legacy.dungeons_plus.data;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -26,7 +26,7 @@ public class DPTags
 
 		private static TagKey<Block> create(String name)
 		{
-			return TagKey.create(Registry.BLOCK_REGISTRY, DungeonsPlus.locate(name));
+			return TagKey.create(Registries.BLOCK, DungeonsPlus.locate(name));
 		}
 	}
 
@@ -69,7 +69,7 @@ public class DPTags
 
 		private static TagKey<Item> create(String name)
 		{
-			return TagKey.create(Registry.ITEM_REGISTRY, DungeonsPlus.locate(name));
+			return TagKey.create(Registries.ITEM, DungeonsPlus.locate(name));
 		}
 	}
 
@@ -79,7 +79,7 @@ public class DPTags
 
 		private static TagKey<EntityType<?>> create(String name)
 		{
-			return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, DungeonsPlus.locate(name));
+			return TagKey.create(Registries.ENTITY_TYPE, DungeonsPlus.locate(name));
 		}
 	}
 
@@ -97,7 +97,7 @@ public class DPTags
 
 		private static TagKey<Structure> create(String name)
 		{
-			return TagKey.create(Registry.STRUCTURE_REGISTRY, DungeonsPlus.locate(name));
+			return TagKey.create(Registries.STRUCTURE, DungeonsPlus.locate(name));
 		}
 	}
 
@@ -120,7 +120,7 @@ public class DPTags
 
 		private static TagKey<Biome> create(String name)
 		{
-			return TagKey.create(Registry.BIOME_REGISTRY, DungeonsPlus.locate(name));
+			return TagKey.create(Registries.BIOME, DungeonsPlus.locate(name));
 		}
 	}
 
@@ -130,7 +130,7 @@ public class DPTags
 
 		private static TagKey<Enchantment> create(String name)
 		{
-			return TagKey.create(Registry.ENCHANTMENT_REGISTRY, DungeonsPlus.locate(name));
+			return TagKey.create(Registries.ENCHANTMENT, DungeonsPlus.locate(name));
 		}
 	}
 }

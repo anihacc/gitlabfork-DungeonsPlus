@@ -20,8 +20,9 @@ import com.mojang.serialization.Codec;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.features.CaveFeatures;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -217,10 +218,10 @@ public enum ReanimatedRuinsType implements StringRepresentable
 		placeFeature(level, pos, rand, CaveFeatures.GLOW_LICHEN);
 	}
 
-	private static void placeFeature(ServerLevelAccessor level, BlockPos pos, RandomSource rand, Holder<? extends ConfiguredFeature<?, ?>> feature)
+	private static void placeFeature(ServerLevelAccessor level, BlockPos pos, RandomSource rand, ResourceKey<ConfiguredFeature<?, ?>> configuredFeatureKey)
 	{
 		if (level instanceof WorldGenLevel wgLevel)
-			feature.value().place(wgLevel, wgLevel.getLevel().getChunkSource().getGenerator(), rand, pos);
+			level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE).get(configuredFeatureKey).ifPresent(f -> f.value().place(wgLevel, wgLevel.getLevel().getChunkSource().getGenerator(), rand, pos));
 	}
 
 	private static BlockModifierMap mossyBlockModifier()

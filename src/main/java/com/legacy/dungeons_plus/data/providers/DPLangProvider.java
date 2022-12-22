@@ -2,6 +2,8 @@ package com.legacy.dungeons_plus.data.providers;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 
 import com.legacy.dungeons_plus.DungeonsPlus;
@@ -18,9 +20,11 @@ import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.DisplayInfo;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -29,19 +33,21 @@ import net.minecraftforge.common.data.LanguageProvider;
 
 public class DPLangProvider extends LanguageProvider
 {
-	public DPLangProvider(DataGenerator gen)
+	private final CompletableFuture<HolderLookup.Provider> lookup;
+
+	public DPLangProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> lookup)
 	{
-		super(gen, DungeonsPlus.MODID, "en_us");
+		super(packOutput, DungeonsPlus.MODID, "en_us");
+		this.lookup = lookup;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void addTranslations()
 	{
-		this.addAll(Registry.BLOCK, Map.of());
-		this.addAll(BuiltinRegistries.STRUCTURES, Map.of());
-		this.addAll(Registry.ITEM, Map.of());
-		this.addAll(Registry.ENTITY_TYPE, Map.of());
+		this.addAll(Registries.BLOCK, Map.of());
+		this.addAll(Registries.STRUCTURE, Map.of());
+		this.addAll(Registries.ITEM, Map.of());
+		this.addAll(Registries.ENTITY_TYPE, Map.of());
 
 		this.add(mapName(DPStructures.REANIMATED_RUINS), "Reanimated Ruins Map");
 		this.add(mapName(DPStructures.LEVIATHAN), "Leviathan Map");
@@ -103,10 +109,16 @@ public class DPLangProvider extends LanguageProvider
 		this.add(display.getDescription().getString(), desc);
 	}
 
-	private <T> void addAll(Registry<T> registry, Map<ResourceKey<T>, String> overrides)
+	private <T> void addAll(ResourceKey<Registry<T>> registry, Map<ResourceKey<T>, String> overrides)
 	{
-		registry.keySet().stream().filter(name -> DungeonsPlus.MODID.equals(name.getNamespace())).map(name -> ResourceKey.create(registry.key(), name)).filter(key -> !overrides.containsKey(key)).forEach(this::add);
-
+		try
+		{
+			this.lookup.get().lookupOrThrow(registry).listElementIds().distinct().filter(key -> DungeonsPlus.MODID.equals(key.location().getNamespace())).filter(key -> !overrides.containsKey(key)).forEach(this::add);
+		}
+		catch (InterruptedException | ExecutionException e)
+		{
+			e.printStackTrace();
+		}
 		overrides.forEach(this::add);
 	}
 
@@ -128,7 +140,7 @@ public class DPLangProvider extends LanguageProvider
 	@SuppressWarnings("deprecation")
 	private void addItemInfo(Supplier<Item> item, String key, String translation)
 	{
-		var resourceKey = Registry.ITEM.getResourceKey(item.get()).get();
+		var resourceKey = BuiltInRegistries.ITEM.getResourceKey(item.get()).get();
 		ResourceLocation location = resourceKey.location();
 		this.add(Util.makeDescriptionId(resourceKey.registry().getPath().replace('/', '.'), new ResourceLocation(location.getNamespace(), location.getPath() + "." + key)), translation);
 	}

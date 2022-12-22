@@ -22,6 +22,6 @@ public class MobMixin
 	@Inject(at = @At("RETURN"), method = "finalizeSpawn")
 	private void finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData data, @Nullable CompoundTag nbt, CallbackInfoReturnable<SpawnGroupData> callback)
 	{
-		DPCommonEvents.ForgeBus.onEntitySpawn((Mob) (Object) this);
+		DPCommonEvents.ForgeBus.onInitialEntitySpawn((Mob) (Object) this);
 	}
 }
