@@ -15,12 +15,12 @@
       "element": {
         "element_type": "structure_gel:gel_single_pool_element",
         "ignoreEntities": false,
-        "location": "dungeons_plus:leviathan/temple/pillar/cracked",
+        "location": "dungeons_plus:leviathan/temple/pillar/intact",
         "maintainWater": false,
         "processors": "minecraft:empty",
         "projection": "rigid"
       },
-      "weight": 3
+      "weight": 5
     },
     {
       "element": {
@@ -37,12 +37,12 @@
       "element": {
         "element_type": "structure_gel:gel_single_pool_element",
         "ignoreEntities": false,
-        "location": "dungeons_plus:leviathan/temple/pillar/intact",
+        "location": "dungeons_plus:leviathan/temple/pillar/cracked",
         "maintainWater": false,
         "processors": "minecraft:empty",
         "projection": "rigid"
       },
-      "weight": 5
+      "weight": 3
     }
   ],
   "fallback": "minecraft:empty"

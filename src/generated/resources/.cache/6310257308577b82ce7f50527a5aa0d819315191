@@ -1,4 +1,4 @@
-// 1.19.3	2022-12-22T00:56:41.404212	[Structure Gel] Registrar Registries
+// 1.19.3	2022-12-24T19:44:32.2488722	[Structure Gel] Registrar Registries
 d7d021215b1cc7497ba9d5679ffaf3893347a649 data/dungeons_plus/worldgen/processor_list/end_ruins_tower.json
 c91bd8621d8e83592323c8dd2ae82a80e6fe2c92 data/dungeons_plus/worldgen/structure/end_ruins.json
 32671adb8e797aabb606be86f45e9e46e38c9ecf data/dungeons_plus/worldgen/structure/leviathan.json
@@ -31,7 +31,7 @@ f32a8a3d4ca96ca555ea77eb809c45c16be94edb data/dungeons_plus/worldgen/template_po
 2c84e1f895e35653001f0be8cdcf8eda9393be65 data/dungeons_plus/worldgen/template_pool/leviathan/skeleton/tail.json
 dfcf05497b27202d859ed01b8ebc64e8fd3dd97c data/dungeons_plus/worldgen/template_pool/leviathan/temple/entrance.json
 9e289752e5702c54f15c3098dd851b3dfa8e7ece data/dungeons_plus/worldgen/template_pool/leviathan/temple/main_room.json
-0c595ccf7439eddce2c50e6ec41ed7a6e2c0d08f data/dungeons_plus/worldgen/template_pool/leviathan/temple/pillar.json
+4b32f1ad72086b1675cce30bcb21efea0b2986f2 data/dungeons_plus/worldgen/template_pool/leviathan/temple/pillar.json
 e83e61a0d01a204295252cc8c315a3e21301c59a data/dungeons_plus/worldgen/template_pool/leviathan/temple/side_room_left.json
 0fe80fd2c7e0c3b778efae1c6928910e6afae4ef data/dungeons_plus/worldgen/template_pool/leviathan/temple/side_room_right.json
 e401ebe1a9bb87b4da01d4aae5939213d898a8a1 data/dungeons_plus/worldgen/template_pool/leviathan/temple/statue.json

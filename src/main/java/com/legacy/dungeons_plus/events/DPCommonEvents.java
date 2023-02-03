@@ -4,8 +4,12 @@ import static com.legacy.dungeons_plus.DungeonsPlus.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.legacy.dungeons_plus.DPConfig;
 import com.legacy.dungeons_plus.DungeonsPlus;
@@ -24,13 +28,18 @@ import com.legacy.structure_gel.api.registry.registrar.RegistrarHandler;
 import com.legacy.structure_gel.api.registry.registrar.StructureRegistrar;
 import com.legacy.structure_gel.api.structure.StructureAccessHelper;
 
+import net.minecraft.DetectedVersion;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.metadata.PackMetadataGenerator;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
@@ -285,6 +294,16 @@ public class DPCommonEvents
 
 			// assets
 			gen.addProvider(client, new DPLangProvider(output, lookup));
+
+			// pack
+			gen.addProvider(true, packMcmeta(output, "Dungeons Plus resources"));
+		}
+
+		private static final PackMetadataGenerator packMcmeta(PackOutput output, String description)
+		{
+			Map<PackType, Integer> packVersionMap = Stream.of(PackType.values()).collect(Collectors.toMap(Function.identity(), p -> DetectedVersion.BUILT_IN.getPackVersion(p.bridgeType)));
+			int packVersion = packVersionMap.get(PackType.SERVER_DATA);
+			return new PackMetadataGenerator(output).add(PackMetadataSection.TYPE, new PackMetadataSection(Component.literal(description), packVersion, packVersionMap));
 		}
 	}
 }
