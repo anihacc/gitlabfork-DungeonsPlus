@@ -23,19 +23,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage.Decoration;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
 
 @Mod(DungeonsPlus.MODID)
 public class DungeonsPlus
@@ -56,31 +43,25 @@ public class DungeonsPlus
 		for (Biome biome : ForgeRegistries.BIOMES.getValues())
 		{
 			Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(biome);
-			
-			RegistryHelper.addFeature(biome, Decoration.SURFACE_STRUCTURES, Features.TOWER.getFirst());
-			RegistryHelper.addFeature(biome, Decoration.UNDERGROUND_STRUCTURES, Features.BIGGER_DUNGEON.getFirst());
-			RegistryHelper.addFeature(biome, Decoration.SURFACE_STRUCTURES, Features.LEVIATHAN.getFirst());
-			RegistryHelper.addFeature(biome, Decoration.SURFACE_STRUCTURES, Features.SNOWY_TEMPLE.getFirst());
-			RegistryHelper.addFeature(biome, Decoration.SURFACE_STRUCTURES, Features.END_RUINS.getFirst());
 
 			if (DungeonsConfig.COMMON.tower.isBiomeAllowed(biome))
-				RegistryHelper.addStructure(biome, Features.TOWER.getFirst());
+				RegistryHelper.addStructure(biome, Structures.TOWER.getFirst());
 
 			/**
 			 * Should only add to the overworld biomes. If you get it in your dimension, I'm
 			 * sorry, but there is a blacklist in the config. - Silver_David
 			 */
 			if (types.contains(BiomeDictionary.Type.OVERWORLD) && DungeonsConfig.COMMON.biggerDungeon.isBiomeAllowed(biome))
-				RegistryHelper.addStructure(biome, Features.BIGGER_DUNGEON.getFirst());
+				RegistryHelper.addStructure(biome, Structures.BIGGER_DUNGEON.getFirst());
 
 			if (DungeonsConfig.COMMON.leviathan.isBiomeAllowed(biome))
-				RegistryHelper.addStructure(biome, Features.LEVIATHAN.getFirst());
-			
+				RegistryHelper.addStructure(biome, Structures.LEVIATHAN.getFirst());
+
 			if (DungeonsConfig.COMMON.snowyTemple.isBiomeAllowed(biome))
-				RegistryHelper.addStructure(biome, Features.SNOWY_TEMPLE.getFirst());
-			
+				RegistryHelper.addStructure(biome, Structures.SNOWY_TEMPLE.getFirst());
+
 			if (DungeonsConfig.COMMON.endRuins.isBiomeAllowed(biome))
-				RegistryHelper.addStructure(biome, Features.END_RUINS.getFirst());
+				RegistryHelper.addStructure(biome, Structures.END_RUINS.getFirst());
 		}
 	}
 
@@ -90,7 +71,7 @@ public class DungeonsPlus
 	}
 
 	@Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-	public static class Features
+	public static class Structures
 	{
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> TOWER;
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> LEVIATHAN;
@@ -99,14 +80,14 @@ public class DungeonsPlus
 		public static Pair<Structure<NoFeatureConfig>, IStructurePieceType> END_RUINS;
 
 		@SubscribeEvent
-		public static void onRegistry(final RegistryEvent.Register<Feature<?>> event)
+		public static void onRegistry(final RegistryEvent.Register<Structure<?>> event)
 		{
-			IForgeRegistry<Feature<?>> registry = event.getRegistry();
-			TOWER = RegistryHelper.registerStructureAndPiece(registry, locate("tower"), new TowerStructure(NoFeatureConfig::deserialize, DungeonsConfig.COMMON.tower), TowerPieces.Piece::new);
-			LEVIATHAN = RegistryHelper.registerStructureAndPiece(registry, locate("leviathan"), new LeviathanStructure(NoFeatureConfig::deserialize, DungeonsConfig.COMMON.leviathan), LeviathanPieces.Piece::new);
-			SNOWY_TEMPLE = RegistryHelper.registerStructureAndPiece(registry, locate("snowy_temple"), new SnowyTempleStructure(NoFeatureConfig::deserialize, DungeonsConfig.COMMON.snowyTemple), SnowyTemplePieces.Piece::new);
-			BIGGER_DUNGEON = RegistryHelper.registerStructureAndPiece(registry, locate("bigger_dungeon"), new BiggerDungeonStructure(NoFeatureConfig::deserialize, DungeonsConfig.COMMON.biggerDungeon), BiggerDungeonPieces.Piece::new);
-			END_RUINS = RegistryHelper.registerStructureAndPiece(registry, locate("end_ruins"), new EndRuinsStructure(NoFeatureConfig::deserialize, DungeonsConfig.COMMON.endRuins), EndRuinsPieces.Piece::new);
+			IForgeRegistry<Structure<?>> registry = event.getRegistry();
+			TOWER = RegistryHelper.registerStructureAndPiece(registry, locate("tower"), new TowerStructure(NoFeatureConfig.field_236558_a_, DungeonsConfig.COMMON.tower), TowerPieces.Piece::new);
+			LEVIATHAN = RegistryHelper.registerStructureAndPiece(registry, locate("leviathan"), new LeviathanStructure(NoFeatureConfig.field_236558_a_, DungeonsConfig.COMMON.leviathan), LeviathanPieces.Piece::new);
+			SNOWY_TEMPLE = RegistryHelper.registerStructureAndPiece(registry, locate("snowy_temple"), new SnowyTempleStructure(NoFeatureConfig.field_236558_a_, DungeonsConfig.COMMON.snowyTemple), SnowyTemplePieces.Piece::new);
+			BIGGER_DUNGEON = RegistryHelper.registerStructureAndPiece(registry, locate("bigger_dungeon"), new BiggerDungeonStructure(NoFeatureConfig.field_236558_a_, DungeonsConfig.COMMON.biggerDungeon), BiggerDungeonPieces.Piece::new);
+			END_RUINS = RegistryHelper.registerStructureAndPiece(registry, locate("end_ruins"), new EndRuinsStructure(NoFeatureConfig.field_236558_a_, DungeonsConfig.COMMON.endRuins), EndRuinsPieces.Piece::new);
 
 			JigsawAccessHelper.addIllagerStructures(TOWER.getFirst(), SNOWY_TEMPLE.getFirst());
 		}

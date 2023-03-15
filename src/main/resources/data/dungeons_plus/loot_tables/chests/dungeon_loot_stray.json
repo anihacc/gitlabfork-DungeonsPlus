@@ -11,7 +11,6 @@
               "function": "minecraft:exploration_map",
               "destination": "dungeons_plus:snowy_temple",
               "decoration": "red_x",
-			  "search_radius": 100,
               "zoom": 1,
               "skip_existing_chunks": false
             }

@@ -1,11 +1,10 @@
 package com.legacy.dungeons_plus.features;
 
-import java.util.function.Function;
 
 import com.legacy.structure_gel.structures.GelConfigStructure;
 import com.legacy.structure_gel.structures.GelStructureStart;
 import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Codec;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
@@ -17,9 +16,9 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 
 public class BiggerDungeonStructure extends GelConfigStructure<NoFeatureConfig>
 {
-	public BiggerDungeonStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> configFactoryIn, StructureConfig config)
+	public BiggerDungeonStructure(Codec<NoFeatureConfig> codec, StructureConfig config)
 	{
-		super(configFactoryIn, config);
+		super(codec, config);
 	}
 
 	@Override
@@ -29,29 +28,24 @@ public class BiggerDungeonStructure extends GelConfigStructure<NoFeatureConfig>
 	}
 
 	@Override
-	public IStartFactory getStartFactory()
+
+	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return BiggerDungeonStructure.Start::new;
 	}
 
-	@Override
-	public int getSize()
-	{
-		return 3;
-	}
-
-	public static class Start extends GelStructureStart
+	public static class Start extends GelStructureStart<NoFeatureConfig>
 	{
 
-		public Start(Structure<?> structureIn, int chunkX, int chunkZ, Biome biomeIn, MutableBoundingBox boundsIn, int referenceIn, long seed)
+		public Start(Structure<NoFeatureConfig> structureIn, int chunkX, int chunkZ, MutableBoundingBox boundsIn, int referenceIn, long seed)
 		{
-			super(structureIn, chunkX, chunkZ, biomeIn, boundsIn, referenceIn, seed);
+			super(structureIn, chunkX, chunkZ, boundsIn, referenceIn, seed);
 		}
 
 		@Override
-		public void init(ChunkGenerator<?> generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn)
+		public void func_230364_a_(ChunkGenerator generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config)
 		{
-			BiggerDungeonPieces.assemble(generator, templateManagerIn, new BlockPos(chunkX * 16 + rand.nextInt(15), 90, chunkZ * 16 + rand.nextInt(15)), this.components, this.rand);
+			BiggerDungeonPieces.assemble(generator, templateManagerIn, new BlockPos(chunkX * 16 + rand.nextInt(15), 0, chunkZ * 16 + rand.nextInt(15)), this.components, this.rand);
 			this.recalculateStructureSize();
 
 			/**

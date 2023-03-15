@@ -21,6 +21,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.properties.ChestType;
 import net.minecraft.tileentity.ChestTileEntity;
@@ -41,14 +42,17 @@ import net.minecraft.world.gen.feature.template.RandomBlockMatchRuleTest;
 import net.minecraft.world.gen.feature.template.RuleEntry;
 import net.minecraft.world.gen.feature.template.RuleStructureProcessor;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.storage.loot.LootTables;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class TowerPieces
 {
-	public static void assemble(ChunkGenerator<?> chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
+	public static void assemble(ChunkGenerator chunkGen, TemplateManager template, BlockPos pos, List<StructurePiece> pieces, SharedSeedRandom seed)
 	{
-		JigsawManager.func_214889_a(DungeonsPlus.locate("tower/root"), 7, TowerPieces.Piece::new, chunkGen, template, pos, pieces, seed);
+		JigsawManager.func_236823_a_(DungeonsPlus.locate("tower/root"), 7, TowerPieces.Piece::new, chunkGen, template, pos, pieces, seed, true, true);
+	}
+
+	public static void init()
+	{
 	}
 
 	public static void init()
@@ -153,12 +157,12 @@ public class TowerPieces
 	{
 		public Piece(TemplateManager template, JigsawPiece jigsawPiece, BlockPos pos, int groundLevelDelta, Rotation rotation, MutableBoundingBox boundingBox)
 		{
-			super(DungeonsPlus.Features.TOWER.getSecond(), template, jigsawPiece, pos, groundLevelDelta, rotation, boundingBox);
+			super(DungeonsPlus.Structures.TOWER.getSecond(), template, jigsawPiece, pos, groundLevelDelta, rotation, boundingBox);
 		}
 
 		public Piece(TemplateManager template, CompoundNBT nbt)
 		{
-			super(template, nbt, DungeonsPlus.Features.TOWER.getSecond());
+			super(template, nbt, DungeonsPlus.Structures.TOWER.getSecond());
 		}
 
 		/**
@@ -183,9 +187,9 @@ public class TowerPieces
 				String[] data = key.split("-");
 
 				Direction facing = Direction.byName(data[1]);
-				ChestType chestType = data[2].equals(ChestType.LEFT.getName()) ? ChestType.LEFT : (data[2].equals(ChestType.RIGHT.getName()) ? ChestType.RIGHT : ChestType.SINGLE);
+				ChestType chestType = data[2].equals(ChestType.LEFT.getString()) ? ChestType.LEFT : (data[2].equals(ChestType.RIGHT.getString()) ? ChestType.RIGHT : ChestType.SINGLE);
 
-				worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).rotate(this.rotation), 3);
+				worldIn.setBlockState(pos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, facing).with(ChestBlock.TYPE, chestType).rotate(worldIn, pos, this.rotation), 3);
 				if (worldIn.getTileEntity(pos) instanceof ChestTileEntity)
 				{
 					if (data[0].contains("map"))

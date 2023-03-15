@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[28,)"
+loaderVersion="[31,)"
 issueTrackerURL="https://gitlab.com/groups/modding-legacy/-/issues"
 [[mods]]
 	modId="dungeons_plus"
@@ -12,18 +12,18 @@ issueTrackerURL="https://gitlab.com/groups/modding-legacy/-/issues"
 [[dependencies.dungeons_plus]]
     modId="forge"
     mandatory=true
-    versionRange="[28.2.0,)"
+    versionRange="[32.0.7,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.dungeons_plus]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.14.4]"
+    versionRange="[1.16.1]"
     ordering="NONE"
     side="BOTH"
 [[dependencies.dungeons_plus]]
     modId="structure_gel"
     mandatory=true
-    versionRange="[1.0.0,]"
+    versionRange="[1.1.0,]"
     ordering="NONE"
     side="BOTH"
