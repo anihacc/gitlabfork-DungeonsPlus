@@ -37,6 +37,10 @@ public class LeviathanPieces
 	{
 	}
 
+	public static void init()
+	{
+	}
+
 	static
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "leviathan/");

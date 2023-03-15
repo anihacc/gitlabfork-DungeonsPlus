@@ -55,6 +55,10 @@ public class TowerPieces
 	{
 	}
 
+	public static void init()
+	{
+	}
+
 	static
 	{
 		/**

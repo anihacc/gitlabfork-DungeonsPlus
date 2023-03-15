@@ -69,7 +69,6 @@ public class EndRuinsPieces
 		 * the old registry and it's prefix along with this one.
 		 */
 		JigsawRegistryHelper towerRegistry = registry.setPrefix("end_ruins/tower/");
-
 		/**
 		 * By using the .clone() method, I can use the same settings for each pool
 		 * builder. All tower pools will use the RandomBlockSwapProcessor to replace end

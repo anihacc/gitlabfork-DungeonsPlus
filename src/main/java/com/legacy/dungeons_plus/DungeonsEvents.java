@@ -1,6 +1,6 @@
 package com.legacy.dungeons_plus;
 
-import com.legacy.structure_gel.access_helpers.EntityAccessHelper;
+import com.legacy.dungeons_plus.DungeonsPlus.Features;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -11,9 +11,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = DungeonsPlus.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class DungeonsEvents

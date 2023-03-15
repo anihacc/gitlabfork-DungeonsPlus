@@ -28,6 +28,7 @@ public class EndRuinsStructure extends GelConfigStructure<NoFeatureConfig>
 	}
 
 	@Override
+
 	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return EndRuinsStructure.Start::new;

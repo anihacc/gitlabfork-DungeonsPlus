@@ -41,6 +41,10 @@ public class BiggerDungeonPieces
 	{
 	}
 
+	public static void init()
+	{
+	}
+
 	static
 	{
 		JigsawRegistryHelper registry = new JigsawRegistryHelper(DungeonsPlus.MODID, "bigger_dungeon/");

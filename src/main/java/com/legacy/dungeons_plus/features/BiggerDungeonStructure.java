@@ -1,5 +1,6 @@
 package com.legacy.dungeons_plus.features;
 
+
 import com.legacy.structure_gel.structures.GelConfigStructure;
 import com.legacy.structure_gel.structures.GelStructureStart;
 import com.legacy.structure_gel.util.ConfigTemplates.StructureConfig;
@@ -27,6 +28,7 @@ public class BiggerDungeonStructure extends GelConfigStructure<NoFeatureConfig>
 	}
 
 	@Override
+
 	public IStartFactory<NoFeatureConfig> getStartFactory()
 	{
 		return BiggerDungeonStructure.Start::new;
